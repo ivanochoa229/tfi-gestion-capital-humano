@@ -13,6 +13,7 @@ import { LocalAuthGuard } from './local-auth.guard.js';
 import { LocalStrategy } from './local.strategy.js';
 import { PasswordService } from './password.service.js';
 import { SesionSerializer } from './sesion.serializer.js';
+import { UsuariosBootstrapService } from './usuarios-bootstrap.service.js';
 import { UsuariosController } from './usuarios.controller.js';
 import { UsuariosService } from './usuarios.service.js';
 
@@ -30,6 +31,7 @@ import { UsuariosService } from './usuarios.service.js';
     LocalStrategy,
     LocalAuthGuard,
     SesionSerializer,
+    UsuariosBootstrapService,
     // El orden importa: primero la sesión y después el rol.
     { provide: APP_GUARD, useClass: SesionGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
