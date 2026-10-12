@@ -1,6 +1,7 @@
 import {
   AppBar,
   Box,
+  Button,
   Drawer,
   List,
   ListItemButton,
@@ -8,21 +9,27 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { NavLink, Outlet } from 'react-router';
+import { useQueryClient } from '@tanstack/react-query';
+import { NavLink, Outlet, useNavigate } from 'react-router';
+import { api } from '../api/cliente';
+import { puedeVer, SECCIONES } from '../auth/permisos';
+import { useSesion } from '../auth/useSesion';
 
 const ANCHO_MENU = 240;
 
-const secciones = [
-  { ruta: '/', nombre: 'Tablero de riesgo' },
-  { ruta: '/estructura', nombre: 'Estructura y puestos' },
-  { ruta: '/personas', nombre: 'Personas' },
-  { ruta: '/conocimiento', nombre: 'Conocimiento' },
-  { ruta: '/criticidad', nombre: 'Criticidad' },
-  { ruta: '/sucesion', nombre: 'Sucesión' },
-  { ruta: '/admin', nombre: 'Administración' },
-];
-
 export function Layout() {
+  const { data: sesion } = useSesion();
+  const navegar = useNavigate();
+  const cliente = useQueryClient();
+
+  const cerrarSesion = async () => {
+    await api.POST('/api/auth/logout');
+    cliente.setQueryData(['sesion'], null);
+    cliente.clear();
+    navegar('/login', { replace: true });
+  };
+  const secciones = SECCIONES.filter((s) => sesion && puedeVer(sesion.rol, s));
+
   return (
     <Box sx={{ display: 'flex' }}>
       <AppBar position="fixed" sx={{ zIndex: (t) => t.zIndex.drawer + 1 }}>
@@ -30,6 +37,11 @@ export function Layout() {
           <Typography variant="h6" component="div" noWrap>
             Gestión del conocimiento crítico
           </Typography>
+          <Box sx={{ flexGrow: 1 }} />
+          <Typography sx={{ mr: 2 }}>{sesion?.nombreUsuario}</Typography>
+          <Button color="inherit" onClick={cerrarSesion}>
+            Cerrar sesión
+          </Button>
         </Toolbar>
       </AppBar>
 

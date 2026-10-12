@@ -20,6 +20,150 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/auditoria': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['AuditoriaController_consultar'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/auth/login': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['AuthController_login'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/auth/logout': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['AuthController_logout'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/auth/yo': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['AuthController_yo'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/auth/clave': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch: operations['AuthController_cambiarClave'];
+    trace?: never;
+  };
+  '/api/usuarios': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['UsuariosController_listar'];
+    put?: never;
+    post: operations['UsuariosController_crear'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/usuarios/roles': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['UsuariosController_listarRoles'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/usuarios/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch: operations['UsuariosController_actualizar'];
+    trace?: never;
+  };
+  '/api/usuarios/{id}/restablecer-clave': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['UsuariosController_restablecerClave'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/referencia': {
     parameters: {
       query?: never;
@@ -79,6 +223,117 @@ export interface components {
       baseDeDatos: boolean;
       /** @description RustFS responde y el bucket existe */
       almacenamiento: boolean;
+    };
+    AuditoriaDto: {
+      id: number;
+      /** @example plan_sucesion */
+      entidad: string;
+      /** @example 5 */
+      idRegistro: string;
+      /** @enum {string} */
+      operacion: 'alta' | 'modificacion' | 'baja';
+      idUsuario: number;
+      /** Format: date-time */
+      fecha: string;
+      valoresAnteriores: {
+        [key: string]: unknown;
+      } | null;
+      valoresNuevos: {
+        [key: string]: unknown;
+      } | null;
+    };
+    LoginDto: {
+      /** @example admin */
+      nombreUsuario: string;
+      clave: string;
+    };
+    SesionDto: {
+      id: number;
+      nombreUsuario: string;
+      /** @enum {string} */
+      rol:
+        | 'analista_puestos'
+        | 'recursos_humanos'
+        | 'autoridad'
+        | 'jefatura_departamento'
+        | 'jefe_catedra'
+        | 'administrador'
+        | 'docente';
+      idPersona: number | null;
+      unidades: number[];
+    };
+    CambiarClaveDto: {
+      claveActual: string;
+      /** @description Al menos 10 caracteres */
+      claveNueva: string;
+    };
+    UsuarioDto: {
+      id: number;
+      nombreUsuario: string;
+      /** @enum {string} */
+      rol:
+        | 'analista_puestos'
+        | 'recursos_humanos'
+        | 'autoridad'
+        | 'jefatura_departamento'
+        | 'jefe_catedra'
+        | 'administrador'
+        | 'docente';
+      idPersona: number | null;
+      idUnidades: number[];
+      activo: boolean;
+    };
+    RolDto: {
+      /** @example jefe_catedra */
+      codigo: string;
+      /** @example Jefe de cátedra */
+      denominacion: string;
+    };
+    CrearUsuarioDto: {
+      /**
+       * @description 3 a 50 caracteres; se guarda en minúsculas
+       * @example ana.perez
+       */
+      nombreUsuario: string;
+      clave: string;
+      /** @enum {string} */
+      rol:
+        | 'analista_puestos'
+        | 'recursos_humanos'
+        | 'autoridad'
+        | 'jefatura_departamento'
+        | 'jefe_catedra'
+        | 'administrador'
+        | 'docente';
+      /** @description Obligatoria para el rol docente */
+      idPersona?: Record<string, never> | null;
+      /** @description Solo para jefatura y jefe de cátedra */
+      idUnidades?: number[];
+    };
+    ActualizarUsuarioDto: {
+      /**
+       * @description 3 a 50 caracteres; se guarda en minúsculas
+       * @example ana.perez
+       */
+      nombreUsuario?: string;
+      /** @enum {string} */
+      rol?:
+        | 'analista_puestos'
+        | 'recursos_humanos'
+        | 'autoridad'
+        | 'jefatura_departamento'
+        | 'jefe_catedra'
+        | 'administrador'
+        | 'docente';
+      /** @description Obligatoria para el rol docente */
+      idPersona?: Record<string, never> | null;
+      /** @description Solo para jefatura y jefe de cátedra */
+      idUnidades?: number[];
+      /** @description false desactiva el usuario */
+      activo?: boolean;
+    };
+    RestablecerClaveDto: {
+      clave: string;
     };
     DominioDto: {
       /** @example nivel-dominio */
@@ -166,6 +421,255 @@ export interface operations {
       };
     };
   };
+  AuditoriaController_consultar: {
+    parameters: {
+      query?: {
+        entidad?: string;
+        idRegistro?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['AuditoriaDto'][];
+        };
+      };
+    };
+  };
+  AuthController_login: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['LoginDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['SesionDto'];
+        };
+      };
+      /** @description Usuario o clave incorrectos */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AuthController_logout: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Sesión cerrada */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AuthController_yo: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['SesionDto'];
+        };
+      };
+    };
+  };
+  AuthController_cambiarClave: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CambiarClaveDto'];
+      };
+    };
+    responses: {
+      /** @description Clave cambiada */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  UsuariosController_listar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['UsuarioDto'][];
+        };
+      };
+    };
+  };
+  UsuariosController_crear: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CrearUsuarioDto'];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['UsuarioDto'];
+        };
+      };
+      /** @description Usuario o persona repetidos */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  UsuariosController_listarRoles: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['RolDto'][];
+        };
+      };
+    };
+  };
+  UsuariosController_actualizar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ActualizarUsuarioDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['UsuarioDto'];
+        };
+      };
+      /** @description El usuario no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Duplicado o último administrador activo */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  UsuariosController_restablecerClave: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RestablecerClaveDto'];
+      };
+    };
+    responses: {
+      /** @description Clave restablecida */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El usuario no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   ReferenciaController_listarDominios: {
     parameters: {
       query?: never;
@@ -218,10 +722,7 @@ export interface operations {
   ReferenciaController_crear: {
     parameters: {
       query?: never;
-      header?: {
-        /** @description Token provisorio de administrador (hasta RF22) */
-        'x-admin-token'?: string;
-      };
+      header?: never;
       path: {
         dominio: string;
       };
@@ -241,7 +742,7 @@ export interface operations {
           'application/json': components['schemas']['ValorReferenciaDto'];
         };
       };
-      /** @description Falta el token de administrador */
+      /** @description El rol no puede modificar las tablas de referencia */
       403: {
         headers: {
           [name: string]: unknown;
@@ -260,10 +761,7 @@ export interface operations {
   ReferenciaController_eliminar: {
     parameters: {
       query?: never;
-      header?: {
-        /** @description Token provisorio de administrador (hasta RF22) */
-        'x-admin-token'?: string;
-      };
+      header?: never;
       path: {
         dominio: string;
         id: number;
@@ -279,7 +777,7 @@ export interface operations {
         };
         content?: never;
       };
-      /** @description Falta el token de administrador */
+      /** @description El rol no puede modificar las tablas de referencia */
       403: {
         headers: {
           [name: string]: unknown;
@@ -305,10 +803,7 @@ export interface operations {
   ReferenciaController_actualizar: {
     parameters: {
       query?: never;
-      header?: {
-        /** @description Token provisorio de administrador (hasta RF22) */
-        'x-admin-token'?: string;
-      };
+      header?: never;
       path: {
         dominio: string;
         id: number;
@@ -329,7 +824,7 @@ export interface operations {
           'application/json': components['schemas']['ActualizacionValorDto'];
         };
       };
-      /** @description Falta el token de administrador */
+      /** @description El rol no puede modificar las tablas de referencia */
       403: {
         headers: {
           [name: string]: unknown;
