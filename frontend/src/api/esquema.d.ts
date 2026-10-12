@@ -20,6 +20,54 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/referencia': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['ReferenciaController_listarDominios'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/referencia/{dominio}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['ReferenciaController_listarValores'];
+    put?: never;
+    post: operations['ReferenciaController_crear'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/referencia/{dominio}/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete: operations['ReferenciaController_eliminar'];
+    options?: never;
+    head?: never;
+    patch: operations['ReferenciaController_actualizar'];
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -31,6 +79,64 @@ export interface components {
       baseDeDatos: boolean;
       /** @description RustFS responde y el bucket existe */
       almacenamiento: boolean;
+    };
+    DominioDto: {
+      /** @example nivel-dominio */
+      dominio: string;
+      /** @example Nivel de dominio */
+      denominacion: string;
+      /** @description Si es true, los valores tienen orden */
+      ordinal: boolean;
+    };
+    ValorReferenciaDto: {
+      id: number;
+      /** @example basico */
+      codigo: string;
+      /** @example Básico */
+      denominacion: string;
+      activo: boolean;
+      /** @description Solo en dominios ordinales */
+      orden?: number;
+      /** @description Hay registros que usan este valor */
+      enUso: boolean;
+    };
+    CrearValorDto: {
+      /**
+       * @description Minúsculas, números y guion bajo; empieza con letra
+       * @example competencia_tecnica
+       */
+      codigo: string;
+      /** @example Competencia técnica */
+      denominacion: string;
+      /** @description Obligatorio en dominios ordinales; prohibido en el resto */
+      orden?: number;
+    };
+    ActualizarValorDto: {
+      /**
+       * @description Minúsculas, números y guion bajo; empieza con letra
+       * @example competencia_tecnica
+       */
+      codigo?: string;
+      /** @example Competencia técnica */
+      denominacion?: string;
+      /** @description Obligatorio en dominios ordinales; prohibido en el resto */
+      orden?: number;
+      /** @description false desactiva el valor */
+      activo?: boolean;
+    };
+    ActualizacionValorDto: {
+      id: number;
+      /** @example basico */
+      codigo: string;
+      /** @example Básico */
+      denominacion: string;
+      activo: boolean;
+      /** @description Solo en dominios ordinales */
+      orden?: number;
+      /** @description Hay registros que usan este valor */
+      enUso: boolean;
+      /** @description Aviso cuando se desactiva el último valor activo */
+      advertencia?: string;
     };
   };
   responses: never;
@@ -57,6 +163,192 @@ export interface operations {
         content: {
           'application/json': components['schemas']['SaludDto'];
         };
+      };
+    };
+  };
+  ReferenciaController_listarDominios: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['DominioDto'][];
+        };
+      };
+    };
+  };
+  ReferenciaController_listarValores: {
+    parameters: {
+      query?: {
+        incluirInactivos?: boolean;
+      };
+      header?: never;
+      path: {
+        dominio: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ValorReferenciaDto'][];
+        };
+      };
+      /** @description El dominio no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ReferenciaController_crear: {
+    parameters: {
+      query?: never;
+      header?: {
+        /** @description Token provisorio de administrador (hasta RF22) */
+        'x-admin-token'?: string;
+      };
+      path: {
+        dominio: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CrearValorDto'];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ValorReferenciaDto'];
+        };
+      };
+      /** @description Falta el token de administrador */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Código, denominación u orden repetido */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ReferenciaController_eliminar: {
+    parameters: {
+      query?: never;
+      header?: {
+        /** @description Token provisorio de administrador (hasta RF22) */
+        'x-admin-token'?: string;
+      };
+      path: {
+        dominio: string;
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Valor borrado */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Falta el token de administrador */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El dominio o el valor no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El valor está en uso */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ReferenciaController_actualizar: {
+    parameters: {
+      query?: never;
+      header?: {
+        /** @description Token provisorio de administrador (hasta RF22) */
+        'x-admin-token'?: string;
+      };
+      path: {
+        dominio: string;
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ActualizarValorDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ActualizacionValorDto'];
+        };
+      };
+      /** @description Falta el token de administrador */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El dominio o el valor no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Duplicado, o cambio de código de un valor en uso */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
     };
   };

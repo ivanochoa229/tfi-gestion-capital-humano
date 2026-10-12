@@ -32,6 +32,8 @@ docker compose up --build
 
 El backend crea el bucket de archivos y aplica las migraciones pendientes al arrancar. El tablero del frontend muestra si la base y el almacenamiento están conectados.
 
+**Tablas de referencia:** se administran en http://localhost:5173/admin. Crear, editar, desactivar o borrar valores exige el token provisorio `ADMIN_TOKEN` del `.env` (se ingresa en esa pantalla o se envía en el encabezado `x-admin-token`). Es un mecanismo temporal hasta implementar usuarios y roles (RF22); si `ADMIN_TOKEN` no está definido, las escrituras se rechazan.
+
 El código de `backend/src` y `frontend/src` está montado en los contenedores: los cambios se recargan solos. Si se agrega una dependencia, hay que reconstruir con `docker compose up --build`.
 
 Para trabajar sin Docker en las aplicaciones, se levanta solo la infraestructura y se corre cada app con npm:

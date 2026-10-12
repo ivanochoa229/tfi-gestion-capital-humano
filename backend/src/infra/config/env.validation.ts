@@ -3,6 +3,7 @@ import {
   IsBoolean,
   IsInt,
   IsNotEmpty,
+  IsOptional,
   IsString,
   IsUrl,
   validateSync,
@@ -64,6 +65,14 @@ export class Env {
   @IsString()
   @IsNotEmpty()
   S3_BUCKET: string;
+
+  /**
+   * Token provisorio que autoriza las escrituras de las tablas de referencia
+   * hasta que exista la gestión de usuarios y roles (RF22).
+   */
+  @IsOptional()
+  @IsString()
+  ADMIN_TOKEN?: string;
 }
 
 export function validarEnv(config: Record<string, unknown>): Env {
