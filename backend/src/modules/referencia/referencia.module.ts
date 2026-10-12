@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AdminProvisorioGuard } from '../../common/guards/admin-provisorio.guard.js';
 import { NivelDominio } from './entities/nivel-dominio.entity.js';
 import { NivelCriticidad } from './entities/nivel-criticidad.entity.js';
 import { EstadoPreparacion } from './entities/estado-preparacion.entity.js';
@@ -34,7 +33,7 @@ import { ReferenciaService } from './referencia.service.js';
     ]),
   ],
   controllers: [ReferenciaController],
-  providers: [ReferenciaService, AdminProvisorioGuard],
+  providers: [ReferenciaService],
   exports: [ReferenciaService],
 })
 export class ReferenciaModule {}

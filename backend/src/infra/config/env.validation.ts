@@ -68,14 +68,6 @@ export class Env {
   @IsNotEmpty()
   S3_BUCKET: string;
 
-  /**
-   * Token provisorio que autoriza las escrituras de las tablas de referencia
-   * hasta que exista la gestión de usuarios y roles (RF22).
-   */
-  @IsOptional()
-  @IsString()
-  ADMIN_TOKEN?: string;
-
   /** Firma la cookie de sesión. */
   @IsString()
   @MinLength(32)
