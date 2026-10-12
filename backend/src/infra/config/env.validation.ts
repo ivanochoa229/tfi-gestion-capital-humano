@@ -6,6 +6,8 @@ import {
   IsOptional,
   IsString,
   IsUrl,
+  MaxLength,
+  MinLength,
   validateSync,
 } from 'class-validator';
 
@@ -73,6 +75,22 @@ export class Env {
   @IsOptional()
   @IsString()
   ADMIN_TOKEN?: string;
+
+  /** Firma la cookie de sesión. */
+  @IsString()
+  @MinLength(32)
+  SESION_SECRETO: string;
+
+  /** Usuario y clave del primer administrador; solo se usan si no hay usuarios. */
+  @IsOptional()
+  @IsString()
+  @MinLength(3)
+  @MaxLength(50)
+  ADMIN_USUARIO?: string;
+
+  @IsOptional()
+  @IsString()
+  ADMIN_CLAVE?: string;
 }
 
 export function validarEnv(config: Record<string, unknown>): Env {
