@@ -62,6 +62,9 @@ Módulo `modules/usuarios` (con `auth.controller` y `usuarios.controller`) y gua
 - Sesión: `express-session` con `connect-pg-simple` (tabla `sesion`), vencimiento de 8 horas de
   inactividad, firmada con la variable `SESION_SECRETO`.
 - Hash: argon2id (paquete `argon2`, parámetros por defecto).
+- Cambiar o restablecer una clave cierra las demás sesiones del usuario (al cambiarla él mismo se
+  conserva la actual). Si el usuario no existe o está desactivado, el login igual verifica un hash
+  falso, para que el tiempo de respuesta no revele qué nombres existen.
 
 Fuera de alcance: recuperación de clave por correo, bloqueo por intentos fallidos y tokens CSRF
 (sistema solo local; cookie `sameSite=lax` y CORS limitado a `FRONTEND_URL`).
@@ -115,6 +118,10 @@ contra la base real queda como requisito de la spec de `estructura`.
 - El usuario sale de un contexto por petición (`AsyncLocalStorage`), cargado después de
   `SesionGuard`. Si se escribe una entidad auditada sin usuario en el contexto, el subscriber falla
   y la operación se cancela.
+- Limitación: TypeORM solo dispara estos eventos con `save()`, `insert()` de entidades y
+  `remove()`. Un `repository.update()`, un `QueryBuilder` o SQL directo sobre una entidad auditada
+  no queda registrado. Los módulos de criticidad y sucesión MUST escribir esas entidades con
+  `save()` o `remove()`.
 - La bitácora es de solo lectura: `GET /api/auditoria` con filtros `entidad` e `idRegistro`, para
   `recursos_humanos` y `autoridad`. Sin pantalla en este bloque.
 - Fuera de alcance: auditar usuarios y roles.
@@ -125,6 +132,9 @@ Endpoints, todos con `@Roles('administrador')`:
 
 - `GET /api/usuarios`, `POST /api/usuarios`, `PATCH /api/usuarios/:id` (rol, `idPersona`,
   `idUnidades`, `activo`), `POST /api/usuarios/:id/restablecer-clave`.
+- Desactivar o cambiar de rol a un administrador se hace dentro de una transacción con un bloqueo
+  consultivo de PostgreSQL, para que dos pedidos simultáneos no dejen al sistema sin administrador
+  activo.
 - DTOs con class-validator y `@ApiProperty`; tipos del frontend regenerados con `npm run api:tipos`.
 
 ## Primer administrador

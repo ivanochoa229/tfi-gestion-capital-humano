@@ -24,4 +24,9 @@ describe('PasswordService', () => {
   it('devuelve false ante un hash mal formado en vez de lanzar', async () => {
     expect(await servicio.verificar('no-es-un-hash', 'x')).toBe(false);
   });
+
+  it('verificarFalso termina sin error y reutiliza el hash falso', async () => {
+    await expect(servicio.verificarFalso('x')).resolves.toBeUndefined();
+    await expect(servicio.verificarFalso('y')).resolves.toBeUndefined();
+  });
 });

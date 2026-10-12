@@ -67,7 +67,13 @@ export class AuthController {
   cambiarClave(
     @UsuarioActual() usuario: SesionUsuario,
     @Body() dto: CambiarClaveDto,
+    @Req() req: Request,
   ): Promise<void> {
-    return this.auth.cambiarClave(usuario.id, dto.claveActual, dto.claveNueva);
+    return this.auth.cambiarClave(
+      usuario.id,
+      dto.claveActual,
+      dto.claveNueva,
+      req.sessionID,
+    );
   }
 }

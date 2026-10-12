@@ -21,6 +21,8 @@ type Registro = Record<string, unknown>;
 /**
  * Escribe en `auditoria`, dentro de la misma transacción, cada alta, modificación
  * y baja de las entidades auditadas. Sin usuario en el contexto, falla.
+ * Solo ve lo que se escribe con `save()` o `remove()`: un `update()` o un
+ * QueryBuilder no dispara estos eventos y no quedaría registrado.
  */
 @Injectable()
 export class AuditoriaSubscriber implements EntitySubscriberInterface {

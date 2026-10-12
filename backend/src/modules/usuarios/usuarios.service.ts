@@ -17,6 +17,10 @@ import { UsuarioUnidad } from './entities/usuario-unidad.entity.js';
 import { Usuario } from './entities/usuario.entity.js';
 import { normalizarNombreUsuario } from './auth.service.js';
 import { PasswordService } from './password.service.js';
+import { SesionesService } from './sesiones.service.js';
+
+/** Clave del bloqueo que serializa los cambios que pueden dejar sin administradores. */
+const BLOQUEO_ADMINISTRADORES = 7001;
 
 @Injectable()
 export class UsuariosService {
@@ -24,6 +28,7 @@ export class UsuariosService {
     @InjectRepository(Usuario) private readonly usuarios: Repository<Usuario>,
     @InjectRepository(Rol) private readonly roles: Repository<Rol>,
     private readonly passwords: PasswordService,
+    private readonly sesiones: SesionesService,
   ) {}
 
   async listar(): Promise<UsuarioDto[]> {
@@ -94,15 +99,25 @@ export class UsuariosService {
       usuario.rol.codigo === ROLES.administrador &&
       usuario.activo &&
       (dto.activo === false || rolFinal !== ROLES.administrador);
-    if (dejaDeSerAdminActivo) await this.exigirOtroAdministradorActivo();
-
     if (dto.rol) usuario.rol = await this.buscarRol(dto.rol);
     if (dto.idPersona !== undefined) usuario.idPersona = dto.idPersona;
     if (dto.activo !== undefined) usuario.activo = dto.activo;
     if (dto.idUnidades)
       usuario.unidades = this.unidades(dto.idUnidades, usuario.id);
 
-    return this.aDto(await this.usuarios.save(usuario));
+    if (!dejaDeSerAdminActivo)
+      return this.aDto(await this.usuarios.save(usuario));
+
+    // El bloqueo evita que dos pedidos simultáneos desactiven a los dos últimos
+    // administradores: el segundo espera, ve el conteo actualizado y es rechazado.
+    return this.usuarios.manager.transaction(async (manager) => {
+      await manager.query('SELECT pg_advisory_xact_lock($1)', [
+        BLOQUEO_ADMINISTRADORES,
+      ]);
+      const repo = manager.getRepository(Usuario);
+      await this.exigirOtroAdministradorActivo(repo);
+      return this.aDto(await repo.save(usuario));
+    });
   }
 
   async restablecerClave(id: number, clave: string): Promise<void> {
@@ -110,6 +125,7 @@ export class UsuariosService {
     await this.usuarios.update(id, {
       claveHash: await this.passwords.hashear(clave),
     });
+    await this.sesiones.cerrarDe(id);
   }
 
   private async obtener(id: number): Promise<Usuario> {
@@ -153,8 +169,10 @@ export class UsuariosService {
     }
   }
 
-  private async exigirOtroAdministradorActivo(): Promise<void> {
-    const activos = await this.usuarios.count({
+  private async exigirOtroAdministradorActivo(
+    repo: Repository<Usuario>,
+  ): Promise<void> {
+    const activos = await repo.count({
       where: { activo: true, rol: { codigo: ROLES.administrador } },
     });
     if (activos <= 1) {

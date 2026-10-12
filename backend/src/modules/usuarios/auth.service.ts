@@ -5,6 +5,7 @@ import type { CodigoRol } from '../../common/roles.js';
 import type { SesionUsuario } from '../../common/sesion-usuario.js';
 import { Usuario } from './entities/usuario.entity.js';
 import { LARGO_MINIMO_CLAVE, PasswordService } from './password.service.js';
+import { SesionesService } from './sesiones.service.js';
 
 /** Los nombres de usuario no distinguen mayúsculas ni espacios en los extremos. */
 export function normalizarNombreUsuario(nombre: string): string {
@@ -26,6 +27,7 @@ export class AuthService {
   constructor(
     @InjectRepository(Usuario) private readonly usuarios: Repository<Usuario>,
     private readonly passwords: PasswordService,
+    private readonly sesiones: SesionesService,
   ) {}
 
   /** null ante usuario inexistente, desactivado o clave incorrecta (mismo resultado). */
@@ -37,7 +39,10 @@ export class AuthService {
       where: { nombreUsuario: normalizarNombreUsuario(nombreUsuario) },
       relations: { rol: true, unidades: true },
     });
-    if (!usuario || !usuario.activo) return null;
+    if (!usuario || !usuario.activo) {
+      await this.passwords.verificarFalso(clave);
+      return null;
+    }
     if (!(await this.passwords.verificar(usuario.claveHash, clave)))
       return null;
     return aSesionUsuario(usuario);
@@ -56,6 +61,7 @@ export class AuthService {
     idUsuario: number,
     claveActual: string,
     claveNueva: string,
+    sesionActual?: string,
   ): Promise<void> {
     const usuario = await this.usuarios.findOne({ where: { id: idUsuario } });
     if (
@@ -72,5 +78,6 @@ export class AuthService {
     await this.usuarios.update(idUsuario, {
       claveHash: await this.passwords.hashear(claveNueva),
     });
+    await this.sesiones.cerrarDe(idUsuario, sesionActual);
   }
 }

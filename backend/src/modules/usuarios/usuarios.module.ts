@@ -13,6 +13,7 @@ import { Usuario } from './entities/usuario.entity.js';
 import { LocalAuthGuard } from './local-auth.guard.js';
 import { LocalStrategy } from './local.strategy.js';
 import { PasswordService } from './password.service.js';
+import { SesionesService } from './sesiones.service.js';
 import { SesionSerializer } from './sesion.serializer.js';
 import { UsuariosBootstrapService } from './usuarios-bootstrap.service.js';
 import { UsuariosController } from './usuarios.controller.js';
@@ -27,6 +28,7 @@ import { UsuariosService } from './usuarios.service.js';
   controllers: [AuthController, UsuariosController],
   providers: [
     PasswordService,
+    SesionesService,
     AuthService,
     UsuariosService,
     AlcanceService,

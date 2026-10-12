@@ -3,6 +3,7 @@ import type { Repository } from 'typeorm';
 import { AuthService, normalizarNombreUsuario } from './auth.service.js';
 import type { Usuario } from './entities/usuario.entity.js';
 import { PasswordService } from './password.service.js';
+import type { SesionesService } from './sesiones.service.js';
 
 const passwords = new PasswordService();
 
@@ -25,7 +26,16 @@ function crearServicio(usuario: Usuario | null) {
     findOne: vi.fn(async () => usuario),
     update: vi.fn(async () => undefined),
   } as unknown as Repository<Usuario>;
-  return { servicio: new AuthService(repo, passwords), repo };
+  const sesiones = { cerrarDe: vi.fn(async () => undefined) };
+  return {
+    servicio: new AuthService(
+      repo,
+      passwords,
+      sesiones as unknown as SesionesService,
+    ),
+    repo,
+    sesiones,
+  };
 }
 
 describe('normalizarNombreUsuario', () => {
@@ -70,6 +80,18 @@ describe('AuthService.validarCredenciales', () => {
   });
 });
 
+describe('AuthService.validarCredenciales (tiempo de respuesta)', () => {
+  it('verifica una clave falsa si el usuario no existe o está desactivado', async () => {
+    const espia = vi.spyOn(passwords, 'verificarFalso');
+    await crearServicio(null).servicio.validarCredenciales('nadie', 'x');
+    await crearServicio(
+      await usuarioDe({ activo: false }),
+    ).servicio.validarCredenciales('ana', 'x');
+    expect(espia).toHaveBeenCalledTimes(2);
+    espia.mockRestore();
+  });
+});
+
 describe('AuthService.cargarSesionUsuario', () => {
   it('devuelve la sesión de un usuario activo', async () => {
     const { servicio } = crearServicio(await usuarioDe());
@@ -95,6 +117,17 @@ describe('AuthService.cambiarClave', () => {
     expect(
       await passwords.verificar(cambios.claveHash, 'clave-nueva-1234'),
     ).toBe(true);
+  });
+
+  it('cierra las otras sesiones del usuario y conserva la actual', async () => {
+    const { servicio, sesiones } = crearServicio(await usuarioDe());
+    await servicio.cambiarClave(
+      7,
+      'clave-correcta-1',
+      'clave-nueva-1234',
+      'sid-actual',
+    );
+    expect(sesiones.cerrarDe).toHaveBeenCalledWith(7, 'sid-actual');
   });
 
   it('rechaza una clave actual incorrecta sin modificar nada', async () => {

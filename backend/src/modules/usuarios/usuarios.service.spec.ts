@@ -7,6 +7,7 @@ import type { Repository } from 'typeorm';
 import type { Rol } from './entities/rol.entity.js';
 import type { Usuario } from './entities/usuario.entity.js';
 import { PasswordService } from './password.service.js';
+import type { SesionesService } from './sesiones.service.js';
 import { UsuariosService } from './usuarios.service.js';
 
 const roles: Rol[] = [
@@ -40,19 +41,24 @@ function crearServicio(existentes: Usuario[]) {
   const filas = existentes.map((u) => ({ ...u }));
   const usuarios = {
     find: vi.fn(async () => filas),
-    findOne: vi.fn(
-      async ({ where }: { where: Partial<Usuario> }) =>
-        filas.find((u) =>
-          Object.entries(where).every(([k, v]) => u[k as keyof Usuario] === v),
-        ) ?? null,
-    ),
+    // Devuelve copias, como la base: solo `save` modifica lo guardado.
+    findOne: vi.fn(async ({ where }: { where: Partial<Usuario> }) => {
+      const fila = filas.find((u) =>
+        Object.entries(where).every(([k, v]) => u[k as keyof Usuario] === v),
+      );
+      return fila ? { ...fila } : null;
+    }),
     count: vi.fn(
       async () =>
         filas.filter((u) => u.activo && u.rol.codigo === 'administrador')
           .length,
     ),
     create: vi.fn((datos: Partial<Usuario>) => ({ id: 99, ...datos })),
-    save: vi.fn(async (u: Usuario) => u),
+    save: vi.fn(async (u: Usuario) => {
+      const i = filas.findIndex((f) => f.id === u.id);
+      if (i >= 0) filas[i] = { ...u };
+      return u;
+    }),
     update: vi.fn(async () => undefined),
   } as unknown as Repository<Usuario>;
   const rolesRepo = {
@@ -62,9 +68,25 @@ function crearServicio(existentes: Usuario[]) {
         roles.find((r) => r.codigo === where.codigo) ?? null,
     ),
   } as unknown as Repository<Rol>;
+  const consultas: string[] = [];
+  const manager = {
+    query: vi.fn(async (sql: string) => consultas.push(sql)),
+    getRepository: () => usuarios,
+    transaction: async (trabajo: (m: unknown) => Promise<unknown>) =>
+      trabajo(manager),
+  };
+  (usuarios as unknown as { manager: unknown }).manager = manager;
+  const sesiones = { cerrarDe: vi.fn(async () => undefined) };
   return {
-    servicio: new UsuariosService(usuarios, rolesRepo, new PasswordService()),
+    servicio: new UsuariosService(
+      usuarios,
+      rolesRepo,
+      new PasswordService(),
+      sesiones as unknown as SesionesService,
+    ),
     usuarios,
+    sesiones,
+    consultas,
   };
 }
 
@@ -172,7 +194,30 @@ describe('UsuariosService.actualizar', () => {
   });
 });
 
+describe('UsuariosService (bloqueo de administradores)', () => {
+  it('toma el bloqueo antes de comprobar si queda otro administrador', async () => {
+    const { servicio, consultas } = crearServicio([
+      usuario({ id: 1, nombreUsuario: 'a', rolCodigo: 'administrador' }),
+      usuario({ id: 2, nombreUsuario: 'b', rolCodigo: 'administrador' }),
+    ]);
+    await servicio.actualizar(1, { activo: false });
+    expect(consultas).toEqual(['SELECT pg_advisory_xact_lock($1)']);
+  });
+
+  it('no usa el bloqueo si el cambio no afecta a un administrador', async () => {
+    const { servicio, consultas } = crearServicio([usuario({ id: 3 })]);
+    await servicio.actualizar(3, { activo: false });
+    expect(consultas).toEqual([]);
+  });
+});
+
 describe('UsuariosService.restablecerClave', () => {
+  it('cierra todas las sesiones del usuario', async () => {
+    const { servicio, sesiones } = crearServicio([usuario({ id: 3 })]);
+    await servicio.restablecerClave(3, 'otra-clave-larga');
+    expect(sesiones.cerrarDe).toHaveBeenCalledWith(3);
+  });
+
   it('guarda el hash de la clave nueva', async () => {
     const { servicio, usuarios } = crearServicio([usuario({ id: 3 })]);
     await servicio.restablecerClave(3, 'otra-clave-larga');
