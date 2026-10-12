@@ -34,3 +34,15 @@ Frontend (`cd frontend`): `npm run dev`, `npm run build` (tsc -b + vite), `npm r
 ## Git
 
 - Los commits no llevan línea `Co-Authored-By` ni ninguna otra atribución a Claude.
+
+## Spec-driven development (Superpowers)
+
+- Flujo: superpowers:brainstorming → spec; superpowers:writing-plans → plan; ejecución con superpowers:executing-plans o superpowers:subagent-driven-development.
+- Contexto obligatorio antes de especificar: docs/requerimientos.md y docs/primer-avance.md. Toda spec indica los RF y RNF que cubre.
+- Si una spec depende de un punto abierto (docs/requerimientos.md, sección 7), se pregunta y la decisión queda escrita en la spec.
+- Specs en docs/superpowers/specs/ y planes en docs/superpowers/plans/, en español, commiteados en la misma rama que el código.
+- Cada archivo empieza con una línea de estado:
+  - Specs: Estado: Propuesta | Aprobada | Parcial | Implementada | Descartada, más Fecha y Autor.
+  - Planes: Estado: Pendiente | En curso | Implementado | Descartado, más Fecha y PR.
+- Al cerrar el trabajo se actualiza el Estado; es lo único que indica si está hecho.
+- Los planes respetan el stack y la arquitectura de docs/requerimientos.md (secciones 5 y 6): módulos NestJS en capas, cambios de esquema solo por migraciones, DTO con @ApiProperty, frontend con TanStack Query, react-hook-form y zod.
