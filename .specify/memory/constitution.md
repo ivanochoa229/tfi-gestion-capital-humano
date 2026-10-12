@@ -1,14 +1,3 @@
-<!--
-Sync Impact Report
-- Version change: (plantilla sin completar) → 1.0.0
-- Principios agregados: I. Stack tecnológico fijo; II. Arquitectura en capas por dominio;
-  III. Esquema solo por migraciones revisadas; IV. Convenciones de nombres;
-  V. Dominios cerrados en tablas de referencia; VI. Indicadores calculados, no almacenados;
-  VII. Trazabilidad a requerimientos; VIII. Calidad antes de integrar
-- Secciones agregadas: Restricciones adicionales, Flujo de desarrollo, Governance
-- Secciones eliminadas: ninguna
-- TODOs diferidos: ninguno
--->
 # Constitución del sistema de gestión del conocimiento crítico
 
 ## Core Principles
