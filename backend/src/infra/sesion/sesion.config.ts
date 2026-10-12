@@ -4,6 +4,8 @@ import connectPgSimple from 'connect-pg-simple';
 import session from 'express-session';
 import passport from 'passport';
 import type { Env } from '../config/env.validation.js';
+import type { SesionUsuario } from '../../common/sesion-usuario.js';
+import { contextoUsuario } from '../auditoria/contexto-usuario.js';
 
 const OCHO_HORAS = 8 * 60 * 60 * 1000;
 
@@ -35,4 +37,8 @@ export function configurarSesion(
   );
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(
+    (req: { user?: SesionUsuario }, _res: unknown, siguiente: () => void) =>
+      contextoUsuario.run({ idUsuario: req.user?.id ?? null }, siguiente),
+  );
 }
