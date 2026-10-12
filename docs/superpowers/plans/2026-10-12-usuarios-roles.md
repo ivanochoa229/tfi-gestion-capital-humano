@@ -1,4 +1,4 @@
-Estado: Implementado | Fecha: 2026-10-12 | PR: pendiente
+Estado: Implementado | Fecha: 2026-10-12 | PR: #1
 
 # Usuarios y roles: plan de implementación
 
