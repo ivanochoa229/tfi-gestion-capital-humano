@@ -14,8 +14,7 @@ se regenera con `npm run api:tipos`. Errores en el formato estándar de NestJS
 | PATCH | `/api/referencia/:dominio/:id` | escritura | Modifica `codigo`, `denominacion`, `orden`, `activo` (todos opcionales). |
 | DELETE | `/api/referencia/:dominio/:id` | escritura | Borra un valor sin uso. |
 
-**Acceso**: escritura exige el encabezado `x-admin-token` (provisorio, ver plan); se reemplaza por
-el rol de administrador al implementar RF22.
+**Acceso**: Lectura: cualquier usuario con sesión iniciada. Escritura: rol `administrador`. Sin sesión, 401; con otro rol, 403.
 
 ## Cuerpos
 
@@ -30,6 +29,7 @@ el rol de administrador al implementar RF22.
 | --- | --- |
 | 200/201/204 | Éxito (PATCH/GET 200, POST 201, DELETE 204) |
 | 400 | Campos inválidos, orden faltante en ordinal u orden en no ordinal |
-| 403 | Falta o es inválido el token de escritura |
+| 401 | Sin sesión |
+| 403 | El rol no puede modificar las tablas de referencia |
 | 404 | Dominio o valor inexistente |
 | 409 | Código u orden duplicado; borrado o cambio de código de un valor en uso |

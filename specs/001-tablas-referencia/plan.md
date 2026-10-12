@@ -48,10 +48,10 @@ Sin NEEDS CLARIFICATION pendientes; las decisiones están en [research.md](resea
 | V. Dominios cerrados en tablas | Es la feature misma. |
 | VI. Indicadores no almacenados | No aplica. |
 | VII. Trazabilidad | Cubre RF23 y RNF03; RNF01 y RF24 de forma parcial (ver abajo). |
-| VIII. Calidad | Plan incluye tests de servicio, catálogo y guard; lint y formato en ambas apps. |
-| RNF01 (autenticación obligatoria) | **Desvío justificado** hasta RF22: ver Complexity Tracking. |
+| VIII. Calidad | Plan incluye tests de servicio y catálogo; lint y formato en ambas apps. |
+| RNF01 (autenticación obligatoria) | Cumple: las escrituras exigen el rol `administrador` (ver `docs/superpowers/specs/2026-10-12-usuarios-roles-design.md`). |
 
-Re-evaluación tras la Fase 1: sin cambios; el único desvío es el de RNF01.
+Re-evaluación tras la Fase 1: sin cambios.
 
 ## Project Structure
 
@@ -86,7 +86,6 @@ backend/src/
 │   ├── referencia.service.spec.ts
 │   ├── dominios.spec.ts
 │   └── referencia.module.ts                # exporta ReferenciaService
-├── common/guards/admin-provisorio.guard.ts (+ .spec.ts)
 └── infra/database/migrations/
     ├── <ts>-CrearTablasReferencia.ts
     └── <ts>-CargarValoresReferencia.ts
@@ -98,12 +97,8 @@ frontend/src/features/admin/
 ```
 
 **Structure Decision**: aplicación web existente; se completan los esqueletos
-`backend/src/modules/referencia` y `frontend/src/features/admin`, según la constitución. Se
-agrega `common/guards` (ya previsto en la arquitectura) y se registra la variable opcional
-`ADMIN_TOKEN` en `env.validation.ts` y `.env.example`.
+`backend/src/modules/referencia` y `frontend/src/features/admin`, según la constitución.
 
 ## Complexity Tracking
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-| --- | --- | --- |
-| RNF01/RF24 no se cumplen del todo: las escrituras se protegen con un guard provisorio por token (`ADMIN_TOKEN`) y las lecturas quedan abiertas | RF22 (usuarios y roles) no existe aún y esta feature no puede esperar: el resto de los módulos depende de estos valores | Implementar usuarios y roles acá excede el alcance; dejar las escrituras sin protección permitiría alterar dominios cerrados. El guard se reemplaza por el guard de rol real al implementar RF22 |
+Sin violaciones.

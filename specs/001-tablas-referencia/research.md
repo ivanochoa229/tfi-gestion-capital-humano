@@ -40,7 +40,8 @@
 - **Alternatives**: trigger en la base (oculto y difícil de revisar).
 
 ## R6. Control de acceso provisorio
-- **Decision**: `AdminProvisorioGuard` en las escrituras, que exige el encabezado `x-admin-token`
+- **Reemplazada** por usuarios y roles (2026-10-12): las escrituras exigen el rol `administrador`; las lecturas, sesión iniciada.
+- **Decision** (histórica): `AdminProvisorioGuard` en las escrituras, que exige el encabezado `x-admin-token`
   igual a `ADMIN_TOKEN` (variable opcional; si no está definida, las escrituras se rechazan
   con 403). Lecturas abiertas hasta contar con autenticación (RF22).
 - **Rationale**: no inventa un modelo de usuarios y es fácil de reemplazar por un guard de rol.

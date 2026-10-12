@@ -6,6 +6,8 @@ import {
   IsOptional,
   IsString,
   IsUrl,
+  MaxLength,
+  MinLength,
   validateSync,
 } from 'class-validator';
 
@@ -66,13 +68,21 @@ export class Env {
   @IsNotEmpty()
   S3_BUCKET: string;
 
-  /**
-   * Token provisorio que autoriza las escrituras de las tablas de referencia
-   * hasta que exista la gestión de usuarios y roles (RF22).
-   */
+  /** Firma la cookie de sesión. */
+  @IsString()
+  @MinLength(32)
+  SESION_SECRETO: string;
+
+  /** Usuario y clave del primer administrador; solo se usan si no hay usuarios. */
   @IsOptional()
   @IsString()
-  ADMIN_TOKEN?: string;
+  @MinLength(3)
+  @MaxLength(50)
+  ADMIN_USUARIO?: string;
+
+  @IsOptional()
+  @IsString()
+  ADMIN_CLAVE?: string;
 }
 
 export function validarEnv(config: Record<string, unknown>): Env {

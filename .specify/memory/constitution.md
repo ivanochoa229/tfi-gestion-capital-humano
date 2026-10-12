@@ -7,7 +7,7 @@ El backend MUST usar NestJS 12 con TypeORM, PostgreSQL y RustFS (almacenamiento 
 El frontend MUST usar React, TypeScript y Vite con MUI y TanStack Query. Cambiar o agregar una
 tecnología de capa (ORM, motor, librería de UI, gestor de estado) requiere enmendar esta
 constitución. Los archivos de los activos de conocimiento se guardan en RustFS y PostgreSQL guarda
-solo sus metadatos (RNF08).
+solo sus metadatos (RNF08). Para autenticación se usan Passport, express-session con connect-pg-simple y argon2 (usuarios y roles).
 
 ### II. Arquitectura en capas por módulo de dominio
 Cada dominio del backend es un módulo de NestJS con controller (HTTP y validación de DTO), service
@@ -45,8 +45,7 @@ detección MUST tener tests.
 
 ## Restricciones adicionales
 
-- Autenticación obligatoria y autorización por rol en toda operación (RNF01); datos personales
-  conforme a la Ley 25.326 (RNF02).
+- Autenticación obligatoria con sesión y autorización por rol en toda operación (RNF01), con siete roles fijos; datos personales conforme a la Ley 25.326 (RNF02).
 - Altas y modificaciones de criticidad y planes de sucesión registran usuario y fecha (RNF05).
 - Entorno exclusivamente local con Docker Compose, imágenes con versión fija y volúmenes
   persistentes (RNF09). Configuración por `.env`, validada al arrancar.
@@ -69,4 +68,4 @@ materialmente un principio o sección, PATCH por aclaraciones. Toda revisión de
 verificar el cumplimiento de los principios; las desviaciones se justifican por escrito en el plan
 de la feature. La guía de trabajo diaria está en `CLAUDE.md` y `README.md`.
 
-**Version**: 1.0.0 | **Ratified**: 2026-10-12 | **Last Amended**: 2026-10-12
+**Version**: 1.1.0 | **Ratified**: 2026-10-12 | **Last Amended**: 2026-10-12

@@ -4,6 +4,7 @@ import { validarEnv } from './infra/config/env.validation.js';
 import { DatabaseModule } from './infra/database/database.module.js';
 import { SaludController } from './infra/salud/salud.controller.js';
 import { StorageModule } from './infra/storage/storage.module.js';
+import { AuditoriaModule } from './infra/auditoria/auditoria.module.js';
 import { ConocimientoModule } from './modules/conocimiento/conocimiento.module.js';
 import { CriticidadModule } from './modules/criticidad/criticidad.module.js';
 import { DeteccionModule } from './modules/deteccion/deteccion.module.js';
@@ -24,6 +25,7 @@ import { UsuariosModule } from './modules/usuarios/usuarios.module.js';
     }),
     DatabaseModule,
     StorageModule,
+    AuditoriaModule,
     EstructuraModule,
     PersonasModule,
     ConocimientoModule,

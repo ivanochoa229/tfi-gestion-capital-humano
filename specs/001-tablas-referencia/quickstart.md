@@ -2,9 +2,8 @@
 
 ## Prerrequisitos
 
-- `.env` creado desde `.env.example` con `ADMIN_TOKEN=cambiame` agregado.
-- `docker compose up --build` (las migraciones corren al arrancar). Cuando exista un cliente, dejar
-  `curl` con `-H "x-admin-token: cambiame"` en las escrituras.
+- `.env` con `ADMIN_USUARIO`, `ADMIN_CLAVE` y `SESION_SECRETO`; iniciar sesión (`POST /api/auth/login`) y reutilizar la cookie con `curl -b`.
+- `docker compose up --build` (las migraciones corren al arrancar).
 
 ## Validación automática
 

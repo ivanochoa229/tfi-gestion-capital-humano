@@ -94,19 +94,22 @@ La decisión modifica la tabla `activo_conocimiento`:
 
 | Capa | Tecnología | Requerimientos que cubre |
 | --- | --- | --- |
-| Base de datos | PostgreSQL | Modelo relacional de diecinueve tablas (RNF07) |
+| Base de datos | PostgreSQL | Modelo relacional de veinticuatro tablas (RNF07) |
 | Almacenamiento de archivos | RustFS | Activos de conocimiento (RF11, RNF08) |
 | Backend | NestJS (TypeScript) | API para todos los requerimientos funcionales |
 | ORM y migraciones | TypeORM, con migraciones versionadas y `synchronize` desactivado | Esquema y datos de prueba iguales para todo el grupo |
 | Consultas de detección | Vistas de PostgreSQL creadas por migración | RF16 a RF20, calculadas y no almacenadas (RNF04) |
 | Validación | class-validator y class-transformer | Datos de entrada y dominios cerrados (RNF03) |
-| Autenticación y roles | Passport con sesión y guards de NestJS por rol | RF22, RF24, RNF01 |
+| Autenticación y roles | Passport (estrategia local) con sesión en PostgreSQL, claves con argon2id y guards de NestJS por rol | RF22, RF24, RNF01 |
+| Sesión | express-session con connect-pg-simple (tabla sesion en PostgreSQL) | RNF01 |
 | Auditoría | Subscribers de TypeORM que registran usuario y fecha | RNF05 |
 | Carga de archivos | Multer y @aws-sdk/client-s3 apuntando a RustFS | RF11, RNF08 |
 | Documentación de la API | @nestjs/swagger | Contrato entre backend y frontend |
 | Frontend | React, TypeScript y Vite | Formularios de ABM y consultas |
 | Componentes y gráficos | MUI y Recharts | Tablero de riesgo (RF21), usabilidad (RNF06) |
 | Entorno | Docker Compose con base, almacenamiento, backend y frontend | RNF09 |
+
+**Usuarios y roles:** siete roles fijos (`rol`), `usuario`, `usuario_unidad`, `sesion` y `auditoria`; ver `docs/superpowers/specs/2026-10-12-usuarios-roles-design.md`.
 
 Cuidados de implementación:
 
@@ -168,7 +171,6 @@ Deben decidirse antes de implementar el bloque que los usa.
 
 | Tema | Requerimiento afectado | Qué falta definir |
 | --- | --- | --- |
-| Usuarios y roles | RF22, RF24 | Tablas de usuario, rol y permiso, que no están entre las diecinueve |
 | Validación y aprobación | RF05, RF13 | Un estado, quién validó o aprobó y cuándo; `relevamiento` y `plan_sucesion` no lo registran |
 | Criticidad del puesto | RF18 | La criticidad se evalúa por par conocimiento-puesto, pero RF18 habla de puestos críticos. Falta la regla, por ejemplo: un puesto es crítico si tiene al menos un conocimiento de criticidad alta |
 | Regla de combinación | RF12 | Cómo se combinan impacto de pérdida y dificultad de reemplazo para obtener el nivel de criticidad (supuesto 5 del avance) |

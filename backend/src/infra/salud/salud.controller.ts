@@ -1,6 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { DataSource } from 'typeorm';
+import { Publico } from '../../common/decorators/publico.decorator.js';
 import { StorageService } from '../storage/storage.service.js';
 import { SaludDto } from './salud.dto.js';
 
@@ -13,6 +14,7 @@ export class SaludController {
     private readonly storage: StorageService,
   ) {}
 
+  @Publico()
   @Get()
   @ApiOkResponse({ type: SaludDto })
   async verificar(): Promise<SaludDto> {
