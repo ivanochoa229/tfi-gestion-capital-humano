@@ -134,6 +134,6 @@ En los dominios ordinales (niveles), el administrador ajusta el orden de los val
 - Valores iniciales tomados de los documentos: carácter de ocupación (titular, interino, suplente) y tipo de acción de transferencia (documentación, capacitación, mentoría, rotación). Los de los demás dominios se definen al planificar, con denominaciones razonables en español.
 - El nivel de dominio tiene cuatro niveles (por ejemplo: básico, intermedio, avanzado, experto; denominaciones a confirmar).
 - La regla que combina impacto de pérdida y dificultad de reemplazo en un nivel de criticidad queda fuera de este alcance (punto abierto de RF12).
-- La gestión de usuarios y roles (RF22) es una dependencia: este módulo asume que existen autenticación y el rol de administrador; hasta entonces se puede proteger de forma provisoria.
+- La autenticación y el rol de administrador provienen del bloque de usuarios y roles.
 - Cambiar el código de un valor en uso no está permitido; solo se cambia la denominación.
 - Los dominios en sí no se crean ni eliminan desde el sistema: son los diez fijos del modelo.

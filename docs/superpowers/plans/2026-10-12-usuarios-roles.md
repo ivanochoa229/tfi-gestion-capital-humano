@@ -1,4 +1,4 @@
-Estado: Pendiente | Fecha: 2026-10-12 | PR: pendiente
+Estado: Implementado | Fecha: 2026-10-12 | PR: pendiente
 
 # Usuarios y roles: plan de implementación
 
@@ -72,7 +72,7 @@ Entradas o fallas que la spec implica y que ninguna tarea cubriría por sí sola
 **Interfaces:**
 - Produce: variables `SESION_SECRETO` (obligatoria, 32 caracteres o más), `ADMIN_USUARIO` y `ADMIN_CLAVE` (opcionales) en la clase `Env`.
 
-- [ ] **Paso 1: Crear la rama de trabajo**
+- [x] **Paso 1: Crear la rama de trabajo**
 
 Ya estás en `feat/usuarios`. Verificar:
 
@@ -82,7 +82,7 @@ git branch --show-current
 
 Esperado: `feat/usuarios`.
 
-- [ ] **Paso 2: Instalar dependencias en el host**
+- [x] **Paso 2: Instalar dependencias en el host**
 
 ```bash
 cd backend
@@ -92,7 +92,7 @@ npm install -D @types/passport @types/passport-local @types/express-session @typ
 
 Esperado: sin errores; `package.json` y `package-lock.json` modificados.
 
-- [ ] **Paso 3: Verificar que los imports ESM funcionan**
+- [x] **Paso 3: Verificar que los imports ESM funcionan**
 
 ```bash
 node --input-type=module -e "
@@ -107,7 +107,7 @@ console.log(await verify(h, 'clave-de-prueba'), typeof connectPgSimple(session),
 
 Esperado: `true function function`.
 
-- [ ] **Paso 4: Escribir el test de validación de entorno (falla)**
+- [x] **Paso 4: Escribir el test de validación de entorno (falla)**
 
 Crear `backend/src/infra/config/env.validation.spec.ts`:
 
@@ -147,7 +147,7 @@ describe('validarEnv', () => {
 });
 ```
 
-- [ ] **Paso 5: Correr el test y verlo fallar**
+- [x] **Paso 5: Correr el test y verlo fallar**
 
 ```bash
 cd backend && npx vitest run src/infra/config/env.validation.spec.ts
@@ -155,7 +155,7 @@ cd backend && npx vitest run src/infra/config/env.validation.spec.ts
 
 Esperado: FAIL (la primera prueba no encuentra `SESION_SECRETO` en `Env`, o la tercera no lanza).
 
-- [ ] **Paso 6: Agregar las variables a `Env`**
+- [x] **Paso 6: Agregar las variables a `Env`**
 
 En `backend/src/infra/config/env.validation.ts`, ampliar el import de class-validator con `MaxLength` y `MinLength`, y agregar al final de la clase `Env` (después de `ADMIN_TOKEN`, que se elimina en la Tarea 7):
 
@@ -177,7 +177,7 @@ En `backend/src/infra/config/env.validation.ts`, ampliar el import de class-vali
   ADMIN_CLAVE?: string;
 ```
 
-- [ ] **Paso 7: Actualizar `.env.example` y `.env`**
+- [x] **Paso 7: Actualizar `.env.example` y `.env`**
 
 En `.env.example`, después de la línea `ADMIN_TOKEN=cambiame` agregar:
 
@@ -191,7 +191,7 @@ ADMIN_CLAVE=cambiame-clave-larga
 
 Agregar las mismas tres líneas, con valores propios, al `.env` local (por ejemplo `SESION_SECRETO=$(openssl rand -hex 32)`).
 
-- [ ] **Paso 8: Reconstruir el backend y correr tests**
+- [x] **Paso 8: Reconstruir el backend y correr tests**
 
 ```bash
 docker compose up --build -d backend
@@ -200,7 +200,7 @@ docker compose exec -T backend npx vitest run src/infra/config/env.validation.sp
 
 Esperado: 3 tests PASS y el backend arranca.
 
-- [ ] **Paso 9: Commit**
+- [x] **Paso 9: Commit**
 
 ```bash
 git add backend/package.json backend/package-lock.json backend/src/infra/config .env.example
@@ -222,7 +222,7 @@ git commit -m "Agregar dependencias de sesión y variables de entorno de usuario
 **Interfaces:**
 - Produce: `ROLES`, `CodigoRol`, `TODOS_LOS_ROLES`, `ROLES_GLOBALES`, `ROLES_CON_ALCANCE_POR_UNIDAD`, `SesionUsuario`, entidades `Rol`, `Usuario`, `UsuarioUnidad`, `Auditoria`.
 
-- [ ] **Paso 1: Escribir el test de roles (falla)**
+- [x] **Paso 1: Escribir el test de roles (falla)**
 
 Crear `backend/src/common/roles.spec.ts`:
 
@@ -259,7 +259,7 @@ describe('roles', () => {
 });
 ```
 
-- [ ] **Paso 2: Correr el test y verlo fallar**
+- [x] **Paso 2: Correr el test y verlo fallar**
 
 ```bash
 docker compose exec -T backend npx vitest run src/common/roles.spec.ts
@@ -267,7 +267,7 @@ docker compose exec -T backend npx vitest run src/common/roles.spec.ts
 
 Esperado: FAIL ("Cannot find module './roles.js'").
 
-- [ ] **Paso 3: Crear `roles.ts` y `sesion-usuario.ts`**
+- [x] **Paso 3: Crear `roles.ts` y `sesion-usuario.ts`**
 
 `backend/src/common/roles.ts`:
 
@@ -317,7 +317,7 @@ export interface SesionUsuario {
 }
 ```
 
-- [ ] **Paso 4: Correr el test y verlo pasar**
+- [x] **Paso 4: Correr el test y verlo pasar**
 
 ```bash
 docker compose exec -T backend npx vitest run src/common/roles.spec.ts
@@ -325,7 +325,7 @@ docker compose exec -T backend npx vitest run src/common/roles.spec.ts
 
 Esperado: 2 tests PASS.
 
-- [ ] **Paso 5: Crear las entidades**
+- [x] **Paso 5: Crear las entidades**
 
 `backend/src/modules/usuarios/entities/rol.entity.ts`:
 
@@ -465,7 +465,7 @@ export class Auditoria {
 }
 ```
 
-- [ ] **Paso 6: Incluir `infra/` en las entidades de la CLI**
+- [x] **Paso 6: Incluir `infra/` en las entidades de la CLI**
 
 En `backend/src/infra/database/data-source.ts`, reemplazar el arreglo `entities` por:
 
@@ -476,7 +476,7 @@ En `backend/src/infra/database/data-source.ts`, reemplazar el arreglo `entities`
   ],
 ```
 
-- [ ] **Paso 7: Generar la migración y revisarla**
+- [x] **Paso 7: Generar la migración y revisarla**
 
 La CLI descubre las entidades por glob, así que no hace falta registrarlas antes. Generar:
 
@@ -487,7 +487,7 @@ ls backend/src/infra/database/migrations
 
 Esperado: un archivo nuevo `*-CrearTablasUsuarios.ts` que crea `rol`, `usuario`, `usuario_unidad` y `auditoria` con sus claves foráneas y restricciones de unicidad (`nombre_usuario`, `id_persona`, `codigo`). Revisar que `usuario_unidad` tenga clave primaria compuesta y que su clave foránea a `usuario` sea `ON DELETE CASCADE`.
 
-- [ ] **Paso 8: Completar la migración con los roles y la tabla `sesion`**
+- [x] **Paso 8: Completar la migración con los roles y la tabla `sesion`**
 
 Editar el archivo generado. Al final del método `up` agregar (después de los `CREATE TABLE` y claves foráneas generadas):
 
@@ -522,7 +522,7 @@ Y al comienzo del método `down` (antes de los `DROP TABLE` generados):
     await queryRunner.query(`DROP TABLE "sesion"`);
 ```
 
-- [ ] **Paso 9: Aplicar, revertir y volver a aplicar**
+- [x] **Paso 9: Aplicar, revertir y volver a aplicar**
 
 ```bash
 docker compose exec -T backend npm run migration:run 2>&1 | grep -E "executed|Error"
@@ -533,7 +533,7 @@ docker compose exec -T db sh -c 'psql -U $POSTGRES_USER -d $POSTGRES_DB -c "sele
 
 Esperado: ejecutada, revertida y ejecutada de nuevo; 7 roles listados.
 
-- [ ] **Paso 10: Verificar que las entidades y la base coinciden**
+- [x] **Paso 10: Verificar que las entidades y la base coinciden**
 
 ```bash
 docker compose exec -T backend npm run migration:generate -- src/infra/database/migrations/Verificacion 2>&1 | tail -3
@@ -541,7 +541,7 @@ docker compose exec -T backend npm run migration:generate -- src/infra/database/
 
 Esperado: "No changes in database schema were found" y ningún archivo nuevo. Si generó una migración, borrarla y corregir la entidad o la migración hasta que no haya diferencias.
 
-- [ ] **Paso 11: Commit**
+- [x] **Paso 11: Commit**
 
 ```bash
 git add backend/src/common backend/src/modules/usuarios/entities backend/src/infra
@@ -559,7 +559,7 @@ git commit -m "Agregar roles, entidades de usuarios y auditoría, y su migració
 **Interfaces:**
 - Produce: `PasswordService` con `hashear(clave: string): Promise<string>`, `verificar(hash: string, clave: string): Promise<boolean>` y la constante `LARGO_MINIMO_CLAVE = 10`.
 
-- [ ] **Paso 1: Escribir el test (falla)**
+- [x] **Paso 1: Escribir el test (falla)**
 
 `backend/src/modules/usuarios/password.service.spec.ts`:
 
@@ -593,7 +593,7 @@ describe('PasswordService', () => {
 });
 ```
 
-- [ ] **Paso 2: Correrlo y verlo fallar**
+- [x] **Paso 2: Correrlo y verlo fallar**
 
 ```bash
 docker compose exec -T backend npx vitest run src/modules/usuarios/password.service.spec.ts
@@ -601,7 +601,7 @@ docker compose exec -T backend npx vitest run src/modules/usuarios/password.serv
 
 Esperado: FAIL ("Cannot find module './password.service.js'").
 
-- [ ] **Paso 3: Implementar**
+- [x] **Paso 3: Implementar**
 
 `backend/src/modules/usuarios/password.service.ts`:
 
@@ -628,7 +628,7 @@ export class PasswordService {
 }
 ```
 
-- [ ] **Paso 4: Correrlo y verlo pasar**
+- [x] **Paso 4: Correrlo y verlo pasar**
 
 ```bash
 docker compose exec -T backend npx vitest run src/modules/usuarios/password.service.spec.ts
@@ -636,7 +636,7 @@ docker compose exec -T backend npx vitest run src/modules/usuarios/password.serv
 
 Esperado: 4 tests PASS.
 
-- [ ] **Paso 5: Commit**
+- [x] **Paso 5: Commit**
 
 ```bash
 git add backend/src/modules/usuarios/password.service.ts backend/src/modules/usuarios/password.service.spec.ts
@@ -656,7 +656,7 @@ git commit -m "Agregar hash de contraseñas con argon2id"
 - Consume: `CodigoRol`, `SesionUsuario`.
 - Produce: `@Roles(...roles: CodigoRol[])`, `ROLES_KEY`, `@Publico()`, `PUBLICO_KEY`, `@UsuarioActual()`, `SesionGuard`, `RolesGuard`. Los endpoints sin `@Roles` ni `@Publico` se rechazan con 403 (falla cerrada).
 
-- [ ] **Paso 1: Escribir los tests (fallan)**
+- [x] **Paso 1: Escribir los tests (fallan)**
 
 `backend/src/common/guards/sesion.guard.spec.ts`:
 
@@ -770,7 +770,7 @@ describe('RolesGuard', () => {
 });
 ```
 
-- [ ] **Paso 2: Correrlos y verlos fallar**
+- [x] **Paso 2: Correrlos y verlos fallar**
 
 ```bash
 docker compose exec -T backend npx vitest run src/common/guards
@@ -778,7 +778,7 @@ docker compose exec -T backend npx vitest run src/common/guards
 
 Esperado: FAIL (módulos inexistentes).
 
-- [ ] **Paso 3: Crear los decoradores**
+- [x] **Paso 3: Crear los decoradores**
 
 `backend/src/common/decorators/roles.decorator.ts`:
 
@@ -816,7 +816,7 @@ export const UsuarioActual = createParamDecorator(
 );
 ```
 
-- [ ] **Paso 4: Crear los guards**
+- [x] **Paso 4: Crear los guards**
 
 `backend/src/common/guards/sesion.guard.ts`:
 
@@ -894,7 +894,7 @@ export class RolesGuard implements CanActivate {
 }
 ```
 
-- [ ] **Paso 5: Correr los tests y verlos pasar**
+- [x] **Paso 5: Correr los tests y verlos pasar**
 
 ```bash
 docker compose exec -T backend npx vitest run src/common/guards
@@ -902,7 +902,7 @@ docker compose exec -T backend npx vitest run src/common/guards
 
 Esperado: todos PASS (3 de `SesionGuard`, 11 de `RolesGuard` y los 4 del guard provisorio de la feature anterior, que se elimina en la Tarea 7).
 
-- [ ] **Paso 6: Commit**
+- [x] **Paso 6: Commit**
 
 ```bash
 git add backend/src/common
@@ -921,7 +921,7 @@ git commit -m "Agregar decoradores y guards de sesión y roles"
 - Consume: `PasswordService`, `LARGO_MINIMO_CLAVE`, `Usuario`, `SesionUsuario`, `Repository<Usuario>`.
 - Produce: `AuthService` con `validarCredenciales(nombreUsuario: string, clave: string): Promise<SesionUsuario | null>`, `cargarSesionUsuario(id: number): Promise<SesionUsuario | null>` y `cambiarClave(idUsuario: number, claveActual: string, claveNueva: string): Promise<void>`. Constante `normalizarNombreUsuario(nombre: string): string` exportada desde este archivo.
 
-- [ ] **Paso 1: Escribir los tests (fallan)**
+- [x] **Paso 1: Escribir los tests (fallan)**
 
 `backend/src/modules/usuarios/auth.service.spec.ts`:
 
@@ -1033,7 +1033,7 @@ describe('AuthService.cambiarClave', () => {
 });
 ```
 
-- [ ] **Paso 2: Correrlos y verlos fallar**
+- [x] **Paso 2: Correrlos y verlos fallar**
 
 ```bash
 docker compose exec -T backend npx vitest run src/modules/usuarios/auth.service.spec.ts
@@ -1041,7 +1041,7 @@ docker compose exec -T backend npx vitest run src/modules/usuarios/auth.service.
 
 Esperado: FAIL (módulo inexistente).
 
-- [ ] **Paso 3: Implementar**
+- [x] **Paso 3: Implementar**
 
 `backend/src/modules/usuarios/auth.service.ts`:
 
@@ -1123,7 +1123,7 @@ export class AuthService {
 }
 ```
 
-- [ ] **Paso 3b: Correrlos y verlos pasar**
+- [x] **Paso 3b: Correrlos y verlos pasar**
 
 ```bash
 docker compose exec -T backend npx vitest run src/modules/usuarios/auth.service.spec.ts
@@ -1131,7 +1131,7 @@ docker compose exec -T backend npx vitest run src/modules/usuarios/auth.service.
 
 Esperado: 11 tests PASS.
 
-- [ ] **Paso 4: Commit**
+- [x] **Paso 4: Commit**
 
 ```bash
 git add backend/src/modules/usuarios/auth.service.ts backend/src/modules/usuarios/auth.service.spec.ts
@@ -1151,7 +1151,7 @@ git commit -m "Agregar AuthService: credenciales, sesión y cambio de clave"
 - Consume: `PasswordService`, `LARGO_MINIMO_CLAVE`, `normalizarNombreUsuario`, `Usuario`, `Rol`, `ROLES`, `ROLES_CON_ALCANCE_POR_UNIDAD`.
 - Produce: `UsuariosService` con `listar(): Promise<UsuarioDto[]>`, `listarRoles(): Promise<RolDto[]>`, `crear(dto: CrearUsuarioDto): Promise<UsuarioDto>`, `actualizar(id: number, dto: ActualizarUsuarioDto): Promise<UsuarioDto>` y `restablecerClave(id: number, clave: string): Promise<void>`.
 
-- [ ] **Paso 1: Crear los DTOs**
+- [x] **Paso 1: Crear los DTOs**
 
 `backend/src/modules/usuarios/dto/crear-usuario.dto.ts`:
 
@@ -1283,7 +1283,7 @@ export class RolDto {
 }
 ```
 
-- [ ] **Paso 2: Escribir los tests (fallan)**
+- [x] **Paso 2: Escribir los tests (fallan)**
 
 `backend/src/modules/usuarios/usuarios.service.spec.ts`:
 
@@ -1450,7 +1450,7 @@ describe('UsuariosService.restablecerClave', () => {
 });
 ```
 
-- [ ] **Paso 3: Correrlos y verlos fallar**
+- [x] **Paso 3: Correrlos y verlos fallar**
 
 ```bash
 docker compose exec -T backend npx vitest run src/modules/usuarios/usuarios.service.spec.ts
@@ -1458,7 +1458,7 @@ docker compose exec -T backend npx vitest run src/modules/usuarios/usuarios.serv
 
 Esperado: FAIL (módulo inexistente).
 
-- [ ] **Paso 4: Implementar**
+- [x] **Paso 4: Implementar**
 
 `backend/src/modules/usuarios/usuarios.service.ts`:
 
@@ -1632,7 +1632,7 @@ export class UsuariosService {
 }
 ```
 
-- [ ] **Paso 5: Correrlos y verlos pasar**
+- [x] **Paso 5: Correrlos y verlos pasar**
 
 ```bash
 docker compose exec -T backend npx vitest run src/modules/usuarios/usuarios.service.spec.ts
@@ -1640,7 +1640,7 @@ docker compose exec -T backend npx vitest run src/modules/usuarios/usuarios.serv
 
 Esperado: 16 tests PASS.
 
-- [ ] **Paso 6: Commit**
+- [x] **Paso 6: Commit**
 
 ```bash
 git add backend/src/modules/usuarios/dto backend/src/modules/usuarios/usuarios.service.ts backend/src/modules/usuarios/usuarios.service.spec.ts
@@ -1665,7 +1665,7 @@ git commit -m "Agregar UsuariosService con gestión de usuarios y roles (RF22)"
 - Consume: `AuthService`, `UsuariosService`, `PasswordService`, `SesionGuard`, `RolesGuard`, `@Roles`, `@Publico`, `@UsuarioActual`, `TODOS_LOS_ROLES`.
 - Produce: endpoints `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/yo`, `PATCH /api/auth/clave`, `GET|POST /api/usuarios`, `GET /api/usuarios/roles`, `PATCH /api/usuarios/:id`, `POST /api/usuarios/:id/restablecer-clave`; guards globales; `configurarSesion(app, config)`; `AuthService`, `UsuariosService` y `Usuario` exportados por `UsuariosModule` para otros módulos.
 
-- [ ] **Paso 1: Escribir el test de cobertura de roles (falla)**
+- [x] **Paso 1: Escribir el test de cobertura de roles (falla)**
 
 `backend/src/common/cobertura-roles.spec.ts`:
 
@@ -1721,7 +1721,7 @@ describe('cobertura de @Roles', () => {
 });
 ```
 
-- [ ] **Paso 2: Correrlo y verlo fallar**
+- [x] **Paso 2: Correrlo y verlo fallar**
 
 ```bash
 docker compose exec -T backend npx vitest run src/common/cobertura-roles.spec.ts
@@ -1729,7 +1729,7 @@ docker compose exec -T backend npx vitest run src/common/cobertura-roles.spec.ts
 
 Esperado: FAIL en `referencia.controller.ts` y `salud.controller.ts` ("no declara @Roles ni @Publico").
 
-- [ ] **Paso 3: Crear los DTOs de autenticación**
+- [x] **Paso 3: Crear los DTOs de autenticación**
 
 `backend/src/modules/usuarios/dto/login.dto.ts`:
 
@@ -1789,7 +1789,7 @@ export class CambiarClaveDto {
 }
 ```
 
-- [ ] **Paso 4: Crear la integración con Passport**
+- [x] **Paso 4: Crear la integración con Passport**
 
 `backend/src/modules/usuarios/local.strategy.ts`:
 
@@ -1866,7 +1866,7 @@ export class LocalAuthGuard extends AuthGuard('local') {
 }
 ```
 
-- [ ] **Paso 5: Crear los controllers**
+- [x] **Paso 5: Crear los controllers**
 
 `backend/src/modules/usuarios/auth.controller.ts`:
 
@@ -2026,7 +2026,7 @@ export class UsuariosController {
 }
 ```
 
-- [ ] **Paso 6: Registrar el módulo con los guards globales**
+- [x] **Paso 6: Registrar el módulo con los guards globales**
 
 Reemplazar `backend/src/modules/usuarios/usuarios.module.ts`:
 
@@ -2072,7 +2072,7 @@ import { UsuariosService } from './usuarios.service.js';
 export class UsuariosModule {}
 ```
 
-- [ ] **Paso 7: Configurar la sesión**
+- [x] **Paso 7: Configurar la sesión**
 
 `backend/src/infra/sesion/sesion.config.ts`:
 
@@ -2123,7 +2123,7 @@ En `backend/src/main.ts`, importar `configurarSesion` (`import { configurarSesio
   configurarSesion(app, config);
 ```
 
-- [ ] **Paso 8: Marcar salud como pública y los endpoints de referencia por rol**
+- [x] **Paso 8: Marcar salud como pública y los endpoints de referencia por rol**
 
 En `backend/src/infra/salud/salud.controller.ts`: importar `Publico` (`import { Publico } from '../../common/decorators/publico.decorator.js';`) y agregar `@Publico()` sobre `@Get()` de `verificar`.
 
@@ -2136,7 +2136,7 @@ En `backend/src/modules/referencia/referencia.controller.ts`:
 
 En `backend/src/modules/referencia/referencia.module.ts`: quitar `AdminProvisorioGuard` de `providers` y su import.
 
-- [ ] **Paso 9: Eliminar el guard provisorio y `ADMIN_TOKEN`**
+- [x] **Paso 9: Eliminar el guard provisorio y `ADMIN_TOKEN`**
 
 ```bash
 git rm backend/src/common/guards/admin-provisorio.guard.ts backend/src/common/guards/admin-provisorio.guard.spec.ts
@@ -2144,7 +2144,7 @@ git rm backend/src/common/guards/admin-provisorio.guard.ts backend/src/common/gu
 
 En `backend/src/infra/config/env.validation.ts`, borrar la propiedad `ADMIN_TOKEN` con su comentario y su decorador. En `.env.example` borrar las tres líneas de `ADMIN_TOKEN` (comentario y variable). En el `.env` local borrar `ADMIN_TOKEN`.
 
-- [ ] **Paso 10: Importar el módulo y verificar**
+- [x] **Paso 10: Importar el módulo y verificar**
 
 `UsuariosModule` ya está en `app.module.ts`. Correr:
 
@@ -2156,7 +2156,7 @@ docker compose exec -T backend npm test
 
 Esperado: lint sin avisos y todos los tests PASS (incluido `cobertura-roles`). Si `oxlint` marca algo, corregirlo sin desactivar reglas.
 
-- [ ] **Paso 11: Verificación manual con la base real**
+- [x] **Paso 11: Verificación manual con la base real**
 
 El backend aún no crea un administrador (Tarea 8). Insertar uno temporal con un hash generado:
 
@@ -2182,7 +2182,7 @@ Esperado: `sin sesion: 401`; login `200` con el JSON de sesión (`rol: administr
 docker compose exec -T db sh -c 'psql -U $POSTGRES_USER -d $POSTGRES_DB -c "delete from usuario where nombre_usuario = '"'"'prueba'"'"'"'
 ```
 
-- [ ] **Paso 12: Commit**
+- [x] **Paso 12: Commit**
 
 ```bash
 git add -A backend .env.example
@@ -2202,7 +2202,7 @@ git commit -m "Integrar Passport y sesión, exponer usuarios y retirar el token 
 - Consume: `PasswordService`, `Usuario`, `Rol`, `ROLES`, `ConfigService<Env, true>`.
 - Produce: `UsuariosBootstrapService` (implementa `OnApplicationBootstrap`).
 
-- [ ] **Paso 1: Escribir los tests (fallan)**
+- [x] **Paso 1: Escribir los tests (fallan)**
 
 `backend/src/modules/usuarios/usuarios-bootstrap.service.spec.ts`:
 
@@ -2264,7 +2264,7 @@ describe('UsuariosBootstrapService', () => {
 });
 ```
 
-- [ ] **Paso 2: Correrlos y verlos fallar**
+- [x] **Paso 2: Correrlos y verlos fallar**
 
 ```bash
 docker compose exec -T backend npx vitest run src/modules/usuarios/usuarios-bootstrap.service.spec.ts
@@ -2272,7 +2272,7 @@ docker compose exec -T backend npx vitest run src/modules/usuarios/usuarios-boot
 
 Esperado: FAIL (módulo inexistente).
 
-- [ ] **Paso 3: Implementar**
+- [x] **Paso 3: Implementar**
 
 `backend/src/modules/usuarios/usuarios-bootstrap.service.ts`:
 
@@ -2331,11 +2331,11 @@ export class UsuariosBootstrapService implements OnApplicationBootstrap {
 }
 ```
 
-- [ ] **Paso 4: Registrarlo**
+- [x] **Paso 4: Registrarlo**
 
 En `usuarios.module.ts`, importar `UsuariosBootstrapService` y agregarlo a `providers` (antes de los `APP_GUARD`).
 
-- [ ] **Paso 5: Tests y verificación con la base real**
+- [x] **Paso 5: Tests y verificación con la base real**
 
 ```bash
 docker compose exec -T backend npx vitest run src/modules/usuarios/usuarios-bootstrap.service.spec.ts
@@ -2346,7 +2346,7 @@ curl -s -o /dev/null -w "login admin: %{http_code}\n" -XPOST localhost:3000/api/
 
 Esperado: 4 tests PASS; el log muestra "Administrador inicial ... creado" (solo la primera vez, con la tabla vacía); `login admin: 200`.
 
-- [ ] **Paso 6: Commit**
+- [x] **Paso 6: Commit**
 
 ```bash
 git add backend/src/modules/usuarios
@@ -2366,7 +2366,7 @@ git commit -m "Crear el primer administrador al arrancar desde el .env"
 - Consume: `SesionUsuario`, `ROLES_GLOBALES`, `ROLES_CON_ALCANCE_POR_UNIDAD`, `DataSource`.
 - Produce: `AlcanceService` con `unidadesVisibles(usuario: SesionUsuario): Promise<number[] | null>` (`null` = sin restricción) y `exigirUnidad(usuario: SesionUsuario, idUnidad: number): Promise<void>` (lanza `ForbiddenException`). Exportado por `UsuariosModule`.
 
-- [ ] **Paso 1: Escribir los tests (fallan)**
+- [x] **Paso 1: Escribir los tests (fallan)**
 
 `backend/src/modules/usuarios/alcance.service.spec.ts`:
 
@@ -2448,7 +2448,7 @@ describe('AlcanceService.exigirUnidad', () => {
 });
 ```
 
-- [ ] **Paso 2: Correrlos y verlos fallar**
+- [x] **Paso 2: Correrlos y verlos fallar**
 
 ```bash
 docker compose exec -T backend npx vitest run src/modules/usuarios/alcance.service.spec.ts
@@ -2456,7 +2456,7 @@ docker compose exec -T backend npx vitest run src/modules/usuarios/alcance.servi
 
 Esperado: FAIL (módulo inexistente).
 
-- [ ] **Paso 3: Implementar**
+- [x] **Paso 3: Implementar**
 
 `backend/src/modules/usuarios/alcance.service.ts`:
 
@@ -2510,11 +2510,11 @@ export class AlcanceService {
 }
 ```
 
-- [ ] **Paso 4: Registrarlo y exportarlo**
+- [x] **Paso 4: Registrarlo y exportarlo**
 
 En `usuarios.module.ts`: importar `AlcanceService`, agregarlo a `providers` y a `exports`.
 
-- [ ] **Paso 5: Correr los tests**
+- [x] **Paso 5: Correr los tests**
 
 ```bash
 docker compose exec -T backend npx vitest run src/modules/usuarios/alcance.service.spec.ts
@@ -2522,7 +2522,7 @@ docker compose exec -T backend npx vitest run src/modules/usuarios/alcance.servi
 
 Esperado: 11 tests PASS (3 globales, 1 jefatura, 1 jefe de cátedra, 1 sin unidades, 2 sin visibilidad y 3 de `exigirUnidad`).
 
-- [ ] **Paso 6: Commit**
+- [x] **Paso 6: Commit**
 
 ```bash
 git add backend/src/modules/usuarios
@@ -2547,7 +2547,7 @@ git commit -m "Agregar AlcanceService para el alcance por unidad (RF24)"
 - Consume: entidad `Auditoria`, `SesionUsuario`.
 - Produce: `contextoUsuario` (`AsyncLocalStorage<{ idUsuario: number | null }>`), `ENTIDADES_AUDITADAS`, `AuditoriaSubscriber`, `AuditoriaService.consultar(filtro): Promise<AuditoriaDto[]>` y `GET /api/auditoria`.
 
-- [ ] **Paso 1: Crear el contexto por petición**
+- [x] **Paso 1: Crear el contexto por petición**
 
 `backend/src/infra/auditoria/contexto-usuario.ts`:
 
@@ -2570,7 +2570,7 @@ En `backend/src/infra/sesion/sesion.config.ts` agregar los imports `import type 
   );
 ```
 
-- [ ] **Paso 2: Escribir los tests del subscriber (fallan)**
+- [x] **Paso 2: Escribir los tests del subscriber (fallan)**
 
 `backend/src/infra/auditoria/auditoria.subscriber.spec.ts`:
 
@@ -2676,7 +2676,7 @@ describe('AuditoriaSubscriber', () => {
 });
 ```
 
-- [ ] **Paso 3: Correrlos y verlos fallar**
+- [x] **Paso 3: Correrlos y verlos fallar**
 
 ```bash
 docker compose exec -T backend npx vitest run src/infra/auditoria/auditoria.subscriber.spec.ts
@@ -2684,7 +2684,7 @@ docker compose exec -T backend npx vitest run src/infra/auditoria/auditoria.subs
 
 Esperado: FAIL (módulo inexistente).
 
-- [ ] **Paso 4: Implementar el subscriber**
+- [x] **Paso 4: Implementar el subscriber**
 
 `backend/src/infra/auditoria/auditoria.subscriber.ts`:
 
@@ -2774,7 +2774,7 @@ export class AuditoriaSubscriber implements EntitySubscriberInterface {
 }
 ```
 
-- [ ] **Paso 5: Correr los tests del subscriber**
+- [x] **Paso 5: Correr los tests del subscriber**
 
 ```bash
 docker compose exec -T backend npx vitest run src/infra/auditoria/auditoria.subscriber.spec.ts
@@ -2782,7 +2782,7 @@ docker compose exec -T backend npx vitest run src/infra/auditoria/auditoria.subs
 
 Esperado: 7 tests PASS. Si `afterRemove` falla porque `getEntityValue` recibe un registro sin `id`, usar `evento.entityId` como valor del `idRegistro` cuando exista; el test de baja aporta `entityId: 8`.
 
-- [ ] **Paso 6: DTOs, servicio y controller de consulta**
+- [x] **Paso 6: DTOs, servicio y controller de consulta**
 
 `backend/src/infra/auditoria/dto/auditoria.dto.ts`:
 
@@ -2954,7 +2954,7 @@ export class AuditoriaModule {}
 
 En `backend/src/app.module.ts` importar `AuditoriaModule` (`import { AuditoriaModule } from './infra/auditoria/auditoria.module.js';`) y agregarlo a `imports` después de `StorageModule`.
 
-- [ ] **Paso 7: Verificar**
+- [x] **Paso 7: Verificar**
 
 ```bash
 docker compose exec -T backend npx prettier --write "src/**/*.ts" > /dev/null
@@ -2964,7 +2964,7 @@ docker compose exec -T backend npm test
 
 Esperado: lint sin avisos y todos los tests PASS, incluido `cobertura-roles` (el controller de auditoría declara `@Roles`).
 
-- [ ] **Paso 8: Verificación manual de la consulta**
+- [x] **Paso 8: Verificación manual de la consulta**
 
 ```bash
 sleep 8; B=localhost:3000/api; J=/tmp/claude-1000/cookies.txt
@@ -2974,7 +2974,7 @@ curl -s -b $J -o /dev/null -w "auditoria como administrador: %{http_code}\n" $B/
 
 Esperado: `403` (el administrador no accede a la bitácora; solo `recursos_humanos` y `autoridad`).
 
-- [ ] **Paso 9: Commit**
+- [x] **Paso 9: Commit**
 
 ```bash
 git add backend/src
@@ -2994,7 +2994,7 @@ git commit -m "Agregar bitácora de auditoría con subscriber y consulta (RNF05)
 - Consume: `GET /api/auth/yo`, `POST /api/auth/login`, `POST /api/auth/logout`.
 - Produce: `useSesion()` (devuelve `Esquemas['SesionDto'] | null`), `RutaProtegida`, `SECCIONES` y `puedeVer(rol, seccion)` en `permisos.ts`.
 
-- [ ] **Paso 1: Regenerar los tipos**
+- [x] **Paso 1: Regenerar los tipos**
 
 Con el backend corriendo:
 
@@ -3004,7 +3004,7 @@ cd frontend && npm run api:tipos && grep -c "auth/login" src/api/esquema.d.ts
 
 Esperado: un número mayor que 0.
 
-- [ ] **Paso 2: Crear `permisos.ts`**
+- [x] **Paso 2: Crear `permisos.ts`**
 
 `frontend/src/auth/permisos.ts`:
 
@@ -3048,7 +3048,7 @@ export function puedeVer(rol: string, seccion: Seccion): boolean {
 }
 ```
 
-- [ ] **Paso 3: Crear `useSesion.ts`**
+- [x] **Paso 3: Crear `useSesion.ts`**
 
 `frontend/src/auth/useSesion.ts`:
 
@@ -3074,7 +3074,7 @@ export function useSesion() {
 }
 ```
 
-- [ ] **Paso 4: Crear `RutaProtegida.tsx`**
+- [x] **Paso 4: Crear `RutaProtegida.tsx`**
 
 `frontend/src/auth/RutaProtegida.tsx`:
 
@@ -3107,7 +3107,7 @@ export function RutaProtegida({ roles, children }: Props) {
 }
 ```
 
-- [ ] **Paso 5: Crear `LoginPage.tsx`**
+- [x] **Paso 5: Crear `LoginPage.tsx`**
 
 `frontend/src/auth/LoginPage.tsx`:
 
@@ -3184,7 +3184,7 @@ export function LoginPage() {
 }
 ```
 
-- [ ] **Paso 6: Actualizar el router**
+- [x] **Paso 6: Actualizar el router**
 
 Reemplazar `frontend/src/router.tsx`:
 
@@ -3230,7 +3230,7 @@ export const router = createBrowserRouter([
 ]);
 ```
 
-- [ ] **Paso 7: Actualizar el Layout (menú por rol y cerrar sesión)**
+- [x] **Paso 7: Actualizar el Layout (menú por rol y cerrar sesión)**
 
 En `frontend/src/components/Layout.tsx`:
 - Reemplazar los imports y la constante `secciones` por:
@@ -3284,7 +3284,7 @@ const ANCHO_MENU = 240;
 
 - En el `map` de `secciones`, cambiar `{s.nombre}`: el JSX usa `s.nombre` y `s.ruta`, que se mantienen.
 
-- [ ] **Paso 8: Verificar**
+- [x] **Paso 8: Verificar**
 
 ```bash
 cd frontend && npx prettier --write "src/**/*.{ts,tsx}" > /dev/null && npm run lint && npm run build
@@ -3292,7 +3292,7 @@ cd frontend && npx prettier --write "src/**/*.{ts,tsx}" > /dev/null && npm run l
 
 Esperado: lint sin avisos y build exitoso. Luego, con el backend y el frontend corriendo, abrir http://localhost:5173: debe redirigir a `/login`; ingresar con `ADMIN_USUARIO` y `ADMIN_CLAVE` del `.env` lleva al tablero; el menú muestra Administración; "Cerrar sesión" vuelve al login; una clave errónea muestra "Usuario o clave incorrectos".
 
-- [ ] **Paso 9: Commit**
+- [x] **Paso 9: Commit**
 
 ```bash
 git add frontend/src
@@ -3312,14 +3312,14 @@ git commit -m "Agregar login, sesión y rutas protegidas por rol en el frontend"
 - Consume: `GET|POST /api/usuarios`, `GET /api/usuarios/roles`, `PATCH /api/usuarios/{id}`, `POST /api/usuarios/{id}/restablecer-clave`.
 - Produce: pestaña **Usuarios** en Administración; `useGuardarValor.ts` sin token (`encabezados`, `leerToken` y `guardarToken` se eliminan).
 
-- [ ] **Paso 1: Quitar el token provisorio de `useGuardarValor.ts`**
+- [x] **Paso 1: Quitar el token provisorio de `useGuardarValor.ts`**
 
 En `frontend/src/features/admin/hooks/useGuardarValor.ts`:
 - Eliminar `CLAVE_TOKEN`, `leerToken`, `guardarToken` y `encabezados`.
 - Quitar `headers: encabezados(),` de las tres mutaciones.
 - Mantener `mensajeError`.
 
-- [ ] **Paso 2: Crear los hooks de usuarios**
+- [x] **Paso 2: Crear los hooks de usuarios**
 
 `frontend/src/features/admin/hooks/useUsuarios.ts`:
 
@@ -3399,7 +3399,7 @@ export function useRestablecerClave() {
 }
 ```
 
-- [ ] **Paso 3: Crear `FormularioUsuario.tsx`**
+- [x] **Paso 3: Crear `FormularioUsuario.tsx`**
 
 `frontend/src/features/admin/components/FormularioUsuario.tsx`:
 
@@ -3537,7 +3537,7 @@ export function FormularioUsuario({ usuario, onCerrar }: Props) {
 }
 ```
 
-- [ ] **Paso 4: Crear `RestablecerClaveDialog.tsx`**
+- [x] **Paso 4: Crear `RestablecerClaveDialog.tsx`**
 
 `frontend/src/features/admin/components/RestablecerClaveDialog.tsx`:
 
@@ -3612,7 +3612,7 @@ export function RestablecerClaveDialog({ usuario, onCerrar }: Props) {
 }
 ```
 
-- [ ] **Paso 5: Crear `TablaUsuarios.tsx`**
+- [x] **Paso 5: Crear `TablaUsuarios.tsx`**
 
 `frontend/src/features/admin/components/TablaUsuarios.tsx`:
 
@@ -3719,7 +3719,7 @@ export function TablaUsuarios() {
 }
 ```
 
-- [ ] **Paso 6: Reescribir `AdminPage.tsx` con dos pestañas**
+- [x] **Paso 6: Reescribir `AdminPage.tsx` con dos pestañas**
 
 Reemplazar `frontend/src/features/admin/pages/AdminPage.tsx`:
 
@@ -3777,7 +3777,7 @@ export function AdminPage() {
 }
 ```
 
-- [ ] **Paso 7: Regenerar tipos y verificar**
+- [x] **Paso 7: Regenerar tipos y verificar**
 
 ```bash
 cd frontend && npm run api:tipos && npx prettier --write "src/**/*.{ts,tsx}" > /dev/null && npm run lint && npm run build
@@ -3785,11 +3785,11 @@ cd frontend && npm run api:tipos && npx prettier --write "src/**/*.{ts,tsx}" > /
 
 Esperado: lint sin avisos y build exitoso. Si `tsc` rechaza el `as never` de los roles, tipar `rol` con `Esquemas['CrearUsuarioDto']['rol']` en lugar del cast.
 
-- [ ] **Paso 8: Verificación en el navegador**
+- [x] **Paso 8: Verificación en el navegador**
 
 Con la sesión del administrador, en `/admin`: crear un usuario `ana` con rol Jefe de cátedra → aparece en la tabla; repetirlo con `Ana` → error de usuario repetido; editar su rol; restablecer su clave; desactivarlo; intentar desactivar al único administrador → error "último administrador activo". Cerrar sesión e ingresar como `ana` con la clave nueva: el menú no muestra Administración y entrar a `/admin` por URL muestra "No tenés permiso". Con `ana` desactivada, el login falla.
 
-- [ ] **Paso 9: Commit**
+- [x] **Paso 9: Commit**
 
 ```bash
 git add frontend/src
@@ -3805,14 +3805,14 @@ git commit -m "Agregar la pestaña Usuarios y quitar el token provisorio del fro
 - Modificar: `specs/001-tablas-referencia/{plan.md,quickstart.md,contracts/referencia.openapi.md,research.md,spec.md}`
 - Modificar: `docs/superpowers/specs/2026-10-12-usuarios-roles-design.md`, este plan
 
-- [ ] **Paso 1: Actualizar `docs/requerimientos.md`**
+- [x] **Paso 1: Actualizar `docs/requerimientos.md`**
 
 - En §5 (Stack), agregar la fila `| Sesión | express-session con connect-pg-simple (tabla sesion en PostgreSQL) | RNF01 |` y cambiar la fila "Autenticación y roles" a: `Passport (estrategia local) con sesión en PostgreSQL, claves con argon2id y guards de NestJS por rol | RF22, RF24, RNF01`.
 - En la fila de "Base de datos" cambiar "diecinueve tablas" por "veinticuatro tablas".
 - En §7 (Puntos abiertos), eliminar la fila "Usuarios y roles".
 - Agregar al final de §5 un párrafo breve: "**Usuarios y roles:** siete roles fijos (`rol`), `usuario`, `usuario_unidad`, `sesion` y `auditoria`; ver `docs/superpowers/specs/2026-10-12-usuarios-roles-design.md`."
 
-- [ ] **Paso 2: Actualizar el README**
+- [x] **Paso 2: Actualizar el README**
 
 Reemplazar el párrafo "**Tablas de referencia:**" (que habla de `ADMIN_TOKEN`) por:
 
@@ -3822,14 +3822,14 @@ Reemplazar el párrafo "**Tablas de referencia:**" (que habla de `ADMIN_TOKEN`) 
 
 En "Problemas frecuentes", agregar: `- **El backend no arranca y pide ADMIN_USUARIO y ADMIN_CLAVE:** la base no tiene usuarios; definilos en el \`.env\` (o restaurá la base).`
 
-- [ ] **Paso 3: Enmendar la constitución (MINOR)**
+- [x] **Paso 3: Enmendar la constitución (MINOR)**
 
 En `.specify/memory/constitution.md`:
 - En el principio I, agregar al final: `Para autenticación se usan Passport, express-session con connect-pg-simple y argon2 (usuarios y roles).`
 - En "Restricciones adicionales", reemplazar la primera viñeta por: `- Autenticación obligatoria con sesión y autorización por rol en toda operación (RNF01), con siete roles fijos; datos personales conforme a la Ley 25.326 (RNF02).`
 - Cambiar `**Version**: 1.0.0 | **Ratified**: 2026-10-12 | **Last Amended**: 2026-10-12` por `**Version**: 1.1.0 | **Ratified**: 2026-10-12 | **Last Amended**: 2026-10-12`.
 
-- [ ] **Paso 4: Actualizar `specs/001-tablas-referencia`**
+- [x] **Paso 4: Actualizar `specs/001-tablas-referencia`**
 
 - `plan.md`: en la tabla de Constitution Check, la fila de RNF01 pasa a "Cumple: las escrituras exigen el rol `administrador` (ver `docs/superpowers/specs/2026-10-12-usuarios-roles-design.md`)"; eliminar la fila de `Complexity Tracking` y dejar la sección con "Sin violaciones."; quitar la mención de `ADMIN_TOKEN` y del guard provisorio de la estructura de código y de "Structure Decision".
 - `research.md`: en R6 anteponer "**Reemplazada** por usuarios y roles (2026-10-12): las escrituras exigen el rol `administrador`; las lecturas, sesión iniciada." y dejar el texto original como histórico.
@@ -3837,7 +3837,7 @@ En `.specify/memory/constitution.md`:
 - `quickstart.md`: en Prerrequisitos reemplazar `ADMIN_TOKEN` por "`.env` con `ADMIN_USUARIO`, `ADMIN_CLAVE` y `SESION_SECRETO`; iniciar sesión (`POST /api/auth/login`) y reutilizar la cookie con `curl -b`".
 - `spec.md`: en la sección Assumptions, reemplazar la viñeta de la dependencia con RF22 por "La autenticación y el rol de administrador provienen del bloque de usuarios y roles".
 
-- [ ] **Paso 5: Verificación final**
+- [x] **Paso 5: Verificación final**
 
 ```bash
 cd backend && docker compose exec -T backend sh -c 'npm run lint && npx prettier --check "src/**/*.ts" && npm test'
@@ -3871,12 +3871,12 @@ Esperado: `401`; `200`; `201`; `400`; `201`; el listado con `idUnidades: [1,2]` 
 docker compose exec -T db sh -c "psql -U \$POSTGRES_USER -d \$POSTGRES_DB -c \"delete from usuario where nombre_usuario in ('rrhh1','jefe1')\""
 ```
 
-- [ ] **Paso 6: Actualizar los estados**
+- [x] **Paso 6: Actualizar los estados**
 
 - En `docs/superpowers/specs/2026-10-12-usuarios-roles-design.md`: primera línea a `Estado: Implementada | Fecha: 2026-10-12 | Autor: IvanOchoa229`.
 - En este plan: primera línea a `Estado: Implementado | Fecha: 2026-10-12 | PR: <número del PR>` (completarlo al abrir el PR) y marcar todas las casillas.
 
-- [ ] **Paso 7: Commit y publicación**
+- [x] **Paso 7: Commit y publicación**
 
 ```bash
 git add -A docs specs README.md .specify

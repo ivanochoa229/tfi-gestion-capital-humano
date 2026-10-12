@@ -1,4 +1,4 @@
-Estado: Propuesta | Fecha: 2026-10-12 | Autor: IvanOchoa229
+Estado: Implementada | Fecha: 2026-10-12 | Autor: IvanOchoa229
 
 # Usuarios y roles: autenticación, autorización, alcance y auditoría
 

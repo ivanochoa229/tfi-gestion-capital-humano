@@ -32,7 +32,7 @@ docker compose up --build
 
 El backend crea el bucket de archivos y aplica las migraciones pendientes al arrancar. El tablero del frontend muestra si la base y el almacenamiento están conectados.
 
-**Tablas de referencia:** se administran en http://localhost:5173/admin. Crear, editar, desactivar o borrar valores exige el token provisorio `ADMIN_TOKEN` del `.env` (se ingresa en esa pantalla o se envía en el encabezado `x-admin-token`). Es un mecanismo temporal hasta implementar usuarios y roles (RF22); si `ADMIN_TOKEN` no está definido, las escrituras se rechazan.
+**Acceso:** todo el sistema requiere iniciar sesión. Al arrancar con la tabla de usuarios vacía, el backend crea el administrador con `ADMIN_USUARIO` y `ADMIN_CLAVE` del `.env` (al menos 10 caracteres de clave); `SESION_SECRETO` (32 caracteres o más) firma la cookie de sesión. Las tablas de referencia se administran en http://localhost:5173/admin (rol administrador). Los usuarios y sus roles se gestionan en la pestaña Usuarios de la misma pantalla.
 
 El código de `backend/src` y `frontend/src` está montado en los contenedores: los cambios se recargan solos. Si se agrega una dependencia, hay que reconstruir con `docker compose up --build`.
 
@@ -101,6 +101,7 @@ Regenera `src/api/esquema.d.ts` a partir del Swagger. El cliente `api` de `src/a
 ## Problemas comunes
 
 - **"port is already allocated":** otro programa usa ese puerto en tu máquina. Cambiá el puerto correspondiente en el `.env` (`DB_PORT`, `S3_PORT`, `S3_CONSOLE_PORT`, `PORT` o `FRONTEND_PORT`); si es `S3_PORT`, actualizá también `S3_ENDPOINT`.
+- **El backend no arranca y pide ADMIN_USUARIO y ADMIN_CLAVE:** la base no tiene usuarios; definilos en el `.env` (o restaurá la base).
 - **El backend no arranca y lista variables inválidas:** falta el `.env` o le falta alguna variable de `.env.example`.
 - **El almacenamiento figura sin conexión:** revisar `docker compose logs storage`. La imagen de RustFS está fijada en una versión candidata; si no existe en Docker Hub, usar la más reciente de https://github.com/rustfs/rustfs/releases.
 - **Los cambios no se recargan en Windows o macOS:** es una limitación de los volúmenes montados; correr las aplicaciones fuera de Docker como se indica arriba.
