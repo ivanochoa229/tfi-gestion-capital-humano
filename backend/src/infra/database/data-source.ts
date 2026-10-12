@@ -29,5 +29,6 @@ export default new DataSource({
   }),
   entities: [
     join(aqui, '..', '..', 'modules', '**', 'entities', '*.entity.js'),
+    join(aqui, '..', '..', 'infra', '**', '*.entity.js'),
   ],
 });
