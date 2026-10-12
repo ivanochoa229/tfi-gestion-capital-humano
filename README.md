@@ -17,6 +17,7 @@ Sistema de gestión del conocimiento crítico y planificación de la sucesión d
 ## Puesta en marcha
 
 ```bash
+cp .env.example .env
 docker compose up --build
 ```
 

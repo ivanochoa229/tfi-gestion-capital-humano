@@ -6,7 +6,7 @@ Sistema de gestión del conocimiento crítico y sucesión (TFI, UTN-FRT). Monore
 
 ## Commands
 
-Setup: `cp .env.example .env && docker compose up --build` (frontend :5173, API :3000/api, Swagger :3000/api/docs, salud :3000/api/salud). `backend/src` y `frontend/src` están montados en los contenedores (hot reload); agregar dependencias requiere `--build`.
+Setup: `cp .env.example .env && docker compose up --build` (`.env` está en `.gitignore`; las variables esperadas están en `backend/src/infra/config/env.validation.ts`) (frontend :5173, API :3000/api, Swagger :3000/api/docs, salud :3000/api/salud). `backend/src` y `frontend/src` están montados en los contenedores (hot reload); agregar dependencias requiere `--build`.
 
 Sin Docker en las apps (Node 24+ / npm 11 requerido): `docker compose up -d db storage`, luego `npm run start:dev` en `backend/` y `npm run dev` en `frontend/`.
 
