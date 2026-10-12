@@ -85,7 +85,9 @@ export class AuditoriaSubscriber implements EntitySubscriberInterface {
     }
 
     const idRegistro =
-      'entityId' in evento && evento.entityId !== undefined && evento.entityId !== null
+      'entityId' in evento &&
+      evento.entityId !== undefined &&
+      evento.entityId !== null
         ? String(evento.entityId)
         : evento.metadata.primaryColumns
             .map((c) => String(c.getEntityValue(registro)))
