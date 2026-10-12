@@ -4,6 +4,7 @@ import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RolesGuard } from '../../common/guards/roles.guard.js';
 import { SesionGuard } from '../../common/guards/sesion.guard.js';
+import { AlcanceService } from './alcance.service.js';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
 import { Rol } from './entities/rol.entity.js';
@@ -28,6 +29,7 @@ import { UsuariosService } from './usuarios.service.js';
     PasswordService,
     AuthService,
     UsuariosService,
+    AlcanceService,
     LocalStrategy,
     LocalAuthGuard,
     SesionSerializer,
@@ -36,6 +38,6 @@ import { UsuariosService } from './usuarios.service.js';
     { provide: APP_GUARD, useClass: SesionGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
   ],
-  exports: [AuthService, UsuariosService, TypeOrmModule],
+  exports: [AuthService, UsuariosService, AlcanceService, TypeOrmModule],
 })
 export class UsuariosModule {}
