@@ -383,3 +383,91 @@ describe('PuestosService.obtener', () => {
     await expect(servicio.obtener(9)).rejects.toThrow(NotFoundException);
   });
 });
+
+describe('PuestosService.darDeBaja', () => {
+  it('desactiva el puesto y lo devuelve', async () => {
+    const { servicio, filas } = crearEntorno([puesto({ id: 1 })]);
+    const detalle = await servicio.darDeBaja(1);
+    expect(detalle.activo).toBe(false);
+    expect(filas[0].activo).toBe(false);
+  });
+
+  it('rechaza con 409 si tiene subordinados activos y los lista', async () => {
+    const { servicio, filas } = crearEntorno([
+      puesto({ id: 1, codigo: 'P-0001', denominacion: 'Jefe' }),
+      puesto({
+        id: 2,
+        codigo: 'P-0002',
+        denominacion: 'JTP',
+        idPuestoSuperior: 1,
+      }),
+      puesto({
+        id: 3,
+        codigo: 'P-0003',
+        denominacion: 'ATP',
+        idPuestoSuperior: 1,
+        activo: false,
+      }),
+    ]);
+    const error = await servicio.darDeBaja(1).catch((e: unknown) => e);
+    expect(error).toBeInstanceOf(ConflictException);
+    expect((error as Error).message).toContain('P-0002 JTP');
+    expect((error as Error).message).not.toContain('P-0003');
+    expect(filas[0].activo).toBe(true);
+  });
+
+  it('es idempotente con un puesto ya dado de baja', async () => {
+    const { servicio, repo } = crearEntorno([puesto({ id: 1, activo: false })]);
+    await expect(servicio.darDeBaja(1)).resolves.toMatchObject({
+      activo: false,
+    });
+    expect(repo.save).not.toHaveBeenCalled();
+  });
+
+  it('responde 404 si no existe y toma el bloqueo consultivo', async () => {
+    const { servicio, consultas } = crearEntorno([]);
+    await expect(servicio.darDeBaja(9)).rejects.toThrow(NotFoundException);
+    expect(consultas[0]).toContain('pg_advisory_xact_lock');
+  });
+});
+
+describe('PuestosService.reactivar', () => {
+  it('reactiva un puesto dado de baja', async () => {
+    const { servicio } = crearEntorno([puesto({ id: 1, activo: false })]);
+    await expect(servicio.reactivar(1)).resolves.toMatchObject({
+      activo: true,
+    });
+  });
+
+  it('rechaza con 409 si la unidad está inactiva', async () => {
+    const { servicio, unidades } = crearEntorno([
+      puesto({ id: 1, activo: false }),
+    ]);
+    unidades.obtener.mockResolvedValueOnce({ id: 10, activo: false });
+    await expect(servicio.reactivar(1)).rejects.toThrow(/unidad.*inactiva/);
+  });
+
+  it('rechaza con 409 si el superior está dado de baja', async () => {
+    const { servicio } = crearEntorno([
+      puesto({ id: 1, activo: false, idPuestoSuperior: 5 }),
+      puesto({ id: 5, codigo: 'P-0005', denominacion: 'Jefe', activo: false }),
+    ]);
+    await expect(servicio.reactivar(1)).rejects.toThrow(ConflictException);
+  });
+
+  it('rechaza con 409 si otro puesto activo ya usa la denominación', async () => {
+    const { servicio } = crearEntorno([
+      puesto({ id: 1, denominacion: 'Auxiliar', activo: false }),
+      puesto({ id: 2, codigo: 'P-0002', denominacion: 'auxiliar' }),
+    ]);
+    await expect(servicio.reactivar(1)).rejects.toThrow(ConflictException);
+  });
+
+  it('es idempotente con un puesto ya activo', async () => {
+    const { servicio, repo } = crearEntorno([puesto({ id: 1 })]);
+    await expect(servicio.reactivar(1)).resolves.toMatchObject({
+      activo: true,
+    });
+    expect(repo.save).not.toHaveBeenCalled();
+  });
+});

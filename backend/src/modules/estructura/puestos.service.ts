@@ -207,6 +207,64 @@ export class PuestosService {
     return this.obtener(id);
   }
 
+  /** Baja lógica. Se bloquea mientras haya subordinados activos. */
+  async darDeBaja(id: number): Promise<PuestoDetalleDto> {
+    await enTransaccionDeEstructura(this.puestos, async (manager) => {
+      const repo = manager.getRepository(Puesto);
+      const puesto = await this.buscar(repo, id);
+      if (!puesto.activo) return;
+
+      const subordinados = await repo.find({
+        where: { idPuestoSuperior: id, activo: true },
+      });
+      if (subordinados.length > 0) {
+        throw new ConflictException(
+          `No se puede dar de baja: tiene subordinados activos (${subordinados
+            .map((s) => `${s.codigo} ${s.denominacion}`)
+            .join(', ')}). Asignales otro superior primero`,
+        );
+      }
+      puesto.activo = false;
+      await repo.save(puesto);
+    });
+    return this.obtener(id);
+  }
+
+  /** Exige unidad y superior activos y que la denominación siga libre. */
+  async reactivar(id: number): Promise<PuestoDetalleDto> {
+    await enTransaccionDeEstructura(this.puestos, async (manager) => {
+      const repo = manager.getRepository(Puesto);
+      const puesto = await this.buscar(repo, id);
+      if (puesto.activo) return;
+
+      const unidad = await this.unidades.obtener(puesto.idUnidad);
+      if (!unidad.activo) {
+        throw new ConflictException(
+          `No se puede reactivar: la unidad "${unidad.denominacion}" está inactiva`,
+        );
+      }
+      if (puesto.idPuestoSuperior !== null) {
+        const superior = await repo.findOne({
+          where: { id: puesto.idPuestoSuperior },
+        });
+        if (!superior?.activo) {
+          throw new ConflictException(
+            'No se puede reactivar: su puesto superior está dado de baja',
+          );
+        }
+      }
+      await this.exigirDenominacionLibre(
+        repo,
+        puesto.idUnidad,
+        puesto.denominacion,
+        id,
+      );
+      puesto.activo = true;
+      await repo.save(puesto);
+    });
+    return this.obtener(id);
+  }
+
   /** `repo` puede ser el de una transacción en curso. */
   protected async buscar(
     repo: Repository<Puesto>,
