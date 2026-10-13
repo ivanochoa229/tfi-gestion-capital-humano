@@ -36,6 +36,182 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/unidades': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['UnidadesController_listar'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/unidades/arbol': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['UnidadesController_arbol'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/unidades/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['UnidadesController_obtener'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/unidades/{id}/puestos-tipo': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['UnidadesController_crearPuestosTipo'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/puestos': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['PuestosController_listar'];
+    put?: never;
+    post: operations['PuestosController_crear'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/puestos/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['PuestosController_obtener'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch: operations['PuestosController_actualizar'];
+    trace?: never;
+  };
+  '/api/puestos/{id}/baja': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['PuestosController_darDeBaja'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/puestos/{id}/reactivar': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['PuestosController_reactivar'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/referencia': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['ReferenciaController_listarDominios'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/referencia/{dominio}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['ReferenciaController_listarValores'];
+    put?: never;
+    post: operations['ReferenciaController_crear'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/referencia/{dominio}/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete: operations['ReferenciaController_eliminar'];
+    options?: never;
+    head?: never;
+    patch: operations['ReferenciaController_actualizar'];
+    trace?: never;
+  };
   '/api/auth/login': {
     parameters: {
       query?: never;
@@ -164,54 +340,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/referencia': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['ReferenciaController_listarDominios'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/referencia/{dominio}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['ReferenciaController_listarValores'];
-    put?: never;
-    post: operations['ReferenciaController_crear'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/referencia/{dominio}/{id}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete: operations['ReferenciaController_eliminar'];
-    options?: never;
-    head?: never;
-    patch: operations['ReferenciaController_actualizar'];
-    trace?: never;
-  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -241,6 +369,179 @@ export interface components {
       valoresNuevos: {
         [key: string]: unknown;
       } | null;
+    };
+    UnidadDto: {
+      id: number;
+      /** @example Departamento de Sistemas */
+      denominacion: string;
+      /**
+       * @description Código del tipo de unidad
+       * @example catedra
+       */
+      tipo: string;
+      idUnidadSuperior: number | null;
+      activo: boolean;
+    };
+    UnidadArbolDto: {
+      id: number;
+      /** @example Departamento de Sistemas */
+      denominacion: string;
+      /**
+       * @description Código del tipo de unidad
+       * @example catedra
+       */
+      tipo: string;
+      idUnidadSuperior: number | null;
+      activo: boolean;
+      hijas: components['schemas']['UnidadArbolDto'][];
+    };
+    UnidadDetalleDto: {
+      id: number;
+      /** @example Departamento de Sistemas */
+      denominacion: string;
+      /**
+       * @description Código del tipo de unidad
+       * @example catedra
+       */
+      tipo: string;
+      idUnidadSuperior: number | null;
+      activo: boolean;
+      /** @description Puestos activos de la unidad */
+      cantidadPuestosActivos: number;
+    };
+    PuestoDto: {
+      id: number;
+      /** @example P-0001 */
+      codigo: string;
+      /** @example Jefe de cátedra */
+      denominacion: string;
+      proposito: string | null;
+      condicionesTrabajo: string | null;
+      rangoRetributivo: string | null;
+      dotacionPrevista: number;
+      idUnidad: number;
+      idNivelJerarquico: number;
+      idTipoRelacionContractual: number | null;
+      idPuestoSuperior: number | null;
+      activo: boolean;
+    };
+    PuestosTipoCreadosDto: {
+      puestos: components['schemas']['PuestoDto'][];
+      advertencias: string[];
+    };
+    PuestoResumenDto: {
+      id: number;
+      /** @example P-0001 */
+      codigo: string;
+      denominacion: string;
+      activo: boolean;
+    };
+    PuestoDetalleDto: {
+      id: number;
+      /** @example P-0001 */
+      codigo: string;
+      /** @example Jefe de cátedra */
+      denominacion: string;
+      proposito: string | null;
+      condicionesTrabajo: string | null;
+      rangoRetributivo: string | null;
+      dotacionPrevista: number;
+      idUnidad: number;
+      idNivelJerarquico: number;
+      idTipoRelacionContractual: number | null;
+      idPuestoSuperior: number | null;
+      activo: boolean;
+      superior: components['schemas']['PuestoResumenDto'] | null;
+      /** @description Subordinados directos */
+      subordinados: components['schemas']['PuestoResumenDto'][];
+    };
+    CrearPuestoDto: {
+      /** @example Jefe de cátedra */
+      denominacion: string;
+      proposito?: string | null;
+      condicionesTrabajo?: string | null;
+      /** @description Texto descriptivo; no es un monto */
+      rangoRetributivo?: string | null;
+      /** @default 1 */
+      dotacionPrevista: number;
+      /** @description Unidad del puesto; no se puede cambiar después */
+      idUnidad: number;
+      idNivelJerarquico: number;
+      idTipoRelacionContractual?: number | null;
+      /** @description En la misma unidad o en una ancestra */
+      idPuestoSuperior?: number | null;
+    };
+    ActualizarPuestoDto: {
+      /** @example Jefe de cátedra */
+      denominacion?: string;
+      proposito?: string | null;
+      condicionesTrabajo?: string | null;
+      /** @description Texto descriptivo; no es un monto */
+      rangoRetributivo?: string | null;
+      /** @default 1 */
+      dotacionPrevista: number;
+      idNivelJerarquico?: number;
+      idTipoRelacionContractual?: number | null;
+      /** @description En la misma unidad o en una ancestra */
+      idPuestoSuperior?: number | null;
+    };
+    DominioDto: {
+      /** @example nivel-dominio */
+      dominio: string;
+      /** @example Nivel de dominio */
+      denominacion: string;
+      /** @description Si es true, los valores tienen orden */
+      ordinal: boolean;
+    };
+    ValorReferenciaDto: {
+      id: number;
+      /** @example basico */
+      codigo: string;
+      /** @example Básico */
+      denominacion: string;
+      activo: boolean;
+      /** @description Solo en dominios ordinales */
+      orden?: number;
+      /** @description Hay registros que usan este valor */
+      enUso: boolean;
+    };
+    CrearValorDto: {
+      /**
+       * @description Minúsculas, números y guion bajo; empieza con letra
+       * @example competencia_tecnica
+       */
+      codigo: string;
+      /** @example Competencia técnica */
+      denominacion: string;
+      /** @description Obligatorio en dominios ordinales; prohibido en el resto */
+      orden?: number;
+    };
+    ActualizarValorDto: {
+      /**
+       * @description Minúsculas, números y guion bajo; empieza con letra
+       * @example competencia_tecnica
+       */
+      codigo?: string;
+      /** @example Competencia técnica */
+      denominacion?: string;
+      /** @description Obligatorio en dominios ordinales; prohibido en el resto */
+      orden?: number;
+      /** @description false desactiva el valor */
+      activo?: boolean;
+    };
+    ActualizacionValorDto: {
+      id: number;
+      /** @example basico */
+      codigo: string;
+      /** @example Básico */
+      denominacion: string;
+      activo: boolean;
+      /** @description Solo en dominios ordinales */
+      orden?: number;
+      /** @description Hay registros que usan este valor */
+      enUso: boolean;
+      /** @description Aviso cuando se desactiva el último valor activo */
+      advertencia?: string;
     };
     LoginDto: {
       /** @example admin */
@@ -335,64 +636,6 @@ export interface components {
     RestablecerClaveDto: {
       clave: string;
     };
-    DominioDto: {
-      /** @example nivel-dominio */
-      dominio: string;
-      /** @example Nivel de dominio */
-      denominacion: string;
-      /** @description Si es true, los valores tienen orden */
-      ordinal: boolean;
-    };
-    ValorReferenciaDto: {
-      id: number;
-      /** @example basico */
-      codigo: string;
-      /** @example Básico */
-      denominacion: string;
-      activo: boolean;
-      /** @description Solo en dominios ordinales */
-      orden?: number;
-      /** @description Hay registros que usan este valor */
-      enUso: boolean;
-    };
-    CrearValorDto: {
-      /**
-       * @description Minúsculas, números y guion bajo; empieza con letra
-       * @example competencia_tecnica
-       */
-      codigo: string;
-      /** @example Competencia técnica */
-      denominacion: string;
-      /** @description Obligatorio en dominios ordinales; prohibido en el resto */
-      orden?: number;
-    };
-    ActualizarValorDto: {
-      /**
-       * @description Minúsculas, números y guion bajo; empieza con letra
-       * @example competencia_tecnica
-       */
-      codigo?: string;
-      /** @example Competencia técnica */
-      denominacion?: string;
-      /** @description Obligatorio en dominios ordinales; prohibido en el resto */
-      orden?: number;
-      /** @description false desactiva el valor */
-      activo?: boolean;
-    };
-    ActualizacionValorDto: {
-      id: number;
-      /** @example basico */
-      codigo: string;
-      /** @example Básico */
-      denominacion: string;
-      activo: boolean;
-      /** @description Solo en dominios ordinales */
-      orden?: number;
-      /** @description Hay registros que usan este valor */
-      enUso: boolean;
-      /** @description Aviso cuando se desactiva el último valor activo */
-      advertencia?: string;
-    };
   };
   responses: never;
   parameters: never;
@@ -440,6 +683,500 @@ export interface operations {
         content: {
           'application/json': components['schemas']['AuditoriaDto'][];
         };
+      };
+    };
+  };
+  UnidadesController_listar: {
+    parameters: {
+      query?: {
+        incluirInactivas?: boolean;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['UnidadDto'][];
+        };
+      };
+    };
+  };
+  UnidadesController_arbol: {
+    parameters: {
+      query?: {
+        incluirInactivas?: boolean;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['UnidadArbolDto'][];
+        };
+      };
+    };
+  };
+  UnidadesController_obtener: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['UnidadDetalleDto'];
+        };
+      };
+      /** @description La unidad no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  UnidadesController_crearPuestosTipo: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PuestosTipoCreadosDto'];
+        };
+      };
+      /** @description La unidad no es una cátedra activa */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description La unidad no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description La cátedra ya tiene alguno de los cargos */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PuestosController_listar: {
+    parameters: {
+      query?: {
+        idUnidad?: number;
+        activo?: boolean;
+        /** @description Texto contenido en el código o la denominación */
+        q?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PuestoDto'][];
+        };
+      };
+    };
+  };
+  PuestosController_crear: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CrearPuestoDto'];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PuestoDetalleDto'];
+        };
+      };
+      /** @description Unidad, nivel o superior inválidos */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Denominación repetida en la unidad */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PuestosController_obtener: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PuestoDetalleDto'];
+        };
+      };
+      /** @description El puesto no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PuestosController_actualizar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ActualizarPuestoDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PuestoDetalleDto'];
+        };
+      };
+      /** @description Superior inválido o ciclo */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El puesto no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Denominación repetida en la unidad */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PuestosController_darDeBaja: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PuestoDetalleDto'];
+        };
+      };
+      /** @description El puesto no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Tiene subordinados activos */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PuestosController_reactivar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PuestoDetalleDto'];
+        };
+      };
+      /** @description El puesto no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description La unidad o el superior están inactivos */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ReferenciaController_listarDominios: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['DominioDto'][];
+        };
+      };
+    };
+  };
+  ReferenciaController_listarValores: {
+    parameters: {
+      query?: {
+        incluirInactivos?: boolean;
+      };
+      header?: never;
+      path: {
+        dominio: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ValorReferenciaDto'][];
+        };
+      };
+      /** @description El dominio no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ReferenciaController_crear: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        dominio: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CrearValorDto'];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ValorReferenciaDto'];
+        };
+      };
+      /** @description El rol no puede modificar las tablas de referencia */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Código, denominación u orden repetido */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ReferenciaController_eliminar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        dominio: string;
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Valor borrado */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El rol no puede modificar las tablas de referencia */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El dominio o el valor no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El valor está en uso */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ReferenciaController_actualizar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        dominio: string;
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ActualizarValorDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ActualizacionValorDto'];
+        };
+      };
+      /** @description El rol no puede modificar las tablas de referencia */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El dominio o el valor no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Duplicado, o cambio de código de un valor en uso */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
     };
   };
@@ -663,183 +1400,6 @@ export interface operations {
       };
       /** @description El usuario no existe */
       404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ReferenciaController_listarDominios: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['DominioDto'][];
-        };
-      };
-    };
-  };
-  ReferenciaController_listarValores: {
-    parameters: {
-      query?: {
-        incluirInactivos?: boolean;
-      };
-      header?: never;
-      path: {
-        dominio: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ValorReferenciaDto'][];
-        };
-      };
-      /** @description El dominio no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ReferenciaController_crear: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        dominio: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CrearValorDto'];
-      };
-    };
-    responses: {
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ValorReferenciaDto'];
-        };
-      };
-      /** @description El rol no puede modificar las tablas de referencia */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Código, denominación u orden repetido */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ReferenciaController_eliminar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        dominio: string;
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Valor borrado */
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El rol no puede modificar las tablas de referencia */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El dominio o el valor no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El valor está en uso */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ReferenciaController_actualizar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        dominio: string;
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['ActualizarValorDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ActualizacionValorDto'];
-        };
-      };
-      /** @description El rol no puede modificar las tablas de referencia */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El dominio o el valor no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Duplicado, o cambio de código de un valor en uso */
-      409: {
         headers: {
           [name: string]: unknown;
         };
