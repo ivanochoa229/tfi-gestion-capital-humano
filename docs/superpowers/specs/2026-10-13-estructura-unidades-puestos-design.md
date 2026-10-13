@@ -35,7 +35,7 @@ No toca RF05 (validación de descripciones) ni los puntos abiertos de `docs/requ
 | 2 | Jerarquía de unidades | Recursiva (`id_unidad_superior`) pero forzada a dos niveles. El departamento no tiene superior y la cátedra tiene como superior un departamento. Sin ciclos posibles. Las reglas viven en la base (CHECK y trigger), porque la carga no pasa por la aplicación |
 | 3 | Tipo de unidad | Tabla de referencia `tipo_unidad` con `departamento` y `catedra`, identificados por `codigo` |
 | 4 | Puesto por cátedra | Cada cargo es un puesto distinto en cada cátedra. La acción "Crear puestos tipo" crea los cuatro cargos de una vez; la lista de cargos es una constante en código, no una tabla |
-| 5 | Código de puesto | Generado por la base desde una secuencia, formato `P-0001`; único e inmutable; no se reutiliza. El límite es `P-9999` |
+| 5 | Código de puesto | Generado desde una secuencia de PostgreSQL, formato `P-0001`; único e inmutable; no se reutiliza. El límite es `P-9999` |
 | 6 | Superior inmediato | Opcional. Debe estar en la misma unidad o en una unidad ancestra, y activo. Sin ciclos. La unidad de un puesto no cambia después del alta |
 | 7 | Nivel jerárquico | Tabla de referencia ordinal `nivel_jerarquico` |
 | 8 | Rango retributivo y relación contractual | Opcionales. `rango_retributivo` es texto libre descriptivo (no hay liquidación de haberes). `tipo_relacion_contractual` es una tabla de referencia |
@@ -86,7 +86,7 @@ local (no es una migración).
 | Columna | Detalle |
 | --- | --- |
 | `id_puesto` | Clave primaria |
-| `codigo` | `varchar(10)`, único, no nulo. Valor por defecto `'P-' \|\| lpad(nextval('puesto_codigo_seq')::text, 4, '0')`; la secuencia tiene `MAXVALUE 9999`, así que agotarla falla en lugar de repetir códigos |
+| `codigo` | `varchar(10)`, único, no nulo, sin valor por defecto. Lo genera `EstructuraService` al crear el puesto con `nextval('puesto_codigo_seq')` (`'P-'` más el número con cuatro dígitos); la secuencia tiene `MAXVALUE 9999`, así que agotarla falla en lugar de repetir códigos. Se genera en la aplicación para que `migration:generate` no proponga cambios sobre un valor por defecto que las entidades no declaran |
 | `denominacion` | Hasta 150 caracteres, obligatorio |
 | `proposito`, `condiciones_trabajo` | Texto, opcionales |
 | `rango_retributivo` | Hasta 100 caracteres, opcional |
@@ -113,6 +113,8 @@ parciales se escriben en SQL.
 ## Reglas de negocio (`EstructuraService`)
 
 ### Puestos
+
+Todas las escrituras de puestos (alta, modificación, baja, reactivación y puestos tipo) corren en una transacción con el bloqueo consultivo de `estructura`, de modo que quedan serializadas.
 
 - **Alta**: `analista_puestos`. La unidad debe existir y estar activa. El nivel y el tipo contractual
   se validan con `ReferenciaService.validarActivo`. `codigo` lo genera la base y no se acepta en el DTO.
@@ -157,7 +159,8 @@ regenerados con `npm run api:tipos`.
 
 | Endpoint | Rol | Notas |
 | --- | --- | --- |
-| `GET /unidades` | Cualquier rol autenticado | `?arbol=true` devuelve el árbol anidado; `?incluirInactivas=true` suma las inactivas |
+| `GET /unidades` | Cualquier rol autenticado | Lista plana; `?incluirInactivas=true` suma las inactivas |
+| `GET /unidades/arbol` | Cualquier rol autenticado | Árbol anidado; también admite `?incluirInactivas=true` |
 | `GET /unidades/:id` | Cualquier rol autenticado | Incluye tipo, superior y cantidad de puestos activos |
 | `GET /puestos` | Cualquier rol autenticado | Filtros `idUnidad`, `activo`, `q` (código o denominación). Sin paginación: el volumen es de decenas de unidades y cientos de puestos |
 | `GET /puestos/:id` | Cualquier rol autenticado | Incluye superior y subordinados directos |
@@ -207,8 +210,8 @@ El test existente que exige `@Roles` en toda ruta no pública cubre las rutas nu
 ## Cambios en documentos
 
 - `docs/requerimientos.md`: RF01 pasa a "Consultar las unidades organizativas (departamento y
-  cátedras) con su jerarquía; las carga el DBA", con actor "Todos"; RF23 menciona 13 dominios; se
-  agrega a §5 la referencia a esta spec. El recuento de 24 tablas del modelo no cambia, porque no
+  cátedras) con su jerarquía; las carga el DBA", con actor "Todos"; se agrega a §5 la referencia
+  a esta spec. El recuento de 24 tablas del modelo no cambia, porque no
   cuenta las tablas de referencia.
 - `README.md`: cómo cargar cátedras por SQL.
 - Esta spec pasa a `Implementada` al cerrar el trabajo.
