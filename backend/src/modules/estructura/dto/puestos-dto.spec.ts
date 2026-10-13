@@ -98,3 +98,58 @@ describe('CrearPuestoDto', () => {
     ).rejects.toThrow(BadRequestException);
   });
 });
+
+describe('límites numéricos de los puestos', () => {
+  const base = { denominacion: 'Jefe', idUnidad: 2, idNivelJerarquico: 2 };
+  const valoresFuera: [string, number][] = [
+    ['dotacionPrevista', 10001],
+    ['dotacionPrevista', 99999999999],
+    ['idUnidad', 99999999999],
+    ['idNivelJerarquico', 2147483648],
+    ['idTipoRelacionContractual', 2147483648],
+    ['idPuestoSuperior', 2147483648],
+  ];
+
+  it.each(valoresFuera)('CrearPuestoDto rechaza %s = %d', async (campo, v) => {
+    await expect(
+      pipe.transform(
+        { ...base, [campo]: v },
+        { type: 'body', metatype: CrearPuestoDto },
+      ),
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it.each(valoresFuera)(
+    'ActualizarPuestoDto rechaza %s = %d',
+    async (campo, v) => {
+      if (campo === 'idUnidad') return; // no se edita: otro rechazo
+      await expect(
+        pipe.transform(
+          { [campo]: v },
+          { type: 'body', metatype: ActualizarPuestoDto },
+        ),
+      ).rejects.toThrow(BadRequestException);
+    },
+  );
+
+  it('acepta los máximos permitidos', async () => {
+    await expect(
+      pipe.transform(
+        { ...base, dotacionPrevista: 10000, idUnidad: 2147483647 },
+        { type: 'body', metatype: CrearPuestoDto },
+      ),
+    ).resolves.toBeDefined();
+  });
+
+  it.each(['0', '2147483648'])(
+    'FiltroPuestosDto rechaza idUnidad = %s',
+    async (idUnidad) => {
+      await expect(
+        pipe.transform(
+          { idUnidad },
+          { type: 'query', metatype: FiltroPuestosDto },
+        ),
+      ).rejects.toThrow(BadRequestException);
+    },
+  );
+});

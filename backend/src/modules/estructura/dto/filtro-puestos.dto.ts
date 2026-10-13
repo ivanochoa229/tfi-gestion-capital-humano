@@ -5,7 +5,9 @@ import {
   IsInt,
   IsOptional,
   IsString,
+  Max,
   MaxLength,
+  Min,
 } from 'class-validator';
 
 export class FiltroPuestosDto {
@@ -13,6 +15,8 @@ export class FiltroPuestosDto {
   @IsOptional()
   @Type(() => Number)
   @IsInt()
+  @Min(1)
+  @Max(2147483647)
   idUnidad?: number;
 
   @ApiPropertyOptional({ type: Boolean })

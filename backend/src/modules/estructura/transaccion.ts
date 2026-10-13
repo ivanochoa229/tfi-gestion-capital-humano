@@ -38,8 +38,22 @@ export async function enTransaccionDeEstructura<T>(
 export async function siguienteCodigoPuesto(
   manager: EntityManager,
 ): Promise<string> {
-  const [fila] = await manager.query<{ n: string }[]>(
-    `SELECT nextval('puesto_codigo_seq') AS n`,
-  );
+  let fila: { n: string };
+  try {
+    [fila] = await manager.query<{ n: string }[]>(
+      `SELECT nextval('puesto_codigo_seq') AS n`,
+    );
+  } catch (error) {
+    // 2200H: la secuencia superó su MAXVALUE.
+    if (
+      error instanceof QueryFailedError &&
+      (error.driverError as { code?: string } | undefined)?.code === '2200H'
+    ) {
+      throw new ConflictException(
+        'Se agotó el rango de códigos de puesto (P-9999): no se pueden crear más puestos sin ampliar la secuencia',
+      );
+    }
+    throw error;
+  }
   return `P-${fila.n.padStart(4, '0')}`;
 }

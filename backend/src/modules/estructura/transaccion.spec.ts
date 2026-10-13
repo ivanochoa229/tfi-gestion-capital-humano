@@ -76,3 +76,32 @@ describe('siguienteCodigoPuesto', () => {
     expect(await siguienteCodigoPuesto(manager)).toBe('P-9999');
   });
 });
+
+describe('siguienteCodigoPuesto (secuencia agotada)', () => {
+  it('traduce el agotamiento de la secuencia (2200H) a 409', async () => {
+    const agotada = new QueryFailedError(
+      'SELECT nextval',
+      [],
+      Object.assign(new Error('nextval: reached maximum value'), {
+        code: '2200H',
+      }),
+    );
+    const manager = {
+      query: vi.fn(async () => {
+        throw agotada;
+      }),
+    } as unknown as EntityManager;
+    const intento = siguienteCodigoPuesto(manager);
+    await expect(intento).rejects.toThrow(ConflictException);
+    await expect(intento).rejects.toThrow(/P-9999/);
+  });
+
+  it('deja pasar los demás errores de la base', async () => {
+    const manager = {
+      query: vi.fn(async () => {
+        throw new Error('otro');
+      }),
+    } as unknown as EntityManager;
+    await expect(siguienteCodigoPuesto(manager)).rejects.toThrow('otro');
+  });
+});
