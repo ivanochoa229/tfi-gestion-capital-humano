@@ -81,7 +81,11 @@ export class UsuariosService {
       dto.idUnidades ?? usuario.unidades.map((u) => u.idUnidad);
     this.validarReglasDeRol(rolFinal, idPersonaFinal, unidadesFinales);
     if (dto.idUnidades !== undefined || dto.rol !== undefined) {
-      await this.validarUnidades(rolFinal, unidadesFinales);
+      await this.validarUnidades(
+        rolFinal,
+        unidadesFinales,
+        usuario.unidades.map((u) => u.idUnidad),
+      );
     }
 
     if (dto.nombreUsuario) {
@@ -168,12 +172,15 @@ export class UsuariosService {
   }
 
   /**
-   * Cada unidad debe existir, estar activa y ser del tipo que corresponde al rol:
-   * cátedras para el jefe de cátedra, departamento para la jefatura.
+   * Cada unidad debe existir y ser del tipo que corresponde al rol: cátedras para
+   * el jefe de cátedra, departamento para la jefatura. Las nuevas asignaciones
+   * además deben estar activas; las ya asignadas (`yaAsignadas`) pueden haberse
+   * desactivado después y no deben impedir editar al usuario ni quitarlas.
    */
   private async validarUnidades(
     rol: CodigoRol,
     idUnidades: number[],
+    yaAsignadas: number[] = [],
   ): Promise<void> {
     if (idUnidades.length === 0) return;
     const tipoEsperado =
@@ -189,7 +196,7 @@ export class UsuariosService {
     for (const id of idUnidades) {
       const unidad = encontradas.get(id);
       if (!unidad) throw new BadRequestException(`La unidad ${id} no existe`);
-      if (!unidad.activo) {
+      if (!unidad.activo && !yaAsignadas.includes(id)) {
         throw new BadRequestException(
           `La unidad "${unidad.denominacion}" está inactiva`,
         );

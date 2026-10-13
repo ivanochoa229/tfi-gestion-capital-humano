@@ -23,7 +23,7 @@ import { RestablecerClaveDialog } from './RestablecerClaveDialog';
 
 export function TablaUsuarios() {
   const { data, isLoading, isError } = useUsuarios();
-  const { data: unidades } = useUnidades();
+  const { data: unidades } = useUnidades(true);
   const actualizar = useActualizarUsuario();
   const [formulario, setFormulario] = useState<{ usuario?: Usuario } | null>(
     null,
@@ -79,11 +79,13 @@ export function TablaUsuarios() {
                 {u.idUnidades.length === 0
                   ? '—'
                   : u.idUnidades
-                      .map(
-                        (id) =>
-                          unidades?.find((x) => x.id === id)?.denominacion ??
-                          `#${id}`,
-                      )
+                      .map((id) => {
+                        const unidad = unidades?.find((x) => x.id === id);
+                        if (!unidad) return `#${id}`;
+                        return unidad.activo
+                          ? unidad.denominacion
+                          : `${unidad.denominacion} (inactiva)`;
+                      })
                       .join(', ')}
               </TableCell>
               <TableCell>

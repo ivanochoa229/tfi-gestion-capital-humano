@@ -17,12 +17,17 @@ export function useArbolUnidades(incluirInactivas: boolean) {
   });
 }
 
-/** Lista plana de unidades activas (selectores). */
-export function useUnidades() {
+/**
+ * Lista plana de unidades (selectores). Solo activas por defecto; con
+ * `incluirInactivas` también las dadas de baja, para mostrar asignaciones viejas.
+ */
+export function useUnidades(incluirInactivas = false) {
   return useQuery({
-    queryKey: ['unidades', 'lista'],
+    queryKey: ['unidades', 'lista', incluirInactivas],
     queryFn: async () => {
-      const { data, error } = await api.GET('/api/unidades');
+      const { data, error } = await api.GET('/api/unidades', {
+        params: { query: { incluirInactivas } },
+      });
       if (error || !data) throw new Error('No se pudieron cargar las unidades');
       return data;
     },

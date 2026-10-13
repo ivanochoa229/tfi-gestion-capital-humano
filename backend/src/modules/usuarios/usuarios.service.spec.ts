@@ -89,6 +89,7 @@ function crearServicio(existentes: Usuario[]) {
     catedra(2, 'Cátedra B'),
     catedra(3, 'Cátedra inactiva', false),
     catedra(4, 'Cátedra C'),
+    catedra(6, 'Otra cátedra inactiva', false),
     {
       id: 5,
       denominacion: 'Departamento de Sistemas',
@@ -235,6 +236,66 @@ describe('UsuariosService.actualizar', () => {
     await expect(servicio.actualizar(2, { idUnidades: [3] })).rejects.toThrow(
       /inactiva/,
     );
+  });
+
+  it('permite editar otros datos de un jefe cuya unidad asignada quedó inactiva', async () => {
+    const { servicio } = crearServicio([
+      usuario({
+        id: 2,
+        nombreUsuario: 'bea',
+        rolCodigo: 'jefe_catedra',
+        unidades: [{ idUsuario: 2, idUnidad: 3 } as never],
+      }),
+    ]);
+    const dto = await servicio.actualizar(2, {
+      nombreUsuario: 'bea2',
+      rol: 'jefe_catedra',
+      idUnidades: [3, 1],
+    });
+    expect(dto).toMatchObject({ nombreUsuario: 'bea2', idUnidades: [3, 1] });
+  });
+
+  it('permite quitar una unidad inactiva ya asignada', async () => {
+    const { servicio } = crearServicio([
+      usuario({
+        id: 2,
+        nombreUsuario: 'bea',
+        rolCodigo: 'jefe_catedra',
+        unidades: [{ idUsuario: 2, idUnidad: 3 } as never],
+      }),
+    ]);
+    const dto = await servicio.actualizar(2, { idUnidades: [1] });
+    expect(dto.idUnidades).toEqual([1]);
+  });
+
+  it('sigue rechazando una unidad inactiva nueva aunque haya otra inactiva asignada', async () => {
+    const { servicio } = crearServicio([
+      usuario({
+        id: 2,
+        nombreUsuario: 'bea',
+        rolCodigo: 'jefe_catedra',
+        unidades: [{ idUsuario: 2, idUnidad: 3 } as never],
+      }),
+    ]);
+    await expect(
+      servicio.actualizar(2, {
+        idUnidades: [3, 6],
+      }),
+    ).rejects.toThrow(/inactiva/);
+  });
+
+  it('revalida el tipo de una unidad inactiva asignada si cambia el rol', async () => {
+    const { servicio } = crearServicio([
+      usuario({
+        id: 2,
+        nombreUsuario: 'bea',
+        rolCodigo: 'jefe_catedra',
+        unidades: [{ idUsuario: 2, idUnidad: 3 } as never],
+      }),
+    ]);
+    await expect(
+      servicio.actualizar(2, { rol: 'jefatura_departamento' }),
+    ).rejects.toThrow(/solo admite/);
   });
 
   it('revalida las unidades actuales cuando cambia el rol', async () => {

@@ -54,7 +54,7 @@ export function FormularioUsuario({ usuario, onCerrar }: Props) {
   const actualizar = useActualizarUsuario();
   const [error, setError] = useState<string>();
 
-  const { data: unidades } = useUnidades();
+  const { data: unidades } = useUnidades(true);
   const {
     register,
     control,
@@ -77,7 +77,10 @@ export function FormularioUsuario({ usuario, onCerrar }: Props) {
       : rol === 'jefatura_departamento'
         ? 'departamento'
         : undefined;
-  const elegibles = (unidades ?? []).filter((u) => u.tipo === tipoUnidad);
+  const delTipo = (unidades ?? []).filter((u) => u.tipo === tipoUnidad);
+  const elegibles = (seleccion: number[]) =>
+    // Las inactivas solo se muestran si ya están asignadas, para poder quitarlas.
+    delTipo.filter((u) => u.activo || seleccion.includes(u.id));
 
   const guardar = handleSubmit(async (datos) => {
     const idUnidades = tipoUnidad ? datos.idUnidades : [];
@@ -165,14 +168,16 @@ export function FormularioUsuario({ usuario, onCerrar }: Props) {
                     onChange={field.onChange}
                     slotProps={{ select: { multiple: true } }}
                     helperText={
-                      elegibles.length === 0
+                      elegibles(field.value).length === 0
                         ? 'No hay unidades de este tipo cargadas. Las carga el DBA.'
                         : 'Define qué unidades ve y gestiona este usuario'
                     }
                   >
-                    {elegibles.map((u) => (
+                    {elegibles(field.value).map((u) => (
                       <MenuItem key={u.id} value={u.id}>
-                        {u.denominacion}
+                        {u.activo
+                          ? u.denominacion
+                          : `${u.denominacion} (inactiva)`}
                       </MenuItem>
                     ))}
                   </TextField>
