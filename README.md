@@ -61,6 +61,26 @@ frontend/src/
 
 Cada módulo del backend sigue la misma forma: `entities/`, `dto/`, `<modulo>.controller.ts`, `<modulo>.service.ts` y `<modulo>.module.ts`.
 
+## Unidades organizativas
+
+La aplicación **no** crea ni edita unidades: las carga el DBA por SQL. La migración deja solo el Departamento de Sistemas. Las cátedras se cargan con `INSERT` bajo ese departamento; el trigger `trg_validar_jerarquia_unidad` rechaza un departamento con superior, una cátedra sin superior y una cátedra cuyo superior no es un departamento.
+
+```sql
+INSERT INTO unidad_organizativa (denominacion, id_tipo_unidad, id_unidad_superior)
+SELECT 'Bases de Datos', t.id_tipo_unidad, d.id_unidad
+FROM tipo_unidad t, unidad_organizativa d
+WHERE t.codigo = 'catedra'
+  AND d.denominacion = 'Departamento de Sistemas' AND d.id_unidad_superior IS NULL;
+```
+
+Para el entorno local, `backend/scripts/catedras-ejemplo.sql` carga tres cátedras de ejemplo (se puede correr más de una vez):
+
+```bash
+docker compose exec -T db sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"' < backend/scripts/catedras-ejemplo.sql
+```
+
+Cuidados del DBA: el trigger revisa la unidad, no sus puestos. Si se cambia el superior o el tipo de una unidad que ya tiene puestos, o se desactiva una cátedra con puestos activos o usuarios asignados, la aplicación no lo impide: conviene revisar los superiores de los puestos afectados.
+
 ## Flujo de trabajo
 
 ### Migraciones
@@ -80,6 +100,12 @@ npm run migration:show     # lista aplicadas y pendientes
 ```
 
 Revisen siempre la migración generada antes de aplicarla.
+
+Los índices con `lower()`, el trigger y la secuencia de `estructura` se escriben a mano en la migración y no están en las entidades: si `migration:generate` propone borrarlos, quitar esas líneas.
+
+### Tests de integración
+
+`npm test` corre solo tests unitarios. `npm run test:integracion` (requiere `docker compose up -d db`; dentro de Docker, `docker compose exec -T backend npm run test:integracion`) crea una base PostgreSQL temporal, le aplica las migraciones y prueba restricciones, triggers y consultas recursivas reales. Los archivos se llaman `*.int.spec.ts`.
 
 ### Tipos de la API en el frontend
 

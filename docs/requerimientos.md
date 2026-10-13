@@ -12,7 +12,7 @@ El alcance es gestión del conocimiento crítico y planificación de la sucesió
 
 | ID | Requerimiento | Actor | Origen |
 | --- | --- | --- | --- |
-| RF01 | Gestionar unidades organizativas (departamento y cátedras) con su jerarquía | Analista de puestos | OE1 |
+| RF01 | Consultar las unidades organizativas (departamento y cátedras) con su jerarquía; las carga el DBA | Todos | OE1 |
 | RF02 | Alta, modificación y baja de puestos con sus datos de identificación y superior inmediato | Analista de puestos | OE1 |
 | RF03 | Registrar la descripción del puesto: funciones, tareas, responsabilidades, estándares de desempeño, riesgos y relaciones de trabajo | Analista de puestos | OE2 |
 | RF04 | Exigir fuente de datos, método, analista y fecha de relevamiento al cargar cada descripción | Analista de puestos | OE9 |
@@ -110,6 +110,8 @@ La decisión modifica la tabla `activo_conocimiento`:
 | Entorno | Docker Compose con base, almacenamiento, backend y frontend | RNF09 |
 
 **Usuarios y roles:** siete roles fijos (`rol`), `usuario`, `usuario_unidad`, `sesion` y `auditoria`; ver `docs/superpowers/specs/2026-10-12-usuarios-roles-design.md`.
+
+**Estructura:** `unidad_organizativa` (solo lectura para la aplicación, cargada por el DBA) y `puesto`; ver `docs/superpowers/specs/2026-10-13-estructura-unidades-puestos-design.md`. Suma tres dominios de referencia (`tipo_unidad`, `nivel_jerarquico`, `tipo_relacion_contractual`) a los administrados por RF23.
 
 Cuidados de implementación:
 
