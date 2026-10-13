@@ -1,4 +1,4 @@
-Estado: Implementada | Fecha: 2026-10-13 | Autor: IvanOchoa229
+Estado: Aprobada | Fecha: 2026-10-13 | Autor: IvanOchoa229
 
 # Estructura: unidades organizativas y puestos
 
@@ -86,7 +86,7 @@ local (no es una migración).
 | Columna | Detalle |
 | --- | --- |
 | `id_puesto` | Clave primaria |
-| `codigo` | `varchar(10)`, único, no nulo, sin valor por defecto. Lo genera `EstructuraService` al crear el puesto con `nextval('puesto_codigo_seq')` (`'P-'` más el número con cuatro dígitos); la secuencia tiene `MAXVALUE 9999`, así que agotarla falla en lugar de repetir códigos. Se genera en la aplicación para que `migration:generate` no proponga cambios sobre un valor por defecto que las entidades no declaran |
+| `codigo` | `varchar(10)`, único, no nulo, sin valor por defecto. Lo genera `PuestosService` al crear el puesto con `nextval('puesto_codigo_seq')` (`'P-'` más el número con cuatro dígitos); la secuencia tiene `MAXVALUE 9999`, así que agotarla falla en lugar de repetir códigos. Se genera en la aplicación para que `migration:generate` no proponga cambios sobre un valor por defecto que las entidades no declaran |
 | `denominacion` | Hasta 150 caracteres, obligatorio |
 | `proposito`, `condiciones_trabajo` | Texto, opcionales |
 | `rango_retributivo` | Hasta 100 caracteres, opcional |
@@ -110,7 +110,7 @@ Restricciones: índice único parcial `(id_unidad, lower(denominacion))` donde `
 Se revisan a mano antes de aplicarse, como indica CLAUDE.md. El trigger, la secuencia y los índices
 parciales se escriben en SQL.
 
-## Reglas de negocio (`EstructuraService`)
+## Reglas de negocio (`UnidadesService`, `PuestosService`, `PuestosTipoService` y `JerarquiaService`)
 
 ### Puestos
 
