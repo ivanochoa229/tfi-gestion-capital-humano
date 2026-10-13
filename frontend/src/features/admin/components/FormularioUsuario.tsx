@@ -11,8 +11,9 @@ import {
   TextField,
 } from '@mui/material';
 import { useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
+import { useUnidades } from '../../estructura/hooks/useUnidades';
 import {
   useActualizarUsuario,
   useCrearUsuario,
@@ -39,6 +40,7 @@ function crearEsquema(esAlta: boolean) {
       ? z.string().min(10, 'Al menos 10 caracteres')
       : z.string().optional(),
     rol: z.string().min(1, 'Elegí un rol'),
+    idUnidades: z.array(z.number()),
   });
 }
 type Datos = z.infer<ReturnType<typeof crearEsquema>>;
@@ -52,8 +54,10 @@ export function FormularioUsuario({ usuario, onCerrar }: Props) {
   const actualizar = useActualizarUsuario();
   const [error, setError] = useState<string>();
 
+  const { data: unidades } = useUnidades();
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<Datos>({
@@ -62,10 +66,20 @@ export function FormularioUsuario({ usuario, onCerrar }: Props) {
       nombreUsuario: usuario?.nombreUsuario ?? '',
       clave: '',
       rol: usuario?.rol ?? '',
+      idUnidades: usuario?.idUnidades ?? [],
     },
   });
+  const rol = useWatch({ control, name: 'rol' });
+  const tipoUnidad =
+    rol === 'jefe_catedra'
+      ? 'catedra'
+      : rol === 'jefatura_departamento'
+        ? 'departamento'
+        : undefined;
+  const elegibles = (unidades ?? []).filter((u) => u.tipo === tipoUnidad);
 
   const guardar = handleSubmit(async (datos) => {
+    const idUnidades = tipoUnidad ? datos.idUnidades : [];
     try {
       if (usuario) {
         await actualizar.mutateAsync({
@@ -73,6 +87,7 @@ export function FormularioUsuario({ usuario, onCerrar }: Props) {
           cuerpo: {
             nombreUsuario: datos.nombreUsuario,
             rol: datos.rol as never,
+            idUnidades,
           },
         });
       } else {
@@ -80,6 +95,7 @@ export function FormularioUsuario({ usuario, onCerrar }: Props) {
           nombreUsuario: datos.nombreUsuario,
           clave: datos.clave ?? '',
           rol: datos.rol as never,
+          idUnidades,
         });
       }
       onCerrar();
@@ -130,6 +146,36 @@ export function FormularioUsuario({ usuario, onCerrar }: Props) {
                 </MenuItem>
               ))}
             </TextField>
+            {tipoUnidad && (
+              <Controller
+                control={control}
+                name="idUnidades"
+                render={({ field }) => (
+                  <TextField
+                    select
+                    label={
+                      tipoUnidad === 'catedra'
+                        ? 'Cátedras a cargo'
+                        : 'Departamento a cargo'
+                    }
+                    value={field.value}
+                    onChange={field.onChange}
+                    slotProps={{ select: { multiple: true } }}
+                    helperText={
+                      elegibles.length === 0
+                        ? 'No hay unidades de este tipo cargadas. Las carga el DBA.'
+                        : 'Define qué unidades ve y gestiona este usuario'
+                    }
+                  >
+                    {elegibles.map((u) => (
+                      <MenuItem key={u.id} value={u.id}>
+                        {u.denominacion}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
+            )}
           </Stack>
         </DialogContent>
         <DialogActions>
