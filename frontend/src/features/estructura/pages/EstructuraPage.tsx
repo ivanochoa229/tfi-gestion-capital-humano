@@ -12,6 +12,9 @@ export function EstructuraPage() {
   const [incluirInactivas, setIncluirInactivas] = useState(false);
   const [idSeleccionada, setIdSeleccionada] = useState<number>();
   const { data: arbol } = useArbolUnidades(incluirInactivas);
+  // Para hallar las ancestras: con las inactivas ocultas, las cátedras de un
+  // departamento inactivo quedarían como raíces y se perdería su departamento.
+  const { data: arbolCompleto } = useArbolUnidades(true);
 
   const seleccionada =
     arbol && idSeleccionada !== undefined
@@ -40,11 +43,14 @@ export function EstructuraPage() {
         </Box>
         <Box>
           <Divider sx={{ display: { md: 'none' }, mb: 2 }} />
-          {seleccionada && arbol ? (
+          {seleccionada && arbolCompleto ? (
             <TablaPuestos
               key={seleccionada.id}
               unidad={seleccionada}
-              unidadesValidas={unidadesHastaRaiz(arbol, seleccionada.id)}
+              unidadesValidas={unidadesHastaRaiz(
+                arbolCompleto,
+                seleccionada.id,
+              )}
               puedeEditar={sesion?.rol === 'analista_puestos'}
             />
           ) : (
