@@ -7,6 +7,7 @@ import type { Repository } from 'typeorm';
 import type { Rol } from './entities/rol.entity.js';
 import type { Usuario } from './entities/usuario.entity.js';
 import { PasswordService } from './password.service.js';
+import type { UnidadesService } from '../estructura/unidades.service.js';
 import type { SesionesService } from './sesiones.service.js';
 import { UsuariosService } from './usuarios.service.js';
 
@@ -77,16 +78,41 @@ function crearServicio(existentes: Usuario[]) {
   };
   (usuarios as unknown as { manager: unknown }).manager = manager;
   const sesiones = { cerrarDe: vi.fn(async () => undefined) };
+  const catedra = (id: number, denominacion: string, activo = true) => ({
+    id,
+    denominacion,
+    activo,
+    tipo: { codigo: 'catedra' },
+  });
+  const unidadesFake = [
+    catedra(1, 'Cátedra A'),
+    catedra(2, 'Cátedra B'),
+    catedra(3, 'Cátedra inactiva', false),
+    catedra(4, 'Cátedra C'),
+    {
+      id: 5,
+      denominacion: 'Departamento de Sistemas',
+      activo: true,
+      tipo: { codigo: 'departamento' },
+    },
+  ];
+  const unidadesEstructura = {
+    buscarPorIds: vi.fn(async (ids: number[]) =>
+      unidadesFake.filter((u) => ids.includes(u.id)),
+    ),
+  };
   return {
     servicio: new UsuariosService(
       usuarios,
       rolesRepo,
       new PasswordService(),
       sesiones as unknown as SesionesService,
+      unidadesEstructura as unknown as UnidadesService,
     ),
     usuarios,
     sesiones,
     consultas,
+    unidadesEstructura,
   };
 }
 
@@ -144,6 +170,50 @@ describe('UsuariosService.crear', () => {
     });
     expect(dto.idUnidades).toEqual([1, 2]);
   });
+
+  it('rechaza una unidad inexistente', async () => {
+    const { servicio } = crearServicio([]);
+    await expect(
+      servicio.crear({ ...base, rol: 'jefe_catedra', idUnidades: [99] }),
+    ).rejects.toThrow(/La unidad 99 no existe/);
+  });
+
+  it('rechaza una unidad inactiva', async () => {
+    const { servicio } = crearServicio([]);
+    await expect(
+      servicio.crear({ ...base, rol: 'jefe_catedra', idUnidades: [3] }),
+    ).rejects.toThrow(/inactiva/);
+  });
+
+  it('el jefe de cátedra solo admite cátedras', async () => {
+    const { servicio } = crearServicio([]);
+    await expect(
+      servicio.crear({ ...base, rol: 'jefe_catedra', idUnidades: [5] }),
+    ).rejects.toThrow(/solo admite/);
+  });
+
+  it('la jefatura de departamento solo admite departamentos', async () => {
+    const { servicio } = crearServicio([]);
+    await expect(
+      servicio.crear({
+        ...base,
+        rol: 'jefatura_departamento',
+        idUnidades: [1],
+      }),
+    ).rejects.toThrow(/solo admite/);
+    const dto = await servicio.crear({
+      ...base,
+      rol: 'jefatura_departamento',
+      idUnidades: [5],
+    });
+    expect(dto.idUnidades).toEqual([5]);
+  });
+
+  it('no consulta las unidades si no se asigna ninguna', async () => {
+    const { servicio, unidadesEstructura } = crearServicio([]);
+    await servicio.crear({ ...base, rol: 'recursos_humanos' });
+    expect(unidadesEstructura.buscarPorIds).not.toHaveBeenCalled();
+  });
 });
 
 describe('UsuariosService.actualizar', () => {
@@ -156,6 +226,37 @@ describe('UsuariosService.actualizar', () => {
       idUnidades: [4],
     });
     expect(dto).toMatchObject({ rol: 'jefe_catedra', idUnidades: [4] });
+  });
+
+  it('rechaza asignar una unidad inactiva al modificar', async () => {
+    const { servicio } = crearServicio([
+      usuario({ id: 2, nombreUsuario: 'bea', rolCodigo: 'jefe_catedra' }),
+    ]);
+    await expect(servicio.actualizar(2, { idUnidades: [3] })).rejects.toThrow(
+      /inactiva/,
+    );
+  });
+
+  it('revalida las unidades actuales cuando cambia el rol', async () => {
+    const { servicio } = crearServicio([
+      usuario({
+        id: 2,
+        nombreUsuario: 'bea',
+        rolCodigo: 'jefe_catedra',
+        unidades: [{ idUsuario: 2, idUnidad: 1 } as never],
+      }),
+    ]);
+    await expect(
+      servicio.actualizar(2, { rol: 'jefatura_departamento' }),
+    ).rejects.toThrow(/solo admite/);
+  });
+
+  it('no consulta las unidades si solo cambia otro dato', async () => {
+    const { servicio, unidadesEstructura } = crearServicio([
+      usuario({ id: 2, nombreUsuario: 'bea' }),
+    ]);
+    await servicio.actualizar(2, { activo: false });
+    expect(unidadesEstructura.buscarPorIds).not.toHaveBeenCalled();
   });
 
   it('responde 404 si el usuario no existe', async () => {

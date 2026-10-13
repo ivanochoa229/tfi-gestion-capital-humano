@@ -8,6 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ROLES, ROLES_CON_ALCANCE_POR_UNIDAD } from '../../common/roles.js';
 import type { CodigoRol } from '../../common/roles.js';
+import { TIPOS_UNIDAD } from '../estructura/estructura.constantes.js';
+import { UnidadesService } from '../estructura/unidades.service.js';
 import type { ActualizarUsuarioDto } from './dto/actualizar-usuario.dto.js';
 import type { CrearUsuarioDto } from './dto/crear-usuario.dto.js';
 import type { RolDto } from './dto/rol.dto.js';
@@ -29,6 +31,7 @@ export class UsuariosService {
     @InjectRepository(Rol) private readonly roles: Repository<Rol>,
     private readonly passwords: PasswordService,
     private readonly sesiones: SesionesService,
+    private readonly unidadesEstructura: UnidadesService,
   ) {}
 
   async listar(): Promise<UsuarioDto[]> {
@@ -52,6 +55,7 @@ export class UsuariosService {
     const rol = await this.buscarRol(dto.rol);
     const idPersona = dto.idPersona ?? null;
     this.validarReglasDeRol(dto.rol, idPersona, dto.idUnidades ?? []);
+    await this.validarUnidades(dto.rol, dto.idUnidades ?? []);
     await this.validarPersonaLibre(idPersona);
 
     const creado = await this.usuarios.save(
@@ -76,6 +80,9 @@ export class UsuariosService {
     const unidadesFinales =
       dto.idUnidades ?? usuario.unidades.map((u) => u.idUnidad);
     this.validarReglasDeRol(rolFinal, idPersonaFinal, unidadesFinales);
+    if (dto.idUnidades !== undefined || dto.rol !== undefined) {
+      await this.validarUnidades(rolFinal, unidadesFinales);
+    }
 
     if (dto.nombreUsuario) {
       const nombreUsuario = normalizarNombreUsuario(dto.nombreUsuario);
@@ -157,6 +164,41 @@ export class UsuariosService {
       throw new BadRequestException(
         'Solo la jefatura de departamento y el jefe de cátedra tienen unidades a cargo',
       );
+    }
+  }
+
+  /**
+   * Cada unidad debe existir, estar activa y ser del tipo que corresponde al rol:
+   * cátedras para el jefe de cátedra, departamento para la jefatura.
+   */
+  private async validarUnidades(
+    rol: CodigoRol,
+    idUnidades: number[],
+  ): Promise<void> {
+    if (idUnidades.length === 0) return;
+    const tipoEsperado =
+      rol === ROLES.jefeCatedra
+        ? TIPOS_UNIDAD.catedra
+        : TIPOS_UNIDAD.departamento;
+    const encontradas = new Map(
+      (await this.unidadesEstructura.buscarPorIds(idUnidades)).map((u) => [
+        u.id,
+        u,
+      ]),
+    );
+    for (const id of idUnidades) {
+      const unidad = encontradas.get(id);
+      if (!unidad) throw new BadRequestException(`La unidad ${id} no existe`);
+      if (!unidad.activo) {
+        throw new BadRequestException(
+          `La unidad "${unidad.denominacion}" está inactiva`,
+        );
+      }
+      if (unidad.tipo.codigo !== tipoEsperado) {
+        throw new BadRequestException(
+          `La unidad "${unidad.denominacion}" no es de tipo ${tipoEsperado}: el rol ${rol} solo admite unidades de ese tipo`,
+        );
+      }
     }
   }
 
