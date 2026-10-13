@@ -9,6 +9,9 @@ import { CaracterOcupacion } from './entities/caracter-ocupacion.entity.js';
 import { TipoAccionTransferencia } from './entities/tipo-accion-transferencia.entity.js';
 import { EstadoAccionTransferencia } from './entities/estado-accion-transferencia.entity.js';
 import { EstadoPlan } from './entities/estado-plan.entity.js';
+import { TipoUnidad } from './entities/tipo-unidad.entity.js';
+import { NivelJerarquico } from './entities/nivel-jerarquico.entity.js';
+import { TipoRelacionContractual } from './entities/tipo-relacion-contractual.entity.js';
 import type { ValorReferencia } from './entities/valor-referencia.base.js';
 
 export interface DefinicionDominio {
@@ -21,7 +24,7 @@ export interface DefinicionDominio {
   entidad: Type<ValorReferencia>;
 }
 
-/** Los diez dominios cerrados del modelo (RF23). */
+/** Los trece dominios cerrados del modelo (RF23). */
 export const DOMINIOS: readonly DefinicionDominio[] = [
   {
     slug: 'nivel-dominio',
@@ -92,6 +95,27 @@ export const DOMINIOS: readonly DefinicionDominio[] = [
     tabla: 'estado_plan',
     ordinal: false,
     entidad: EstadoPlan,
+  },
+  {
+    slug: 'tipo-unidad',
+    denominacion: 'Tipo de unidad',
+    tabla: 'tipo_unidad',
+    ordinal: false,
+    entidad: TipoUnidad,
+  },
+  {
+    slug: 'nivel-jerarquico',
+    denominacion: 'Nivel jerárquico',
+    tabla: 'nivel_jerarquico',
+    ordinal: true,
+    entidad: NivelJerarquico,
+  },
+  {
+    slug: 'tipo-relacion-contractual',
+    denominacion: 'Tipo de relación contractual',
+    tabla: 'tipo_relacion_contractual',
+    ordinal: false,
+    entidad: TipoRelacionContractual,
   },
 ];
 

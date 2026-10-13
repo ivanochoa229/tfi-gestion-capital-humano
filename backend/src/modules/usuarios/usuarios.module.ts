@@ -4,6 +4,7 @@ import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RolesGuard } from '../../common/guards/roles.guard.js';
 import { SesionGuard } from '../../common/guards/sesion.guard.js';
+import { EstructuraModule } from '../estructura/estructura.module.js';
 import { AlcanceService } from './alcance.service.js';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
@@ -24,6 +25,7 @@ import { UsuariosService } from './usuarios.service.js';
   imports: [
     PassportModule.register({ session: true }),
     TypeOrmModule.forFeature([Rol, Usuario, UsuarioUnidad]),
+    EstructuraModule,
   ],
   controllers: [AuthController, UsuariosController],
   providers: [

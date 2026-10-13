@@ -11,7 +11,7 @@ Setup: `cp .env.example .env && docker compose up --build` (`.env` está en `.gi
 Sin Docker en las apps (Node 24+ / npm 11 requerido): `docker compose up -d db storage`, luego `npm run start:dev` en `backend/` y `npm run dev` en `frontend/`.
 
 Backend (`cd backend`):
-- `npm run lint` (oxlint), `npm run format` (prettier), `npm test` (vitest), un test: `npx vitest run src/infra/database/snake-naming.strategy.spec.ts` o `npx vitest run -t "nombre"`
+- `npm run lint` (oxlint), `npm run format` (prettier), `npm test` (vitest), un test: `npx vitest run src/infra/database/snake-naming.strategy.spec.ts` o `npx vitest run -t "nombre"`, `npm run test:integracion` (contra PostgreSQL real, requiere `db`)
 - Migraciones (compilan primero, usan `dist/`): `npm run migration:generate -- src/infra/database/migrations/Nombre`, `migration:create -- <ruta>` (SQL a mano), `migration:run`, `migration:revert`, `migration:show`. Revisar siempre la migración generada.
 
 Frontend (`cd frontend`): `npm run dev`, `npm run build` (tsc -b + vite), `npm run lint`, `npm run format`. No hay tests.
@@ -29,7 +29,7 @@ Frontend (`cd frontend`): `npm run dev`, `npm run build` (tsc -b + vite), `npm r
 
 - Nombres en español (dominio y código). DTOs con class-validator + `@ApiProperty` (alimentan Swagger y los tipos del frontend).
 - Formularios con react-hook-form + zod; llamadas a la API con hooks de TanStack Query dentro de cada feature.
-- Antes de subir cambios: `npm run lint` y `npm run format` en cada app, y `npm test` en el backend.
+- Antes de subir cambios: `npm run lint` y `npm run format` en cada app, y `npm test` (más `npm run test:integracion` si tocaste migraciones o SQL) en el backend.
 
 ## Git
 

@@ -5,6 +5,7 @@ import {
   PrimaryColumn,
   type Relation,
 } from 'typeorm';
+import { UnidadOrganizativa } from '../../estructura/entities/unidad-organizativa.entity.js';
 import { Usuario } from './usuario.entity.js';
 
 /** Unidades a cargo de una jefatura o jefe de cátedra (RF24). */
@@ -13,7 +14,7 @@ export class UsuarioUnidad {
   @PrimaryColumn({ name: 'id_usuario', type: 'int' })
   idUsuario: number;
 
-  /** Sin clave foránea hasta que exista `unidad_organizativa`. */
+  /** Unidad a cargo; ver la clave foránea hacia `unidad_organizativa`. */
   @PrimaryColumn({ name: 'id_unidad', type: 'int' })
   idUnidad: number;
 
@@ -23,4 +24,11 @@ export class UsuarioUnidad {
   })
   @JoinColumn({ name: 'id_usuario' })
   usuario: Relation<Usuario>;
+
+  @ManyToOne(() => UnidadOrganizativa, {
+    nullable: false,
+    onDelete: 'RESTRICT',
+  })
+  @JoinColumn({ name: 'id_unidad' })
+  unidad: Relation<UnidadOrganizativa>;
 }

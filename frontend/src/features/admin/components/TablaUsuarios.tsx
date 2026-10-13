@@ -11,6 +11,7 @@ import {
   TableRow,
 } from '@mui/material';
 import { useState } from 'react';
+import { useUnidades } from '../../estructura/hooks/useUnidades';
 import { mensajeError } from '../hooks/useGuardarValor';
 import {
   useActualizarUsuario,
@@ -22,6 +23,7 @@ import { RestablecerClaveDialog } from './RestablecerClaveDialog';
 
 export function TablaUsuarios() {
   const { data, isLoading, isError } = useUsuarios();
+  const { data: unidades } = useUnidades(true);
   const actualizar = useActualizarUsuario();
   const [formulario, setFormulario] = useState<{ usuario?: Usuario } | null>(
     null,
@@ -63,6 +65,7 @@ export function TablaUsuarios() {
           <TableRow>
             <TableCell>Usuario</TableCell>
             <TableCell>Rol</TableCell>
+            <TableCell>Unidades</TableCell>
             <TableCell>Estado</TableCell>
             <TableCell align="right">Acciones</TableCell>
           </TableRow>
@@ -72,6 +75,19 @@ export function TablaUsuarios() {
             <TableRow key={u.id}>
               <TableCell>{u.nombreUsuario}</TableCell>
               <TableCell>{u.rol}</TableCell>
+              <TableCell>
+                {u.idUnidades.length === 0
+                  ? '—'
+                  : u.idUnidades
+                      .map((id) => {
+                        const unidad = unidades?.find((x) => x.id === id);
+                        if (!unidad) return `#${id}`;
+                        return unidad.activo
+                          ? unidad.denominacion
+                          : `${unidad.denominacion} (inactiva)`;
+                      })
+                      .join(', ')}
+              </TableCell>
               <TableCell>
                 <Chip
                   size="small"

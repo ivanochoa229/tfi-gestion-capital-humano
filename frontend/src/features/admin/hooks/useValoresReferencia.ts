@@ -4,7 +4,7 @@ import { api, type Esquemas } from '../../../api/cliente';
 export type Dominio = Esquemas['DominioDto'];
 export type Valor = Esquemas['ValorReferenciaDto'];
 
-/** Los diez dominios cerrados del modelo. */
+/** Los dominios cerrados del modelo. */
 export function useDominiosReferencia() {
   return useQuery({
     queryKey: ['referencia', 'dominios'],

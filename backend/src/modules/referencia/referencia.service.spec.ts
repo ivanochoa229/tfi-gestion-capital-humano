@@ -64,9 +64,9 @@ const simples: Fila[] = [
 ];
 
 describe('ReferenciaService - consulta', () => {
-  it('lista los diez dominios', () => {
+  it('lista los trece dominios', () => {
     const { servicio } = crearEntorno([]);
-    expect(servicio.listarDominios()).toHaveLength(10);
+    expect(servicio.listarDominios()).toHaveLength(13);
   });
 
   it('lista solo los valores activos por defecto', async () => {

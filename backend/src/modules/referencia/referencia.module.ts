@@ -10,6 +10,9 @@ import { CaracterOcupacion } from './entities/caracter-ocupacion.entity.js';
 import { TipoAccionTransferencia } from './entities/tipo-accion-transferencia.entity.js';
 import { EstadoAccionTransferencia } from './entities/estado-accion-transferencia.entity.js';
 import { EstadoPlan } from './entities/estado-plan.entity.js';
+import { TipoUnidad } from './entities/tipo-unidad.entity.js';
+import { NivelJerarquico } from './entities/nivel-jerarquico.entity.js';
+import { TipoRelacionContractual } from './entities/tipo-relacion-contractual.entity.js';
 import { ReferenciaController } from './referencia.controller.js';
 import { ReferenciaService } from './referencia.service.js';
 
@@ -30,6 +33,9 @@ import { ReferenciaService } from './referencia.service.js';
       TipoAccionTransferencia,
       EstadoAccionTransferencia,
       EstadoPlan,
+      TipoUnidad,
+      NivelJerarquico,
+      TipoRelacionContractual,
     ]),
   ],
   controllers: [ReferenciaController],

@@ -5,21 +5,26 @@ import {
 } from './entities/valor-referencia.base.js';
 
 describe('DOMINIOS', () => {
-  it('define los diez dominios cerrados', () => {
-    expect(DOMINIOS).toHaveLength(10);
+  it('define los trece dominios cerrados', () => {
+    expect(DOMINIOS).toHaveLength(13);
   });
 
   it('no repite slugs ni tablas', () => {
-    expect(new Set(DOMINIOS.map((d) => d.slug)).size).toBe(10);
-    expect(new Set(DOMINIOS.map((d) => d.tabla)).size).toBe(10);
+    expect(new Set(DOMINIOS.map((d) => d.slug)).size).toBe(13);
+    expect(new Set(DOMINIOS.map((d) => d.tabla)).size).toBe(13);
   });
 
-  it('tiene exactamente tres dominios ordinales', () => {
+  it('tiene exactamente cuatro dominios ordinales', () => {
     expect(
       DOMINIOS.filter((d) => d.ordinal)
         .map((d) => d.slug)
         .sort(),
-    ).toEqual(['estado-preparacion', 'nivel-criticidad', 'nivel-dominio']);
+    ).toEqual([
+      'estado-preparacion',
+      'nivel-criticidad',
+      'nivel-dominio',
+      'nivel-jerarquico',
+    ]);
   });
 
   it('cada entidad extiende la base que corresponde a su tipo', () => {
