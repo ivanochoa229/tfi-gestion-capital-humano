@@ -58,6 +58,7 @@ export function FormularioUsuario({ usuario, onCerrar }: Props) {
   const {
     register,
     control,
+    setValue,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<Datos>({
@@ -133,7 +134,9 @@ export function FormularioUsuario({ usuario, onCerrar }: Props) {
               select
               label="Rol"
               defaultValue={usuario?.rol ?? ''}
-              {...register('rol')}
+              {...register('rol', {
+                onChange: () => setValue('idUnidades', []),
+              })}
               error={!!errors.rol}
               helperText={
                 errors.rol?.message ??
