@@ -64,6 +64,26 @@ function conexion(database: string) {
   };
 }
 
+async function eliminar(nombre: string): Promise<void> {
+  const limpieza = new DataSource(conexion(process.env.DB_NAME ?? 'postgres'));
+  await limpieza.initialize();
+  try {
+    await limpieza.query(`DROP DATABASE IF EXISTS "${nombre}" WITH (FORCE)`);
+  } finally {
+    await limpieza.destroy();
+  }
+}
+
+async function crear(nombre: string): Promise<void> {
+  const admin = new DataSource(conexion(process.env.DB_NAME ?? 'postgres'));
+  await admin.initialize();
+  try {
+    await admin.query(`CREATE DATABASE "${nombre}"`);
+  } finally {
+    await admin.destroy();
+  }
+}
+
 /**
  * Crea una base PostgreSQL con nombre aleatorio y le aplica las migraciones,
  * para probar restricciones, triggers y consultas SQL reales.
@@ -72,60 +92,57 @@ export async function crearBaseTemporal(
   opciones: OpcionesBase = {},
 ): Promise<BaseTemporal> {
   const nombre = `test_${randomBytes(6).toString('hex')}`;
-  const admin = new DataSource(conexion(process.env.DB_NAME ?? 'postgres'));
-  await admin.initialize();
-  await admin.query(`CREATE DATABASE "${nombre}"`);
-  await admin.destroy();
+  await crear(nombre);
 
-  const entidades = [
-    ...(await clasesDe(archivos(join(raiz, 'modules'), '.entity.ts', true))),
-    ...(await clasesDe(archivos(join(raiz, 'infra'), '.entity.ts', true))),
-  ];
-  const migraciones = await clasesDe(
-    archivos(join(raiz, 'infra', 'database', 'migrations'), '.ts', false),
-  );
+  try {
+    const entidades = [
+      ...(await clasesDe(archivos(join(raiz, 'modules'), '.entity.ts', true))),
+      ...(await clasesDe(archivos(join(raiz, 'infra'), '.entity.ts', true))),
+    ];
+    const migraciones = await clasesDe(
+      archivos(join(raiz, 'infra', 'database', 'migrations'), '.ts', false),
+    );
 
-  const abrir = async (aplicar: Clase[]): Promise<DataSource> => {
-    const ds = new DataSource({
-      ...conexion(nombre),
-      entities: entidades as never,
-      migrations: aplicar as never,
-      migrationsTableName: 'migraciones',
-      namingStrategy: new SnakeNamingStrategy(),
-      synchronize: false,
-    });
-    await ds.initialize();
-    try {
-      await ds.runMigrations();
-    } catch (error) {
-      await ds.destroy();
-      throw error;
-    }
-    return ds;
-  };
+    const abrir = async (aplicar: Clase[]): Promise<DataSource> => {
+      const ds = new DataSource({
+        ...conexion(nombre),
+        entities: entidades as never,
+        migrations: aplicar as never,
+        migrationsTableName: 'migraciones',
+        namingStrategy: new SnakeNamingStrategy(),
+        synchronize: false,
+      });
+      await ds.initialize();
+      try {
+        await ds.runMigrations();
+      } catch (error) {
+        await ds.destroy();
+        throw error;
+      }
+      return ds;
+    };
 
-  const excluidas = opciones.sin ?? [];
-  let actual = await abrir(
-    migraciones.filter((m) => !excluidas.some((s) => m.name.includes(s))),
-  );
+    const excluidas = opciones.sin ?? [];
+    let actual = await abrir(
+      migraciones.filter((m) => !excluidas.some((s) => m.name.includes(s))),
+    );
 
-  return {
-    get dataSource() {
-      return actual;
-    },
-    async aplicarTodas() {
-      const nuevo = await abrir(migraciones);
-      await actual.destroy();
-      actual = nuevo;
-    },
-    async destruir() {
-      await actual.destroy();
-      const limpieza = new DataSource(
-        conexion(process.env.DB_NAME ?? 'postgres'),
-      );
-      await limpieza.initialize();
-      await limpieza.query(`DROP DATABASE "${nombre}" WITH (FORCE)`);
-      await limpieza.destroy();
-    },
-  };
+    return {
+      get dataSource() {
+        return actual;
+      },
+      async aplicarTodas() {
+        const nuevo = await abrir(migraciones);
+        await actual.destroy();
+        actual = nuevo;
+      },
+      async destruir() {
+        await actual.destroy();
+        await eliminar(nombre);
+      },
+    };
+  } catch (error) {
+    await eliminar(nombre);
+    throw error;
+  }
 }

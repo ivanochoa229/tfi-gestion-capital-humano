@@ -1,3 +1,4 @@
+import { DataSource } from 'typeorm';
 import { crearBaseTemporal, type BaseTemporal } from './base-temporal.js';
 
 describe('crearBaseTemporal', () => {
@@ -49,5 +50,30 @@ describe('crearBaseTemporal', () => {
     } finally {
       await parcial.destruir();
     }
+  });
+
+  it('elimina la base si falla la preparación', async () => {
+    const listar = async () => {
+      const admin = new DataSource(base.dataSource.options);
+      await admin.initialize();
+      try {
+        const filas: { datname: string }[] = await admin.query(
+          "SELECT datname FROM pg_database WHERE datname LIKE 'test\\_%'",
+        );
+        return filas.map((f) => f.datname).sort();
+      } finally {
+        await admin.destroy();
+      }
+    };
+    const antes = await listar();
+    const espia = vi
+      .spyOn(DataSource.prototype, 'runMigrations')
+      .mockRejectedValueOnce(new Error('migración rota'));
+    try {
+      await expect(crearBaseTemporal()).rejects.toThrow('migración rota');
+    } finally {
+      espia.mockRestore();
+    }
+    expect(await listar()).toEqual(antes);
   });
 });
