@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitest/config';
+import { configDefaults, defineConfig } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
@@ -9,6 +9,8 @@ export default defineConfig({
     globals: true,
     root: './',
     include: ['**/*.spec.ts'],
+    // Los de integración corren aparte: `npm run test:integracion`.
+    exclude: [...configDefaults.exclude, '**/*.int.spec.ts'],
     setupFiles: ['reflect-metadata'],
   },
 });

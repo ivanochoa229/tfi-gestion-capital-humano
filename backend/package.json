@@ -17,6 +17,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
+    "test:integracion": "vitest run --config vitest.integracion.config.ts",
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
     "typeorm": "typeorm -d dist/infra/database/data-source.js",
     "migration:generate": "npm run build && typeorm -d dist/infra/database/data-source.js migration:generate",
