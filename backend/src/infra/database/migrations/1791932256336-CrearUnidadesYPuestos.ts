@@ -72,6 +72,8 @@ export class CrearUnidadesYPuestos1791932256336 implements MigrationInterface {
                 IF codigo_superior IS DISTINCT FROM 'departamento' THEN
                   RAISE EXCEPTION 'La unidad superior de la cátedra "%" debe ser un departamento', NEW.denominacion;
                 END IF;
+              ELSE
+                RAISE EXCEPTION 'Tipo de unidad desconocido para la unidad "%": solo se admiten departamento y cátedra', NEW.denominacion;
               END IF;
               RETURN NEW;
             END;

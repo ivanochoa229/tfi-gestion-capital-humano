@@ -112,6 +112,21 @@ describe('esquema de estructura', () => {
       ).rejects.toThrow(/debe ser un departamento/);
     });
 
+    it('rechaza una unidad de un tipo desconocido (solo dos niveles)', async () => {
+      const otro = (
+        await sql<{ id: number }[]>(
+          `INSERT INTO tipo_unidad (codigo, denominacion) VALUES ('otro', 'Otro') RETURNING id_tipo_unidad AS id`,
+        )
+      )[0].id;
+      const dpto = await unidad('Dpto tipo desconocido', 'departamento');
+      await expect(
+        sql(
+          `INSERT INTO unidad_organizativa (denominacion, id_tipo_unidad, id_unidad_superior) VALUES ('Tercer nivel', $1, $2)`,
+          [otro, dpto],
+        ),
+      ).rejects.toThrow(/Tipo de unidad desconocido/);
+    });
+
     it('no admite dos unidades activas con la misma denominación bajo el mismo superior', async () => {
       await unidad('Cátedra D', 'catedra', departamento);
       await expect(
