@@ -3985,7 +3985,7 @@ git commit -m "Bloquear la baja de puestos con ocupaciones y validar la persona 
 
 El frontend no tiene tests: se valida con lint, build y el recorrido manual del paso final.
 
-- [ ] **Paso 1: Regenerar los tipos de la API**
+- [x] **Paso 1: Regenerar los tipos de la API**
 
 Con el backend corriendo y reiniciado:
 
@@ -3995,7 +3995,7 @@ cd frontend && npm run api:tipos
 
 Verificar que `src/api/esquema.d.ts` ahora tiene `PersonaDto`, `PersonaDetalleDto`, `ResultadoBajaPersonaDto`, `CrearPersonaDto`, `ActualizarPersonaDto`, `OcupacionDto`, `OcupanteDto`, `CrearOcupacionDto`, `ActualizarOcupacionDto`, `CerrarOcupacionDto` y las rutas `/api/personas`, `/api/personas/{id}`, `/api/personas/{id}/baja`, `/api/personas/{id}/reactivar`, `/api/personas/{idPersona}/ocupaciones`, `/api/personas/{idPersona}/ocupaciones/{idPuesto}/{fechaDesde}`, `.../cerrar` y `/api/puestos/{idPuesto}/ocupaciones`: `grep -n "PersonaDetalleDto\|/api/personas" frontend/src/api/esquema.d.ts | head`. Si algún nombre difiere, usar el que quedó generado en los pasos siguientes.
 
-- [ ] **Paso 2: Hooks de personas**
+- [x] **Paso 2: Hooks de personas**
 
 `hooks/usePersonas.ts`:
 
@@ -4104,7 +4104,7 @@ export function useCambiarEstadoPersona() {
 }
 ```
 
-- [ ] **Paso 3: Hooks de ocupaciones**
+- [x] **Paso 3: Hooks de ocupaciones**
 
 `hooks/useOcupaciones.ts`:
 
@@ -4235,7 +4235,7 @@ export function useAnularOcupacion() {
 }
 ```
 
-- [ ] **Paso 4: Formulario de persona**
+- [x] **Paso 4: Formulario de persona**
 
 `components/FormularioPersona.tsx`:
 
@@ -4420,7 +4420,7 @@ export function FormularioPersona({ persona, onCerrar, onGuardada }: Props) {
 }
 ```
 
-- [ ] **Paso 5: Formulario y diálogo de cierre de ocupaciones**
+- [x] **Paso 5: Formulario y diálogo de cierre de ocupaciones**
 
 `components/FormularioOcupacion.tsx`:
 
@@ -4690,7 +4690,7 @@ export function CerrarOcupacionDialog({ ocupacion, onCerrar }: Props) {
 }
 ```
 
-- [ ] **Paso 6: Tabla de ocupaciones**
+- [x] **Paso 6: Tabla de ocupaciones**
 
 `components/TablaOcupaciones.tsx`:
 
@@ -4844,7 +4844,7 @@ export function TablaOcupaciones({ idPersona, puedeEditar, admiteNuevas }: Props
 }
 ```
 
-- [ ] **Paso 7: Ficha y lista**
+- [x] **Paso 7: Ficha y lista**
 
 `components/FichaPersona.tsx`:
 
@@ -5038,7 +5038,7 @@ export function ListaPersonas({ seleccionada, onElegir, onNueva }: Props) {
 }
 ```
 
-- [ ] **Paso 8: Páginas, ruta y menú**
+- [x] **Paso 8: Páginas, ruta y menú**
 
 Reemplazar `pages/PersonasPage.tsx`:
 
@@ -5145,7 +5145,7 @@ En `router.tsx` importar `MiFichaPage` (`'./features/personas/pages/MiFichaPage'
       { path: 'personas/yo', element: <MiFichaPage /> },
 ```
 
-- [ ] **Paso 9: Lint, build y commit**
+- [x] **Paso 9: Lint, build y commit**
 
 ```bash
 docker compose exec -T frontend npm run lint
