@@ -1977,7 +1977,7 @@ git commit -m "Agregar la base compartida del módulo personas"
   - `exigirActiva(idPersona: number): Promise<void>` (400 si no existe o está de baja; lo usa `UsuariosService`)
   El módulo exporta `PersonasService`.
 
-- [ ] **Paso 1: Escribir el test del servicio**
+- [x] **Paso 1: Escribir el test del servicio**
 
 `personas.service.spec.ts`:
 
@@ -2335,12 +2335,12 @@ describe('PersonasService.exigirActiva', () => {
 });
 ```
 
-- [ ] **Paso 2: Verificar que falla**
+- [x] **Paso 2: Verificar que falla**
 
 Run: `cd backend && npx vitest run src/modules/personas/personas.service.spec.ts`
 Expected: FAIL (no existe `personas.service.ts`).
 
-- [ ] **Paso 3: Implementar el servicio**
+- [x] **Paso 3: Implementar el servicio**
 
 `personas.service.ts`:
 
@@ -2623,12 +2623,12 @@ export class PersonasService {
 }
 ```
 
-- [ ] **Paso 4: Verificar que el test pasa**
+- [x] **Paso 4: Verificar que el test pasa**
 
 Run: `cd backend && npx vitest run src/modules/personas/personas.service.spec.ts`
 Expected: PASS.
 
-- [ ] **Paso 5: Implementar el controller**
+- [x] **Paso 5: Implementar el controller**
 
 `personas.controller.ts`:
 
@@ -2738,7 +2738,7 @@ export class PersonasController {
 }
 ```
 
-- [ ] **Paso 6: Registrar en el módulo**
+- [x] **Paso 6: Registrar en el módulo**
 
 Reemplazar `personas.module.ts` por:
 
@@ -2768,7 +2768,7 @@ import { PersonasService } from './personas.service.js';
 export class PersonasModule {}
 ```
 
-- [ ] **Paso 7: Verificar la suite y el arranque**
+- [x] **Paso 7: Verificar la suite y el arranque**
 
 ```bash
 cd backend && npm test
@@ -2777,7 +2777,7 @@ docker compose restart backend && docker compose logs --tail=30 backend
 
 Expected: tests PASS (incluido `cobertura-roles.spec.ts`, que exige `@Roles` en las rutas nuevas); el backend arranca sin errores de inyección. Probar con la sesión del administrador: `curl -s -c /tmp/c.txt -H 'Content-Type: application/json' -d '{"nombreUsuario":"<ADMIN_USUARIO>","clave":"<ADMIN_CLAVE>"}' localhost:3000/api/auth/login` y `curl -s -b /tmp/c.txt localhost:3000/api/personas` → `[]`.
 
-- [ ] **Paso 8: Lint, formato y commit**
+- [x] **Paso 8: Lint, formato y commit**
 
 ```bash
 cd backend && npm run lint && npm run format && npm test
