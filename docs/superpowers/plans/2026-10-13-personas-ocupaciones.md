@@ -2803,7 +2803,7 @@ git commit -m "Agregar el alta, edición y baja de personas"
   - `cerrar(idPersona: number, idPuesto: number, fechaDesde: FechaISO, dto: CerrarOcupacionDto): Promise<OcupacionDto>`
   - `anular(idPersona: number, idPuesto: number, fechaDesde: FechaISO): Promise<void>`
 
-- [ ] **Paso 1: Escribir el test unitario**
+- [x] **Paso 1: Escribir el test unitario**
 
 `ocupaciones.service.spec.ts`:
 
@@ -3179,12 +3179,12 @@ describe('OcupacionesService.listarDePuesto', () => {
 });
 ```
 
-- [ ] **Paso 2: Verificar que falla**
+- [x] **Paso 2: Verificar que falla**
 
 Run: `cd backend && npx vitest run src/modules/personas/ocupaciones.service.spec.ts`
 Expected: FAIL (no existe `ocupaciones.service.ts`).
 
-- [ ] **Paso 3: Implementar el servicio**
+- [x] **Paso 3: Implementar el servicio**
 
 `ocupaciones.service.ts`:
 
@@ -3448,12 +3448,12 @@ export class OcupacionesService {
 }
 ```
 
-- [ ] **Paso 4: Verificar que el test pasa**
+- [x] **Paso 4: Verificar que el test pasa**
 
 Run: `cd backend && npx vitest run src/modules/personas/ocupaciones.service.spec.ts`
 Expected: PASS.
 
-- [ ] **Paso 5: Implementar el controller**
+- [x] **Paso 5: Implementar el controller**
 
 `ocupaciones.controller.ts`:
 
@@ -3578,11 +3578,11 @@ export class OcupacionesController {
 }
 ```
 
-- [ ] **Paso 6: Registrar en el módulo**
+- [x] **Paso 6: Registrar en el módulo**
 
 En `personas.module.ts`: importar `Puesto` (`'../estructura/entities/puesto.entity.js'`), `OcupacionesController` y `OcupacionesService`; agregar `Puesto` a `TypeOrmModule.forFeature([Persona, Ocupacion, Usuario, Puesto])`, `OcupacionesController` a `controllers` y `OcupacionesService` a `providers`.
 
-- [ ] **Paso 7: Escribir el test de integración del servicio**
+- [x] **Paso 7: Escribir el test de integración del servicio**
 
 `ocupaciones.service.int.spec.ts` (contra PostgreSQL real; fija el comportamiento del bloqueo, de la exclusión y de "hoy"):
 
@@ -3729,7 +3729,7 @@ describe('Ocupaciones y personas (PostgreSQL real)', () => {
 });
 ```
 
-- [ ] **Paso 8: Verificar la suite completa y el arranque**
+- [x] **Paso 8: Verificar la suite completa y el arranque**
 
 ```bash
 cd backend && npm test && npm run test:integracion -- src/modules/personas/ocupaciones.service.int.spec.ts
@@ -3738,7 +3738,7 @@ docker compose restart backend && docker compose logs --tail=30 backend
 
 Expected: PASS en ambos; el backend arranca sin errores de inyección; `cobertura-roles.spec.ts` incluye `ocupaciones.controller.ts`.
 
-- [ ] **Paso 9: Lint, formato y commit**
+- [x] **Paso 9: Lint, formato y commit**
 
 ```bash
 cd backend && npm run lint && npm run format && npm test
