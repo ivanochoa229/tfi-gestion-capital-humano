@@ -25,3 +25,14 @@ export const ROLES_CON_ALCANCE_POR_UNIDAD: CodigoRol[] = [
   ROLES.jefaturaDepartamento,
   ROLES.jefeCatedra,
 ];
+
+/** Todos menos el docente: ven personas y ocupaciones de la facultad. */
+export const ROLES_SIN_DOCENTE: CodigoRol[] = TODOS_LOS_ROLES.filter(
+  (rol) => rol !== ROLES.docente,
+);
+
+/** Ven el documento y la fecha de nacimiento (RNF02, Ley 25.326). */
+export const ROLES_CON_DATOS_PERSONALES: CodigoRol[] = [
+  ROLES.recursosHumanos,
+  ROLES.administrador,
+];

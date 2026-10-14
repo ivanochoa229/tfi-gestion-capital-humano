@@ -28,6 +28,10 @@ import {
   siguienteCodigoPuesto,
 } from './transaccion.js';
 import { UnidadesService } from './unidades.service.js';
+import { escaparLike } from '../../common/like.js';
+
+// El spec existente la importa desde acá.
+export { escaparLike };
 
 /** Campos que admiten `null` en una modificación; el resto no se puede vaciar. */
 const CAMPOS_NULABLES = new Set([
@@ -37,11 +41,6 @@ const CAMPOS_NULABLES = new Set([
   'idTipoRelacionContractual',
   'idPuestoSuperior',
 ]);
-
-/** Para `ILIKE`: `%`, `_` y `\` del texto buscado no son comodines. */
-export function escaparLike(texto: string): string {
-  return texto.replace(/[\\%_]/g, '\\$&');
-}
 
 const normalizar = (texto: string) => texto.trim().toLowerCase();
 

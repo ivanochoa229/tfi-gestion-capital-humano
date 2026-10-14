@@ -901,7 +901,7 @@ git commit -m "Agregar la clave foránea de usuario hacia persona"
   - DTOs: `CrearPersonaDto`, `ActualizarPersonaDto`, `FiltroPersonasDto`, `PersonaDto` (con `tieneUsuario`, `documento?`, `fechaNacimiento?`), `PersonaDetalleDto` (`ocupacionesVigentes: OcupacionDto[]`), `ResultadoBajaPersonaDto` (`persona`, `advertencias`), `CrearOcupacionDto`, `ActualizarOcupacionDto`, `CerrarOcupacionDto`, `OcupacionDto` (`estado`), `OcupanteDto extends OcupacionDto` (`legajo`, `apellido`, `nombre`).
   - Mappers: `aPersonaDto(p: Persona, opciones: { verSensibles: boolean; tieneUsuario: boolean }): PersonaDto`, `puedeVerDatosPersonales(rol: CodigoRol): boolean`, `aOcupacionDto(o: Ocupacion, hoy: FechaISO): OcupacionDto`, `aOcupanteDto(o: Ocupacion, hoy: FechaISO): OcupanteDto` (requiere `o.persona` cargada).
 
-- [ ] **Paso 1: Roles nuevos**
+- [x] **Paso 1: Roles nuevos**
 
 En `common/roles.ts`, al final:
 
@@ -936,7 +936,7 @@ En `roles.spec.ts`, importar ambas constantes y agregar:
 
 Run: `cd backend && npx vitest run src/common/roles.spec.ts` → PASS.
 
-- [ ] **Paso 2: Mover `escaparLike` a `common/like.ts`**
+- [x] **Paso 2: Mover `escaparLike` a `common/like.ts`**
 
 Crear `backend/src/common/like.ts`:
 
@@ -958,7 +958,7 @@ export { escaparLike };
 
 (el `import` va junto a los demás imports, el `export` debajo de ellos). Run: `cd backend && npx vitest run src/modules/estructura/puestos.service.spec.ts` → PASS.
 
-- [ ] **Paso 3: Constantes**
+- [x] **Paso 3: Constantes**
 
 `personas.constantes.ts`:
 
@@ -969,7 +969,7 @@ export const DOMINIO_DEDICACION = 'dedicacion';
 export const DOMINIO_CARACTER_OCUPACION = 'caracter-ocupacion';
 ```
 
-- [ ] **Paso 4: Test de fechas**
+- [x] **Paso 4: Test de fechas**
 
 `fechas.spec.ts`:
 
@@ -1086,7 +1086,7 @@ describe('hoyDeLaBase', () => {
 
 Run: `cd backend && npx vitest run src/modules/personas/fechas.spec.ts` → FAIL (no existe `fechas.ts`).
 
-- [ ] **Paso 5: Implementar `fechas.ts`**
+- [x] **Paso 5: Implementar `fechas.ts`**
 
 ```ts
 import { BadRequestException } from '@nestjs/common';
@@ -1175,7 +1175,7 @@ export function validarFechasDePersona(
 
 Run: `cd backend && npx vitest run src/modules/personas/fechas.spec.ts` → PASS.
 
-- [ ] **Paso 6: Acceso del docente (test y código)**
+- [x] **Paso 6: Acceso del docente (test y código)**
 
 `acceso.spec.ts`:
 
@@ -1228,7 +1228,7 @@ export function exigirAccesoAPersona(
 
 Run: `cd backend && npx vitest run src/modules/personas/acceso.spec.ts` → PASS.
 
-- [ ] **Paso 7: Transacción y traducción de errores (test y código)**
+- [x] **Paso 7: Transacción y traducción de errores (test y código)**
 
 `transaccion.spec.ts`:
 
@@ -1364,7 +1364,7 @@ export async function enTransaccionDePersonas<T>(
 
 Run: `cd backend && npx vitest run src/modules/personas/transaccion.spec.ts` → PASS.
 
-- [ ] **Paso 8: Pipe de la fecha de la URL (test y código)**
+- [x] **Paso 8: Pipe de la fecha de la URL (test y código)**
 
 `fecha.pipe.spec.ts`:
 
@@ -1406,7 +1406,7 @@ export class ParseFechaPipe implements PipeTransform<string, string> {
 
 Run: `cd backend && npx vitest run src/modules/personas/fecha.pipe.spec.ts` → PASS.
 
-- [ ] **Paso 9: Test de los DTOs**
+- [x] **Paso 9: Test de los DTOs**
 
 `dto/personas-dto.spec.ts`:
 
@@ -1508,7 +1508,7 @@ describe('DTOs de ocupación', () => {
 
 Run: `cd backend && npx vitest run src/modules/personas/dto` → FAIL (no existen los DTOs).
 
-- [ ] **Paso 10: Implementar los DTOs**
+- [x] **Paso 10: Implementar los DTOs**
 
 `dto/fecha-iso.decorator.ts`:
 
@@ -1822,7 +1822,7 @@ export class CerrarOcupacionDto {
 
 Run: `cd backend && npx vitest run src/modules/personas/dto` → PASS.
 
-- [ ] **Paso 11: Mappers (test y código)**
+- [x] **Paso 11: Mappers (test y código)**
 
 `persona.mapper.spec.ts`:
 
@@ -1949,7 +1949,7 @@ export function aOcupanteDto(ocupacion: Ocupacion, hoy: FechaISO): OcupanteDto {
 
 Run: `cd backend && npx vitest run src/modules/personas` → PASS.
 
-- [ ] **Paso 12: Lint, formato y commit**
+- [x] **Paso 12: Lint, formato y commit**
 
 ```bash
 cd backend && npm run lint && npm run format && npm test
