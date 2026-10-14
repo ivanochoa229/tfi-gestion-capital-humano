@@ -40,6 +40,7 @@ export class CrearUsuarioDto {
   rol: CodigoRol;
 
   @ApiPropertyOptional({
+    type: Number,
     nullable: true,
     description: 'Obligatoria para el rol docente',
   })

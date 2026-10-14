@@ -929,7 +929,7 @@ export interface components {
         | 'administrador'
         | 'docente';
       /** @description Obligatoria para el rol docente */
-      idPersona?: Record<string, never> | null;
+      idPersona?: number | null;
       /** @description Solo para jefatura y jefe de cátedra */
       idUnidades?: number[];
     };
@@ -949,7 +949,7 @@ export interface components {
         | 'administrador'
         | 'docente';
       /** @description Obligatoria para el rol docente */
-      idPersona?: Record<string, never> | null;
+      idPersona?: number | null;
       /** @description Solo para jefatura y jefe de cátedra */
       idUnidades?: number[];
       /** @description false desactiva el usuario */

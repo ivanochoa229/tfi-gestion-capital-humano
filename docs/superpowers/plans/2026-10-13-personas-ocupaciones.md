@@ -5169,7 +5169,7 @@ Expected: 0 errores de lint; el build compila. Si `tsc` marca un nombre de tipo 
 **Interfaces:**
 - Consumes: `usePersonas`, `useOcupantesDePuesto`, `useValoresReferencia`.
 
-- [ ] **Paso 1: Selector de persona en el formulario de usuario**
+- [x] **Paso 1: Selector de persona en el formulario de usuario**
 
 En `FormularioUsuario.tsx`:
 
@@ -5238,7 +5238,7 @@ function crearEsquema(esAlta: boolean) {
 
 7. En el `helperText` del `TextField` de rol, reemplazar el texto `'El rol docente exige vincular una persona, que se habilita cuando exista el módulo de personas'` por `'El rol docente exige vincular una persona'`.
 
-- [ ] **Paso 2: Diálogo de ocupantes de un puesto**
+- [x] **Paso 2: Diálogo de ocupantes de un puesto**
 
 `estructura/components/OcupantesPuestoDialog.tsx`:
 
@@ -5320,7 +5320,7 @@ export function OcupantesPuestoDialog({ puesto, onCerrar }: Props) {
 }
 ```
 
-- [ ] **Paso 3: Botón "Ocupantes" en la tabla de puestos**
+- [x] **Paso 3: Botón "Ocupantes" en la tabla de puestos**
 
 En `TablaPuestos.tsx`:
 
@@ -5361,7 +5361,7 @@ En `TablaPuestos.tsx`:
 
 En `EstructuraPage.tsx`, pasar a `TablaPuestos` la nueva propiedad: `puedeVerOcupantes={sesion?.rol !== undefined && sesion.rol !== 'docente'}`.
 
-- [ ] **Paso 4: Lint, build y commit**
+- [x] **Paso 4: Lint, build y commit**
 
 ```bash
 docker compose exec -T frontend npm run lint
