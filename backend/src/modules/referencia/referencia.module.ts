@@ -13,6 +13,8 @@ import { EstadoPlan } from './entities/estado-plan.entity.js';
 import { TipoUnidad } from './entities/tipo-unidad.entity.js';
 import { NivelJerarquico } from './entities/nivel-jerarquico.entity.js';
 import { TipoRelacionContractual } from './entities/tipo-relacion-contractual.entity.js';
+import { SituacionRevista } from './entities/situacion-revista.entity.js';
+import { Dedicacion } from './entities/dedicacion.entity.js';
 import { ReferenciaController } from './referencia.controller.js';
 import { ReferenciaService } from './referencia.service.js';
 
@@ -36,6 +38,8 @@ import { ReferenciaService } from './referencia.service.js';
       TipoUnidad,
       NivelJerarquico,
       TipoRelacionContractual,
+      SituacionRevista,
+      Dedicacion,
     ]),
   ],
   controllers: [ReferenciaController],

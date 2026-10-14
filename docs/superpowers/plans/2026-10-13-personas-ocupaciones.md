@@ -1,4 +1,4 @@
-Estado: Pendiente | Fecha: 2026-10-13 | PR: —
+Estado: En curso | Fecha: 2026-10-13 | PR: —
 
 # Personas y ocupaciones: plan de implementación
 
@@ -81,7 +81,7 @@ Frontend (`frontend/src/`): `features/personas/{hooks,components,pages}`, `auth/
 **Interfaces:**
 - Produces: dominios `situacion-revista` (simple) y `dedicacion` (ordinal) en `DOMINIOS`; tablas `situacion_revista(id_situacion_revista, codigo, denominacion, activo)` y `dedicacion(id_dedicacion, codigo, denominacion, activo, orden)` con sus valores iniciales.
 
-- [ ] **Paso 1: Actualizar el test de dominios**
+- [x] **Paso 1: Actualizar el test de dominios**
 
 En `dominios.spec.ts`, cambiar el título `define los trece dominios cerrados` por `define los quince dominios cerrados` y las tres apariciones de `13` por `15` (líneas 9, 13 y 14). Agregar dentro del mismo `describe`:
 
@@ -99,12 +99,12 @@ En `dominios.spec.ts`, cambiar el título `define los trece dominios cerrados` p
   });
 ```
 
-- [ ] **Paso 2: Verificar que falla**
+- [x] **Paso 2: Verificar que falla**
 
 Run: `cd backend && npx vitest run src/modules/referencia/dominios.spec.ts`
 Expected: FAIL (`expected 13 to have a length of 15`).
 
-- [ ] **Paso 3: Crear las dos entidades**
+- [x] **Paso 3: Crear las dos entidades**
 
 `situacion-revista.entity.ts`:
 
@@ -132,7 +132,7 @@ export class Dedicacion extends ValorReferenciaOrdinal {
 }
 ```
 
-- [ ] **Paso 4: Registrar los dominios y las entidades**
+- [x] **Paso 4: Registrar los dominios y las entidades**
 
 En `dominios.ts`: agregar los imports
 
@@ -162,12 +162,12 @@ cambiar el comentario `/** Los trece dominios cerrados del modelo (RF23). */` po
 
 En `referencia.module.ts`: importar `SituacionRevista` y `Dedicacion` y sumarlos a la lista de `TypeOrmModule.forFeature([...])` (después de `TipoRelacionContractual`).
 
-- [ ] **Paso 5: Verificar que pasa**
+- [x] **Paso 5: Verificar que pasa**
 
 Run: `cd backend && npx vitest run src/modules/referencia`
 Expected: PASS.
 
-- [ ] **Paso 6: Generar la migración**
+- [x] **Paso 6: Generar la migración**
 
 ```bash
 docker compose exec -T backend npm run migration:run
@@ -176,7 +176,7 @@ docker compose exec -T backend npm run migration:generate -- src/infra/database/
 
 Revisar el archivo generado: debe crear solo `situacion_revista` y `dedicacion` (con `UNIQUE` de `codigo`, `denominacion` y, en `dedicacion`, de `orden`); `down` debe borrarlas. Si propone otras tablas, detenerse.
 
-- [ ] **Paso 7: Cargar los valores iniciales**
+- [x] **Paso 7: Cargar los valores iniciales**
 
 En la migración generada, arriba de la clase (después del import) agregar:
 
@@ -215,7 +215,7 @@ y al final de `up` (después de los `CREATE TABLE` generados):
     }
 ```
 
-- [ ] **Paso 8: Aplicar, revertir y reaplicar**
+- [x] **Paso 8: Aplicar, revertir y reaplicar**
 
 ```bash
 docker compose exec -T backend npm run migration:run
@@ -225,7 +225,7 @@ docker compose exec -T backend npm run migration:run
 
 Expected: sin errores en los tres. El paso 6 solo generó el archivo, así que el primer `run` aplica la nueva migración; `revert` deshace solo la última aplicada (verificar con `docker compose exec -T backend npm run migration:show` que es `CrearReferenciaPersonas`).
 
-- [ ] **Paso 9: Lint, formato, tests y commit**
+- [x] **Paso 9: Lint, formato, tests y commit**
 
 ```bash
 cd backend && npm run lint && npm run format && npm test
