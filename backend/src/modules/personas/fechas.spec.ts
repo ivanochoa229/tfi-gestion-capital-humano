@@ -110,7 +110,11 @@ describe('validarFechasDePersona', () => {
 describe('hoyDeLaBase', () => {
   it('devuelve CURRENT_DATE como texto', async () => {
     const manager = { query: vi.fn(async () => [{ hoy: HOY }]) };
-    expect(await hoyDeLaBase(manager)).toBe(HOY);
+    expect(
+      await hoyDeLaBase(
+        manager as unknown as Parameters<typeof hoyDeLaBase>[0],
+      ),
+    ).toBe(HOY);
     expect(manager.query).toHaveBeenCalledWith(
       expect.stringContaining('CURRENT_DATE'),
     );
