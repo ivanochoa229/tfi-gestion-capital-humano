@@ -248,7 +248,7 @@ git commit -m "Agregar los dominios situación de revista y dedicación"
 - Consumes: `SituacionRevista`, `Dedicacion`, `CaracterOcupacion` (referencia), `Puesto` (estructura).
 - Produces: `Persona` (`id, legajo, apellido, nombre, documento, fechaNacimiento, idSituacionRevista, situacionRevista, fechaIngreso, fechaPrevistaRetiro, activo`) y `Ocupacion` (`idPersona, idPuesto, fechaDesde` como clave; `fechaHasta, idCaracterOcupacion, idDedicacion` y las relaciones `persona, puesto, caracterOcupacion, dedicacion`). Restricciones con nombre: `CK_persona_documento`, `CK_persona_ingreso_posterior_a_nacimiento`, `CK_persona_retiro_desde_ingreso`, `CK_ocupacion_fechas`, `EX_ocupacion_sin_solape`.
 
-- [ ] **Paso 1: Escribir el test de integración del esquema**
+- [x] **Paso 1: Escribir el test de integración del esquema**
 
 `backend/src/infra/database/personas.int.spec.ts`:
 
@@ -483,12 +483,12 @@ describe('esquema de personas y ocupaciones', () => {
 });
 ```
 
-- [ ] **Paso 2: Verificar que falla**
+- [x] **Paso 2: Verificar que falla**
 
 Run: `cd backend && npm run test:integracion -- src/infra/database/personas.int.spec.ts`
 Expected: FAIL (`relation "persona" does not exist`).
 
-- [ ] **Paso 3: Crear las entidades**
+- [x] **Paso 3: Crear las entidades**
 
 `persona.entity.ts`:
 
@@ -635,7 +635,7 @@ import { Persona } from './entities/persona.entity.js';
 export class PersonasModule {}
 ```
 
-- [ ] **Paso 4: Generar la migración**
+- [x] **Paso 4: Generar la migración**
 
 ```bash
 docker compose exec -T backend npm run migration:run
@@ -644,7 +644,7 @@ docker compose exec -T backend npm run migration:generate -- src/infra/database/
 
 Revisar el archivo: debe crear solo `persona` y `ocupacion` con sus claves foráneas, los `UNIQUE` de `legajo` y `documento`, los cuatro `CHECK`, la clave primaria compuesta y el índice `IDX_ocupacion_puesto`; `down` debe eliminarlos. Si propone otras tablas, detenerse.
 
-- [ ] **Paso 5: Completar la migración con el SQL manual**
+- [x] **Paso 5: Completar la migración con el SQL manual**
 
 Al final de `up` (después de las sentencias generadas) agregar:
 
@@ -671,7 +671,7 @@ Al principio de `down` (antes de las sentencias generadas) agregar:
     // La extensión btree_gist se deja instalada: la base puede usarla otra migración.
 ```
 
-- [ ] **Paso 6: Aplicar, revertir y reaplicar**
+- [x] **Paso 6: Aplicar, revertir y reaplicar**
 
 ```bash
 docker compose exec -T backend npm run migration:run
@@ -681,12 +681,12 @@ docker compose exec -T backend npm run migration:run
 
 Expected: sin errores en los tres. Si `CREATE EXTENSION` falla por permisos, el usuario de la base no puede crearla: ver el riesgo de la spec y detenerse.
 
-- [ ] **Paso 7: Verificar que el test pasa**
+- [x] **Paso 7: Verificar que el test pasa**
 
 Run: `cd backend && npm run test:integracion -- src/infra/database/personas.int.spec.ts`
 Expected: PASS. Si el caso "dos ocupaciones que empiezan el mismo día" falla por otro código, ajustar el arreglo esperado en el test, no la migración.
 
-- [ ] **Paso 8: Sondear que `migration:generate` no propone cambios inesperados**
+- [x] **Paso 8: Sondear que `migration:generate` no propone cambios inesperados**
 
 ```bash
 docker compose exec -T backend npm run migration:generate -- src/infra/database/migrations/SondaBorrar
@@ -694,7 +694,7 @@ docker compose exec -T backend npm run migration:generate -- src/infra/database/
 
 Expected: "No changes in database schema were found", o un archivo cuyo único contenido sea `DROP INDEX "IDX_persona_apellido_nombre"` y/o `DROP CONSTRAINT "EX_ocupacion_sin_solape"`. Borrar el archivo `*-SondaBorrar.ts` si se generó. Cualquier otra diferencia indica que las entidades y la migración no coinciden: corregir antes de seguir.
 
-- [ ] **Paso 9: Si la sonda propuso borrar la exclusión o el índice**
+- [x] **Paso 9: Si la sonda propuso borrar la exclusión o el índice**
 
 Es una limitación de TypeORM con lo que no modela. Declarar la exclusión en la entidad evita el ruido: en `ocupacion.entity.ts` importar `Exclusion` de `typeorm` y agregar sobre la clase
 
@@ -707,7 +707,7 @@ Es una limitación de TypeORM con lo que no modela. Declarar la exclusión en la
 
 y repetir el paso 8. Si aun así propone cambios sobre la exclusión, dejar la declaración, documentar en el comentario de la entidad que la sonda puede mostrar ese `DROP` y no aplicarlo. El índice con `lower()` se trata igual que los de Estructura: ignorar su `DROP` en la sonda.
 
-- [ ] **Paso 10: Lint, formato y commit**
+- [x] **Paso 10: Lint, formato y commit**
 
 ```bash
 cd backend && npm run lint && npm run format && npm test
