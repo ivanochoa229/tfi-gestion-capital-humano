@@ -3758,7 +3758,7 @@ git commit -m "Agregar las ocupaciones con vigencia, cierre y anulación"
 - Consumes: `Ocupacion` (entidad), `estaAbierta`, `hoyDeLaBase` (`personas/fechas.ts`); `PersonasService.exigirActiva`.
 - Produces: `PuestosService.darDeBaja` rechaza con 409 si el puesto tiene ocupaciones vigentes o futuras; `UsuariosService` valida `idPersona` (400 si no existe o está de baja, 409 si ya está vinculada).
 
-- [ ] **Paso 1: Actualizar el test de puestos**
+- [x] **Paso 1: Actualizar el test de puestos**
 
 En `puestos.service.spec.ts`:
 
@@ -3836,12 +3836,12 @@ y reemplazar `query` y `getRepository` del `manager` por:
   });
 ```
 
-- [ ] **Paso 2: Verificar que falla**
+- [x] **Paso 2: Verificar que falla**
 
 Run: `cd backend && npx vitest run src/modules/estructura/puestos.service.spec.ts`
 Expected: FAIL en los tres casos nuevos con ocupación abierta (la baja procede).
 
-- [ ] **Paso 3: Implementar la baja bloqueada**
+- [x] **Paso 3: Implementar la baja bloqueada**
 
 En `puestos.service.ts`: agregar los imports
 
@@ -3873,7 +3873,7 @@ Actualizar el comentario de la docstring de `darDeBaja`: `/** Baja lógica. Se b
 
 Run: `cd backend && npx vitest run src/modules/estructura` → PASS.
 
-- [ ] **Paso 4: Actualizar el test de usuarios**
+- [x] **Paso 4: Actualizar el test de usuarios**
 
 En `usuarios.service.spec.ts`:
 
@@ -3917,12 +3917,12 @@ y en el `describe` de `actualizar` (buscar el que ya prueba `idPersona`; si no h
   });
 ```
 
-- [ ] **Paso 5: Verificar que falla**
+- [x] **Paso 5: Verificar que falla**
 
 Run: `cd backend && npx vitest run src/modules/usuarios/usuarios.service.spec.ts`
 Expected: FAIL (`personas.exigirActiva` nunca se llama).
 
-- [ ] **Paso 6: Implementar la validación de la persona**
+- [x] **Paso 6: Implementar la validación de la persona**
 
 En `usuarios.service.ts`:
 
@@ -3951,7 +3951,7 @@ y cambiar las dos llamadas (`crear`: `await this.validarPersonaLibre(idPersona);
 
 En `usuarios.module.ts`: importar `PersonasModule` (`'../personas/personas.module.js'`) y agregarlo a `imports` después de `EstructuraModule`.
 
-- [ ] **Paso 7: Verificar la suite y el arranque**
+- [x] **Paso 7: Verificar la suite y el arranque**
 
 ```bash
 cd backend && npm test && npm run test:integracion
@@ -3960,7 +3960,7 @@ docker compose restart backend && docker compose logs --tail=30 backend
 
 Expected: todo PASS; el backend arranca sin dependencias circulares (`PersonasModule` no importa a `UsuariosModule`).
 
-- [ ] **Paso 8: Lint, formato y commit**
+- [x] **Paso 8: Lint, formato y commit**
 
 ```bash
 cd backend && npm run lint && npm run format && npm test

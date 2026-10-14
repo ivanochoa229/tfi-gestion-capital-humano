@@ -12,6 +12,8 @@ import {
   Repository,
 } from 'typeorm';
 import { ReferenciaService } from '../referencia/referencia.service.js';
+import { Ocupacion } from '../personas/entities/ocupacion.entity.js';
+import { estaAbierta, hoyDeLaBase } from '../personas/fechas.js';
 import type { ActualizarPuestoDto } from './dto/actualizar-puesto.dto.js';
 import type { CrearPuestoDto } from './dto/crear-puesto.dto.js';
 import type { FiltroPuestosDto } from './dto/filtro-puestos.dto.js';
@@ -206,7 +208,7 @@ export class PuestosService {
     return this.obtener(id);
   }
 
-  /** Baja lógica. Se bloquea mientras haya subordinados activos. */
+  /** Baja lógica. Se bloquea mientras haya subordinados activos u ocupaciones vigentes o futuras. */
   async darDeBaja(id: number): Promise<PuestoDetalleDto> {
     await enTransaccionDeEstructura(this.puestos, async (manager) => {
       const repo = manager.getRepository(Puesto);
@@ -221,6 +223,20 @@ export class PuestosService {
           `No se puede dar de baja: tiene subordinados activos (${subordinados
             .map((s) => `${s.codigo} ${s.denominacion}`)
             .join(', ')}). Asignales otro superior primero`,
+        );
+      }
+      const hoy = await hoyDeLaBase(manager);
+      const abiertas = (
+        await manager.getRepository(Ocupacion).find({
+          where: { idPuesto: id },
+          relations: { persona: true },
+        })
+      ).filter((o) => estaAbierta(o, hoy));
+      if (abiertas.length > 0) {
+        throw new ConflictException(
+          `No se puede dar de baja: tiene ocupaciones vigentes o futuras (${abiertas
+            .map((o) => `${o.persona.apellido}, ${o.persona.nombre}`)
+            .join('; ')}). Cerralas o anulalas primero`,
         );
       }
       puesto.activo = false;

@@ -10,6 +10,7 @@ import { ROLES, ROLES_CON_ALCANCE_POR_UNIDAD } from '../../common/roles.js';
 import type { CodigoRol } from '../../common/roles.js';
 import { TIPOS_UNIDAD } from '../estructura/estructura.constantes.js';
 import { UnidadesService } from '../estructura/unidades.service.js';
+import { PersonasService } from '../personas/personas.service.js';
 import type { ActualizarUsuarioDto } from './dto/actualizar-usuario.dto.js';
 import type { CrearUsuarioDto } from './dto/crear-usuario.dto.js';
 import type { RolDto } from './dto/rol.dto.js';
@@ -32,6 +33,7 @@ export class UsuariosService {
     private readonly passwords: PasswordService,
     private readonly sesiones: SesionesService,
     private readonly unidadesEstructura: UnidadesService,
+    private readonly personas: PersonasService,
   ) {}
 
   async listar(): Promise<UsuarioDto[]> {
@@ -56,7 +58,7 @@ export class UsuariosService {
     const idPersona = dto.idPersona ?? null;
     this.validarReglasDeRol(dto.rol, idPersona, dto.idUnidades ?? []);
     await this.validarUnidades(dto.rol, dto.idUnidades ?? []);
-    await this.validarPersonaLibre(idPersona);
+    await this.validarPersona(idPersona);
 
     const creado = await this.usuarios.save(
       this.usuarios.create({
@@ -103,7 +105,7 @@ export class UsuariosService {
       usuario.nombreUsuario = nombreUsuario;
     }
     if (idPersonaFinal !== usuario.idPersona) {
-      await this.validarPersonaLibre(idPersonaFinal);
+      await this.validarPersona(idPersonaFinal);
     }
 
     const dejaDeSerAdminActivo =
@@ -209,8 +211,10 @@ export class UsuariosService {
     }
   }
 
-  private async validarPersonaLibre(idPersona: number | null): Promise<void> {
+  /** La persona debe existir y estar activa (400) y no estar vinculada a otro usuario (409). */
+  private async validarPersona(idPersona: number | null): Promise<void> {
     if (idPersona === null) return;
+    await this.personas.exigirActiva(idPersona);
     if (await this.usuarios.findOne({ where: { idPersona } })) {
       throw new ConflictException(
         'Esa persona ya está vinculada a otro usuario',

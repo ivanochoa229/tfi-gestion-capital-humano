@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { FindOperator, type Repository } from 'typeorm';
 import type { ReferenciaService } from '../referencia/referencia.service.js';
+import { Ocupacion } from '../personas/entities/ocupacion.entity.js';
 import type { Puesto } from './entities/puesto.entity.js';
 import type { JerarquiaService } from './jerarquia.service.js';
 import { escaparLike, PuestosService } from './puestos.service.js';
@@ -33,6 +34,10 @@ interface Config {
   ascendentes?: number[];
   /** Cadena de superiores por id de puesto (incluye el propio id). */
   cadenas?: Record<number, number[]>;
+  /** Ocupaciones de los puestos, para la baja. */
+  ocupaciones?: Partial<Ocupacion>[];
+  /** "Hoy" de la base (por defecto 2026-06-15). */
+  hoy?: string;
 }
 
 function crearEntorno(existentes: Puesto[], config: Config = {}) {
@@ -68,13 +73,23 @@ function crearEntorno(existentes: Puesto[], config: Config = {}) {
       return { ...(p as Puesto) };
     }),
   };
+  const repoOcupaciones = {
+    find: vi.fn(async ({ where }: { where: { idPuesto?: number } }) =>
+      (config.ocupaciones ?? [])
+        .filter((o) => o.idPuesto === where.idPuesto)
+        .map((o) => ({ ...o })),
+    ),
+  };
   const consultas: string[] = [];
   const manager = {
     query: vi.fn(async (sql: string) => {
       consultas.push(sql);
+      if (sql.includes('CURRENT_DATE'))
+        return [{ hoy: config.hoy ?? '2026-06-15' }];
       return sql.includes('nextval') ? [{ n: String(++secuencia) }] : [];
     }),
-    getRepository: () => repo,
+    getRepository: (entidad: unknown) =>
+      entidad === Ocupacion ? repoOcupaciones : repo,
     transaction: async (trabajo: (m: unknown) => Promise<unknown>) =>
       trabajo(manager),
   };
@@ -428,6 +443,40 @@ describe('PuestosService.darDeBaja', () => {
     const { servicio, consultas } = crearEntorno([]);
     await expect(servicio.darDeBaja(9)).rejects.toThrow(NotFoundException);
     expect(consultas[0]).toContain('pg_advisory_xact_lock');
+  });
+
+  const ocupante = (parcial: Partial<Ocupacion> = {}): Partial<Ocupacion> => ({
+    idPuesto: 1,
+    idPersona: 7,
+    fechaDesde: '2025-01-01',
+    fechaHasta: null,
+    persona: { apellido: 'Pérez', nombre: 'Ana' } as never,
+    ...parcial,
+  });
+
+  it.each([
+    ['vigente sin fin', {}],
+    ['que vence hoy', { fechaHasta: '2026-06-15' }],
+    ['futura', { fechaDesde: '2026-09-01' }],
+  ])(
+    'rechaza con 409 si tiene una ocupación %s y nombra a la persona',
+    async (_t, parcial) => {
+      const { servicio, filas } = crearEntorno([puesto({ id: 1 })], {
+        ocupaciones: [ocupante(parcial)],
+      });
+      const error = await servicio.darDeBaja(1).catch((e: unknown) => e);
+      expect(error).toBeInstanceOf(ConflictException);
+      expect((error as Error).message).toContain('Pérez, Ana');
+      expect(filas[0].activo).toBe(true);
+    },
+  );
+
+  it('no se bloquea por una ocupación que terminó ayer', async () => {
+    const { servicio, filas } = crearEntorno([puesto({ id: 1 })], {
+      ocupaciones: [ocupante({ fechaHasta: '2026-06-14' })],
+    });
+    await servicio.darDeBaja(1);
+    expect(filas[0].activo).toBe(false);
   });
 });
 

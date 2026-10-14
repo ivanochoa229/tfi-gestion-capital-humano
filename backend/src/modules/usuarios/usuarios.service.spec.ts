@@ -8,6 +8,7 @@ import type { Rol } from './entities/rol.entity.js';
 import type { Usuario } from './entities/usuario.entity.js';
 import { PasswordService } from './password.service.js';
 import type { UnidadesService } from '../estructura/unidades.service.js';
+import type { PersonasService } from '../personas/personas.service.js';
 import type { SesionesService } from './sesiones.service.js';
 import { UsuariosService } from './usuarios.service.js';
 
@@ -102,6 +103,7 @@ function crearServicio(existentes: Usuario[]) {
       unidadesFake.filter((u) => ids.includes(u.id)),
     ),
   };
+  const personas = { exigirActiva: vi.fn(async () => undefined) };
   return {
     servicio: new UsuariosService(
       usuarios,
@@ -109,11 +111,13 @@ function crearServicio(existentes: Usuario[]) {
       new PasswordService(),
       sesiones as unknown as SesionesService,
       unidadesEstructura as unknown as UnidadesService,
+      personas as unknown as PersonasService,
     ),
     usuarios,
     sesiones,
     consultas,
     unidadesEstructura,
+    personas,
   };
 }
 
@@ -157,6 +161,28 @@ describe('UsuariosService.crear', () => {
     await expect(
       servicio.crear({ ...base, rol: 'docente', idPersona: 5 }),
     ).rejects.toThrow(ConflictException);
+  });
+
+  it('valida que la persona exista y esté activa', async () => {
+    const { servicio, personas } = crearServicio([]);
+    await servicio.crear({ ...base, rol: 'docente', idPersona: 8 });
+    expect(personas.exigirActiva).toHaveBeenCalledWith(8);
+  });
+
+  it('propaga el 400 si la persona no existe o está dada de baja', async () => {
+    const { servicio, personas } = crearServicio([]);
+    personas.exigirActiva.mockRejectedValueOnce(
+      new BadRequestException('no existe'),
+    );
+    await expect(
+      servicio.crear({ ...base, rol: 'docente', idPersona: 8 }),
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it('no consulta personas si no se vincula ninguna', async () => {
+    const { servicio, personas } = crearServicio([]);
+    await servicio.crear({ ...base, rol: 'recursos_humanos' });
+    expect(personas.exigirActiva).not.toHaveBeenCalled();
   });
 
   it('solo admite unidades para jefatura y jefe de cátedra', async () => {
@@ -394,5 +420,17 @@ describe('UsuariosService.restablecerClave', () => {
     await expect(
       servicio.restablecerClave(9, 'otra-clave-larga'),
     ).rejects.toThrow(NotFoundException);
+  });
+});
+
+describe('UsuariosService.actualizar (persona)', () => {
+  it('valida la persona solo cuando cambia', async () => {
+    const { servicio, personas } = crearServicio([
+      usuario({ id: 1, rolCodigo: 'docente', idPersona: 5 }),
+    ]);
+    await servicio.actualizar(1, { idPersona: 5 });
+    expect(personas.exigirActiva).not.toHaveBeenCalled();
+    await servicio.actualizar(1, { idPersona: 6 });
+    expect(personas.exigirActiva).toHaveBeenCalledWith(6);
   });
 });
