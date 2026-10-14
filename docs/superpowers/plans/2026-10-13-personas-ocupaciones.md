@@ -728,7 +728,7 @@ git commit -m "Crear las tablas persona y ocupacion con exclusión de solapes"
 - Consumes: `Persona` (tarea 2).
 - Produces: FK con `ON DELETE RESTRICT`; la migración aborta y lista los `id_persona` huérfanos.
 
-- [ ] **Paso 1: Escribir el test**
+- [x] **Paso 1: Escribir el test**
 
 `backend/src/infra/database/fk-usuario-persona.int.spec.ts`:
 
@@ -797,12 +797,12 @@ describe('FK usuario.id_persona → persona', () => {
 });
 ```
 
-- [ ] **Paso 2: Verificar que falla**
+- [x] **Paso 2: Verificar que falla**
 
 Run: `cd backend && npm run test:integracion -- src/infra/database/fk-usuario-persona.int.spec.ts`
 Expected: FAIL (no existe la migración `AgregarFkUsuarioPersona` ni la FK; el primer test falla por no encontrar errores y el segundo inserta sin error).
 
-- [ ] **Paso 3: Declarar la relación en la entidad**
+- [x] **Paso 3: Declarar la relación en la entidad**
 
 En `usuario.entity.ts`: importar `Persona` y `type Relation`:
 
@@ -822,7 +822,7 @@ import { Persona } from '../../personas/entities/persona.entity.js';
   persona: Relation<Persona> | null;
 ```
 
-- [ ] **Paso 4: Generar la migración**
+- [x] **Paso 4: Generar la migración**
 
 ```bash
 docker compose exec -T backend npm run migration:run
@@ -831,7 +831,7 @@ docker compose exec -T backend npm run migration:generate -- src/infra/database/
 
 Revisar: debe contener solo el `ALTER TABLE "usuario" ADD CONSTRAINT "FK_..." FOREIGN KEY ("id_persona") REFERENCES "persona"("id_persona") ON DELETE RESTRICT ...` y su `down`. Si propone otra cosa, detenerse.
 
-- [ ] **Paso 5: Abortar ante huérfanos**
+- [x] **Paso 5: Abortar ante huérfanos**
 
 Al principio de `up`, antes del `ALTER TABLE` generado:
 
@@ -852,7 +852,7 @@ Al principio de `up`, antes del `ALTER TABLE` generado:
     }
 ```
 
-- [ ] **Paso 6: Aplicar, revertir y reaplicar**
+- [x] **Paso 6: Aplicar, revertir y reaplicar**
 
 ```bash
 docker compose exec -T backend npm run migration:run
@@ -862,7 +862,7 @@ docker compose exec -T backend npm run migration:run
 
 Expected: sin errores.
 
-- [ ] **Paso 7: Verificar que el test pasa y que la sonda no propone cambios**
+- [x] **Paso 7: Verificar que el test pasa y que la sonda no propone cambios**
 
 ```bash
 cd backend && npm run test:integracion -- src/infra/database/fk-usuario-persona.int.spec.ts
@@ -871,7 +871,7 @@ docker compose exec -T backend npm run migration:generate -- src/infra/database/
 
 Expected: PASS; la sonda no encuentra cambios (o solo los `DROP` ya conocidos de la tarea 2; borrar el archivo si se generó).
 
-- [ ] **Paso 8: Lint, formato, tests y commit**
+- [x] **Paso 8: Lint, formato, tests y commit**
 
 ```bash
 cd backend && npm run lint && npm run format && npm test && npm run test:integracion
