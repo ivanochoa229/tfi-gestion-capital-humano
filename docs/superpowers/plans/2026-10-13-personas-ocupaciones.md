@@ -1,4 +1,4 @@
-Estado: En curso | Fecha: 2026-10-13 | PR: —
+Estado: Implementado | Fecha: 2026-10-13 | PR: #3
 
 # Personas y ocupaciones: plan de implementación
 
@@ -5379,7 +5379,7 @@ git commit -m "Vincular personas a usuarios y mostrar los ocupantes de cada pues
 - Modify: `docs/requerimientos.md`, `README.md`
 - Modify: la línea de Estado de esta spec y de este plan
 
-- [ ] **Paso 1: Actualizar `docs/requerimientos.md`**
+- [x] **Paso 1: Actualizar `docs/requerimientos.md`**
 
 En §5, debajo del párrafo **Estructura:** (línea 114), agregar:
 
@@ -5389,7 +5389,7 @@ En §5, debajo del párrafo **Estructura:** (línea 114), agregar:
 
 No cambian los enunciados de RF06 y RF07.
 
-- [ ] **Paso 2: Actualizar `README.md`**
+- [x] **Paso 2: Actualizar `README.md`**
 
 Debajo de la sección "Unidades organizativas", agregar una sección `## Personas y ocupaciones` con:
 
@@ -5399,7 +5399,7 @@ Debajo de la sección "Unidades organizativas", agregar una sección `## Persona
 - La baja de una persona o de un puesto se bloquea mientras tengan ocupaciones vigentes o futuras; la baja de la persona no desactiva su usuario.
 - La extensión `btree_gist` se crea en la migración y requiere permiso `CREATE EXTENSION` (el usuario de la base del compose lo tiene).
 
-- [ ] **Paso 3: Verificación completa**
+- [x] **Paso 3: Verificación completa**
 
 ```bash
 cd backend && npm run lint && npx prettier --check src && npm test && npm run test:integracion
@@ -5411,7 +5411,7 @@ docker compose exec -T backend npm run migration:generate -- src/infra/database/
 
 Expected: todo en 0 errores y PASS; la sonda no encuentra cambios, o solo los `DROP` conocidos del índice con `lower()` y de la exclusión (tarea 2, paso 9). Borrar `*-SondaBorrar.ts` si se generó. Reportar el recuento de tests tal cual salga.
 
-- [ ] **Paso 4: Recorrido manual en el navegador**
+- [x] **Paso 4: Recorrido manual en el navegador**
 
 Con `docker compose up` y el administrador inicial (`ADMIN_USUARIO`/`ADMIN_CLAVE`), cargar cátedras con `backend/scripts/catedras-ejemplo.sql`, crear puestos tipo en una cátedra, y verificar:
 
@@ -5425,11 +5425,11 @@ Con `docker compose up` y el administrador inicial (`ADMIN_USUARIO`/`ADMIN_CLAVE
 
 Anotar cualquier desvío y corregirlo antes de cerrar.
 
-- [ ] **Paso 5: Cerrar los documentos**
+- [x] **Paso 5: Cerrar los documentos**
 
 Cambiar la primera línea de la spec a `Estado: Implementada | Fecha: 2026-10-13 | Autor: IvanOchoa229`. En este plan, cambiar la primera línea a `Estado: Implementado | Fecha: 2026-10-13 | PR: #<número del PR>` y marcar las casillas realizadas.
 
-- [ ] **Paso 6: Commit**
+- [x] **Paso 6: Commit**
 
 ```bash
 git add README.md docs

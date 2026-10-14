@@ -1,4 +1,4 @@
-Estado: Propuesta | Fecha: 2026-10-13 | Autor: IvanOchoa229
+Estado: Implementada | Fecha: 2026-10-13 | Autor: IvanOchoa229
 
 # Personas y ocupaciones
 
