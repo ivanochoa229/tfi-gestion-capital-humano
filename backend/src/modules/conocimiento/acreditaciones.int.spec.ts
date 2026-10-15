@@ -29,7 +29,9 @@ describe('Acreditaciones (PostgreSQL real)', () => {
     ds.query(consulta, parametros) as Promise<T>;
   const dia = async (delta: number) =>
     (
-      await sql<{ f: string }[]>(`SELECT (CURRENT_DATE + $1::int)::text AS f`, [delta])
+      await sql<{ f: string }[]>(`SELECT (CURRENT_DATE + $1::int)::text AS f`, [
+        delta,
+      ])
     )[0].f;
   const nuevaPersona = async (legajo: string, documento: string) =>
     (
@@ -77,7 +79,10 @@ describe('Acreditaciones (PostgreSQL real)', () => {
       referencia,
       acceso,
     );
-    catalogo = new ConocimientosService(ds.getRepository(Conocimiento), referencia);
+    catalogo = new ConocimientosService(
+      ds.getRepository(Conocimiento),
+      referencia,
+    );
     persona = await nuevaPersona('L-1', '30111111');
     evaluador = await nuevaPersona('L-2', '30222222');
     jefe = {
@@ -87,9 +92,21 @@ describe('Acreditaciones (PostgreSQL real)', () => {
       idPersona: evaluador,
       unidades: [],
     };
-    basico = (await sql<{ id: number }[]>(`SELECT id_nivel_dominio AS id FROM nivel_dominio WHERE codigo = 'basico'`))[0].id;
-    avanzado = (await sql<{ id: number }[]>(`SELECT id_nivel_dominio AS id FROM nivel_dominio WHERE codigo = 'avanzado'`))[0].id;
-    evidencia = (await sql<{ id: number }[]>(`SELECT id_tipo_evidencia AS id FROM tipo_evidencia WHERE codigo = 'titulo'`))[0].id;
+    basico = (
+      await sql<{ id: number }[]>(
+        `SELECT id_nivel_dominio AS id FROM nivel_dominio WHERE codigo = 'basico'`,
+      )
+    )[0].id;
+    avanzado = (
+      await sql<{ id: number }[]>(
+        `SELECT id_nivel_dominio AS id FROM nivel_dominio WHERE codigo = 'avanzado'`,
+      )
+    )[0].id;
+    evidencia = (
+      await sql<{ id: number }[]>(
+        `SELECT id_tipo_evidencia AS id FROM tipo_evidencia WHERE codigo = 'titulo'`,
+      )
+    )[0].id;
   });
   afterAll(async () => {
     await base.destruir();
@@ -103,7 +120,12 @@ describe('Acreditaciones (PostgreSQL real)', () => {
   });
 
   it('acreditar a alguien que nunca declaró crea su fila con la acreditación', async () => {
-    await acreditaciones.acreditar(persona, a, dto(basico, await dia(-3)), jefe);
+    await acreditaciones.acreditar(
+      persona,
+      a,
+      dto(basico, await dia(-3)),
+      jefe,
+    );
     expect(await reflejo(a)).toEqual({ n: basico, f: await dia(-3), d: null });
   });
 
@@ -112,14 +134,38 @@ describe('Acreditaciones (PostgreSQL real)', () => {
       `INSERT INTO conocimiento_persona (id_persona, id_conocimiento, id_nivel_declarado, fecha_declaracion) VALUES ($1, $2, $3, $4)`,
       [persona, a, avanzado, await dia(-20)],
     );
-    await acreditaciones.acreditar(persona, a, dto(basico, await dia(-10)), jefe);
-    await acreditaciones.acreditar(persona, a, dto(avanzado, await dia(-2)), jefe);
-    expect(await reflejo(a)).toEqual({ n: avanzado, f: await dia(-2), d: avanzado });
+    await acreditaciones.acreditar(
+      persona,
+      a,
+      dto(basico, await dia(-10)),
+      jefe,
+    );
+    await acreditaciones.acreditar(
+      persona,
+      a,
+      dto(avanzado, await dia(-2)),
+      jefe,
+    );
+    expect(await reflejo(a)).toEqual({
+      n: avanzado,
+      f: await dia(-2),
+      d: avanzado,
+    });
   });
 
   it('una acreditación anterior a la vigente queda en el historial y no cambia el reflejo', async () => {
-    await acreditaciones.acreditar(persona, a, dto(basico, await dia(-2)), jefe);
-    await acreditaciones.acreditar(persona, a, dto(avanzado, await dia(-30)), jefe);
+    await acreditaciones.acreditar(
+      persona,
+      a,
+      dto(basico, await dia(-2)),
+      jefe,
+    );
+    await acreditaciones.acreditar(
+      persona,
+      a,
+      dto(avanzado, await dia(-30)),
+      jefe,
+    );
     expect(await reflejo(a)).toEqual({ n: basico, f: await dia(-2), d: null });
     expect(await sql('SELECT 1 FROM acreditacion')).toHaveLength(2);
   });
@@ -134,7 +180,12 @@ describe('Acreditaciones (PostgreSQL real)', () => {
   });
 
   it('una fusión y una acreditación simultáneas no dejan datos en el conocimiento retirado', async () => {
-    await acreditaciones.acreditar(persona, a, dto(basico, await dia(-9)), jefe);
+    await acreditaciones.acreditar(
+      persona,
+      a,
+      dto(basico, await dia(-9)),
+      jefe,
+    );
 
     const resultados = await Promise.allSettled([
       catalogo.fusionar(a, { idDestino: b }),
@@ -144,7 +195,10 @@ describe('Acreditaciones (PostgreSQL real)', () => {
     // Si la acreditación llegó después de la fusión, el origen ya estaba inactivo: 400.
     expect(resultados[0].status).toBe('fulfilled');
     expect(
-      await sql(`SELECT 1 FROM conocimiento_persona WHERE id_conocimiento = $1`, [a]),
+      await sql(
+        `SELECT 1 FROM conocimiento_persona WHERE id_conocimiento = $1`,
+        [a],
+      ),
     ).toHaveLength(0);
     expect(
       await sql(`SELECT 1 FROM acreditacion WHERE id_conocimiento = $1`, [a]),

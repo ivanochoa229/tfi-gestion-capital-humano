@@ -46,7 +46,9 @@ export class RequisitosController {
   @Roles(ROLES.analistaPuestos)
   @ApiOkResponse({ type: RequisitoDto })
   @ApiNotFoundResponse({ description: 'El puesto no existe' })
-  @ApiBadRequestResponse({ description: 'Puesto de baja, conocimiento inactivo o nivel inválido' })
+  @ApiBadRequestResponse({
+    description: 'Puesto de baja, conocimiento inactivo o nivel inválido',
+  })
   guardar(
     @Param('idPuesto', ParseIntPipe) idPuesto: number,
     @Param('idConocimiento', ParseIntPipe) idConocimiento: number,
@@ -71,7 +73,9 @@ export class RequisitosController {
   @HttpCode(200)
   @Roles(ROLES.analistaPuestos)
   @ApiOkResponse({ type: ResultadoCopiaDto })
-  @ApiNotFoundResponse({ description: 'Puesto de origen o de destino inexistente' })
+  @ApiNotFoundResponse({
+    description: 'Puesto de origen o de destino inexistente',
+  })
   @ApiBadRequestResponse({ description: 'Mismo puesto o destino de baja' })
   copiar(
     @Param('idPuesto', ParseIntPipe) idPuesto: number,

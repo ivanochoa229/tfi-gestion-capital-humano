@@ -44,7 +44,12 @@ const esquema = z
 type Datos = z.infer<typeof esquema>;
 
 /** Se monta solo mientras está abierto, por lo que parte siempre de cero. */
-export function AcreditarDialog({ idPersona, nombrePersona, conocimiento, onCerrar }: Props) {
+export function AcreditarDialog({
+  idPersona,
+  nombrePersona,
+  conocimiento,
+  onCerrar,
+}: Props) {
   const { data: niveles } = useValoresReferencia('nivel-dominio', false);
   const { data: evidencias } = useValoresReferencia('tipo-evidencia', false);
   const { data: catalogo } = useConocimientos({ activo: true });
@@ -52,7 +57,9 @@ export function AcreditarDialog({ idPersona, nombrePersona, conocimiento, onCerr
   const [elegido, setElegido] = useState<Conocimiento | null>(null);
   const [error, setError] = useState<string>();
 
-  const destino = conocimiento ?? (elegido && { id: elegido.id, denominacion: elegido.denominacion });
+  const destino =
+    conocimiento ??
+    (elegido && { id: elegido.id, denominacion: elegido.denominacion });
 
   const {
     register,
@@ -99,7 +106,11 @@ export function AcreditarDialog({ idPersona, nombrePersona, conocimiento, onCerr
           <Stack spacing={2} sx={{ pt: 1 }}>
             {error && <Alert severity="error">{error}</Alert>}
             {conocimiento ? (
-              <TextField label="Conocimiento" value={conocimiento.denominacion} disabled />
+              <TextField
+                label="Conocimiento"
+                value={conocimiento.denominacion}
+                disabled
+              />
             ) : (
               <Autocomplete
                 options={catalogo ?? []}

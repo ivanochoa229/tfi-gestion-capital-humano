@@ -1,11 +1,21 @@
-import { Alert, Autocomplete, CircularProgress, Stack, TextField, Typography } from '@mui/material';
+import {
+  Alert,
+  Autocomplete,
+  CircularProgress,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useState } from 'react';
 import { useSesion } from '../../../auth/useSesion';
 import { PaginaEnConstruccion } from '../../../components/PaginaEnConstruccion';
 import { useValoresReferencia } from '../../admin/hooks/useValoresReferencia';
 import { FilaMiConocimiento } from '../components/FilaMiConocimiento';
 import { useConocimientos, type Conocimiento } from '../hooks/useConocimientos';
-import { useMisConocimientos, type MiConocimiento } from '../hooks/useMisConocimientos';
+import {
+  useMisConocimientos,
+  type MiConocimiento,
+} from '../hooks/useMisConocimientos';
 import { descripcionNivel } from '../niveles';
 
 /** Una fila sin nada registrado, para un conocimiento que la persona suma a mano. */
@@ -30,7 +40,11 @@ const filaVacia = (c: Conocimiento): MiConocimiento => ({
 export function MisConocimientosPage() {
   const { data: sesion } = useSesion();
   const idPersona = sesion?.idPersona ?? null;
-  const { data: filas, isLoading, isError } = useMisConocimientos(idPersona !== null);
+  const {
+    data: filas,
+    isLoading,
+    isError,
+  } = useMisConocimientos(idPersona !== null);
   const { data: activos } = useValoresReferencia('nivel-dominio', false);
   const { data: todos } = useValoresReferencia('nivel-dominio', true);
   const { data: evidencias } = useValoresReferencia('tipo-evidencia', true);
@@ -48,7 +62,9 @@ export function MisConocimientosPage() {
     );
   }
 
-  const niveles = [...(activos ?? [])].sort((a, b) => (a.orden ?? a.id) - (b.orden ?? b.id));
+  const niveles = [...(activos ?? [])].sort(
+    (a, b) => (a.orden ?? a.id) - (b.orden ?? b.id),
+  );
   const registrados = new Set((filas ?? []).map((f) => f.idConocimiento));
   const sumados = extras.filter((c) => !registrados.has(c.id));
   const todasLasFilas = [...(filas ?? []), ...sumados.map(filaVacia)];
@@ -74,7 +90,11 @@ export function MisConocimientosPage() {
         </Alert>
 
         {isLoading && <CircularProgress aria-label="Cargando" />}
-        {isError && <Alert severity="error">No se pudieron cargar tus conocimientos.</Alert>}
+        {isError && (
+          <Alert severity="error">
+            No se pudieron cargar tus conocimientos.
+          </Alert>
+        )}
         {filas && filas.length === 0 && sumados.length === 0 && (
           <Alert severity="info">
             Tus puestos todavía no tienen requisitos cargados. Podés sumar
@@ -97,7 +117,9 @@ export function MisConocimientosPage() {
           size="small"
           options={ofrecidos}
           value={null}
-          onChange={(_, c) => c && setExtras((anteriores) => [...anteriores, c])}
+          onChange={(_, c) =>
+            c && setExtras((anteriores) => [...anteriores, c])
+          }
           getOptionLabel={(c) => c.denominacion}
           noOptionsText="No hay más conocimientos en el catálogo"
           renderInput={(p) => (

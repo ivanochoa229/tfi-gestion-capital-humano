@@ -123,19 +123,17 @@ export class PerfilConocimientoService {
       ]);
 
     const combinados = combinarRequisitos(
-      requisitos.map(
-        (r): RequisitoDePuesto => ({
-          idConocimiento: r.id_conocimiento,
-          denominacion: r.denominacion,
-          idTipoConocimiento: r.id_tipo_conocimiento,
-          idPuesto: r.id_puesto,
-          codigoPuesto: r.codigo_puesto,
-          denominacionPuesto: r.denominacion_puesto,
-          idNivelRequerido: r.id_nivel_requerido,
-          ordenNivel: r.orden_nivel,
-          esExcluyente: r.es_excluyente,
-        }),
-      ),
+      requisitos.map((r): RequisitoDePuesto => ({
+        idConocimiento: r.id_conocimiento,
+        denominacion: r.denominacion,
+        idTipoConocimiento: r.id_tipo_conocimiento,
+        idPuesto: r.id_puesto,
+        codigoPuesto: r.codigo_puesto,
+        denominacionPuesto: r.denominacion_puesto,
+        idNivelRequerido: r.id_nivel_requerido,
+        ordenNivel: r.orden_nivel,
+        esExcluyente: r.es_excluyente,
+      })),
     );
     const propiasPorId = new Map(propias.map((p) => [p.id_conocimiento, p]));
     const registro = (p: FilaPropia | undefined) => ({

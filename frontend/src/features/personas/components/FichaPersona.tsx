@@ -117,7 +117,10 @@ export function FichaPersona({
         admiteNuevas={persona.activo}
       />
       {verConocimientos && (
-        <ConocimientosDePersona idPersona={persona.id} puedeAcreditar={puedeAcreditar} />
+        <ConocimientosDePersona
+          idPersona={persona.id}
+          puedeAcreditar={puedeAcreditar}
+        />
       )}
       {editando && (
         <FormularioPersona

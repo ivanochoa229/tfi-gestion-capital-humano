@@ -11,17 +11,24 @@ export function usePerfilDePersona(idPersona: number) {
   return useQuery({
     queryKey: ['perfil-conocimiento', idPersona],
     queryFn: async () => {
-      const { data, error } = await api.GET('/api/personas/{idPersona}/conocimientos', {
-        params: { path: { idPersona } },
-      });
-      if (error || !data) throw new Error('No se pudo cargar el conocimiento de la persona');
+      const { data, error } = await api.GET(
+        '/api/personas/{idPersona}/conocimientos',
+        {
+          params: { path: { idPersona } },
+        },
+      );
+      if (error || !data)
+        throw new Error('No se pudo cargar el conocimiento de la persona');
       return data;
     },
     retry: false,
   });
 }
 
-export function useHistorialAcreditaciones(idPersona: number, idConocimiento: number) {
+export function useHistorialAcreditaciones(
+  idPersona: number,
+  idConocimiento: number,
+) {
   return useQuery({
     queryKey: ['perfil-conocimiento', idPersona, 'historial', idConocimiento],
     queryFn: async () => {
@@ -39,7 +46,9 @@ export function usePendientesAcreditacion() {
   return useQuery({
     queryKey: ['pendientes-acreditacion'],
     queryFn: async () => {
-      const { data, error } = await api.GET('/api/conocimientos/pendientes-acreditacion');
+      const { data, error } = await api.GET(
+        '/api/conocimientos/pendientes-acreditacion',
+      );
       if (error || !data) throw new Error('No se pudo cargar la bandeja');
       return data;
     },
@@ -60,7 +69,9 @@ export function useAcreditar() {
       const { data, error } = await api.POST(
         '/api/personas/{idPersona}/conocimientos/{idConocimiento}/acreditaciones',
         {
-          params: { path: { idPersona: a.idPersona, idConocimiento: a.idConocimiento } },
+          params: {
+            path: { idPersona: a.idPersona, idConocimiento: a.idConocimiento },
+          },
           body: {
             idNivel: a.idNivel,
             fechaEvaluacion: a.fechaEvaluacion,

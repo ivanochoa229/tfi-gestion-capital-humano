@@ -1,4 +1,4 @@
-Estado: En curso | Fecha: 2026-10-15 | PR: —
+Estado: Implementado | Fecha: 2026-10-15 | PR: —
 
 # Conocimiento: catálogo, requisitos y conocimiento de las personas: plan de implementación
 
@@ -7448,7 +7448,7 @@ git commit -m "Agregar la acreditación de conocimientos: bandeja de pendientes 
 - Modify: `docs/superpowers/specs/2026-10-15-conocimiento-catalogo-design.md`
 - Modify: `docs/superpowers/plans/2026-10-15-conocimiento-catalogo.md`
 
-- [ ] **Paso 1: Actualizar `docs/requerimientos.md`**
+- [x] **Paso 1: Actualizar `docs/requerimientos.md`**
 
 Leer el archivo y editar con `Edit`:
 1. En §5, después del párrafo `**Personas:** …`, agregar:
@@ -7460,7 +7460,7 @@ Leer el archivo y editar con `Edit`:
 2. En la fila de la tabla de stack `Base de datos`, cambiar `Modelo relacional de veinticuatro tablas (RNF07)` por `Modelo relacional de veinticinco tablas (RNF07)`.
 3. En §7, borrar las dos filas `Historial de evaluaciones` y `Declarado y acreditado` (puntos cerrados por la spec de conocimiento, como se hizo con los de bloques anteriores).
 
-- [ ] **Paso 2: Documentar en el README**
+- [x] **Paso 2: Documentar en el README**
 
 Leer `README.md`, ubicar la sección de personas (notas sobre datos personales y `btree_gist`) y agregar a continuación una sección «Catálogo de conocimientos»:
 
@@ -7472,7 +7472,7 @@ Leer `README.md`, ubicar la sección de personas (notas sobre datos personales y
 - **Acreditar:** solo lo hacen la jefatura y los jefes de cátedra, sobre personas con una ocupación vigente en sus unidades. Para que un jefe pueda acreditar, el administrador tiene que vincular su usuario con su persona y asignarle sus unidades. La persona que ocupa la jefatura de departamento no puede ser acreditada por nadie en esta etapa.
 ```
 
-- [ ] **Paso 3: Verificación final**
+- [x] **Paso 3: Verificación final**
 
 Run, en orden:
 
@@ -7483,11 +7483,11 @@ cd ../frontend && npm run lint && npm run format && npm run build
 
 Expected: todo en verde (`npm run format` no debe dejar archivos modificados sin commitear; si los deja, revisar el diff y commitearlos). Revisar `docker compose logs backend` por errores al arrancar con las migraciones aplicadas desde cero: `docker compose down -v && docker compose up --build`, esperar el arranque y repetir el escenario manual de la tarea 15.
 
-- [ ] **Paso 4: Marcar el estado de la spec y del plan**
+- [x] **Paso 4: Marcar el estado de la spec y del plan**
 
 La spec pasa a `Estado: Implementada | Fecha: 2026-10-15 | Autor: IvanOchoa229`. El plan pasa a `Estado: Implementado | Fecha: 2026-10-15 | PR: #<número>` una vez abierto el pull request (si todavía no hay número, dejar `En curso` con `PR: —` y completarlo en un commit aparte).
 
-- [ ] **Paso 5: Commit**
+- [x] **Paso 5: Commit**
 
 ```bash
 git add docs README.md

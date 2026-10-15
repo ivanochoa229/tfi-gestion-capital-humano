@@ -49,7 +49,12 @@ describe('Fusión de conocimientos (PostgreSQL real)', () => {
         [codigo],
       )
     )[0].id;
-  const requisito = (puesto: number, conocimiento: number, nivel: string, excluyente: boolean) =>
+  const requisito = (
+    puesto: number,
+    conocimiento: number,
+    nivel: string,
+    excluyente: boolean,
+  ) =>
     sql(
       `INSERT INTO requisito_puesto (id_puesto, id_conocimiento, id_nivel_requerido, es_excluyente) VALUES ($1, $2, $3, $4)`,
       [puesto, conocimiento, niveles[nivel], excluyente],
@@ -77,7 +82,13 @@ describe('Fusión de conocimientos (PostgreSQL real)', () => {
         acreditado ? acreditado[2] : null,
       ],
     );
-  const acreditacion = (persona: number, conocimiento: number, nivel: string, fecha: string, evaluador: number) =>
+  const acreditacion = (
+    persona: number,
+    conocimiento: number,
+    nivel: string,
+    fecha: string,
+    evaluador: number,
+  ) =>
     sql(
       `INSERT INTO acreditacion (id_persona, id_conocimiento, id_nivel_acreditado, id_tipo_evidencia, fecha_evaluacion, id_evaluador)
        VALUES ($1, $2, $3, $4, $5, $6)`,
@@ -87,10 +98,9 @@ describe('Fusión de conocimientos (PostgreSQL real)', () => {
   beforeAll(async () => {
     base = await crearBaseTemporal();
     ds = base.dataSource;
-    servicio = new ConocimientosService(
-      ds.getRepository(Conocimiento),
-      { validarActivo: async () => undefined } as unknown as ReferenciaService,
-    );
+    servicio = new ConocimientosService(ds.getRepository(Conocimiento), {
+      validarActivo: async () => undefined,
+    } as unknown as ReferenciaService);
     niveles = Object.fromEntries(
       (
         await sql<{ codigo: string; id: number }[]>(
@@ -163,7 +173,13 @@ describe('Fusión de conocimientos (PostgreSQL real)', () => {
     ]);
 
     const personas = await sql<
-      { p: number; c: number; d: number | null; a: number | null; f: string | null }[]
+      {
+        p: number;
+        c: number;
+        d: number | null;
+        a: number | null;
+        f: string | null;
+      }[]
     >(
       `SELECT id_persona AS p, id_conocimiento AS c, id_nivel_declarado AS d,
               id_nivel_acreditado AS a, fecha_evaluacion::text AS f

@@ -50,7 +50,9 @@ export class PerfilConocimientoController {
   @Get()
   @Roles(...ROLES_LECTORES_DE_PERFIL)
   @ApiOkResponse({ type: PerfilConocimientoDto, isArray: true })
-  @ApiForbiddenResponse({ description: 'Sin acceso al conocimiento de esa persona' })
+  @ApiForbiddenResponse({
+    description: 'Sin acceso al conocimiento de esa persona',
+  })
   listar(
     @Param('idPersona', ParseIntPipe) idPersona: number,
     @UsuarioActual() sesion: SesionUsuario,
@@ -61,7 +63,9 @@ export class PerfilConocimientoController {
   @Get(':idConocimiento/acreditaciones')
   @Roles(...ROLES_LECTORES_DE_PERFIL)
   @ApiOkResponse({ type: AcreditacionDto, isArray: true })
-  @ApiForbiddenResponse({ description: 'Sin acceso al conocimiento de esa persona' })
+  @ApiForbiddenResponse({
+    description: 'Sin acceso al conocimiento de esa persona',
+  })
   historial(
     @Param('idPersona', ParseIntPipe) idPersona: number,
     @Param('idConocimiento', ParseIntPipe) idConocimiento: number,
@@ -74,7 +78,9 @@ export class PerfilConocimientoController {
   @Roles(...ROLES_DECLARANTES)
   @ApiOkResponse({ type: ConocimientoPersonaDto })
   @ApiForbiddenResponse({ description: 'Solo la propia persona declara' })
-  @ApiBadRequestResponse({ description: 'Persona, conocimiento o nivel inactivos' })
+  @ApiBadRequestResponse({
+    description: 'Persona, conocimiento o nivel inactivos',
+  })
   declarar(
     @Param('idPersona', ParseIntPipe) idPersona: number,
     @Param('idConocimiento', ParseIntPipe) idConocimiento: number,
@@ -102,13 +108,20 @@ export class PerfilConocimientoController {
   @Roles(...ROLES_EVALUADORES)
   @ApiCreatedResponse({ type: AcreditacionDto })
   @ApiForbiddenResponse({ description: 'Fuera del alcance o autoacreditación' })
-  @ApiBadRequestResponse({ description: 'Sin persona vinculada, fecha futura o datos inactivos' })
+  @ApiBadRequestResponse({
+    description: 'Sin persona vinculada, fecha futura o datos inactivos',
+  })
   acreditar(
     @Param('idPersona', ParseIntPipe) idPersona: number,
     @Param('idConocimiento', ParseIntPipe) idConocimiento: number,
     @Body() dto: AcreditarDto,
     @UsuarioActual() sesion: SesionUsuario,
   ): Promise<AcreditacionDto> {
-    return this.acreditaciones.acreditar(idPersona, idConocimiento, dto, sesion);
+    return this.acreditaciones.acreditar(
+      idPersona,
+      idConocimiento,
+      dto,
+      sesion,
+    );
   }
 }

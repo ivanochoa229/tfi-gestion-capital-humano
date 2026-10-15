@@ -11,7 +11,8 @@ export function PersonasPage() {
   const { data: sesion } = useSesion();
   const puedeEditar = sesion?.rol === 'recursos_humanos';
   const rol = sesion?.rol;
-  const puedeAcreditar = rol === 'jefe_catedra' || rol === 'jefatura_departamento';
+  const puedeAcreditar =
+    rol === 'jefe_catedra' || rol === 'jefatura_departamento';
   const verConocimientos =
     puedeAcreditar || rol === 'recursos_humanos' || rol === 'autoridad';
   const [idSeleccionada, setIdSeleccionada] = useState<number>();

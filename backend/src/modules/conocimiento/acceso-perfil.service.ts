@@ -34,7 +34,10 @@ export class AccesoPerfilService {
   /** Lectura: la propia persona; RR. HH. y autoridades; la jefatura y los jefes por alcance. */
   async exigirLectura(sesion: SesionUsuario, idPersona: number): Promise<void> {
     if (sesion.idPersona === idPersona) return;
-    if (sesion.rol === ROLES.recursosHumanos || sesion.rol === ROLES.autoridad) {
+    if (
+      sesion.rol === ROLES.recursosHumanos ||
+      sesion.rol === ROLES.autoridad
+    ) {
       return;
     }
     if (

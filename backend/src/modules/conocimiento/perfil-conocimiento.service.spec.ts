@@ -15,9 +15,18 @@ import {
 const sesion = (
   rol: SesionUsuario['rol'],
   idPersona: number | null = 5,
-): SesionUsuario => ({ id: 1, nombreUsuario: 'u', rol, idPersona, unidades: [] });
+): SesionUsuario => ({
+  id: 1,
+  nombreUsuario: 'u',
+  rol,
+  idPersona,
+  unidades: [],
+});
 
-function crear(respuestas: Record<string, object[]> = {}, visibles: number[] | null = [10]) {
+function crear(
+  respuestas: Record<string, object[]> = {},
+  visibles: number[] | null = [10],
+) {
   const dataSource = {
     query: vi.fn(async (sql: string) => respuestas[sql] ?? []),
   };
@@ -51,7 +60,9 @@ describe('PerfilConocimientoService.perfilDe y historial', () => {
   it('chequea el acceso de lectura antes de consultar', async () => {
     const { servicio, acceso, dataSource } = crear();
     acceso.exigirLectura.mockRejectedValueOnce(new ForbiddenException('no'));
-    await expect(servicio.perfilDe(9, sesion('jefe_catedra'))).rejects.toBeInstanceOf(ForbiddenException);
+    await expect(
+      servicio.perfilDe(9, sesion('jefe_catedra')),
+    ).rejects.toBeInstanceOf(ForbiddenException);
     expect(dataSource.query).not.toHaveBeenCalled();
   });
 
@@ -98,18 +109,28 @@ describe('PerfilConocimientoService.perfilDe y historial', () => {
       where: { idPersona: 5, idConocimiento: 20 },
       order: { fechaEvaluacion: 'DESC', id: 'DESC' },
     });
-    expect(historial[0]).toMatchObject({ id: 2, registradaEn: '2026-05-01T10:00:00.000Z' });
+    expect(historial[0]).toMatchObject({
+      id: 2,
+      registradaEn: '2026-05-01T10:00:00.000Z',
+    });
   });
 });
 
 describe('PerfilConocimientoService.mios', () => {
   it('sin persona vinculada da 400', async () => {
     const { servicio } = crear();
-    await expect(servicio.mios(sesion('docente', null))).rejects.toBeInstanceOf(BadRequestException);
+    await expect(servicio.mios(sesion('docente', null))).rejects.toBeInstanceOf(
+      BadRequestException,
+    );
   });
 
   it('une los requisitos de los puestos con lo ya registrado, sin repetir conocimientos', async () => {
-    const requisito = (idConocimiento: number, denominacion: string, idPuesto: number, orden: number) => ({
+    const requisito = (
+      idConocimiento: number,
+      denominacion: string,
+      idPuesto: number,
+      orden: number,
+    ) => ({
       id_conocimiento: idConocimiento,
       denominacion,
       id_tipo_conocimiento: 3,
@@ -120,7 +141,11 @@ describe('PerfilConocimientoService.mios', () => {
       orden_nivel: orden,
       es_excluyente: idPuesto === 2,
     });
-    const propia = (idConocimiento: number, denominacion: string, extra: object) => ({
+    const propia = (
+      idConocimiento: number,
+      denominacion: string,
+      extra: object,
+    ) => ({
       id_conocimiento: idConocimiento,
       denominacion,
       id_tipo_conocimiento: 3,
@@ -138,14 +163,24 @@ describe('PerfilConocimientoService.mios', () => {
         requisito(2, 'Redes', 1, 1),
       ],
       [SQL_FILAS_PROPIAS]: [
-        propia(1, 'SQL', { id_nivel_declarado: 2, fecha_declaracion: '2026-06-01' }),
-        propia(9, 'Docker', { id_nivel_declarado: 1, fecha_declaracion: '2026-06-02' }),
+        propia(1, 'SQL', {
+          id_nivel_declarado: 2,
+          fecha_declaracion: '2026-06-01',
+        }),
+        propia(9, 'Docker', {
+          id_nivel_declarado: 1,
+          fecha_declaracion: '2026-06-02',
+        }),
       ],
     });
 
     const filas = await servicio.mios(sesion('docente'));
 
-    expect(filas.map((f) => f.denominacion)).toEqual(['Docker', 'Redes', 'SQL']);
+    expect(filas.map((f) => f.denominacion)).toEqual([
+      'Docker',
+      'Redes',
+      'SQL',
+    ]);
     const sql = filas.find((f) => f.idConocimiento === 1)!;
     expect(sql).toMatchObject({
       idNivelRequerido: 3,
@@ -172,7 +207,10 @@ describe('PerfilConocimientoService.pendientes', () => {
   it('consulta con las unidades del alcance y la persona del evaluador', async () => {
     const { servicio, dataSource } = crear({ [SQL_PENDIENTES]: [] }, [10, 11]);
     await servicio.pendientes(sesion('jefe_catedra', 7));
-    expect(dataSource.query).toHaveBeenCalledWith(SQL_PENDIENTES, [[10, 11], 7]);
+    expect(dataSource.query).toHaveBeenCalledWith(SQL_PENDIENTES, [
+      [10, 11],
+      7,
+    ]);
   });
 
   it('sin unidades en el alcance devuelve vacío sin consultar', async () => {

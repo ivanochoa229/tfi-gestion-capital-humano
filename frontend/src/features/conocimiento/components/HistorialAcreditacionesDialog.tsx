@@ -23,20 +23,34 @@ interface Props {
 }
 
 /** Todas las acreditaciones del par; la primera es la vigente. */
-export function HistorialAcreditacionesDialog({ idPersona, idConocimiento, denominacion, onCerrar }: Props) {
-  const { data, isLoading, isError } = useHistorialAcreditaciones(idPersona, idConocimiento);
+export function HistorialAcreditacionesDialog({
+  idPersona,
+  idConocimiento,
+  denominacion,
+  onCerrar,
+}: Props) {
+  const { data, isLoading, isError } = useHistorialAcreditaciones(
+    idPersona,
+    idConocimiento,
+  );
   const { data: niveles } = useValoresReferencia('nivel-dominio', true);
   const { data: evidencias } = useValoresReferencia('tipo-evidencia', true);
-  const nombre = (lista: { id: number; denominacion: string }[] | undefined, id: number) =>
-    lista?.find((v) => v.id === id)?.denominacion ?? String(id);
+  const nombre = (
+    lista: { id: number; denominacion: string }[] | undefined,
+    id: number,
+  ) => lista?.find((v) => v.id === id)?.denominacion ?? String(id);
 
   return (
     <Dialog open onClose={onCerrar} fullWidth maxWidth="md">
       <DialogTitle>Historial de acreditaciones: {denominacion}</DialogTitle>
       <DialogContent>
         {isLoading && <CircularProgress aria-label="Cargando" />}
-        {isError && <Alert severity="error">No se pudo cargar el historial.</Alert>}
-        {data && data.length === 0 && <Alert severity="info">Todavía no hay acreditaciones.</Alert>}
+        {isError && (
+          <Alert severity="error">No se pudo cargar el historial.</Alert>
+        )}
+        {data && data.length === 0 && (
+          <Alert severity="info">Todavía no hay acreditaciones.</Alert>
+        )}
         {data && data.length > 0 && (
           <Table size="small">
             <TableHead>

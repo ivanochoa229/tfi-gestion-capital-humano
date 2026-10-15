@@ -39,7 +39,9 @@ export function ConocimientoPage() {
   const [idTipo, setIdTipo] = useState('');
   const [idArea, setIdArea] = useState('');
   const [verInactivos, setVerInactivos] = useState(false);
-  const [formulario, setFormulario] = useState<{ conocimiento?: Conocimiento } | null>(null);
+  const [formulario, setFormulario] = useState<{
+    conocimiento?: Conocimiento;
+  } | null>(null);
   const [fusionando, setFusionando] = useState<Conocimiento>();
   const [error, setError] = useState<string>();
 
@@ -78,7 +80,12 @@ export function ConocimientoPage() {
             {error}
           </Alert>
         )}
-        <Stack direction="row" spacing={2} useFlexGap sx={{ alignItems: 'center', flexWrap: 'wrap' }}>
+        <Stack
+          direction="row"
+          spacing={2}
+          useFlexGap
+          sx={{ alignItems: 'center', flexWrap: 'wrap' }}
+        >
           <TextField
             size="small"
             label="Buscar por denominación"
@@ -167,7 +174,10 @@ export function ConocimientoPage() {
                     <TableCell align="right">
                       {c.activo && (
                         <>
-                          <Button size="small" onClick={() => setFormulario({ conocimiento: c })}>
+                          <Button
+                            size="small"
+                            onClick={() => setFormulario({ conocimiento: c })}
+                          >
                             Editar
                           </Button>
                           <Button size="small" onClick={() => setFusionando(c)}>
@@ -193,7 +203,10 @@ export function ConocimientoPage() {
         />
       )}
       {fusionando && (
-        <FusionarDialog origen={fusionando} onCerrar={() => setFusionando(undefined)} />
+        <FusionarDialog
+          origen={fusionando}
+          onCerrar={() => setFusionando(undefined)}
+        />
       )}
     </PaginaEnConstruccion>
   );

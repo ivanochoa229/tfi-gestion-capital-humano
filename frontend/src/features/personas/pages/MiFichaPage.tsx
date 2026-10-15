@@ -17,7 +17,11 @@ export function MiFichaPage() {
           administrador que la asigne.
         </Alert>
       ) : (
-        <FichaPersona idPersona={sesion.idPersona} puedeEditar={false} verConocimientos />
+        <FichaPersona
+          idPersona={sesion.idPersona}
+          puedeEditar={false}
+          verConocimientos
+        />
       )}
     </PaginaEnConstruccion>
   );

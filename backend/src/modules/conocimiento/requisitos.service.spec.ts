@@ -1,7 +1,4 @@
-import {
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import type { Repository } from 'typeorm';
 import type { Puesto } from '../estructura/entities/puesto.entity.js';
 import type { ReferenciaService } from '../referencia/referencia.service.js';
@@ -41,11 +38,17 @@ function crearEntorno(opciones: {
     { id: 10, activo: true },
     { id: 11, activo: true },
   ];
-  const conocimientos = opciones.conocimientos ?? [conocimiento(1), conocimiento(2)];
-  const clave = (r: Partial<RequisitoPuesto>) => `${r.idPuesto}-${r.idConocimiento}`;
+  const conocimientos = opciones.conocimientos ?? [
+    conocimiento(1),
+    conocimiento(2),
+  ];
+  const clave = (r: Partial<RequisitoPuesto>) =>
+    `${r.idPuesto}-${r.idConocimiento}`;
   const repoRequisitos = {
     find: vi.fn(async (o: { where: Partial<RequisitoPuesto> }) =>
-      filas.filter((r) => r.idPuesto === o.where.idPuesto).map((r) => ({ ...r })),
+      filas
+        .filter((r) => r.idPuesto === o.where.idPuesto)
+        .map((r) => ({ ...r })),
     ),
     findOne: vi.fn(async (o: { where: Partial<RequisitoPuesto> }) => {
       const r = filas.find((x) => clave(x) === clave(o.where));
@@ -101,7 +104,10 @@ function crearEntorno(opciones: {
 describe('RequisitosService.guardar', () => {
   it('da de alta el requisito y valida el nivel', async () => {
     const { servicio, referencia, filas } = crearEntorno({});
-    const creado = await servicio.guardar(10, 1, { idNivel: 2, esExcluyente: true });
+    const creado = await servicio.guardar(10, 1, {
+      idNivel: 2,
+      esExcluyente: true,
+    });
     expect(creado).toMatchObject({
       idPuesto: 10,
       idConocimiento: 1,
@@ -114,7 +120,9 @@ describe('RequisitosService.guardar', () => {
   });
 
   it('modifica el requisito existente en lugar de duplicarlo', async () => {
-    const { servicio, filas } = crearEntorno({ requisitos: [requisito(10, 1)] });
+    const { servicio, filas } = crearEntorno({
+      requisitos: [requisito(10, 1)],
+    });
     await servicio.guardar(10, 1, { idNivel: 4, esExcluyente: true });
     expect(filas).toHaveLength(1);
     expect(filas[0]).toMatchObject({ idNivelRequerido: 4, esExcluyente: true });
@@ -122,23 +130,38 @@ describe('RequisitosService.guardar', () => {
 
   it('rechaza un puesto inexistente (404), uno dado de baja (400) y un conocimiento inactivo (400)', async () => {
     const e = crearEntorno({
-      puestos: [{ id: 10, activo: true }, { id: 12, activo: false }],
+      puestos: [
+        { id: 10, activo: true },
+        { id: 12, activo: false },
+      ],
       conocimientos: [conocimiento(1), conocimiento(2, false)],
     });
     const dto = { idNivel: 1, esExcluyente: false };
-    await expect(e.servicio.guardar(99, 1, dto)).rejects.toBeInstanceOf(NotFoundException);
-    await expect(e.servicio.guardar(12, 1, dto)).rejects.toBeInstanceOf(BadRequestException);
-    await expect(e.servicio.guardar(10, 2, dto)).rejects.toBeInstanceOf(BadRequestException);
-    await expect(e.servicio.guardar(10, 77, dto)).rejects.toBeInstanceOf(BadRequestException);
+    await expect(e.servicio.guardar(99, 1, dto)).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
+    await expect(e.servicio.guardar(12, 1, dto)).rejects.toBeInstanceOf(
+      BadRequestException,
+    );
+    await expect(e.servicio.guardar(10, 2, dto)).rejects.toBeInstanceOf(
+      BadRequestException,
+    );
+    await expect(e.servicio.guardar(10, 77, dto)).rejects.toBeInstanceOf(
+      BadRequestException,
+    );
   });
 });
 
 describe('RequisitosService.quitar', () => {
   it('quita el requisito y da 404 si no existe', async () => {
-    const { servicio, filas } = crearEntorno({ requisitos: [requisito(10, 1)] });
+    const { servicio, filas } = crearEntorno({
+      requisitos: [requisito(10, 1)],
+    });
     await servicio.quitar(10, 1);
     expect(filas).toHaveLength(0);
-    await expect(servicio.quitar(10, 1)).rejects.toBeInstanceOf(NotFoundException);
+    await expect(servicio.quitar(10, 1)).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
   });
 });
 
@@ -158,7 +181,9 @@ describe('RequisitosService.copiar', () => {
     ]);
     const destino = filas.filter((r) => r.idPuesto === 11);
     expect(destino).toHaveLength(2);
-    expect(destino.find((r) => r.idConocimiento === 2)?.idNivelRequerido).toBe(4);
+    expect(destino.find((r) => r.idConocimiento === 2)?.idNivelRequerido).toBe(
+      4,
+    );
     expect(destino.find((r) => r.idConocimiento === 1)).toMatchObject({
       idNivelRequerido: 3,
       esExcluyente: true,
@@ -177,10 +202,21 @@ describe('RequisitosService.copiar', () => {
   });
 
   it('rechaza copiar un puesto a sí mismo, un origen inexistente y un destino de baja', async () => {
-    const e = crearEntorno({ puestos: [{ id: 10, activo: true }, { id: 12, activo: false }] });
-    await expect(e.servicio.copiar(10, { idPuestoOrigen: 10 })).rejects.toBeInstanceOf(BadRequestException);
-    await expect(e.servicio.copiar(10, { idPuestoOrigen: 99 })).rejects.toBeInstanceOf(NotFoundException);
-    await expect(e.servicio.copiar(12, { idPuestoOrigen: 10 })).rejects.toBeInstanceOf(BadRequestException);
+    const e = crearEntorno({
+      puestos: [
+        { id: 10, activo: true },
+        { id: 12, activo: false },
+      ],
+    });
+    await expect(
+      e.servicio.copiar(10, { idPuestoOrigen: 10 }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    await expect(
+      e.servicio.copiar(10, { idPuestoOrigen: 99 }),
+    ).rejects.toBeInstanceOf(NotFoundException);
+    await expect(
+      e.servicio.copiar(12, { idPuestoOrigen: 10 }),
+    ).rejects.toBeInstanceOf(BadRequestException);
   });
 });
 

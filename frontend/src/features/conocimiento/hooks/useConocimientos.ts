@@ -119,10 +119,13 @@ export function useFusionarConocimientos() {
       idOrigen: number;
       idDestino: number;
     }): Promise<ResultadoFusion> => {
-      const { data, error } = await api.POST('/api/conocimientos/{id}/fusionar', {
-        params: { path: { id: idOrigen } },
-        body: { idDestino },
-      });
+      const { data, error } = await api.POST(
+        '/api/conocimientos/{id}/fusionar',
+        {
+          params: { path: { id: idOrigen } },
+          body: { idDestino },
+        },
+      );
       if (error || !data) throw new Error(mensajeError(error));
       return data;
     },

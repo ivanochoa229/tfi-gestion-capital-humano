@@ -25,7 +25,9 @@ describe('Lecturas del perfil de conocimiento (PostgreSQL real)', () => {
     ds.query(consulta, parametros) as Promise<T>;
   const dia = async (delta: number) =>
     (
-      await sql<{ f: string }[]>(`SELECT (CURRENT_DATE + $1::int)::text AS f`, [delta])
+      await sql<{ f: string }[]>(`SELECT (CURRENT_DATE + $1::int)::text AS f`, [
+        delta,
+      ])
     )[0].f;
   const nuevaPersona = async (n: number) =>
     (
@@ -36,11 +38,21 @@ describe('Lecturas del perfil de conocimiento (PostgreSQL real)', () => {
         [`L-${n}`, `3000000${n}`, `Apellido${n}`],
       )
     )[0].id;
-  const ocupar = async (persona: number, idPuesto: number, desde: number, hasta: number | null) =>
+  const ocupar = async (
+    persona: number,
+    idPuesto: number,
+    desde: number,
+    hasta: number | null,
+  ) =>
     sql(
       `INSERT INTO ocupacion (id_persona, id_puesto, fecha_desde, fecha_hasta, id_caracter_ocupacion, id_dedicacion)
        SELECT $1, $2, $3, $4, (SELECT min(id_caracter_ocupacion) FROM caracter_ocupacion), (SELECT min(id_dedicacion) FROM dedicacion)`,
-      [persona, idPuesto, await dia(desde), hasta === null ? null : await dia(hasta)],
+      [
+        persona,
+        idPuesto,
+        await dia(desde),
+        hasta === null ? null : await dia(hasta),
+      ],
     );
   const declarar = async (persona: number, nivel: string, fecha: number) =>
     sql(
@@ -59,9 +71,17 @@ describe('Lecturas del perfil de conocimiento (PostgreSQL real)', () => {
     base = await crearBaseTemporal();
     ds = base.dataSource;
     niveles = Object.fromEntries(
-      (await sql<{ codigo: string; id: number }[]>(`SELECT codigo, id_nivel_dominio AS id FROM nivel_dominio`)).map((n) => [n.codigo, n.id]),
+      (
+        await sql<{ codigo: string; id: number }[]>(
+          `SELECT codigo, id_nivel_dominio AS id FROM nivel_dominio`,
+        )
+      ).map((n) => [n.codigo, n.id]),
     );
-    evidencia = (await sql<{ id: number }[]>(`SELECT id_tipo_evidencia AS id FROM tipo_evidencia WHERE codigo = 'titulo'`))[0].id;
+    evidencia = (
+      await sql<{ id: number }[]>(
+        `SELECT id_tipo_evidencia AS id FROM tipo_evidencia WHERE codigo = 'titulo'`,
+      )
+    )[0].id;
     const alcance = new AlcanceService(ds);
     servicio = new PerfilConocimientoService(
       ds,
@@ -69,7 +89,11 @@ describe('Lecturas del perfil de conocimiento (PostgreSQL real)', () => {
       new AccesoPerfilService(ds, alcance),
       alcance,
     );
-    const departamento = (await sql<{ id: number }[]>(`SELECT id_unidad AS id FROM unidad_organizativa WHERE id_unidad_superior IS NULL`))[0].id;
+    const departamento = (
+      await sql<{ id: number }[]>(
+        `SELECT id_unidad AS id FROM unidad_organizativa WHERE id_unidad_superior IS NULL`,
+      )
+    )[0].id;
     const nuevaCatedra = async (nombre: string) =>
       (
         await sql<{ id: number }[]>(
@@ -118,10 +142,15 @@ describe('Lecturas del perfil de conocimiento (PostgreSQL real)', () => {
       await declarar(evaluador, 'basico', -5);
       await declarar(docente, 'avanzado', -5);
 
-      const pendientes = await servicio.pendientes(jefe(evaluador, [unidadCatedra]));
+      const pendientes = await servicio.pendientes(
+        jefe(evaluador, [unidadCatedra]),
+      );
 
       expect(pendientes.map((p) => p.idPersona)).toEqual([docente]);
-      expect(pendientes[0]).toMatchObject({ idNivelDeclarado: niveles.avanzado, idNivelAcreditado: null });
+      expect(pendientes[0]).toMatchObject({
+        idNivelDeclarado: niveles.avanzado,
+        idNivelAcreditado: null,
+      });
     });
 
     it('no incluye a personas de otra cátedra ni a quien ya no ocupa un puesto vigente', async () => {
@@ -132,7 +161,9 @@ describe('Lecturas del perfil de conocimiento (PostgreSQL real)', () => {
       await ocupar(exOcupante, puesto, -100, -1);
       await declarar(ajena, 'basico', -5);
       await declarar(exOcupante, 'basico', -5);
-      expect(await servicio.pendientes(jefe(evaluador, [unidadCatedra]))).toEqual([]);
+      expect(
+        await servicio.pendientes(jefe(evaluador, [unidadCatedra])),
+      ).toEqual([]);
     });
 
     it('una ocupación que vence hoy sigue contando', async () => {
@@ -140,7 +171,9 @@ describe('Lecturas del perfil de conocimiento (PostgreSQL real)', () => {
       const docente = await nuevaPersona(2);
       await ocupar(docente, puesto, -100, 0);
       await declarar(docente, 'basico', -5);
-      expect(await servicio.pendientes(jefe(evaluador, [unidadCatedra]))).toHaveLength(1);
+      expect(
+        await servicio.pendientes(jefe(evaluador, [unidadCatedra])),
+      ).toHaveLength(1);
     });
 
     it('lo acreditado al nivel declarado, o evaluado después de declarar, ya no está pendiente', async () => {
@@ -148,19 +181,37 @@ describe('Lecturas del perfil de conocimiento (PostgreSQL real)', () => {
       const igual = await nuevaPersona(2);
       const posterior = await nuevaPersona(3);
       const redeclarado = await nuevaPersona(4);
-      for (const p of [igual, posterior, redeclarado]) await ocupar(p, puesto, -100, null);
-      const conAcreditacion = async (p: number, declarado: string, fechaDecl: number, acreditado: string, fechaEv: number) =>
+      for (const p of [igual, posterior, redeclarado])
+        await ocupar(p, puesto, -100, null);
+      const conAcreditacion = async (
+        p: number,
+        declarado: string,
+        fechaDecl: number,
+        acreditado: string,
+        fechaEv: number,
+      ) =>
         sql(
           `INSERT INTO conocimiento_persona (id_persona, id_conocimiento, id_nivel_declarado, fecha_declaracion, id_nivel_acreditado, fecha_evaluacion, id_tipo_evidencia, id_evaluador)
            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-          [p, conocimiento, niveles[declarado], await dia(fechaDecl), niveles[acreditado], await dia(fechaEv), evidencia, evaluador],
+          [
+            p,
+            conocimiento,
+            niveles[declarado],
+            await dia(fechaDecl),
+            niveles[acreditado],
+            await dia(fechaEv),
+            evidencia,
+            evaluador,
+          ],
         );
       await conAcreditacion(igual, 'avanzado', -10, 'avanzado', -3);
       await conAcreditacion(posterior, 'avanzado', -10, 'basico', -3);
       // Re-declaró después de ser evaluado: vuelve a quedar pendiente.
       await conAcreditacion(redeclarado, 'experto', -2, 'basico', -9);
 
-      const pendientes = await servicio.pendientes(jefe(evaluador, [unidadCatedra]));
+      const pendientes = await servicio.pendientes(
+        jefe(evaluador, [unidadCatedra]),
+      );
       expect(pendientes.map((p) => p.idPersona)).toEqual([redeclarado]);
     });
   });
@@ -170,11 +221,13 @@ describe('Lecturas del perfil de conocimiento (PostgreSQL real)', () => {
       const persona = await nuevaPersona(1);
       await ocupar(persona, puesto, -100, null);
       await ocupar(persona, puestoAjeno, -100, null);
-      const otroPasado = (await sql<{ id: number }[]>(
-        `INSERT INTO puesto (codigo, denominacion, id_unidad, id_nivel_jerarquico)
+      const otroPasado = (
+        await sql<{ id: number }[]>(
+          `INSERT INTO puesto (codigo, denominacion, id_unidad, id_nivel_jerarquico)
          SELECT 'P-0003', 'P-0003', $1, id_nivel_jerarquico FROM nivel_jerarquico WHERE codigo = 'operativo_docente' RETURNING id_puesto AS id`,
-        [unidadCatedra],
-      ))[0].id;
+          [unidadCatedra],
+        )
+      )[0].id;
       await ocupar(persona, otroPasado, -100, -1);
       const pide = (idPuesto: number, nivel: string, excluyente: boolean) =>
         sql(
@@ -193,7 +246,10 @@ describe('Lecturas del perfil de conocimiento (PostgreSQL real)', () => {
         idNivelRequerido: niveles.avanzado,
         esExcluyente: true,
       });
-      expect(filas[0].puestos.map((p) => p.codigo).sort()).toEqual(['P-0001', 'P-0002']);
+      expect(filas[0].puestos.map((p) => p.codigo).sort()).toEqual([
+        'P-0001',
+        'P-0002',
+      ]);
     });
   });
 });

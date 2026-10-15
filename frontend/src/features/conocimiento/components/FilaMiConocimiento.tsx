@@ -1,4 +1,13 @@
-import { Alert, Button, Chip, MenuItem, Paper, Stack, TextField, Typography } from '@mui/material';
+import {
+  Alert,
+  Button,
+  Chip,
+  MenuItem,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useState } from 'react';
 import { mensajeError } from '../../admin/hooks/useGuardarValor';
 import type { Valor } from '../../admin/hooks/useValoresReferencia';
@@ -32,13 +41,19 @@ export function FilaMiConocimiento({
   const [error, setError] = useState<string>();
 
   const nombre = (lista: Valor[], id: number | null) =>
-    id === null ? '' : (lista.find((v) => v.id === id)?.denominacion ?? String(id));
+    id === null
+      ? ''
+      : (lista.find((v) => v.id === id)?.denominacion ?? String(id));
   const elegido = niveles.find((n) => n.id === fila.idNivelDeclarado);
 
   const cambiar = async (idNivel: number) => {
     setError(undefined);
     try {
-      await declarar.mutateAsync({ idPersona, idConocimiento: fila.idConocimiento, idNivel });
+      await declarar.mutateAsync({
+        idPersona,
+        idConocimiento: fila.idConocimiento,
+        idNivel,
+      });
     } catch (e) {
       setError(mensajeError(e));
     }
@@ -47,7 +62,10 @@ export function FilaMiConocimiento({
   const quitar = async () => {
     setError(undefined);
     try {
-      await retirar.mutateAsync({ idPersona, idConocimiento: fila.idConocimiento });
+      await retirar.mutateAsync({
+        idPersona,
+        idConocimiento: fila.idConocimiento,
+      });
     } catch (e) {
       setError(mensajeError(e));
     }
@@ -58,7 +76,12 @@ export function FilaMiConocimiento({
   return (
     <Paper variant="outlined" sx={{ p: 2 }}>
       <Stack spacing={1.5}>
-        <Stack direction="row" spacing={1} useFlexGap sx={{ alignItems: 'center', flexWrap: 'wrap' }}>
+        <Stack
+          direction="row"
+          spacing={1}
+          useFlexGap
+          sx={{ alignItems: 'center', flexWrap: 'wrap' }}
+        >
           <Typography variant="subtitle1" component="h3" sx={{ flexGrow: 1 }}>
             {fila.denominacion}
           </Typography>
@@ -87,7 +110,10 @@ export function FilaMiConocimiento({
         </Stack>
         {fila.puestos.length > 0 && (
           <Typography variant="body2" color="text.secondary">
-            Lo piden: {fila.puestos.map((p) => `${p.codigo} · ${p.denominacion}`).join('; ')}
+            Lo piden:{' '}
+            {fila.puestos
+              .map((p) => `${p.codigo} · ${p.denominacion}`)
+              .join('; ')}
           </Typography>
         )}
         {error && (
@@ -100,11 +126,18 @@ export function FilaMiConocimiento({
             select
             size="small"
             label="Mi nivel"
-            value={fila.idNivelDeclarado === null ? '' : String(fila.idNivelDeclarado)}
+            value={
+              fila.idNivelDeclarado === null
+                ? ''
+                : String(fila.idNivelDeclarado)
+            }
             onChange={(e) => cambiar(Number(e.target.value))}
             disabled={declarar.isPending}
             sx={{ minWidth: 200 }}
-            helperText={descripcionNivel(elegido?.codigo) || 'Elegí el nivel que te describe'}
+            helperText={
+              descripcionNivel(elegido?.codigo) ||
+              'Elegí el nivel que te describe'
+            }
           >
             {niveles.map((n) => (
               <MenuItem key={n.id} value={String(n.id)}>

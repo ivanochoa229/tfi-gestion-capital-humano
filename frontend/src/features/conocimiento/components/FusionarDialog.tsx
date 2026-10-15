@@ -63,15 +63,15 @@ export function FusionarDialog({ origen, onCerrar }: Props) {
           {resultado ? (
             <Alert severity="success">
               Listo. Se movieron {resultado.requisitosMovidos} requisitos de
-              puesto y los datos de {resultado.personasMovidas} personas;
-              «{origen.denominacion}» quedó dado de baja.
+              puesto y los datos de {resultado.personasMovidas} personas; «
+              {origen.denominacion}» quedó dado de baja.
             </Alert>
           ) : (
             <>
               <Typography>
                 Elegí el conocimiento que se conserva. Los requisitos y los
-                datos de las personas del duplicado pasan a ese conocimiento.
-                Si alguien tenía ambos, queda el nivel declarado más alto y la
+                datos de las personas del duplicado pasan a ese conocimiento. Si
+                alguien tenía ambos, queda el nivel declarado más alto y la
                 acreditación más reciente.
               </Typography>
               <TextField

@@ -33,9 +33,7 @@ function crearEntorno(
   const filas = iniciales.map((f) => ({ ...f }));
   let siguiente = 100;
   const coincide = (f: Conocimiento, where: Record<string, unknown>) =>
-    Object.entries(where).every(
-      ([k, v]) => f[k as keyof Conocimiento] === v,
-    );
+    Object.entries(where).every(([k, v]) => f[k as keyof Conocimiento] === v);
   const repo = {
     find: vi.fn(async (o?: { where?: Record<string, unknown> }) =>
       filas.filter((f) => coincide(f, o?.where ?? {})).map((f) => ({ ...f })),
@@ -85,7 +83,10 @@ const alta = {
 describe('ConocimientosService.crear', () => {
   it('guarda la denominación y su clave normalizada', async () => {
     const { servicio, repo } = crearEntorno();
-    const creado = await servicio.crear({ ...alta, denominacion: 'Bases  de DATOS' });
+    const creado = await servicio.crear({
+      ...alta,
+      denominacion: 'Bases  de DATOS',
+    });
     expect(repo.save).toHaveBeenCalledWith(
       expect.objectContaining({
         denominacion: 'Bases  de DATOS',
@@ -98,13 +99,19 @@ describe('ConocimientosService.crear', () => {
   it('valida el tipo y el área contra la referencia', async () => {
     const { servicio, referencia } = crearEntorno();
     await servicio.crear(alta);
-    expect(referencia.validarActivo).toHaveBeenCalledWith('tipo-conocimiento', 3);
+    expect(referencia.validarActivo).toHaveBeenCalledWith(
+      'tipo-conocimiento',
+      3,
+    );
     expect(referencia.validarActivo).toHaveBeenCalledWith('area-tematica', 5);
   });
 
   it('rechaza con 409 un duplicado por tilde, mayúsculas o espacios y nombra el existente', async () => {
     const { servicio } = crearEntorno([existente()]);
-    const intento = servicio.crear({ ...alta, denominacion: '  PROGRAMACION ' });
+    const intento = servicio.crear({
+      ...alta,
+      denominacion: '  PROGRAMACION ',
+    });
     await expect(intento).rejects.toBeInstanceOf(ConflictException);
     await expect(intento).rejects.toThrow(/Programación.*id 1/);
   });
@@ -115,7 +122,11 @@ describe('ConocimientosService.crear', () => {
       existente({ id: 2, idTipoConocimiento: 9 }),
     ]);
     await expect(
-      servicio.crear({ ...alta, denominacion: 'Programación', idTipoConocimiento: 4 }),
+      servicio.crear({
+        ...alta,
+        denominacion: 'Programación',
+        idTipoConocimiento: 4,
+      }),
     ).resolves.toBeDefined();
     const inactivo = crearEntorno([existente({ activo: false })]);
     await expect(
@@ -153,21 +164,21 @@ describe('ConocimientosService.actualizar', () => {
 
   it('da 404 si no existe y 409 si está dado de baja', async () => {
     const { servicio } = crearEntorno([existente({ id: 1, activo: false })]);
-    await expect(servicio.actualizar(9, { descripcion: 'x' })).rejects.toBeInstanceOf(
-      NotFoundException,
-    );
-    await expect(servicio.actualizar(1, { descripcion: 'x' })).rejects.toBeInstanceOf(
-      ConflictException,
-    );
+    await expect(
+      servicio.actualizar(9, { descripcion: 'x' }),
+    ).rejects.toBeInstanceOf(NotFoundException);
+    await expect(
+      servicio.actualizar(1, { descripcion: 'x' }),
+    ).rejects.toBeInstanceOf(ConflictException);
   });
 });
 
 describe('ConocimientosService.baja y reactivar', () => {
   it('la baja se bloquea si lo piden puestos activos y los lista', async () => {
-    const { servicio } = crearEntorno([existente()], [
-      { codigo: 'P-0001' },
-      { codigo: 'P-0002' },
-    ]);
+    const { servicio } = crearEntorno(
+      [existente()],
+      [{ codigo: 'P-0001' }, { codigo: 'P-0002' }],
+    );
     const intento = servicio.baja(1);
     await expect(intento).rejects.toBeInstanceOf(ConflictException);
     await expect(intento).rejects.toThrow(/P-0001, P-0002/);
@@ -183,12 +194,16 @@ describe('ConocimientosService.baja y reactivar', () => {
       existente({ id: 1, activo: false }),
       existente({ id: 2 }),
     ]);
-    await expect(servicio.reactivar(1)).rejects.toBeInstanceOf(ConflictException);
+    await expect(servicio.reactivar(1)).rejects.toBeInstanceOf(
+      ConflictException,
+    );
   });
 
   it('reactiva si no hay conflicto', async () => {
     const { servicio } = crearEntorno([existente({ id: 1, activo: false })]);
-    await expect(servicio.reactivar(1)).resolves.toMatchObject({ activo: true });
+    await expect(servicio.reactivar(1)).resolves.toMatchObject({
+      activo: true,
+    });
   });
 });
 
@@ -198,9 +213,9 @@ describe('ConocimientosService.listar', () => {
     await servicio.listar({ q: ' Programación ', idTipo: 3 });
     const donde = repo.find.mock.calls[0][0]?.where as Record<string, unknown>;
     expect(donde.idTipoConocimiento).toBe(3);
-    expect(String((donde.denominacionNormalizada as { _value: string })._value)).toBe(
-      '%programacion%',
-    );
+    expect(
+      String((donde.denominacionNormalizada as { _value: string })._value),
+    ).toBe('%programacion%');
   });
 
   it('sin filtros devuelve activos e inactivos', async () => {
@@ -216,7 +231,9 @@ describe('validaciones de dominio', () => {
     referencia.validarActivo.mockRejectedValueOnce(
       new BadRequestException('El valor 3 no existe'),
     );
-    await expect(servicio.crear(alta)).rejects.toBeInstanceOf(BadRequestException);
+    await expect(servicio.crear(alta)).rejects.toBeInstanceOf(
+      BadRequestException,
+    );
   });
 });
 
@@ -250,7 +267,10 @@ describe('ConocimientosService.fusionar', () => {
     await expect(
       inactivo.servicio.fusionar(1, { idDestino: 2 }),
     ).rejects.toThrow(/activos/);
-    const otroTipo = crearEntorno([origen, { ...destino, idTipoConocimiento: 4 }]);
+    const otroTipo = crearEntorno([
+      origen,
+      { ...destino, idTipoConocimiento: 4 },
+    ]);
     await expect(
       otroTipo.servicio.fusionar(1, { idDestino: 2 }),
     ).rejects.toThrow(/mismo tipo/);
@@ -283,4 +303,3 @@ describe('ConocimientosService.fusionar', () => {
     expect(filas.find((f) => f.id === 2)?.activo).toBe(true);
   });
 });
-

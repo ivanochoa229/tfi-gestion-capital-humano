@@ -12,10 +12,7 @@ import { hoyDeLaBase } from '../personas/fechas.js';
 import { ReferenciaService } from '../referencia/referencia.service.js';
 import { DOMINIO_NIVEL_DOMINIO } from './conocimiento.constantes.js';
 import { aConocimientoPersonaDto } from './conocimiento.mapper.js';
-import type {
-  ConocimientoPersonaDto,
-  DeclararDto,
-} from './dto/perfil.dto.js';
+import type { ConocimientoPersonaDto, DeclararDto } from './dto/perfil.dto.js';
 import { ConocimientoPersona } from './entities/conocimiento-persona.entity.js';
 import { Conocimiento } from './entities/conocimiento.entity.js';
 import { enTransaccionDeConocimiento } from './transaccion.js';
@@ -93,7 +90,9 @@ export class DeclaracionesService {
 
   private exigirPropia(sesion: SesionUsuario, idPersona: number): void {
     if (sesion.idPersona === null || sesion.idPersona !== idPersona) {
-      throw new ForbiddenException('Solo podés declarar tus propios conocimientos');
+      throw new ForbiddenException(
+        'Solo podés declarar tus propios conocimientos',
+      );
     }
   }
 
@@ -105,7 +104,8 @@ export class DeclaracionesService {
     const persona = await manager
       .getRepository(Persona)
       .findOne({ where: { id: idPersona } });
-    if (!persona) throw new NotFoundException(`No existe la persona ${idPersona}`);
+    if (!persona)
+      throw new NotFoundException(`No existe la persona ${idPersona}`);
     if (!persona.activo) {
       throw new BadRequestException('La persona está dada de baja');
     }
@@ -113,7 +113,9 @@ export class DeclaracionesService {
       .getRepository(Conocimiento)
       .findOne({ where: { id: idConocimiento } });
     if (!conocimiento) {
-      throw new NotFoundException(`No existe el conocimiento ${idConocimiento}`);
+      throw new NotFoundException(
+        `No existe el conocimiento ${idConocimiento}`,
+      );
     }
     if (!conocimiento.activo) {
       throw new BadRequestException('El conocimiento está dado de baja');

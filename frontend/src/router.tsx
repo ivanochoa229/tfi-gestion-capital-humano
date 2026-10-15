@@ -40,7 +40,9 @@ export const router = createBrowserRouter([
       {
         path: 'conocimiento/mios',
         element: (
-          <RutaProtegida roles={['docente', 'jefe_catedra', 'jefatura_departamento']}>
+          <RutaProtegida
+            roles={['docente', 'jefe_catedra', 'jefatura_departamento']}
+          >
             <MisConocimientosPage />
           </RutaProtegida>
         ),

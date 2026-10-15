@@ -23,9 +23,12 @@ function crearEntorno(opciones: {
   conocimiento?: { activo: boolean } | null;
   fila?: Partial<ConocimientoPersona> | null;
 }) {
-  const persona = opciones.persona === undefined ? { activo: true } : opciones.persona;
+  const persona =
+    opciones.persona === undefined ? { activo: true } : opciones.persona;
   const conocimiento =
-    opciones.conocimiento === undefined ? { activo: true } : opciones.conocimiento;
+    opciones.conocimiento === undefined
+      ? { activo: true }
+      : opciones.conocimiento;
   const fila = opciones.fila ?? null;
   const repoFilas = {
     findOne: vi.fn(async () => (fila ? { ...fila } : null)),
@@ -66,7 +69,12 @@ function crearEntorno(opciones: {
 describe('DeclaracionesService.declarar', () => {
   it('guarda el nivel declarado con la fecha de hoy de la base', async () => {
     const { servicio, manager, referencia } = crearEntorno({});
-    const resultado = await servicio.declarar(5, 20, { idNivel: 2 }, docente(5));
+    const resultado = await servicio.declarar(
+      5,
+      20,
+      { idNivel: 2 },
+      docente(5),
+    );
     const insercion = manager.query.mock.calls.find(([sql]) =>
       String(sql).includes('INSERT INTO conocimiento_persona'),
     );
@@ -83,23 +91,47 @@ describe('DeclaracionesService.declarar', () => {
 
   it('solo la propia persona: otra persona o un usuario sin persona da 403', async () => {
     const { servicio, manager } = crearEntorno({});
-    await expect(servicio.declarar(6, 20, { idNivel: 2 }, docente(5))).rejects.toBeInstanceOf(ForbiddenException);
-    await expect(servicio.declarar(5, 20, { idNivel: 2 }, docente(null))).rejects.toBeInstanceOf(ForbiddenException);
+    await expect(
+      servicio.declarar(6, 20, { idNivel: 2 }, docente(5)),
+    ).rejects.toBeInstanceOf(ForbiddenException);
+    await expect(
+      servicio.declarar(5, 20, { idNivel: 2 }, docente(null)),
+    ).rejects.toBeInstanceOf(ForbiddenException);
     expect(manager.query).not.toHaveBeenCalled();
   });
 
   it('rechaza persona o conocimiento inexistentes (404) o dados de baja (400)', async () => {
     await expect(
-      crearEntorno({ persona: null }).servicio.declarar(5, 20, { idNivel: 2 }, docente(5)),
+      crearEntorno({ persona: null }).servicio.declarar(
+        5,
+        20,
+        { idNivel: 2 },
+        docente(5),
+      ),
     ).rejects.toBeInstanceOf(NotFoundException);
     await expect(
-      crearEntorno({ persona: { activo: false } }).servicio.declarar(5, 20, { idNivel: 2 }, docente(5)),
+      crearEntorno({ persona: { activo: false } }).servicio.declarar(
+        5,
+        20,
+        { idNivel: 2 },
+        docente(5),
+      ),
     ).rejects.toBeInstanceOf(BadRequestException);
     await expect(
-      crearEntorno({ conocimiento: null }).servicio.declarar(5, 20, { idNivel: 2 }, docente(5)),
+      crearEntorno({ conocimiento: null }).servicio.declarar(
+        5,
+        20,
+        { idNivel: 2 },
+        docente(5),
+      ),
     ).rejects.toBeInstanceOf(NotFoundException);
     await expect(
-      crearEntorno({ conocimiento: { activo: false } }).servicio.declarar(5, 20, { idNivel: 2 }, docente(5)),
+      crearEntorno({ conocimiento: { activo: false } }).servicio.declarar(
+        5,
+        20,
+        { idNivel: 2 },
+        docente(5),
+      ),
     ).rejects.toBeInstanceOf(BadRequestException);
   });
 });
@@ -110,7 +142,10 @@ describe('DeclaracionesService.retirar', () => {
       fila: { idNivelDeclarado: 2, idNivelAcreditado: null },
     });
     await servicio.retirar(5, 20, docente(5));
-    expect(repoFilas.delete).toHaveBeenCalledWith({ idPersona: 5, idConocimiento: 20 });
+    expect(repoFilas.delete).toHaveBeenCalledWith({
+      idPersona: 5,
+      idConocimiento: 20,
+    });
     expect(repoFilas.update).not.toHaveBeenCalled();
   });
 
@@ -131,7 +166,9 @@ describe('DeclaracionesService.retirar', () => {
       crearEntorno({ fila: null }).servicio.retirar(5, 20, docente(5)),
     ).rejects.toBeInstanceOf(NotFoundException);
     await expect(
-      crearEntorno({ fila: { idNivelDeclarado: null, idNivelAcreditado: 3 } }).servicio.retirar(5, 20, docente(5)),
+      crearEntorno({
+        fila: { idNivelDeclarado: null, idNivelAcreditado: 3 },
+      }).servicio.retirar(5, 20, docente(5)),
     ).rejects.toBeInstanceOf(NotFoundException);
     await expect(
       crearEntorno({}).servicio.retirar(6, 20, docente(5)),

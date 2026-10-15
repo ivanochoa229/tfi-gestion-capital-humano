@@ -64,7 +64,9 @@ export class AcreditacionesService {
         .getRepository(Conocimiento)
         .findOne({ where: { id: idConocimiento } });
       if (!conocimiento) {
-        throw new NotFoundException(`No existe el conocimiento ${idConocimiento}`);
+        throw new NotFoundException(
+          `No existe el conocimiento ${idConocimiento}`,
+        );
       }
       if (!conocimiento.activo) {
         throw new BadRequestException('El conocimiento está dado de baja');

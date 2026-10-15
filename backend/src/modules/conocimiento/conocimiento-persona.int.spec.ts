@@ -125,9 +125,23 @@ describe('Conocimiento de las personas (PostgreSQL real)', () => {
   });
 
   it('asegurar la fila crea una vez; repetirlo no cambia nada', async () => {
-    const parametros = [persona, conocimiento, basico, await dia(-5), evidencia, evaluador];
+    const parametros = [
+      persona,
+      conocimiento,
+      basico,
+      await dia(-5),
+      evidencia,
+      evaluador,
+    ];
     await sql(SQL_ASEGURAR_FILA, parametros);
-    await sql(SQL_ASEGURAR_FILA, [persona, conocimiento, avanzado, await dia(-1), evidencia, evaluador]);
+    await sql(SQL_ASEGURAR_FILA, [
+      persona,
+      conocimiento,
+      avanzado,
+      await dia(-1),
+      evidencia,
+      evaluador,
+    ]);
     const filas = await sql<{ n: number }[]>(
       `SELECT id_nivel_acreditado AS n FROM conocimiento_persona`,
     );
@@ -143,7 +157,14 @@ describe('Conocimiento de las personas (PostgreSQL real)', () => {
       )[0];
 
     beforeEach(async () => {
-      await sql(SQL_ASEGURAR_FILA, [persona, conocimiento, basico, await dia(-10), evidencia, evaluador]);
+      await sql(SQL_ASEGURAR_FILA, [
+        persona,
+        conocimiento,
+        basico,
+        await dia(-10),
+        evidencia,
+        evaluador,
+      ]);
       await acreditacion(await dia(-10), basico);
     });
 

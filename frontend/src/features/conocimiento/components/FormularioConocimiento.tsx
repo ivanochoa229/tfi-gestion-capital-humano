@@ -54,7 +54,9 @@ export function FormularioConocimiento({ conocimiento, onCerrar }: Props) {
     resolver: zodResolver(esquema),
     defaultValues: {
       denominacion: conocimiento?.denominacion ?? '',
-      idTipoConocimiento: conocimiento ? String(conocimiento.idTipoConocimiento) : '',
+      idTipoConocimiento: conocimiento
+        ? String(conocimiento.idTipoConocimiento)
+        : '',
       idAreaTematica: conocimiento ? String(conocimiento.idAreaTematica) : '',
       descripcion: conocimiento?.descripcion ?? '',
     },
@@ -102,7 +104,9 @@ export function FormularioConocimiento({ conocimiento, onCerrar }: Props) {
             <TextField
               select
               label="Tipo"
-              defaultValue={conocimiento ? String(conocimiento.idTipoConocimiento) : ''}
+              defaultValue={
+                conocimiento ? String(conocimiento.idTipoConocimiento) : ''
+              }
               {...register('idTipoConocimiento')}
               error={!!errors.idTipoConocimiento}
               helperText={errors.idTipoConocimiento?.message}
@@ -116,7 +120,9 @@ export function FormularioConocimiento({ conocimiento, onCerrar }: Props) {
             <TextField
               select
               label="Área temática"
-              defaultValue={conocimiento ? String(conocimiento.idAreaTematica) : ''}
+              defaultValue={
+                conocimiento ? String(conocimiento.idAreaTematica) : ''
+              }
               {...register('idAreaTematica')}
               error={!!errors.idAreaTematica}
               helperText={errors.idAreaTematica?.message}

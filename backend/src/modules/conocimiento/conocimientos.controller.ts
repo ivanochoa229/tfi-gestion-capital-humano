@@ -60,7 +60,9 @@ export class ConocimientosController {
   @Get('mios')
   @Roles(...ROLES_DECLARANTES)
   @ApiOkResponse({ type: MiConocimientoDto, isArray: true })
-  @ApiBadRequestResponse({ description: 'El usuario no tiene persona vinculada' })
+  @ApiBadRequestResponse({
+    description: 'El usuario no tiene persona vinculada',
+  })
   mios(@UsuarioActual() sesion: SesionUsuario): Promise<MiConocimientoDto[]> {
     return this.perfil.mios(sesion);
   }
@@ -77,8 +79,12 @@ export class ConocimientosController {
   @Post()
   @Roles(ROLES.analistaPuestos)
   @ApiCreatedResponse({ type: ConocimientoDto })
-  @ApiBadRequestResponse({ description: 'Tipo o área inexistentes o inactivos' })
-  @ApiConflictResponse({ description: 'Ya existe un conocimiento activo igual del mismo tipo' })
+  @ApiBadRequestResponse({
+    description: 'Tipo o área inexistentes o inactivos',
+  })
+  @ApiConflictResponse({
+    description: 'Ya existe un conocimiento activo igual del mismo tipo',
+  })
   crear(@Body() dto: CrearConocimientoDto): Promise<ConocimientoDto> {
     return this.catalogo.crear(dto);
   }
@@ -120,7 +126,9 @@ export class ConocimientosController {
   @Roles(ROLES.analistaPuestos)
   @ApiOkResponse({ type: ResultadoFusionDto })
   @ApiNotFoundResponse({ description: 'Origen o destino inexistentes' })
-  @ApiBadRequestResponse({ description: 'Inactivos, de distinto tipo o el mismo' })
+  @ApiBadRequestResponse({
+    description: 'Inactivos, de distinto tipo o el mismo',
+  })
   fusionar(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: FusionarConocimientoDto,

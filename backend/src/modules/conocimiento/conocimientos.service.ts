@@ -53,9 +53,7 @@ export class ConocimientosService {
           ? { idAreaTematica: filtro.idArea }
           : {}),
         ...(filtro.activo !== undefined ? { activo: filtro.activo } : {}),
-        ...(q
-          ? { denominacionNormalizada: ILike(`%${escaparLike(q)}%`) }
-          : {}),
+        ...(q ? { denominacionNormalizada: ILike(`%${escaparLike(q)}%`) } : {}),
       },
       order: { denominacion: 'ASC' },
     });
@@ -134,7 +132,9 @@ export class ConocimientosService {
         [id],
       );
       if (usos.length > 0) {
-        const nombres = usos.slice(0, MAX_PUESTOS_EN_MENSAJE).map((u) => u.codigo);
+        const nombres = usos
+          .slice(0, MAX_PUESTOS_EN_MENSAJE)
+          .map((u) => u.codigo);
         const resto = usos.length - nombres.length;
         throw new ConflictException(
           `No se puede dar de baja "${actual.denominacion}": lo piden los puestos ${nombres.join(', ')}${resto > 0 ? ` y ${resto} más` : ''}`,
@@ -149,7 +149,10 @@ export class ConocimientosService {
       const repo = manager.getRepository(Conocimiento);
       const actual = await this.exigir(repo, id);
       if (actual.activo) return aConocimientoDto(actual);
-      await this.validarDominios(actual.idTipoConocimiento, actual.idAreaTematica);
+      await this.validarDominios(
+        actual.idTipoConocimiento,
+        actual.idAreaTematica,
+      );
       await this.exigirSinDuplicado(
         repo,
         actual.idTipoConocimiento,

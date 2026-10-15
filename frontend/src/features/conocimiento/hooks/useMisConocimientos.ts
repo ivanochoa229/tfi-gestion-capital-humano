@@ -12,7 +12,8 @@ export function useMisConocimientos(habilitado: boolean) {
     enabled: habilitado,
     queryFn: async () => {
       const { data, error } = await api.GET('/api/conocimientos/mios');
-      if (error || !data) throw new Error('No se pudieron cargar tus conocimientos');
+      if (error || !data)
+        throw new Error('No se pudieron cargar tus conocimientos');
       return data;
     },
   });
@@ -29,7 +30,9 @@ export function useDeclarar() {
       const { data, error } = await api.PUT(
         '/api/personas/{idPersona}/conocimientos/{idConocimiento}/declaracion',
         {
-          params: { path: { idPersona: a.idPersona, idConocimiento: a.idConocimiento } },
+          params: {
+            path: { idPersona: a.idPersona, idConocimiento: a.idConocimiento },
+          },
           body: { idNivel: a.idNivel },
         },
       );

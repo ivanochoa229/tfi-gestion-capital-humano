@@ -12,7 +12,10 @@ import { useState } from 'react';
 import { PaginaEnConstruccion } from '../../../components/PaginaEnConstruccion';
 import { useValoresReferencia } from '../../admin/hooks/useValoresReferencia';
 import { AcreditarDialog } from '../components/AcreditarDialog';
-import { usePendientesAcreditacion, type Pendiente } from '../hooks/useAcreditaciones';
+import {
+  usePendientesAcreditacion,
+  type Pendiente,
+} from '../hooks/useAcreditaciones';
 
 /** Lo que las personas de tu equipo declararon y todavía falta acreditar. */
 export function PendientesAcreditacionPage() {
@@ -20,7 +23,9 @@ export function PendientesAcreditacionPage() {
   const { data: niveles } = useValoresReferencia('nivel-dominio', true);
   const [elegido, setElegido] = useState<Pendiente>();
   const nombre = (id: number | null) =>
-    id === null ? '—' : (niveles?.find((n) => n.id === id)?.denominacion ?? String(id));
+    id === null
+      ? '—'
+      : (niveles?.find((n) => n.id === id)?.denominacion ?? String(id));
 
   return (
     <PaginaEnConstruccion
@@ -29,7 +34,9 @@ export function PendientesAcreditacionPage() {
     >
       {isLoading && <CircularProgress aria-label="Cargando" />}
       {isError && <Alert severity="error">No se pudo cargar la bandeja.</Alert>}
-      {data && data.length === 0 && <Alert severity="success">No hay nada pendiente.</Alert>}
+      {data && data.length === 0 && (
+        <Alert severity="success">No hay nada pendiente.</Alert>
+      )}
       {data && data.length > 0 && (
         <Table size="small">
           <TableHead>
@@ -66,7 +73,10 @@ export function PendientesAcreditacionPage() {
         <AcreditarDialog
           idPersona={elegido.idPersona}
           nombrePersona={`${elegido.apellido}, ${elegido.nombre}`}
-          conocimiento={{ id: elegido.idConocimiento, denominacion: elegido.denominacion }}
+          conocimiento={{
+            id: elegido.idConocimiento,
+            denominacion: elegido.denominacion,
+          }}
           onCerrar={() => setElegido(undefined)}
         />
       )}

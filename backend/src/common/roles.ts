@@ -58,4 +58,3 @@ export const ROLES_LECTORES_DE_PERFIL: CodigoRol[] = [
   ROLES.jefeCatedra,
   ROLES.docente,
 ];
-

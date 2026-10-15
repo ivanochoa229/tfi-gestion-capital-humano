@@ -11,10 +11,14 @@ export function useRequisitos(idPuesto: number | undefined) {
     queryKey: ['requisitos', idPuesto],
     enabled: idPuesto !== undefined,
     queryFn: async () => {
-      const { data, error } = await api.GET('/api/puestos/{idPuesto}/requisitos', {
-        params: { path: { idPuesto: idPuesto as number } },
-      });
-      if (error || !data) throw new Error('No se pudieron cargar los requisitos');
+      const { data, error } = await api.GET(
+        '/api/puestos/{idPuesto}/requisitos',
+        {
+          params: { path: { idPuesto: idPuesto as number } },
+        },
+      );
+      if (error || !data)
+        throw new Error('No se pudieron cargar los requisitos');
       return data;
     },
   });
@@ -32,7 +36,9 @@ export function useGuardarRequisito() {
       const { data, error } = await api.PUT(
         '/api/puestos/{idPuesto}/requisitos/{idConocimiento}',
         {
-          params: { path: { idPuesto: a.idPuesto, idConocimiento: a.idConocimiento } },
+          params: {
+            path: { idPuesto: a.idPuesto, idConocimiento: a.idConocimiento },
+          },
           body: { idNivel: a.idNivel, esExcluyente: a.esExcluyente },
         },
       );
@@ -64,10 +70,13 @@ export function useCopiarRequisitos() {
       idPuestoDestino: number;
       idPuestoOrigen: number;
     }): Promise<ResultadoCopia> => {
-      const { data, error } = await api.POST('/api/puestos/{idPuesto}/requisitos/copiar', {
-        params: { path: { idPuesto: a.idPuestoDestino } },
-        body: { idPuestoOrigen: a.idPuestoOrigen },
-      });
+      const { data, error } = await api.POST(
+        '/api/puestos/{idPuesto}/requisitos/copiar',
+        {
+          params: { path: { idPuesto: a.idPuestoDestino } },
+          body: { idPuestoOrigen: a.idPuestoOrigen },
+        },
+      );
       if (error || !data) throw new Error(mensajeError(error));
       return data;
     },

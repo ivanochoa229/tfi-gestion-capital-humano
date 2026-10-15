@@ -1,4 +1,4 @@
-Estado: Propuesta | Fecha: 2026-10-15 | Autor: IvanOchoa229
+Estado: Implementada | Fecha: 2026-10-15 | Autor: IvanOchoa229
 
 # Conocimiento: catálogo, requisitos y conocimiento de las personas
 

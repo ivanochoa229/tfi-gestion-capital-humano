@@ -17,10 +17,17 @@ describe('combinarRequisitos', () => {
   it('devuelve un conocimiento una sola vez aunque lo pidan varios puestos', () => {
     const resultado = combinarRequisitos([
       fila({ idPuesto: 10, codigoPuesto: 'P-0010' }),
-      fila({ idPuesto: 11, codigoPuesto: 'P-0011', denominacionPuesto: 'Auxiliar' }),
+      fila({
+        idPuesto: 11,
+        codigoPuesto: 'P-0011',
+        denominacionPuesto: 'Auxiliar',
+      }),
     ]);
     expect(resultado).toHaveLength(1);
-    expect(resultado[0].puestos.map((p) => p.codigo)).toEqual(['P-0010', 'P-0011']);
+    expect(resultado[0].puestos.map((p) => p.codigo)).toEqual([
+      'P-0010',
+      'P-0011',
+    ]);
   });
 
   it('queda con el nivel más exigente por orden, no por id', () => {

@@ -54,7 +54,11 @@ export class AcreditarDto {
   @Max(MAX_INT4)
   idNivel: number;
 
-  @ApiProperty({ format: 'date', example: '2026-06-15', description: 'No futura' })
+  @ApiProperty({
+    format: 'date',
+    example: '2026-06-15',
+    description: 'No futura',
+  })
   @FechaIso()
   fechaEvaluacion: string;
 
@@ -141,7 +145,8 @@ export class MiConocimientoDto {
   @ApiProperty({
     nullable: true,
     type: Number,
-    description: 'El más exigente entre los puestos que ocupa; null si ninguno lo pide',
+    description:
+      'El más exigente entre los puestos que ocupa; null si ninguno lo pide',
   })
   idNivelRequerido: number | null;
 
@@ -192,4 +197,3 @@ export class PendienteAcreditacionDto {
   @ApiProperty({ format: 'date' })
   fechaDeclaracion: string;
 }
-

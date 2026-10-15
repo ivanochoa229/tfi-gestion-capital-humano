@@ -15,7 +15,9 @@ describe('enTransaccionDeConocimiento', () => {
       }),
     };
     const repositorio = {
-      manager: { transaction: async (t: (m: unknown) => unknown) => t(manager) },
+      manager: {
+        transaction: async (t: (m: unknown) => unknown) => t(manager),
+      },
     };
 
     const resultado = await enTransaccionDeConocimiento(

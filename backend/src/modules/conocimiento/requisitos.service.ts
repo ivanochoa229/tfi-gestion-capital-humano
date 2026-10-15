@@ -62,7 +62,10 @@ export class RequisitosService {
   ): Promise<RequisitoDto> {
     await this.referencia.validarActivo(DOMINIO_NIVEL_DOMINIO, dto.idNivel);
     return enTransaccionDeConocimiento(this.requisitos, async (manager) => {
-      const puesto = await this.exigirPuesto(manager.getRepository(Puesto), idPuesto);
+      const puesto = await this.exigirPuesto(
+        manager.getRepository(Puesto),
+        idPuesto,
+      );
       this.exigirPuestoActivo(puesto, idPuesto);
       const conocimiento = await manager
         .getRepository(Conocimiento)
@@ -85,7 +88,9 @@ export class RequisitosService {
   async quitar(idPuesto: number, idConocimiento: number): Promise<void> {
     await enTransaccionDeConocimiento(this.requisitos, async (manager) => {
       const repo = manager.getRepository(RequisitoPuesto);
-      const actual = await repo.findOne({ where: { idPuesto, idConocimiento } });
+      const actual = await repo.findOne({
+        where: { idPuesto, idConocimiento },
+      });
       if (!actual) {
         throw new NotFoundException(
           `El puesto ${idPuesto} no tiene ese requisito`,
@@ -101,7 +106,9 @@ export class RequisitosService {
     dto: CopiarRequisitosDto,
   ): Promise<ResultadoCopiaDto> {
     if (dto.idPuestoOrigen === idPuestoDestino) {
-      throw new BadRequestException('El puesto de origen y el de destino son el mismo');
+      throw new BadRequestException(
+        'El puesto de origen y el de destino son el mismo',
+      );
     }
     return enTransaccionDeConocimiento(this.requisitos, async (manager) => {
       const puestos = manager.getRepository(Puesto);

@@ -33,15 +33,22 @@ function crearEntorno(
     acceso?: () => Promise<void>;
   } = {},
 ) {
-  const persona = opciones.persona === undefined ? { activo: true } : opciones.persona;
+  const persona =
+    opciones.persona === undefined ? { activo: true } : opciones.persona;
   const conocimiento =
-    opciones.conocimiento === undefined ? { activo: true } : opciones.conocimiento;
+    opciones.conocimiento === undefined
+      ? { activo: true }
+      : opciones.conocimiento;
   const guardadas: Partial<Acreditacion>[] = [];
   const repoAcreditaciones = {
     create: vi.fn((datos: Partial<Acreditacion>) => ({ ...datos })),
     save: vi.fn(async (datos: Partial<Acreditacion>) => {
       guardadas.push(datos);
-      return { ...datos, id: 55, registradaEn: new Date('2026-06-15T12:00:00Z') };
+      return {
+        ...datos,
+        id: 55,
+        registradaEn: new Date('2026-06-15T12:00:00Z'),
+      };
     }),
   };
   const consultas: [string, unknown[] | undefined][] = [];
@@ -73,7 +80,8 @@ function crearEntorno(
 
 describe('AcreditacionesService.acreditar', () => {
   it('registra la acreditación con el evaluador de la sesión y refleja la vigente', async () => {
-    const { servicio, consultas, guardadas, referencia, acceso } = crearEntorno();
+    const { servicio, consultas, guardadas, referencia, acceso } =
+      crearEntorno();
 
     const resultado = await servicio.acreditar(5, 20, dto, jefe);
 
@@ -95,9 +103,16 @@ describe('AcreditacionesService.acreditar', () => {
       sqls.indexOf(SQL_REFLEJAR_VIGENTE),
     );
     expect(consultas.find(([sql]) => sql === SQL_ASEGURAR_FILA)?.[1]).toEqual([
-      5, 20, 3, '2026-06-01', 2, 7,
+      5,
+      20,
+      3,
+      '2026-06-01',
+      2,
+      7,
     ]);
-    expect(consultas.find(([sql]) => sql === SQL_REFLEJAR_VIGENTE)?.[1]).toEqual([5, 20]);
+    expect(
+      consultas.find(([sql]) => sql === SQL_REFLEJAR_VIGENTE)?.[1],
+    ).toEqual([5, 20]);
     expect(resultado).toMatchObject({
       id: 55,
       idEvaluador: 7,
@@ -108,28 +123,60 @@ describe('AcreditacionesService.acreditar', () => {
   it('no deja pasar nada si el acceso lo rechaza', async () => {
     const { servicio, consultas, guardadas } = crearEntorno({
       acceso: async () => {
-        throw new ForbiddenException('No podés acreditar tus propios conocimientos');
+        throw new ForbiddenException(
+          'No podés acreditar tus propios conocimientos',
+        );
       },
     });
-    await expect(servicio.acreditar(7, 20, dto, jefe)).rejects.toBeInstanceOf(ForbiddenException);
+    await expect(servicio.acreditar(7, 20, dto, jefe)).rejects.toBeInstanceOf(
+      ForbiddenException,
+    );
     expect(consultas).toHaveLength(0);
     expect(guardadas).toHaveLength(0);
   });
 
   it('rechaza una fecha de evaluación futura (la de hoy sí se acepta)', async () => {
     await expect(
-      crearEntorno().servicio.acreditar(5, 20, { ...dto, fechaEvaluacion: '2026-06-16' }, jefe),
+      crearEntorno().servicio.acreditar(
+        5,
+        20,
+        { ...dto, fechaEvaluacion: '2026-06-16' },
+        jefe,
+      ),
     ).rejects.toBeInstanceOf(BadRequestException);
     await expect(
-      crearEntorno().servicio.acreditar(5, 20, { ...dto, fechaEvaluacion: HOY }, jefe),
+      crearEntorno().servicio.acreditar(
+        5,
+        20,
+        { ...dto, fechaEvaluacion: HOY },
+        jefe,
+      ),
     ).resolves.toBeDefined();
   });
 
   it('rechaza persona o conocimiento inexistentes (404) o dados de baja (400)', async () => {
-    await expect(crearEntorno({ persona: null }).servicio.acreditar(5, 20, dto, jefe)).rejects.toBeInstanceOf(NotFoundException);
-    await expect(crearEntorno({ persona: { activo: false } }).servicio.acreditar(5, 20, dto, jefe)).rejects.toBeInstanceOf(BadRequestException);
-    await expect(crearEntorno({ conocimiento: null }).servicio.acreditar(5, 20, dto, jefe)).rejects.toBeInstanceOf(NotFoundException);
-    await expect(crearEntorno({ conocimiento: { activo: false } }).servicio.acreditar(5, 20, dto, jefe)).rejects.toBeInstanceOf(BadRequestException);
+    await expect(
+      crearEntorno({ persona: null }).servicio.acreditar(5, 20, dto, jefe),
+    ).rejects.toBeInstanceOf(NotFoundException);
+    await expect(
+      crearEntorno({ persona: { activo: false } }).servicio.acreditar(
+        5,
+        20,
+        dto,
+        jefe,
+      ),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    await expect(
+      crearEntorno({ conocimiento: null }).servicio.acreditar(5, 20, dto, jefe),
+    ).rejects.toBeInstanceOf(NotFoundException);
+    await expect(
+      crearEntorno({ conocimiento: { activo: false } }).servicio.acreditar(
+        5,
+        20,
+        dto,
+        jefe,
+      ),
+    ).rejects.toBeInstanceOf(BadRequestException);
   });
 
   it('las observaciones son opcionales', async () => {

@@ -188,10 +188,16 @@ export function TablaPuestos({
                     <TableCell align="right">
                       {puedeVerOcupantes && (
                         <>
-                          <Button size="small" onClick={() => setVerOcupantes(p)}>
+                          <Button
+                            size="small"
+                            onClick={() => setVerOcupantes(p)}
+                          >
                             Ocupantes
                           </Button>
-                          <Button size="small" onClick={() => setVerRequisitos(p)}>
+                          <Button
+                            size="small"
+                            onClick={() => setVerRequisitos(p)}
+                          >
                             Requisitos
                           </Button>
                         </>

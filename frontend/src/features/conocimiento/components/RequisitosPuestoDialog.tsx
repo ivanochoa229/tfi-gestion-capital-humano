@@ -42,7 +42,11 @@ interface Props {
 }
 
 /** Conocimientos que exige el puesto, con nivel y carácter (RF09). */
-export function RequisitosPuestoDialog({ puesto, puedeEditar, onCerrar }: Props) {
+export function RequisitosPuestoDialog({
+  puesto,
+  puedeEditar,
+  onCerrar,
+}: Props) {
   const { data: requisitos, isLoading, isError } = useRequisitos(puesto.id);
   const { data: niveles } = useValoresReferencia('nivel-dominio', false);
   const { data: catalogo } = useConocimientos({ activo: true });
@@ -70,7 +74,9 @@ export function RequisitosPuestoDialog({ puesto, puedeEditar, onCerrar }: Props)
 
   const yaPedidos = new Set((requisitos ?? []).map((r) => r.idConocimiento));
   const ofrecidos = (catalogo ?? []).filter((c) => !yaPedidos.has(c.id));
-  const otrosPuestos = (puestos ?? []).filter((p) => p.activo && p.id !== puesto.id);
+  const otrosPuestos = (puestos ?? []).filter(
+    (p) => p.activo && p.id !== puesto.id,
+  );
   const ordenados = [...(niveles ?? [])].sort(
     (a, b) => (a.orden ?? a.id) - (b.orden ?? b.id),
   );
@@ -97,9 +103,15 @@ export function RequisitosPuestoDialog({ puesto, puedeEditar, onCerrar }: Props)
             </Alert>
           )}
           {isLoading && <CircularProgress aria-label="Cargando" />}
-          {isError && <Alert severity="error">No se pudieron cargar los requisitos.</Alert>}
+          {isError && (
+            <Alert severity="error">
+              No se pudieron cargar los requisitos.
+            </Alert>
+          )}
           {requisitos && requisitos.length === 0 && (
-            <Alert severity="info">Este puesto todavía no tiene requisitos.</Alert>
+            <Alert severity="info">
+              Este puesto todavía no tiene requisitos.
+            </Alert>
           )}
           {requisitos && requisitos.length > 0 && (
             <Table size="small">
@@ -139,15 +151,19 @@ export function RequisitosPuestoDialog({ puesto, puedeEditar, onCerrar }: Props)
                           ))}
                         </TextField>
                       ) : (
-                        (niveles?.find((n) => n.id === r.idNivelRequerido)?.denominacion ??
-                        r.idNivelRequerido)
+                        (niveles?.find((n) => n.id === r.idNivelRequerido)
+                          ?.denominacion ?? r.idNivelRequerido)
                       )}
                     </TableCell>
                     <TableCell>
                       <Switch
                         checked={r.esExcluyente}
                         disabled={!puedeEditar}
-                        slotProps={{ input: { 'aria-label': `Excluyente: ${r.denominacion}` } }}
+                        slotProps={{
+                          input: {
+                            'aria-label': `Excluyente: ${r.denominacion}`,
+                          },
+                        }}
                         onChange={(e) =>
                           envolver(() =>
                             guardar.mutateAsync({

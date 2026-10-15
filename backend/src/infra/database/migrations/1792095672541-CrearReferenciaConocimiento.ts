@@ -21,9 +21,7 @@ const TIPOS_EVIDENCIA: Valor[] = [
   ['entrevista', 'Entrevista'],
 ];
 
-export class CrearReferenciaConocimiento1792095672541
-  implements MigrationInterface
-{
+export class CrearReferenciaConocimiento1792095672541 implements MigrationInterface {
   name = 'CrearReferenciaConocimiento1792095672541';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
