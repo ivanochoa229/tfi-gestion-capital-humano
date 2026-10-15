@@ -1368,7 +1368,7 @@ git commit -m "Implementar el catálogo de conocimientos con control de duplicad
 - Consumes: `RequisitoPuesto`, `Conocimiento` (tarea 3), `Puesto` de `estructura/entities/puesto.entity.js`, `enTransaccionDeConocimiento`, `DOMINIO_NIVEL_DOMINIO`.
 - Produces: `RequisitosService` con `listar(idPuesto: number): Promise<RequisitoDto[]>`, `guardar(idPuesto: number, idConocimiento: number, dto: GuardarRequisitoDto): Promise<RequisitoDto>`, `quitar(idPuesto: number, idConocimiento: number): Promise<void>`, `copiar(idPuestoDestino: number, dto: CopiarRequisitosDto): Promise<ResultadoCopiaDto>`; DTOs `RequisitoDto { idPuesto, idConocimiento, denominacion, idTipoConocimiento, idNivelRequerido, esExcluyente }`, `GuardarRequisitoDto { idNivel, esExcluyente }`, `CopiarRequisitosDto { idPuestoOrigen }`, `ResultadoCopiaDto { copiados: number, omitidos: { idConocimiento, denominacion }[] }`.
 
-- [ ] **Paso 1: Crear los DTOs**
+- [x] **Paso 1: Crear los DTOs**
 
 `dto/requisitos.dto.ts`:
 
@@ -1439,7 +1439,7 @@ export class ResultadoCopiaDto {
 }
 ```
 
-- [ ] **Paso 2: Escribir los tests**
+- [x] **Paso 2: Escribir los tests**
 
 `requisitos.service.spec.ts`:
 
@@ -1642,12 +1642,12 @@ describe('RequisitosService.listar', () => {
 });
 ```
 
-- [ ] **Paso 3: Verificar que falla**
+- [x] **Paso 3: Verificar que falla**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento/requisitos.service.spec.ts`
 Expected: FAIL (no se encuentra `./requisitos.service.js`).
 
-- [ ] **Paso 4: Implementar el servicio**
+- [x] **Paso 4: Implementar el servicio**
 
 `requisitos.service.ts`:
 
@@ -1812,7 +1812,7 @@ export class RequisitosService {
 }
 ```
 
-- [ ] **Paso 5: Verificar que pasa y commitear**
+- [x] **Paso 5: Verificar que pasa y commitear**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento/requisitos.service.spec.ts`
 Expected: PASS.
