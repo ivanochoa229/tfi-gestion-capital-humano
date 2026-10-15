@@ -749,7 +749,7 @@ git commit -m "Agregar las tablas conocimiento y requisito_puesto con su índice
 - Consumes: `Conocimiento` (tarea 3), `normalizarDenominacion`, `enTransaccionDeConocimiento`, constantes (tarea 2), `ReferenciaService.validarActivo(slug, id)`, `escaparLike` de `common/like.ts`.
 - Produces: `ConocimientosService` con `listar(filtro: FiltroConocimientosDto): Promise<ConocimientoDto[]>`, `crear(dto: CrearConocimientoDto)`, `actualizar(id: number, dto: ActualizarConocimientoDto)`, `baja(id)`, `reactivar(id)` (todos devuelven `ConocimientoDto`); DTOs `CrearConocimientoDto`, `ActualizarConocimientoDto`, `FiltroConocimientosDto`, `ConocimientoDto`, `FusionarConocimientoDto`, `ResultadoFusionDto` (la fusión se implementa en la tarea 7); `aConocimientoDto(c: Conocimiento): ConocimientoDto`.
 
-- [ ] **Paso 1: Crear los DTOs y el mapper**
+- [x] **Paso 1: Crear los DTOs y el mapper**
 
 `dto/trim.ts`:
 
@@ -916,7 +916,7 @@ export function aConocimientoDto(c: Conocimiento): ConocimientoDto {
 }
 ```
 
-- [ ] **Paso 2: Escribir los tests del servicio**
+- [x] **Paso 2: Escribir los tests del servicio**
 
 `conocimientos.service.spec.ts`:
 
@@ -1139,12 +1139,12 @@ describe('validaciones de dominio', () => {
 });
 ```
 
-- [ ] **Paso 3: Verificar que falla**
+- [x] **Paso 3: Verificar que falla**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento/conocimientos.service.spec.ts`
 Expected: FAIL (no se encuentra `./conocimientos.service.js`).
 
-- [ ] **Paso 4: Implementar el servicio**
+- [x] **Paso 4: Implementar el servicio**
 
 `conocimientos.service.ts`:
 
@@ -1343,12 +1343,12 @@ export class ConocimientosService {
 }
 ```
 
-- [ ] **Paso 5: Verificar que pasa**
+- [x] **Paso 5: Verificar que pasa**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento/conocimientos.service.spec.ts`
 Expected: PASS. Si el test de `listar` falla por la forma interna de `ILike` (`_value`), ajustar solo esa aserción para leer el valor del operador sin cambiar el servicio.
 
-- [ ] **Paso 6: Commit**
+- [x] **Paso 6: Commit**
 
 ```bash
 git add backend/src/modules/conocimiento
