@@ -5314,7 +5314,7 @@ git commit -m "Exponer el catálogo, los requisitos y el conocimiento de las per
 - Consumes: tipos generados (`ConocimientoDto`, `CrearConocimientoDto`, `ActualizarConocimientoDto`, `FusionarConocimientoDto`, `ResultadoFusionDto`), `useValoresReferencia(dominio, incluirInactivos)`, `mensajeError`, `useSesion()` (`rol`, `idPersona`).
 - Produces: `useConocimientos(filtro)`, `useCrearConocimiento()`, `useActualizarConocimiento()`, `useCambiarEstadoConocimiento()`, `useFusionarConocimientos()`, `invalidarConocimiento(cliente)` (los demás hooks del feature la reutilizan); tipos `Conocimiento` y `FiltroConocimientos`.
 
-- [ ] **Paso 1: Crear los hooks**
+- [x] **Paso 1: Crear los hooks**
 
 `hooks/useConocimientos.ts`:
 
@@ -5451,7 +5451,7 @@ export function useFusionarConocimientos() {
 }
 ```
 
-- [ ] **Paso 2: Crear el formulario de alta y edición**
+- [x] **Paso 2: Crear el formulario de alta y edición**
 
 `components/FormularioConocimiento.tsx`:
 
@@ -5607,7 +5607,7 @@ export function FormularioConocimiento({ conocimiento, onCerrar }: Props) {
 }
 ```
 
-- [ ] **Paso 3: Crear el diálogo de fusión**
+- [x] **Paso 3: Crear el diálogo de fusión**
 
 `components/FusionarDialog.tsx`:
 
@@ -5732,7 +5732,7 @@ export function FusionarDialog({ origen, onCerrar }: Props) {
 }
 ```
 
-- [ ] **Paso 4: Reemplazar la página**
+- [x] **Paso 4: Reemplazar la página**
 
 `pages/ConocimientoPage.tsx`:
 
@@ -5939,7 +5939,7 @@ export function ConocimientoPage() {
 }
 ```
 
-- [ ] **Paso 5: Ajustar el menú**
+- [x] **Paso 5: Ajustar el menú**
 
 En `auth/permisos.ts`, reemplazar la entrada de `/conocimiento` por una que la vean todos los roles menos el docente (el docente usa «Mis conocimientos», que se agrega en la tarea 14):
 
@@ -5958,14 +5958,14 @@ En `auth/permisos.ts`, reemplazar la entrada de `/conocimiento` por una que la v
   },
 ```
 
-- [ ] **Paso 6: Verificar**
+- [x] **Paso 6: Verificar**
 
 Run: `cd frontend && npm run lint && npm run build`
 Expected: sin errores de tipos ni de lint. Si `api.POST(ruta, …)` con la ruta elegida en una variable no tipa, separar `baja` y `reactivar` en dos llamadas explícitas.
 
 Escenario manual (`docker compose up`, entrar como `analista_puestos`): crear «Programación»; intentar crear «  programacion » del mismo tipo (409 con el mensaje que nombra al existente); crear «Año» y «Ano» (ambos se aceptan); fusionar un duplicado; dar de baja otro; con un rol que no sea analista, los botones de escritura no aparecen.
 
-- [ ] **Paso 7: Commit**
+- [x] **Paso 7: Commit**
 
 ```bash
 git add frontend/src

@@ -27,8 +27,15 @@ export const SECCIONES: Seccion[] = [
   { ruta: '/personas/yo', nombre: 'Mi ficha', roles: ['docente'] },
   {
     ruta: '/conocimiento',
-    nombre: 'Conocimiento',
-    roles: ['analista_puestos', 'jefe_catedra', 'docente'],
+    nombre: 'Catálogo de conocimientos',
+    roles: [
+      'analista_puestos',
+      'recursos_humanos',
+      'autoridad',
+      'jefatura_departamento',
+      'jefe_catedra',
+      'administrador',
+    ],
   },
   {
     ruta: '/criticidad',
