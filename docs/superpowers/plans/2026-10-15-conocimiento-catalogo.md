@@ -4865,7 +4865,7 @@ git commit -m "Agregar las lecturas del perfil de conocimiento, Mis conocimiento
 - Consumes: todos los servicios de las tareas 4 a 10 y los grupos de roles de la tarea 8.
 - Produces: los endpoints de la spec: `GET|POST /conocimientos`, `PATCH /conocimientos/:id`, `POST /conocimientos/:id/{baja,reactivar,fusionar}`, `GET /conocimientos/{mios,pendientes-acreditacion}`; `GET /puestos/:idPuesto/requisitos`, `PUT|DELETE /puestos/:idPuesto/requisitos/:idConocimiento`, `POST /puestos/:idPuesto/requisitos/copiar`; `GET /personas/:idPersona/conocimientos`, `GET …/:idConocimiento/acreditaciones`, `PUT|DELETE …/:idConocimiento/declaracion`, `POST …/:idConocimiento/acreditaciones`.
 
-- [ ] **Paso 1: Crear el controller del catálogo**
+- [x] **Paso 1: Crear el controller del catálogo**
 
 `conocimientos.controller.ts`:
 
@@ -5002,7 +5002,7 @@ export class ConocimientosController {
 }
 ```
 
-- [ ] **Paso 2: Crear el controller de requisitos**
+- [x] **Paso 2: Crear el controller de requisitos**
 
 `requisitos.controller.ts`:
 
@@ -5091,7 +5091,7 @@ export class RequisitosController {
 }
 ```
 
-- [ ] **Paso 3: Crear el controller del perfil de la persona**
+- [x] **Paso 3: Crear el controller del perfil de la persona**
 
 `perfil-conocimiento.controller.ts`:
 
@@ -5212,7 +5212,7 @@ export class PerfilConocimientoController {
 }
 ```
 
-- [ ] **Paso 4: Registrar todo en el módulo**
+- [x] **Paso 4: Registrar todo en el módulo**
 
 Reemplazar `conocimiento.module.ts`:
 
@@ -5272,12 +5272,12 @@ import { RequisitosService } from './requisitos.service.js';
 export class ConocimientoModule {}
 ```
 
-- [ ] **Paso 5: Verificar que el backend completo pasa**
+- [x] **Paso 5: Verificar que el backend completo pasa**
 
 Run: `cd backend && npm run lint && npm test`
 Expected: lint sin errores; todos los tests PASS, incluida `cobertura-roles.spec.ts` sobre los tres controllers nuevos (cada ruta con `@Roles`).
 
-- [ ] **Paso 6: Levantar la API y comprobar las rutas**
+- [x] **Paso 6: Levantar la API y comprobar las rutas**
 
 Run: `docker compose up -d --build backend`, esperar a que arranque y:
 
@@ -5287,12 +5287,12 @@ curl -s -o /dev/null -w "%{http_code}\n" http://localhost:3000/api/conocimientos
 
 Expected: `401` (sin sesión; confirma que la ruta existe y está protegida). Revisar `docker compose logs backend` por errores de inyección de dependencias (por ejemplo un provider faltante en el módulo). Con sesión de `administrador` (o la del analista que se cree desde Administración), `GET /api/conocimientos/mios` debe responder 403 para el administrador y `GET /api/conocimientos/pendientes-acreditacion` también: confirma que `mios` no se confunde con un id.
 
-- [ ] **Paso 7: Regenerar los tipos del frontend**
+- [x] **Paso 7: Regenerar los tipos del frontend**
 
 Run: `cd frontend && npm run api:tipos`
 Expected: `src/api/esquema.d.ts` incluye `/api/conocimientos`, `/api/puestos/{idPuesto}/requisitos` y `/api/personas/{idPersona}/conocimientos/{idConocimiento}/declaracion`.
 
-- [ ] **Paso 8: Commit**
+- [x] **Paso 8: Commit**
 
 ```bash
 git add backend/src frontend/src/api/esquema.d.ts
