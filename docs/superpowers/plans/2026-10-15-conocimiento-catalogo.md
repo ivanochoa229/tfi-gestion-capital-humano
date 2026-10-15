@@ -239,7 +239,7 @@ git commit -m "Agregar los dominios area_tematica y tipo_evidencia y ajustar la 
 **Interfaces:**
 - Produces: `DOMINIO_TIPO_CONOCIMIENTO`, `DOMINIO_AREA_TEMATICA`, `DOMINIO_NIVEL_DOMINIO`, `DOMINIO_TIPO_EVIDENCIA` (slugs), `BLOQUEO_CONOCIMIENTO = 7003`; `normalizarDenominacion(texto: string): string`; `enTransaccionDeConocimiento<T>(repositorio: { manager: EntityManager }, trabajo: (manager: EntityManager) => Promise<T>): Promise<T>`; `traducirError(error: unknown): unknown`.
 
-- [ ] **Paso 1: Escribir los tests de normalización**
+- [x] **Paso 1: Escribir los tests de normalización**
 
 `normalizar.spec.ts`:
 
@@ -276,12 +276,12 @@ describe('normalizarDenominacion', () => {
 });
 ```
 
-- [ ] **Paso 2: Verificar que falla**
+- [x] **Paso 2: Verificar que falla**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento/normalizar.spec.ts`
 Expected: FAIL (no se encuentra `./normalizar.js`).
 
-- [ ] **Paso 3: Implementar las constantes y la normalización**
+- [x] **Paso 3: Implementar las constantes y la normalización**
 
 `conocimiento.constantes.ts`:
 
@@ -315,12 +315,12 @@ export function normalizarDenominacion(texto: string): string {
 }
 ```
 
-- [ ] **Paso 4: Verificar que pasa**
+- [x] **Paso 4: Verificar que pasa**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento/normalizar.spec.ts`
 Expected: PASS.
 
-- [ ] **Paso 5: Escribir los tests de la transacción**
+- [x] **Paso 5: Escribir los tests de la transacción**
 
 `transaccion.spec.ts`:
 
@@ -390,12 +390,12 @@ describe('traducirError', () => {
 });
 ```
 
-- [ ] **Paso 6: Verificar que falla**
+- [x] **Paso 6: Verificar que falla**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento/transaccion.spec.ts`
 Expected: FAIL (no se encuentra `./transaccion.js`).
 
-- [ ] **Paso 7: Implementar la transacción**
+- [x] **Paso 7: Implementar la transacción**
 
 `transaccion.ts`:
 
@@ -443,7 +443,7 @@ export async function enTransaccionDeConocimiento<T>(
 }
 ```
 
-- [ ] **Paso 8: Verificar que pasa y commitear**
+- [x] **Paso 8: Verificar que pasa y commitear**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento`
 Expected: PASS.
