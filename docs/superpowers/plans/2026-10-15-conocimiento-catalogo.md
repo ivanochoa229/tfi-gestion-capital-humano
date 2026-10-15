@@ -467,7 +467,7 @@ git commit -m "Agregar la normalización de denominaciones y la transacción con
 - Consumes: `TipoConocimiento`, `AreaTematica`, `NivelDominio` (referencia), `Puesto` (estructura).
 - Produces: `Conocimiento { id, denominacion, denominacionNormalizada, idTipoConocimiento, idAreaTematica, descripcion: string | null, activo, idFusionadoEn: number | null }`; `RequisitoPuesto { idPuesto, idConocimiento, idNivelRequerido, esExcluyente, conocimiento }`.
 
-- [ ] **Paso 1: Crear las entidades**
+- [x] **Paso 1: Crear las entidades**
 
 `conocimiento.entity.ts`:
 
@@ -586,7 +586,7 @@ export class RequisitoPuesto {
 }
 ```
 
-- [ ] **Paso 2: Generar y revisar la migración**
+- [x] **Paso 2: Generar y revisar la migración**
 
 Registrar temporalmente las entidades para que TypeORM las vea: abrir `backend/src/infra/database/data-source.ts` y `database.module.ts` y comprobar cómo se descubren las entidades (si es por patrón de archivos `*.entity`, no hace falta nada; si es una lista, agregar `Conocimiento` y `RequisitoPuesto`).
 
@@ -594,7 +594,7 @@ Run: `docker compose exec -T backend npm run migration:generate -- src/infra/dat
 
 Revisar a mano. Debe contener solo: `CREATE TABLE "conocimiento"` (con el CHECK `CK_conocimiento_fusion_distinta`), `CREATE UNIQUE INDEX "UQ_conocimiento_tipo_denominacion_activo" ON "conocimiento" ("id_tipo_conocimiento", "denominacion_normalizada") WHERE "activo"`, `CREATE TABLE "requisito_puesto"` con clave `(id_puesto, id_conocimiento)`, el índice `IDX_requisito_puesto_conocimiento` y las FK (a `puesto` y `conocimiento` con `ON DELETE RESTRICT`, a `nivel_dominio`, `tipo_conocimiento`, `area_tematica` y la FK recursiva `id_fusionado_en`). Borrar cualquier otra sentencia.
 
-- [ ] **Paso 3: Escribir el test de integración del esquema**
+- [x] **Paso 3: Escribir el test de integración del esquema**
 
 `conocimiento.int.spec.ts`:
 
@@ -720,12 +720,12 @@ describe('Conocimiento: catálogo y requisitos (PostgreSQL real)', () => {
 });
 ```
 
-- [ ] **Paso 4: Correr el test de integración**
+- [x] **Paso 4: Correr el test de integración**
 
 Run: `docker compose up -d db && cd backend && npx vitest run --config vitest.integracion.config.ts src/modules/conocimiento/conocimiento.int.spec.ts`
 Expected: PASS (6 tests). Si falla por el nombre de la restricción, ajustar la expresión regular al mensaje real, no la migración.
 
-- [ ] **Paso 5: Aplicar la migración al entorno y commitear**
+- [x] **Paso 5: Aplicar la migración al entorno y commitear**
 
 Run: `docker compose exec -T backend npm run migration:run`
 
