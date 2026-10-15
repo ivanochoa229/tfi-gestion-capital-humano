@@ -33,7 +33,7 @@ Estado: Pendiente | Fecha: 2026-10-14 | PR: —
 Entradas y condiciones que la spec implica y que ninguna tarea cubriría por sí sola; cada línea tiene su test en la tarea que se indica.
 
 - **Filas vacías de Excel** (`;;;;;;;;;;;;;;` al final de la planilla): se ignoran, no producen errores. Tarea 2 (`csv.spec.ts`).
-- **Celdas con comillas, separador o salto de línea dentro** (`"Pérez; Gómez"`): se leen como una celda y el número de fila reportado sigue siendo el de la línea del archivo. Tarea 2.
+- **Celdas con comillas y separador adentro** (`"Pérez; Gómez"`): se leen como una sola celda, sin desplazar las columnas siguientes. Tarea 2.
 - **Columna con nombre mal escrito** (`fecha_prevista_retiro` → `fecha_retiro`): rechaza el archivo en vez de descartar el dato en silencio. Tarea 2.
 - **Misma persona en filas no contiguas o con datos discrepantes**: se agrupa por legajo; la fila que discrepa da error y no se cuela una persona con datos mezclados. Tarea 3.
 - **Un legajo con ocupaciones simultáneas en puestos distintos y otra solapada en el mismo puesto**: las primeras se aceptan, la solapada falla con el mensaje del ABM y el resto del archivo se sigue evaluando. Tareas 5 y 6.
@@ -96,12 +96,11 @@ Este es el riesgo central de la spec; se comprueba primero.
 Crear `backend/src/modules/personas/crear-con.spec.ts`:
 
 ```ts
-import type { Puesto } from '../estructura/entities/puesto.entity.js';
 import { Ocupacion } from './entities/ocupacion.entity.js';
 import { Persona } from './entities/persona.entity.js';
 import { OcupacionesService } from './ocupaciones.service.js';
 import { PersonasService } from './personas.service.js';
-import { Puesto as PuestoEntidad } from '../estructura/entities/puesto.entity.js';
+import { Puesto } from '../estructura/entities/puesto.entity.js';
 
 describe('crearCon (cuerpo del alta, sin transacción propia)', () => {
   it('PersonasService.crearCon guarda con el manager recibido y devuelve el id', async () => {
@@ -146,7 +145,7 @@ describe('crearCon (cuerpo del alta, sin transacción propia)', () => {
     };
     const repos = new Map<unknown, unknown>([
       [Persona, { findOne: vi.fn().mockResolvedValue(persona) }],
-      [PuestoEntidad, { findOne: vi.fn().mockResolvedValue(puesto) }],
+      [Puesto, { findOne: vi.fn().mockResolvedValue(puesto) }],
       [Ocupacion, repoOcupaciones],
     ]);
     const manager = {
@@ -181,11 +180,7 @@ describe('crearCon (cuerpo del alta, sin transacción propia)', () => {
   });
 });
 
-// Evita que el linter marque el tipo importado sin uso en entornos sin `verbatimModuleSyntax`.
-export type _PuestoTipo = Puesto;
 ```
-
-Quitar las dos últimas líneas (`export type _PuestoTipo…` y su comentario) y el import `type { Puesto }` si no se usan: el archivo debe quedar sin imports sobrantes (`import { Puesto as PuestoEntidad }` se usa; borrar el `import type { Puesto }`).
 
 - [ ] **Step 2: Ejecutar el test y verificar que falla**
 
@@ -582,8 +577,9 @@ describe('clave', () => {
     expect(clave('  Cátedra   de FÍSICA ')).toBe('catedra de fisica');
   });
 
-  it('conserva la ñ', () => {
+  it('conserva la ñ, también en mayúscula', () => {
     expect(clave('Año')).toBe('año');
+    expect(clave('AÑO')).toBe('año');
   });
 });
 
@@ -615,13 +611,13 @@ Expected: FAIL (no existe `normalizar.js`).
 /** Para comparar denominaciones: sin mayúsculas, tildes ni espacios repetidos (la ñ se conserva). */
 export function clave(texto: string): string {
   return texto
+    .toLowerCase() // antes de normalizar, para que la Ñ mayúscula también se proteja
     .normalize('NFD')
     .replace(/ñ/g, '\u0001') // protege la ñ
     .replace(/[̀-ͯ]/g, '')
     .replace(/\u0001/g, 'ñ')
     .trim()
-    .replace(/\s+/g, ' ')
-    .toLowerCase();
+    .replace(/\s+/g, ' ');
 }
 
 /**
@@ -1248,8 +1244,8 @@ export function resolverPuesto(c: Catalogos, unidad: string, puesto: string): Re
 - Produces (`validar.ts`):
 
 ```ts
-export function armarPersona(p: PersonaCsv, idSituacionRevista: number): { dto?: CrearPersonaDto; errores: ErrorImportacion[] };
-export function armarOcupacion(o: OcupacionCsv, ids: { idPuesto: number; idCaracterOcupacion: number; idDedicacion: number }): { dto?: CrearOcupacionDto; errores: ErrorImportacion[] };
+export function armarPersona(p: PersonaCsv, idSituacionRevista: number): Promise<{ dto?: CrearPersonaDto; errores: ErrorImportacion[] }>;
+export function armarOcupacion(o: OcupacionCsv, ids: { idPuesto: number; idCaracterOcupacion: number; idDedicacion: number }): Promise<{ dto?: CrearOcupacionDto; errores: ErrorImportacion[] }>;
 ```
 
 - [ ] **Step 1: Escribir el test de `catalogos.ts`**
@@ -1887,7 +1883,7 @@ describe('ImportacionService.importar', () => {
     expect(r.importado).toBe(false);
     expect(r.errores.map((e) => e.fila)).toEqual([2, 3]);
     expect(r.errores[0].mensaje).toMatch(/L-1 ya lo tiene/);
-    expect(r.errores[1]).toMatchObject({ columna: 'unidad' });
+    expect(r.errores[1]).toMatchObject({ columna: 'puesto' });
     expect(r.errores[1].mensaje).toMatch(/Cátedra de Arte/);
   });
 
