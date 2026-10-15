@@ -1,4 +1,4 @@
-Estado: Propuesta | Fecha: 2026-10-14 | Autor: IvanOchoa229
+Estado: Aprobada | Fecha: 2026-10-14 | Autor: IvanOchoa229
 
 # Importación de personas y ocupaciones desde CSV
 
@@ -44,7 +44,9 @@ Apoya el objetivo OE4 en su parte de personas y ocupaciones. No toca los puntos 
 
 - UTF-8, con BOM tolerado. El separador `;` o `,` se detecta en la cabecera; las comillas dobles admiten
   textos con separador.
-- Cabecera obligatoria con estos nombres exactos, en cualquier orden:
+- Cabecera obligatoria con las 14 columnas siguientes, con estos nombres exactos y en cualquier orden. Una
+  columna faltante, repetida o desconocida rechaza el archivo (así un nombre mal escrito no descarta datos
+  en silencio). Las filas completamente vacías, como las que deja Excel, se ignoran:
 
 | Columna | Obligatoria | Notas |
 | --- | --- | --- |
@@ -93,8 +95,9 @@ dto)`). El método público actual queda como un envoltorio: abre la transacció
 
 ### Ejecución
 
-1. Parsear y validar la forma del archivo. Cabecera incompleta, archivo vacío o límites excedidos dan
-   400 y no se sigue.
+1. Parsear y validar la forma del archivo. Cabecera incompleta o con columnas desconocidas, archivo
+   vacío o más de 2000 filas dan 400; un archivo de más de 2 MB da 413 (lo corta la carga multipart).
+   No se sigue.
 2. Resolver las referencias de cada fila. Los errores se acumulan con su número de fila.
 3. Abrir una transacción con el bloqueo de estructura (una sola vez) y recorrer las filas en orden. Cada
    persona se da de alta con `PersonasService.crearCon` y cada ocupación con
