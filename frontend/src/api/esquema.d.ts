@@ -212,6 +212,38 @@ export interface paths {
     patch: operations['ReferenciaController_actualizar'];
     trace?: never;
   };
+  '/api/personas/importacion': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['ImportacionController_importar'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/personas/importacion/plantilla': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['ImportacionController_plantilla'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/personas': {
     parameters: {
       query?: never;
@@ -670,6 +702,24 @@ export interface components {
       enUso: boolean;
       /** @description Aviso cuando se desactiva el último valor activo */
       advertencia?: string;
+    };
+    ErrorImportacionDto: {
+      /** @description Fila del archivo; la cabecera es la 1 */
+      fila: number;
+      /** @description Columna del CSV a la que apunta el error */
+      columna?: string;
+      mensaje: string;
+    };
+    ResultadoImportacionDto: {
+      /** @description true solo si se pidió confirmar y no hubo errores: se escribió todo */
+      importado: boolean;
+      /** @description Filas de datos leídas */
+      filas: number;
+      /** @description Personas creadas, o que se crearían en la vista previa */
+      personas: number;
+      /** @description Ocupaciones creadas, o que se crearían en la vista previa */
+      ocupaciones: number;
+      errores: components['schemas']['ErrorImportacionDto'][];
     };
     PersonaDto: {
       id: number;
@@ -1495,6 +1545,67 @@ export interface operations {
       };
       /** @description Duplicado, o cambio de código de un valor en uso */
       409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ImportacionController_importar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'multipart/form-data': {
+          /** Format: binary */
+          archivo: string;
+          /** @default false */
+          confirmar?: boolean;
+        };
+      };
+    };
+    responses: {
+      /** @description Reporte de la vista previa o de la importación; los errores de datos van en `errores` */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ResultadoImportacionDto'];
+        };
+      };
+      /** @description Falta el archivo, está vacío, la cabecera es inválida o hay más de 2000 filas */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El archivo supera los 2 MB */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ImportacionController_plantilla: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description CSV con la cabecera y una fila de ejemplo */
+      200: {
         headers: {
           [name: string]: unknown;
         };
