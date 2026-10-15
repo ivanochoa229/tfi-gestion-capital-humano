@@ -60,11 +60,13 @@ export function ImportarPersonasPage() {
         <Button
           variant="outlined"
           component="label"
+          disabled={importar.isPending}
           sx={{ alignSelf: 'start' }}
         >
           {archivo ? `Archivo: ${archivo.name}` : 'Elegir archivo CSV'}
           <input
             hidden
+            disabled={importar.isPending}
             type="file"
             accept=".csv,text/csv"
             onChange={(e) => {
