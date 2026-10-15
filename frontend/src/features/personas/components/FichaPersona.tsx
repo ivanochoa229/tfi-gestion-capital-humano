@@ -12,14 +12,24 @@ import { useValoresReferencia } from '../../admin/hooks/useValoresReferencia';
 import { useCambiarEstadoPersona, usePersona } from '../hooks/usePersonas';
 import { FormularioPersona } from './FormularioPersona';
 import { TablaOcupaciones } from './TablaOcupaciones';
+import { ConocimientosDePersona } from '../../conocimiento/components/ConocimientosDePersona';
 
 interface Props {
   idPersona: number;
   /** Solo RR. HH. escribe. */
   puedeEditar: boolean;
+  /** Quien puede leer el conocimiento de la persona (RR. HH., autoridad, jefatura, jefes, la propia persona). */
+  verConocimientos?: boolean;
+  /** Jefatura y jefes de cátedra. */
+  puedeAcreditar?: boolean;
 }
 
-export function FichaPersona({ idPersona, puedeEditar }: Props) {
+export function FichaPersona({
+  idPersona,
+  puedeEditar,
+  verConocimientos = false,
+  puedeAcreditar = false,
+}: Props) {
   const { data: persona, isLoading, isError } = usePersona(idPersona);
   const { data: situaciones } = useValoresReferencia('situacion-revista', true);
   const cambiarEstado = useCambiarEstadoPersona();
@@ -106,6 +116,9 @@ export function FichaPersona({ idPersona, puedeEditar }: Props) {
         puedeEditar={puedeEditar}
         admiteNuevas={persona.activo}
       />
+      {verConocimientos && (
+        <ConocimientosDePersona idPersona={persona.id} puedeAcreditar={puedeAcreditar} />
+      )}
       {editando && (
         <FormularioPersona
           persona={persona}

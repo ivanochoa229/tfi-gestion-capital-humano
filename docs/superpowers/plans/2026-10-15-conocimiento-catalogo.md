@@ -6813,7 +6813,7 @@ git commit -m "Agregar la pantalla Mis conocimientos precargada con los requisit
 - Consumes: `invalidarConocimiento` y `useConocimientos` (tarea 12), `Valor` de `useValoresReferencia`, tipos generados `PerfilConocimientoDto`, `AcreditacionDto`, `PendienteAcreditacionDto`.
 - Produces: `usePerfilDePersona(idPersona)`, `useHistorialAcreditaciones(idPersona, idConocimiento)`, `usePendientesAcreditacion()`, `useAcreditar()`; componentes `AcreditarDialog({ idPersona, nombrePersona?, conocimiento?, onCerrar })` y `ConocimientosDePersona({ idPersona, puedeAcreditar })`; ruta `/conocimiento/pendientes`; `FichaPersona` suma la prop `verConocimientos?: boolean` y `puedeAcreditar?: boolean`.
 
-- [ ] **Paso 1: Hooks**
+- [x] **Paso 1: Hooks**
 
 `hooks/useAcreditaciones.ts`:
 
@@ -6897,7 +6897,7 @@ export function useAcreditar() {
 }
 ```
 
-- [ ] **Paso 2: Diálogo para acreditar**
+- [x] **Paso 2: Diálogo para acreditar**
 
 `components/AcreditarDialog.tsx`:
 
@@ -7074,7 +7074,7 @@ export function AcreditarDialog({ idPersona, nombrePersona, conocimiento, onCerr
 }
 ```
 
-- [ ] **Paso 3: Historial y sección de la ficha**
+- [x] **Paso 3: Historial y sección de la ficha**
 
 `components/HistorialAcreditacionesDialog.tsx`:
 
@@ -7278,7 +7278,7 @@ export function ConocimientosDePersona({ idPersona, puedeAcreditar }: Props) {
 }
 ```
 
-- [ ] **Paso 4: Bandeja de pendientes**
+- [x] **Paso 4: Bandeja de pendientes**
 
 `pages/PendientesAcreditacionPage.tsx`:
 
@@ -7360,7 +7360,7 @@ export function PendientesAcreditacionPage() {
 }
 ```
 
-- [ ] **Paso 5: Enganchar la sección en la ficha**
+- [x] **Paso 5: Enganchar la sección en la ficha**
 
 En `FichaPersona.tsx`:
 1. Importar `import { ConocimientosDePersona } from '../../conocimiento/components/ConocimientosDePersona';`.
@@ -7393,7 +7393,7 @@ En `PersonasPage.tsx`, después de `const puedeEditar = …`:
 
 y pasar a `FichaPersona`: `verConocimientos={verConocimientos} puedeAcreditar={puedeAcreditar}`. En `MiFichaPage.tsx`, pasar `verConocimientos` (la propia persona lee su perfil) a `<FichaPersona idPersona={sesion.idPersona} puedeEditar={false} verConocimientos />`.
 
-- [ ] **Paso 6: Ruta y menú**
+- [x] **Paso 6: Ruta y menú**
 
 En `router.tsx`: importar `PendientesAcreditacionPage` y agregar, junto a las rutas de conocimiento:
 
@@ -7418,7 +7418,7 @@ En `auth/permisos.ts`:
   },
 ```
 
-- [ ] **Paso 7: Verificar**
+- [x] **Paso 7: Verificar**
 
 Run: `cd frontend && npm run lint && npm run build`
 Expected: sin errores.
@@ -7431,7 +7431,7 @@ Escenario manual de punta a punta (vincular los usuarios a personas desde Admini
 5. En `/personas`, el jefe abre la ficha: ve la sección Conocimientos con el historial; no ve «Acreditar» en su propia ficha; en la ficha de una persona de otra cátedra ve el aviso de acceso.
 6. `analista_puestos` y `administrador` no ven la sección de conocimientos en `/personas`.
 
-- [ ] **Paso 8: Commit**
+- [x] **Paso 8: Commit**
 
 ```bash
 git add frontend/src
