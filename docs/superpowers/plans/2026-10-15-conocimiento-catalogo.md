@@ -6422,7 +6422,7 @@ git commit -m "Agregar los requisitos de puesto a la pantalla de estructura"
 - Consumes: `invalidarConocimiento` (tarea 12), `useConocimientos` (tarea 12), `useValoresReferencia`, `useSesion`, tipos generados `MiConocimientoDto`.
 - Produces: `useMisConocimientos(habilitado: boolean)`, `useDeclarar()`, `useRetirarDeclaracion()`; tipo `MiConocimiento`; `descripcionNivel(codigo)`; ruta `/conocimiento/mios`.
 
-- [ ] **Paso 1: Textos de los niveles**
+- [x] **Paso 1: Textos de los niveles**
 
 `niveles.ts`: el docente elige un nivel sin capacitación previa, así que cada nivel lleva una frase en lenguaje llano. Los códigos son los de la tabla `nivel_dominio` cargada por migración.
 
@@ -6440,7 +6440,7 @@ export function descripcionNivel(codigo: string | undefined): string {
 }
 ```
 
-- [ ] **Paso 2: Hooks**
+- [x] **Paso 2: Hooks**
 
 `hooks/useMisConocimientos.ts`:
 
@@ -6502,7 +6502,7 @@ export function useRetirarDeclaracion() {
 }
 ```
 
-- [ ] **Paso 3: Fila de un conocimiento**
+- [x] **Paso 3: Fila de un conocimiento**
 
 `components/FilaMiConocimiento.tsx`:
 
@@ -6633,7 +6633,7 @@ export function FilaMiConocimiento({
 }
 ```
 
-- [ ] **Paso 4: Página**
+- [x] **Paso 4: Página**
 
 `pages/MisConocimientosPage.tsx`:
 
@@ -6754,7 +6754,7 @@ export function MisConocimientosPage() {
 }
 ```
 
-- [ ] **Paso 5: Ruta y menú**
+- [x] **Paso 5: Ruta y menú**
 
 En `router.tsx`: importar `MisConocimientosPage` (`'./features/conocimiento/pages/MisConocimientosPage'`) y agregar, después de la ruta `conocimiento`:
 
@@ -6779,14 +6779,14 @@ En `auth/permisos.ts`, después de la entrada de `/conocimiento`:
   },
 ```
 
-- [ ] **Paso 6: Verificar**
+- [x] **Paso 6: Verificar**
 
 Run: `cd frontend && npm run lint && npm run build`
 Expected: sin errores.
 
 Escenario manual: con un usuario `docente` vinculado a una persona que ocupa un puesto con requisitos (cargarlos como analista), entrar a «Mis conocimientos»: aparecen los requisitos precargados; elegir un nivel lo guarda en el acto y muestra «Declarado, esperando acreditación»; sumar un conocimiento del buscador; «Quitar mi declaración». Un usuario sin persona vinculada ve el aviso.
 
-- [ ] **Paso 7: Commit**
+- [x] **Paso 7: Commit**
 
 ```bash
 git add frontend/src

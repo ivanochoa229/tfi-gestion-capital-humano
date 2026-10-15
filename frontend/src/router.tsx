@@ -4,6 +4,7 @@ import { RutaProtegida } from './auth/RutaProtegida';
 import { Layout } from './components/Layout';
 import { AdminPage } from './features/admin/pages/AdminPage';
 import { ConocimientoPage } from './features/conocimiento/pages/ConocimientoPage';
+import { MisConocimientosPage } from './features/conocimiento/pages/MisConocimientosPage';
 import { CriticidadPage } from './features/criticidad/pages/CriticidadPage';
 import { EstructuraPage } from './features/estructura/pages/EstructuraPage';
 import { ImportarPersonasPage } from './features/personas/pages/ImportarPersonasPage';
@@ -35,6 +36,14 @@ export const router = createBrowserRouter([
       },
       { path: 'personas/yo', element: <MiFichaPage /> },
       { path: 'conocimiento', element: <ConocimientoPage /> },
+      {
+        path: 'conocimiento/mios',
+        element: (
+          <RutaProtegida roles={['docente', 'jefe_catedra', 'jefatura_departamento']}>
+            <MisConocimientosPage />
+          </RutaProtegida>
+        ),
+      },
       { path: 'criticidad', element: <CriticidadPage /> },
       { path: 'sucesion', element: <SucesionPage /> },
       {

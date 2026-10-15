@@ -38,6 +38,11 @@ export const SECCIONES: Seccion[] = [
     ],
   },
   {
+    ruta: '/conocimiento/mios',
+    nombre: 'Mis conocimientos',
+    roles: ['docente', 'jefe_catedra', 'jefatura_departamento'],
+  },
+  {
     ruta: '/criticidad',
     nombre: 'Criticidad',
     roles: [
