@@ -100,3 +100,96 @@ export class AcreditacionDto {
   @ApiProperty({ format: 'date-time' })
   registradaEn: string;
 }
+
+/** Una fila del perfil de conocimiento de una persona. */
+export class PerfilConocimientoDto extends ConocimientoPersonaDto {
+  @ApiProperty()
+  denominacion: string;
+
+  @ApiProperty()
+  idTipoConocimiento: number;
+
+  @ApiProperty({
+    description:
+      'Declarado que todavía no tiene una acreditación que lo respalde o lo contradiga',
+  })
+  pendiente: boolean;
+}
+
+export class PuestoQuePideDto {
+  @ApiProperty()
+  idPuesto: number;
+
+  @ApiProperty({ example: 'P-0001' })
+  codigo: string;
+
+  @ApiProperty()
+  denominacion: string;
+}
+
+/** Fila de «Mis conocimientos»: un conocimiento una sola vez, aunque lo pidan varios puestos. */
+export class MiConocimientoDto {
+  @ApiProperty()
+  idConocimiento: number;
+
+  @ApiProperty()
+  denominacion: string;
+
+  @ApiProperty()
+  idTipoConocimiento: number;
+
+  @ApiProperty({
+    nullable: true,
+    type: Number,
+    description: 'El más exigente entre los puestos que ocupa; null si ninguno lo pide',
+  })
+  idNivelRequerido: number | null;
+
+  @ApiProperty({ description: 'true si algún puesto lo pide como excluyente' })
+  esExcluyente: boolean;
+
+  @ApiProperty({ type: PuestoQuePideDto, isArray: true })
+  puestos: PuestoQuePideDto[];
+
+  @ApiProperty({ nullable: true, type: Number })
+  idNivelDeclarado: number | null;
+
+  @ApiProperty({ format: 'date', nullable: true, type: String })
+  fechaDeclaracion: string | null;
+
+  @ApiProperty({ nullable: true, type: Number })
+  idNivelAcreditado: number | null;
+
+  @ApiProperty({ format: 'date', nullable: true, type: String })
+  fechaEvaluacion: string | null;
+
+  @ApiProperty({ nullable: true, type: Number })
+  idTipoEvidencia: number | null;
+}
+
+export class PendienteAcreditacionDto {
+  @ApiProperty()
+  idPersona: number;
+
+  @ApiProperty()
+  apellido: string;
+
+  @ApiProperty()
+  nombre: string;
+
+  @ApiProperty()
+  idConocimiento: number;
+
+  @ApiProperty()
+  denominacion: string;
+
+  @ApiProperty()
+  idNivelDeclarado: number;
+
+  @ApiProperty({ nullable: true, type: Number })
+  idNivelAcreditado: number | null;
+
+  @ApiProperty({ format: 'date' })
+  fechaDeclaracion: string;
+}
+

@@ -3875,7 +3875,7 @@ git commit -m "Implementar la acreditación del conocimiento con historial y ref
 - Consumes: `AccesoPerfilService.exigirLectura` y `enAlcance` (tarea 8), `AlcanceService.unidadesVisibles`, `Acreditacion` y `aAcreditacionDto` (tarea 9).
 - Produces: `PerfilConocimientoService` con `perfilDe(idPersona, sesion): Promise<PerfilConocimientoDto[]>`, `historial(idPersona, idConocimiento, sesion): Promise<AcreditacionDto[]>`, `mios(sesion): Promise<MiConocimientoDto[]>`, `pendientes(sesion): Promise<PendienteAcreditacionDto[]>`; `combinarRequisitos(filas: RequisitoDePuesto[]): RequisitoCombinado[]`; `SQL_PENDIENTE` (fragmento SQL con alias `cp`); DTOs `PerfilConocimientoDto`, `MiConocimientoDto`, `PuestoQuePideDto`, `PendienteAcreditacionDto`.
 
-- [ ] **Paso 1: Agregar los DTOs de salida**
+- [x] **Paso 1: Agregar los DTOs de salida**
 
 Al final de `dto/perfil.dto.ts`:
 
@@ -3973,7 +3973,7 @@ export class PendienteAcreditacionDto {
 }
 ```
 
-- [ ] **Paso 2: Escribir los tests de `combinarRequisitos`**
+- [x] **Paso 2: Escribir los tests de `combinarRequisitos`**
 
 `perfil.spec.ts`:
 
@@ -4040,12 +4040,12 @@ describe('combinarRequisitos', () => {
 });
 ```
 
-- [ ] **Paso 3: Verificar que falla**
+- [x] **Paso 3: Verificar que falla**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento/perfil.spec.ts`
 Expected: FAIL (no se encuentra `./perfil.js`).
 
-- [ ] **Paso 4: Implementar `perfil.ts` y `perfil.sql.ts`**
+- [x] **Paso 4: Implementar `perfil.ts` y `perfil.sql.ts`**
 
 `perfil.ts`:
 
@@ -4196,12 +4196,12 @@ export const SQL_PENDIENTES = `
   ORDER BY p.apellido, p.nombre, c.denominacion`;
 ```
 
-- [ ] **Paso 5: Verificar que pasa**
+- [x] **Paso 5: Verificar que pasa**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento/perfil.spec.ts`
 Expected: PASS.
 
-- [ ] **Paso 6: Escribir los tests del servicio**
+- [x] **Paso 6: Escribir los tests del servicio**
 
 `perfil-conocimiento.service.spec.ts`:
 
@@ -4420,12 +4420,12 @@ describe('PerfilConocimientoService.pendientes', () => {
 });
 ```
 
-- [ ] **Paso 7: Verificar que falla**
+- [x] **Paso 7: Verificar que falla**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento/perfil-conocimiento.service.spec.ts`
 Expected: FAIL (no se encuentra `./perfil-conocimiento.service.js`).
 
-- [ ] **Paso 8: Implementar el servicio**
+- [x] **Paso 8: Implementar el servicio**
 
 `perfil-conocimiento.service.ts`:
 
@@ -4627,12 +4627,12 @@ export class PerfilConocimientoService {
 }
 ```
 
-- [ ] **Paso 9: Verificar los unitarios**
+- [x] **Paso 9: Verificar los unitarios**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento/perfil-conocimiento.service.spec.ts`
 Expected: PASS.
 
-- [ ] **Paso 10: Escribir el test de integración de las consultas**
+- [x] **Paso 10: Escribir el test de integración de las consultas**
 
 `perfil.int.spec.ts`:
 
@@ -4838,12 +4838,12 @@ describe('Lecturas del perfil de conocimiento (PostgreSQL real)', () => {
 });
 ```
 
-- [ ] **Paso 11: Correr el test de integración**
+- [x] **Paso 11: Correr el test de integración**
 
 Run: `cd backend && npx vitest run --config vitest.integracion.config.ts src/modules/conocimiento/perfil.int.spec.ts`
 Expected: PASS. Si `unidad_organizativa` exige otra columna al insertar una cátedra, completarla según `estructura.int.spec.ts`.
 
-- [ ] **Paso 12: Commit**
+- [x] **Paso 12: Commit**
 
 ```bash
 git add backend/src/modules/conocimiento
