@@ -89,6 +89,15 @@ Cuidados del DBA: el trigger revisa la unidad, no sus puestos. Si se cambia el s
 - La baja de una persona o de un puesto se bloquea mientras tengan ocupaciones vigentes o futuras; la baja de la persona no desactiva su usuario.
 - La extensión `btree_gist` se crea en la migración y requiere permiso `CREATE EXTENSION` (el usuario de la base del compose lo tiene).
 
+### Importación desde CSV
+
+- Recursos Humanos puede cargar personas y ocupaciones de una vez desde **Personas → Importar CSV** (`/personas/importar`). Es una carga inicial: solo da de alta; un legajo o documento ya existente es un error.
+- Descargá la plantilla desde esa pantalla ("Descargar la plantilla"). El archivo tiene una fila por ocupación; las filas con el mismo `legajo` son la misma persona y deben traer los mismos datos personales. Una fila con `unidad`, `puesto`, `fecha_desde`, `fecha_hasta`, `caracter` y `dedicacion` todos vacíos registra a la persona sin ocupación.
+- Columnas (todas deben estar en la cabecera, sin repetir ni agregar otras): `legajo`, `apellido`, `nombre`, `documento`, `fecha_nacimiento`, `fecha_ingreso`, `situacion_revista`, `fecha_prevista_retiro`, `unidad`, `puesto`, `fecha_desde`, `fecha_hasta`, `caracter`, `dedicacion`. Fechas `AAAA-MM-DD` o `DD/MM/AAAA`; separador `;` o `,`; UTF-8. Las filas totalmente vacías (como las deja Excel) se ignoran.
+- `situacion_revista`, `caracter` y `dedicacion` se escriben como la denominación de la tabla de referencia; `unidad` y `puesto`, como las denominaciones de la estructura (solo unidades y puestos activos; si una unidad se repite en ramas distintas, el error lista las rutas candidatas para desambiguar).
+- Primero se muestra una vista previa sin escribir nada; al confirmar se valida todo de nuevo y se importa todo o nada. Máximo 2 MB (HTTP 413) y 2000 filas (HTTP 400, igual que una cabecera inválida). Los errores inesperados del servidor responden con un mensaje genérico y nunca incluyen contenido del CSV.
+- El CSV contiene datos personales (Ley 25.326, RNF02): el sistema no lo guarda, pero su custodia y su borrado después de la carga son responsabilidad de Recursos Humanos.
+
 ## Flujo de trabajo
 
 ### Migraciones

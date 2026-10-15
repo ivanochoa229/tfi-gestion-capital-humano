@@ -113,7 +113,7 @@ La decisión modifica la tabla `activo_conocimiento`:
 
 **Estructura:** `unidad_organizativa` (solo lectura para la aplicación, cargada por el DBA) y `puesto`; ver `docs/superpowers/specs/2026-10-13-estructura-unidades-puestos-design.md`. Suma tres dominios de referencia (`tipo_unidad`, `nivel_jerarquico`, `tipo_relacion_contractual`) a los administrados por RF23.
 
-**Personas:** `persona` y `ocupacion` (clave compuesta, con restricción de exclusión de solapes sobre `btree_gist`); ver `docs/superpowers/specs/2026-10-13-personas-ocupaciones-design.md`. Suma dos dominios de referencia (`situacion_revista`, `dedicacion`) a los administrados por RF23.
+**Personas:** `persona` y `ocupacion` (clave compuesta, con restricción de exclusión de solapes sobre `btree_gist`); ver `docs/superpowers/specs/2026-10-13-personas-ocupaciones-design.md`. Suma dos dominios de referencia (`situacion_revista`, `dedicacion`) a los administrados por RF23. La carga inicial masiva desde CSV (apoyo a OE4) está en `docs/superpowers/specs/2026-10-14-importacion-csv-personas-design.md`.
 
 Cuidados de implementación:
 

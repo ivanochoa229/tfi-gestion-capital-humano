@@ -199,7 +199,7 @@ alcance se aplica en esos módulos.
 ## Fuera de alcance
 
 Los conocimientos de la persona (RF10), las detecciones (RF17, RF19, RF20), las alertas de dotación
-frente a `dotacion_prevista`, la importación masiva de personas y la auditoría de cambios.
+frente a `dotacion_prevista`, la auditoría de cambios. La importación masiva de personas se especifica en `2026-10-14-importacion-csv-personas-design.md`.
 
 ## Riesgos
 
