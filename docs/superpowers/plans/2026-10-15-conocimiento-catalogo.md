@@ -5985,7 +5985,7 @@ git commit -m "Agregar la pantalla del catálogo de conocimientos con alta, edic
 - Consumes: `invalidarConocimiento` y `useConocimientos` (tarea 12), `usePuestos()` y el tipo `Puesto` de `estructura/hooks/usePuestos`, tipos generados `RequisitoDto`, `GuardarRequisitoDto`, `ResultadoCopiaDto`.
 - Produces: `useRequisitos(idPuesto)`, `useGuardarRequisito()`, `useQuitarRequisito()`, `useCopiarRequisitos()`; componente `RequisitosPuestoDialog({ puesto, puedeEditar, onCerrar })`.
 
-- [ ] **Paso 1: Crear los hooks**
+- [x] **Paso 1: Crear los hooks**
 
 `hooks/useRequisitos.ts`:
 
@@ -6068,7 +6068,7 @@ export function useCopiarRequisitos() {
 }
 ```
 
-- [ ] **Paso 2: Crear el diálogo**
+- [x] **Paso 2: Crear el diálogo**
 
 `components/RequisitosPuestoDialog.tsx`:
 
@@ -6364,7 +6364,7 @@ export function RequisitosPuestoDialog({ puesto, puedeEditar, onCerrar }: Props)
 
 El mensaje de `envolver` limpia `resultado` antes de cada acción, y `copiar` lo fija después: así el aviso de copia no queda pegado a la siguiente operación.
 
-- [ ] **Paso 3: Enganchar el diálogo en la tabla de puestos**
+- [x] **Paso 3: Enganchar el diálogo en la tabla de puestos**
 
 En `TablaPuestos.tsx`:
 1. Importar `import { RequisitosPuestoDialog } from '../../conocimiento/components/RequisitosPuestoDialog';`.
@@ -6392,14 +6392,14 @@ En `TablaPuestos.tsx`:
       )}
 ```
 
-- [ ] **Paso 4: Verificar**
+- [x] **Paso 4: Verificar**
 
 Run: `cd frontend && npm run lint && npm run build`
 Expected: sin errores.
 
 Escenario manual como `analista_puestos`: en Estructura, abrir «Requisitos» de un puesto tipo; agregar dos requisitos; cambiar el nivel de uno y marcarlo excluyente; copiar los requisitos a otro puesto (la segunda vez muestra todos como omitidos); quitar uno. Como `recursos_humanos`: ve la tabla en solo lectura.
 
-- [ ] **Paso 5: Commit**
+- [x] **Paso 5: Commit**
 
 ```bash
 git add frontend/src
