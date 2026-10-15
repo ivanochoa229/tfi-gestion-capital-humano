@@ -2702,7 +2702,7 @@ git commit -m "Agregar la fusión de conocimientos duplicados"
 - Consumes: `AlcanceService.unidadesVisibles(usuario): Promise<number[] | null>` (`usuarios/alcance.service.js`), `SesionUsuario`, `ConocimientoPersona`, `enTransaccionDeConocimiento`, `hoyDeLaBase(manager)` de `personas/fechas.js`.
 - Produces: `ROLES_DECLARANTES`, `ROLES_EVALUADORES`, `ROLES_LECTORES_DE_PERFIL` (`CodigoRol[]`); `AccesoPerfilService` con `exigirLectura(sesion, idPersona): Promise<void>`, `exigirEvaluacion(sesion, idPersona): Promise<void>`, `enAlcance(sesion, idPersona): Promise<boolean>`; `DeclaracionesService` con `declarar(idPersona, idConocimiento, dto: DeclararDto, sesion): Promise<ConocimientoPersonaDto>` y `retirar(idPersona, idConocimiento, sesion): Promise<void>`; DTOs `DeclararDto { idNivel }` y `ConocimientoPersonaDto`; `aConocimientoPersonaDto(f: ConocimientoPersona)`.
 
-- [ ] **Paso 1: Test y definición de los grupos de roles**
+- [x] **Paso 1: Test y definición de los grupos de roles**
 
 Agregar en `roles.spec.ts`, dentro del `describe('roles', …)`, y sumar los tres nombres al `import`:
 
@@ -2758,7 +2758,7 @@ export const ROLES_LECTORES_DE_PERFIL: CodigoRol[] = [
 
 Run de nuevo: PASS.
 
-- [ ] **Paso 2: DTOs y mapper de la declaración**
+- [x] **Paso 2: DTOs y mapper de la declaración**
 
 `dto/perfil.dto.ts`:
 
@@ -2826,7 +2826,7 @@ export function aConocimientoPersonaDto(
 }
 ```
 
-- [ ] **Paso 3: Escribir los tests de `AccesoPerfilService`**
+- [x] **Paso 3: Escribir los tests de `AccesoPerfilService`**
 
 `acceso-perfil.service.spec.ts`:
 
@@ -2921,12 +2921,12 @@ describe('AccesoPerfilService.exigirEvaluacion', () => {
 });
 ```
 
-- [ ] **Paso 4: Verificar que falla**
+- [x] **Paso 4: Verificar que falla**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento/acceso-perfil.service.spec.ts`
 Expected: FAIL (no se encuentra `./acceso-perfil.service.js`).
 
-- [ ] **Paso 5: Implementar `AccesoPerfilService`**
+- [x] **Paso 5: Implementar `AccesoPerfilService`**
 
 `acceso-perfil.service.ts`:
 
@@ -3022,12 +3022,12 @@ export class AccesoPerfilService {
 }
 ```
 
-- [ ] **Paso 6: Verificar que pasa**
+- [x] **Paso 6: Verificar que pasa**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento/acceso-perfil.service.spec.ts`
 Expected: PASS.
 
-- [ ] **Paso 7: Escribir los tests de `DeclaracionesService`**
+- [x] **Paso 7: Escribir los tests de `DeclaracionesService`**
 
 `declaraciones.service.spec.ts`:
 
@@ -3174,12 +3174,12 @@ describe('DeclaracionesService.retirar', () => {
 });
 ```
 
-- [ ] **Paso 8: Verificar que falla**
+- [x] **Paso 8: Verificar que falla**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento/declaraciones.service.spec.ts`
 Expected: FAIL (no se encuentra `./declaraciones.service.js`).
 
-- [ ] **Paso 9: Implementar `DeclaracionesService`**
+- [x] **Paso 9: Implementar `DeclaracionesService`**
 
 `declaraciones.service.ts`:
 
@@ -3308,7 +3308,7 @@ export class DeclaracionesService {
 }
 ```
 
-- [ ] **Paso 10: Verificar y commitear**
+- [x] **Paso 10: Verificar y commitear**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento src/common/roles.spec.ts`
 Expected: PASS.
