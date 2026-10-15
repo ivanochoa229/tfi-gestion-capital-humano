@@ -5,7 +5,14 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, IsNull, Not, Repository, type FindOptionsWhere } from 'typeorm';
+import {
+  ILike,
+  IsNull,
+  Not,
+  Repository,
+  type EntityManager,
+  type FindOptionsWhere,
+} from 'typeorm';
 import { escaparLike } from '../../common/like.js';
 import type { SesionUsuario } from '../../common/sesion-usuario.js';
 import { ReferenciaService } from '../referencia/referencia.service.js';
@@ -91,6 +98,16 @@ export class PersonasService {
   }
 
   async crear(dto: CrearPersonaDto): Promise<PersonaDetalleDto> {
+    await this.validarAlta(dto);
+    const id = await enTransaccionDePersonas(this.personas, (manager) =>
+      this.crearCon(manager, dto),
+    );
+    // Solo RR. HH. escribe, y RR. HH. ve los datos personales.
+    return this.detalle(id, true);
+  }
+
+  /** Validaciones del alta que no necesitan la transacción. */
+  async validarAlta(dto: CrearPersonaDto): Promise<void> {
     validarFechasDePersona(
       dto.fechaNacimiento,
       dto.fechaIngreso,
@@ -100,26 +117,33 @@ export class PersonasService {
       DOMINIO_SITUACION_REVISTA,
       dto.idSituacionRevista,
     );
-    const id = await enTransaccionDePersonas(this.personas, async (manager) => {
-      const repo = manager.getRepository(Persona);
-      await this.exigirIdentidadLibre(repo, dto.legajo, dto.documento);
-      const creada = await repo.save(
-        repo.create({
-          legajo: dto.legajo,
-          apellido: dto.apellido,
-          nombre: dto.nombre,
-          documento: dto.documento,
-          fechaNacimiento: dto.fechaNacimiento,
-          fechaIngreso: dto.fechaIngreso,
-          idSituacionRevista: dto.idSituacionRevista,
-          fechaPrevistaRetiro: dto.fechaPrevistaRetiro ?? null,
-          activo: true,
-        }),
-      );
-      return creada.id;
-    });
-    // Solo RR. HH. escribe, y RR. HH. ve los datos personales.
-    return this.detalle(id, true);
+  }
+
+  /**
+   * Cuerpo del alta: corre sobre el `manager` recibido y no abre transacción
+   * propia, para que la importación masiva lo use dentro de la suya. Devuelve
+   * el id de la persona creada. Llamar antes a `validarAlta`.
+   */
+  async crearCon(
+    manager: EntityManager,
+    dto: CrearPersonaDto,
+  ): Promise<number> {
+    const repo = manager.getRepository(Persona);
+    await this.exigirIdentidadLibre(repo, dto.legajo, dto.documento);
+    const creada = await repo.save(
+      repo.create({
+        legajo: dto.legajo,
+        apellido: dto.apellido,
+        nombre: dto.nombre,
+        documento: dto.documento,
+        fechaNacimiento: dto.fechaNacimiento,
+        fechaIngreso: dto.fechaIngreso,
+        idSituacionRevista: dto.idSituacionRevista,
+        fechaPrevistaRetiro: dto.fechaPrevistaRetiro ?? null,
+        activo: true,
+      }),
+    );
+    return creada.id;
   }
 
   async actualizar(

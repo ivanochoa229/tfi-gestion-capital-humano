@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import type { Repository } from 'typeorm';
+import type { EntityManager, Repository } from 'typeorm';
 import type { SesionUsuario } from '../../common/sesion-usuario.js';
 import { Puesto } from '../estructura/entities/puesto.entity.js';
 import { ReferenciaService } from '../referencia/referencia.service.js';
@@ -87,55 +87,72 @@ export class OcupacionesService {
     idPersona: number,
     dto: CrearOcupacionDto,
   ): Promise<OcupacionDto> {
-    const fechaHasta = dto.fechaHasta ?? null;
-    validarRango(dto.fechaDesde, fechaHasta);
+    await this.validarAlta(dto);
+    return enTransaccionDePersonas(this.ocupaciones, (manager) =>
+      this.crearCon(manager, idPersona, dto),
+    );
+  }
+
+  /** Validaciones del alta que no necesitan la transacción. */
+  async validarAlta(dto: CrearOcupacionDto): Promise<void> {
+    validarRango(dto.fechaDesde, dto.fechaHasta ?? null);
     await this.referencia.validarActivo(
       DOMINIO_CARACTER_OCUPACION,
       dto.idCaracterOcupacion,
     );
     await this.referencia.validarActivo(DOMINIO_DEDICACION, dto.idDedicacion);
+  }
 
-    return enTransaccionDePersonas(this.ocupaciones, async (manager) => {
-      const persona = await this.exigirPersona(
-        manager.getRepository(Persona),
-        idPersona,
+  /**
+   * Cuerpo del alta: corre sobre el `manager` recibido y no abre transacción
+   * propia (lo usa la importación masiva dentro de la suya). Llamar antes a
+   * `validarAlta`.
+   */
+  async crearCon(
+    manager: EntityManager,
+    idPersona: number,
+    dto: CrearOcupacionDto,
+  ): Promise<OcupacionDto> {
+    const fechaHasta = dto.fechaHasta ?? null;
+    const persona = await this.exigirPersona(
+      manager.getRepository(Persona),
+      idPersona,
+    );
+    if (!persona.activo) {
+      throw new BadRequestException(
+        `${persona.apellido}, ${persona.nombre} está dada de baja y no admite ocupaciones nuevas`,
       );
-      if (!persona.activo) {
-        throw new BadRequestException(
-          `${persona.apellido}, ${persona.nombre} está dada de baja y no admite ocupaciones nuevas`,
-        );
-      }
-      const puesto = await manager
-        .getRepository(Puesto)
-        .findOne({ where: { id: dto.idPuesto } });
-      if (!puesto) {
-        throw new BadRequestException(`El puesto ${dto.idPuesto} no existe`);
-      }
-      if (!puesto.activo) {
-        throw new BadRequestException(
-          `El puesto ${puesto.codigo} está dado de baja`,
-        );
-      }
+    }
+    const puesto = await manager
+      .getRepository(Puesto)
+      .findOne({ where: { id: dto.idPuesto } });
+    if (!puesto) {
+      throw new BadRequestException(`El puesto ${dto.idPuesto} no existe`);
+    }
+    if (!puesto.activo) {
+      throw new BadRequestException(
+        `El puesto ${puesto.codigo} está dado de baja`,
+      );
+    }
 
-      const repo = manager.getRepository(Ocupacion);
-      await this.exigirSinSolape(repo, {
+    const repo = manager.getRepository(Ocupacion);
+    await this.exigirSinSolape(repo, {
+      idPersona,
+      idPuesto: dto.idPuesto,
+      fechaDesde: dto.fechaDesde,
+      fechaHasta,
+    });
+    const creada = await repo.save(
+      repo.create({
         idPersona,
         idPuesto: dto.idPuesto,
         fechaDesde: dto.fechaDesde,
         fechaHasta,
-      });
-      const creada = await repo.save(
-        repo.create({
-          idPersona,
-          idPuesto: dto.idPuesto,
-          fechaDesde: dto.fechaDesde,
-          fechaHasta,
-          idCaracterOcupacion: dto.idCaracterOcupacion,
-          idDedicacion: dto.idDedicacion,
-        }),
-      );
-      return aOcupacionDto(creada, await hoyDeLaBase(manager));
-    });
+        idCaracterOcupacion: dto.idCaracterOcupacion,
+        idDedicacion: dto.idDedicacion,
+      }),
+    );
+    return aOcupacionDto(creada, await hoyDeLaBase(manager));
   }
 
   /** Solo ocupaciones vigentes o futuras; una pasada es historial inmutable. */
