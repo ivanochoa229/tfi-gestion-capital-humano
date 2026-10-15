@@ -2256,7 +2256,7 @@ git commit -m "Agregar conocimiento_persona y acreditacion con el reflejo de la 
 - Consumes: `ConocimientosService` (tarea 4), `FusionarConocimientoDto` y `ResultadoFusionDto` (ya definidos), las tablas de la tarea 6.
 - Produces: `ConocimientosService.fusionar(idOrigen: number, dto: FusionarConocimientoDto): Promise<ResultadoFusionDto>`; `PASOS_FUSION: string[]`, `SQL_CONTAR_REQUISITOS`, `SQL_CONTAR_PERSONAS`.
 
-- [ ] **Paso 1: Crear el SQL de la fusión**
+- [x] **Paso 1: Crear el SQL de la fusión**
 
 `fusion.sql.ts`. Cada paso recibe `[idOrigen, idDestino]` y usa los dos parámetros (Postgres rechaza parámetros que la sentencia no referencia); donde un paso solo necesita uno, el otro se referencia con `$n::int IS NOT NULL`.
 
@@ -2335,7 +2335,7 @@ export const PASOS_FUSION: string[] = [
 ];
 ```
 
-- [ ] **Paso 2: Escribir los tests unitarios de la fusión**
+- [x] **Paso 2: Escribir los tests unitarios de la fusión**
 
 Agregar al final de `conocimientos.service.spec.ts`:
 
@@ -2413,12 +2413,12 @@ describe('ConocimientosService.fusionar', () => {
 
 (Los `import` van junto a los del encabezado del archivo.)
 
-- [ ] **Paso 3: Verificar que falla**
+- [x] **Paso 3: Verificar que falla**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento/conocimientos.service.spec.ts -t fusionar`
 Expected: FAIL (`servicio.fusionar is not a function`).
 
-- [ ] **Paso 4: Implementar `fusionar`**
+- [x] **Paso 4: Implementar `fusionar`**
 
 En `conocimientos.service.ts`, importar `BadRequestException` (de `@nestjs/common`), `FusionarConocimientoDto` y `ResultadoFusionDto` (de `./dto/catalogo.dto.js`) y `{ PASOS_FUSION, SQL_CONTAR_PERSONAS, SQL_CONTAR_REQUISITOS }` (de `./fusion.sql.js`). Agregar el método después de `reactivar`:
 
@@ -2470,12 +2470,12 @@ En `conocimientos.service.ts`, importar `BadRequestException` (de `@nestjs/commo
   }
 ```
 
-- [ ] **Paso 5: Verificar los unitarios**
+- [x] **Paso 5: Verificar los unitarios**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento/conocimientos.service.spec.ts`
 Expected: PASS.
 
-- [ ] **Paso 6: Escribir el test de integración de la fusión**
+- [x] **Paso 6: Escribir el test de integración de la fusión**
 
 `fusion.int.spec.ts`:
 
@@ -2672,12 +2672,12 @@ describe('Fusión de conocimientos (PostgreSQL real)', () => {
 });
 ```
 
-- [ ] **Paso 7: Correr el test de integración**
+- [x] **Paso 7: Correr el test de integración**
 
 Run: `cd backend && npx vitest run --config vitest.integracion.config.ts src/modules/conocimiento/fusion.int.spec.ts`
 Expected: PASS. Si un paso del SQL falla (por ejemplo, un parámetro no referenciado), corregir `fusion.sql.ts` y repetir.
 
-- [ ] **Paso 8: Commit**
+- [x] **Paso 8: Commit**
 
 ```bash
 git add backend/src/modules/conocimiento

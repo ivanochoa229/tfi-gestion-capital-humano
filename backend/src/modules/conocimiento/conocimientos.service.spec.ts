@@ -7,6 +7,11 @@ import type { Repository } from 'typeorm';
 import type { ReferenciaService } from '../referencia/referencia.service.js';
 import type { Conocimiento } from './entities/conocimiento.entity.js';
 import { ConocimientosService } from './conocimientos.service.js';
+import {
+  PASOS_FUSION,
+  SQL_CONTAR_PERSONAS,
+  SQL_CONTAR_REQUISITOS,
+} from './fusion.sql.js';
 
 const existente = (parcial: Partial<Conocimiento> = {}): Conocimiento =>
   ({
@@ -214,3 +219,68 @@ describe('validaciones de dominio', () => {
     await expect(servicio.crear(alta)).rejects.toBeInstanceOf(BadRequestException);
   });
 });
+
+describe('ConocimientosService.fusionar', () => {
+  const origen = existente({ id: 1, denominacion: 'Python 3' });
+  const destino = existente({
+    id: 2,
+    denominacion: 'Python',
+    denominacionNormalizada: 'python',
+  });
+
+  it('rechaza fusionar un conocimiento consigo mismo', async () => {
+    const { servicio } = crearEntorno([origen]);
+    await expect(servicio.fusionar(1, { idDestino: 1 })).rejects.toBeInstanceOf(
+      BadRequestException,
+    );
+  });
+
+  it('da 404 si el origen o el destino no existen', async () => {
+    const { servicio } = crearEntorno([origen]);
+    await expect(servicio.fusionar(1, { idDestino: 9 })).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
+    await expect(servicio.fusionar(9, { idDestino: 1 })).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
+  });
+
+  it('exige que los dos estén activos y sean del mismo tipo', async () => {
+    const inactivo = crearEntorno([origen, { ...destino, activo: false }]);
+    await expect(
+      inactivo.servicio.fusionar(1, { idDestino: 2 }),
+    ).rejects.toThrow(/activos/);
+    const otroTipo = crearEntorno([origen, { ...destino, idTipoConocimiento: 4 }]);
+    await expect(
+      otroTipo.servicio.fusionar(1, { idDestino: 2 }),
+    ).rejects.toThrow(/mismo tipo/);
+  });
+
+  it('corre todos los pasos en orden, deja el origen inactivo y informa lo movido', async () => {
+    const { servicio, manager, filas } = crearEntorno([origen, destino]);
+    manager.query.mockImplementation(async (sql: string) => {
+      if (sql === SQL_CONTAR_REQUISITOS) return [{ n: 3 }];
+      if (sql === SQL_CONTAR_PERSONAS) return [{ n: 5 }];
+      return [];
+    });
+
+    const resultado = await servicio.fusionar(1, { idDestino: 2 });
+
+    const pasos = manager.query.mock.calls
+      .filter(([sql]) => PASOS_FUSION.includes(sql as string))
+      .map(([sql, parametros]) => [sql, parametros]);
+    expect(pasos).toEqual(PASOS_FUSION.map((sql) => [sql, [1, 2]]));
+    expect(resultado).toEqual({
+      idOrigen: 1,
+      idDestino: 2,
+      requisitosMovidos: 3,
+      personasMovidas: 5,
+    });
+    expect(filas.find((f) => f.id === 1)).toMatchObject({
+      activo: false,
+      idFusionadoEn: 2,
+    });
+    expect(filas.find((f) => f.id === 2)?.activo).toBe(true);
+  });
+});
+

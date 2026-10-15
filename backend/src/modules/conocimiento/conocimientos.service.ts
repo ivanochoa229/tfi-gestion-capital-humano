@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -17,8 +18,15 @@ import type {
   ConocimientoDto,
   CrearConocimientoDto,
   FiltroConocimientosDto,
+  FusionarConocimientoDto,
+  ResultadoFusionDto,
 } from './dto/catalogo.dto.js';
 import { Conocimiento } from './entities/conocimiento.entity.js';
+import {
+  PASOS_FUSION,
+  SQL_CONTAR_PERSONAS,
+  SQL_CONTAR_REQUISITOS,
+} from './fusion.sql.js';
 import { normalizarDenominacion } from './normalizar.js';
 import { enTransaccionDeConocimiento } from './transaccion.js';
 
@@ -149,6 +157,52 @@ export class ConocimientosService {
         id,
       );
       return aConocimientoDto(await repo.save({ ...actual, activo: true }));
+    });
+  }
+
+  /**
+   * Fusiona un duplicado (`idOrigen`) en el conocimiento que se conserva.
+   * Todo o nada, bajo el bloqueo de conocimiento; no se puede deshacer.
+   */
+  async fusionar(
+    idOrigen: number,
+    dto: FusionarConocimientoDto,
+  ): Promise<ResultadoFusionDto> {
+    const idDestino = dto.idDestino;
+    if (idOrigen === idDestino) {
+      throw new BadRequestException(
+        'El origen y el destino de la fusión son el mismo conocimiento',
+      );
+    }
+    return enTransaccionDeConocimiento(this.conocimientos, async (manager) => {
+      const repo = manager.getRepository(Conocimiento);
+      const origen = await this.exigir(repo, idOrigen);
+      const destino = await this.exigir(repo, idDestino);
+      if (!origen.activo || !destino.activo) {
+        throw new BadRequestException(
+          'Los dos conocimientos deben estar activos para fusionarlos',
+        );
+      }
+      if (origen.idTipoConocimiento !== destino.idTipoConocimiento) {
+        throw new BadRequestException(
+          'Solo se fusionan conocimientos del mismo tipo: corregí antes el tipo de uno de ellos',
+        );
+      }
+
+      const [{ n: requisitosMovidos }] = await manager.query<{ n: number }[]>(
+        SQL_CONTAR_REQUISITOS,
+        [idOrigen],
+      );
+      const [{ n: personasMovidas }] = await manager.query<{ n: number }[]>(
+        SQL_CONTAR_PERSONAS,
+        [idOrigen],
+      );
+      for (const paso of PASOS_FUSION) {
+        await manager.query(paso, [idOrigen, idDestino]);
+      }
+      await repo.save({ ...origen, activo: false, idFusionadoEn: idDestino });
+
+      return { idOrigen, idDestino, requisitosMovidos, personasMovidas };
     });
   }
 
