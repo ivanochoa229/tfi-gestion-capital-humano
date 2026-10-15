@@ -93,4 +93,82 @@ describe('leerCsv', () => {
     );
     expect(leerCsv(buffer(CABECERA, ...filas))).toHaveLength(MAX_FILAS);
   });
+  describe('codificación', () => {
+    it('decodifica Windows-1252 (ANSI de Excel en español)', () => {
+      const filas = leerCsv(
+        Buffer.from(
+          [CABECERA, fila({ apellido: 'Pérez', nombre: 'Muñoz' })].join('\n'),
+          'latin1',
+        ),
+      );
+      expect(filas[0].valores.apellido).toBe('Pérez');
+      expect(filas[0].valores.nombre).toBe('Muñoz');
+    });
+
+    it('no deja caracteres de reemplazo al leer Windows-1252', () => {
+      const filas = leerCsv(
+        Buffer.from(
+          [CABECERA, fila({ apellido: 'Núñez' })].join('\n'),
+          'latin1',
+        ),
+      );
+      expect(filas[0].valores.apellido).not.toContain('\uFFFD');
+    });
+
+    it('un UTF-8 válido con tildes no cambia', () => {
+      const filas = leerCsv(
+        buffer(CABECERA, fila({ apellido: 'Gómez Ñandú' })),
+      );
+      expect(filas[0].valores.apellido).toBe('Gómez Ñandú');
+    });
+
+    it('descarta el BOM UTF-8 de la cabecera', () => {
+      const filas = leerCsv(
+        Buffer.concat([
+          Buffer.from([0xef, 0xbb, 0xbf]),
+          buffer(CABECERA, fila({ legajo: 'L-1' })),
+        ]),
+      );
+      expect(filas[0].valores.legajo).toBe('L-1');
+    });
+  });
+
+  it('detecta el separador por la primera línea no vacía', () => {
+    const filas = leerCsv(buffer('', CABECERA, fila({ legajo: 'L-1' })));
+    expect(filas[0].valores.legajo).toBe('L-1');
+    expect(filas[0].fila).toBe(3);
+  });
+
+  it('avisa de una columna sin nombre en la cabecera', () => {
+    expect(() =>
+      leerCsv(buffer(CABECERA + ';', fila({ legajo: 'L-1' }) + ';')),
+    ).toThrow(/columna sin nombre/);
+  });
+
+  it('traduce una fila con otra cantidad de columnas sin filtrar su contenido', () => {
+    const intento = () => leerCsv(buffer(CABECERA, 'SECRETO;Pérez'));
+    expect(intento).toThrow(
+      'La fila 2 no tiene la misma cantidad de columnas que la cabecera',
+    );
+    expect(intento).not.toThrow(/SECRETO/);
+  });
+
+  it('traduce una comilla sin cerrar sin filtrar su contenido', () => {
+    const intento = () =>
+      leerCsv(buffer(CABECERA, fila({ apellido: '"SECRETO' })));
+    expect(intento).toThrow(/^No se pudo leer el CSV \(línea \d+\): revisá/);
+    expect(intento).not.toThrow(/SECRETO/);
+  });
+
+  it('rechaza un archivo con solo la cabecera', () => {
+    expect(() => leerCsv(buffer(CABECERA))).toThrow(
+      'El archivo no tiene filas de datos',
+    );
+  });
+
+  it('rechaza un libro de Excel (.xlsx)', () => {
+    expect(() =>
+      leerCsv(Buffer.from([0x50, 0x4b, 0x03, 0x04, 0x14, 0x00, 0x00])),
+    ).toThrow(/libro de Excel \(\.xlsx\)/);
+  });
 });

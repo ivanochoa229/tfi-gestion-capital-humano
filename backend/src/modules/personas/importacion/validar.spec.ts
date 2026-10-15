@@ -82,4 +82,44 @@ describe('armarOcupacion', () => {
       expect.objectContaining({ fila: 3, columna: 'fecha_desde' }),
     ]);
   });
+  describe('mensajes en español', () => {
+    const mensajes = async (p: Partial<PersonaCsv>) =>
+      (await armarPersona(persona(p), 4)).errores.map((e) => e.mensaje);
+
+    it('obligatorio', async () => {
+      expect(await mensajes({ apellido: '' })).toEqual([
+        'apellido es obligatorio',
+      ]);
+    });
+    it('largo máximo', async () => {
+      expect(await mensajes({ apellido: 'x'.repeat(101) })).toEqual([
+        'apellido admite hasta 100 caracteres',
+      ]);
+      expect(await mensajes({ legajo: 'x'.repeat(21) })).toEqual([
+        'legajo admite hasta 20 caracteres',
+      ]);
+    });
+    it('documento', async () => {
+      expect(await mensajes({ documento: '12.345.678' })).toEqual([
+        'documento debe tener 7 u 8 dígitos, sin puntos',
+      ]);
+    });
+    it('formato de fecha y fecha inexistente', async () => {
+      expect(await mensajes({ fechaNacimiento: '1/3/24' })).toEqual([
+        'fecha_nacimiento debe ser una fecha AAAA-MM-DD o DD/MM/AAAA',
+      ]);
+      expect(await mensajes({ fechaNacimiento: '2024-02-30' })).toEqual([
+        'fecha_nacimiento no es una fecha válida',
+      ]);
+    });
+    it('fecha_desde inválida', async () => {
+      const { errores } = await armarOcupacion(
+        ocupacion({ fechaDesde: 'ayer' }),
+        { idPuesto: 10, idCaracterOcupacion: 1, idDedicacion: 2 },
+      );
+      expect(errores.map((e) => e.mensaje)).toEqual([
+        'fecha_desde debe ser una fecha AAAA-MM-DD o DD/MM/AAAA',
+      ]);
+    });
+  });
 });

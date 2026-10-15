@@ -193,6 +193,8 @@ describe('Importación de personas (PostgreSQL real)', () => {
       servicio.importar(archivo, true),
     ]);
     expect([a.importado, b.importado].filter(Boolean)).toHaveLength(1);
+    const perdedor = [a, b].find((r) => !r.importado);
+    expect(perdedor?.errores.length).toBeGreaterThan(0);
     expect(await contar('persona')).toBe(1);
   });
 });

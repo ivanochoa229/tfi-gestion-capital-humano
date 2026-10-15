@@ -22,6 +22,33 @@ const COLUMNA_DE: Record<string, string> = {
   idDedicacion: 'dedicacion',
 };
 
+/** Largos máximos de los DTO (coinciden con las columnas de la base). */
+const LARGO_MAXIMO: Record<string, number> = {
+  legajo: 20,
+  apellido: 100,
+  nombre: 100,
+};
+
+/** Traduce la regla que falló; los mensajes de class-validator están en inglés y con la propiedad del DTO. */
+function traducir(propiedad: string, regla: string, columna: string): string {
+  switch (regla) {
+    case 'isNotEmpty':
+      return `${columna} es obligatorio`;
+    case 'isString':
+      return `${columna} debe ser un texto`;
+    case 'maxLength':
+      return `${columna} admite hasta ${LARGO_MAXIMO[propiedad]} caracteres`;
+    case 'matches':
+      return propiedad === 'documento'
+        ? 'documento debe tener 7 u 8 dígitos, sin puntos'
+        : `${columna} debe ser una fecha AAAA-MM-DD o DD/MM/AAAA`;
+    case 'isIso8601':
+      return `${columna} no es una fecha válida`;
+    default:
+      return `${columna}: valor inválido`;
+  }
+}
+
 const vacioASinDefinir = (texto: string) => (texto === '' ? undefined : texto);
 
 function aErrores(
@@ -30,10 +57,10 @@ function aErrores(
 ): ErrorImportacion[] {
   // Un error por columna: un decorador puede fallar en varias reglas a la vez.
   return errores.flatMap((e) => {
-    const [mensaje] = Object.values(e.constraints ?? {});
-    return mensaje === undefined
-      ? []
-      : [{ fila, columna: COLUMNA_DE[e.property] ?? e.property, mensaje }];
+    const [regla] = Object.keys(e.constraints ?? {});
+    if (regla === undefined) return [];
+    const columna = COLUMNA_DE[e.property] ?? e.property;
+    return [{ fila, columna, mensaje: traducir(e.property, regla, columna) }];
   });
 }
 
