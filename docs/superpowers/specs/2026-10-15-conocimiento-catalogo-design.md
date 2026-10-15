@@ -34,7 +34,7 @@ combinación). No cubre RF11 (activos de conocimiento).
 
 | # | Tema | Decisión |
 | --- | --- | --- |
-| 1 | Detección de duplicados | Columna `denominacion_normalizada` (minúsculas, sin tildes, espacios colapsados) calculada por la aplicación, con índice único parcial `(id_tipo_conocimiento, denominacion_normalizada)` entre los activos. No se usa la extensión `unaccent`: es `STABLE` y no sirve en un índice |
+| 1 | Detección de duplicados | Columna `denominacion_normalizada` (minúsculas, sin tildes, espacios colapsados, **conservando la ñ**: `año` y `ano` son palabras distintas) calculada por la aplicación, con índice único parcial `(id_tipo_conocimiento, denominacion_normalizada)` entre los activos. No se usa la extensión `unaccent`: es `STABLE` y no sirve en un índice |
 | 2 | Duplicados existentes | Fusión explícita de dos conocimientos del mismo tipo; el origen queda inactivo con `id_fusionado_en` |
 | 3 | Área temática | Tabla de referencia `area_tematica`, administrada por RF23 |
 | 4 | Requisitos repetidos | Copia puntual de los requisitos de un puesto a otro. Sin plantilla por cargo tipo ni vínculo posterior |
@@ -218,14 +218,14 @@ No se implementa acá, pero queda fijado:
 
 ## Frontend (`features/conocimiento`)
 
-- **Catálogo** (`/conocimientos`, todos los roles menos `docente`): lista con búsqueda y filtros de tipo,
+- **Catálogo** (`/conocimiento`, la ruta que ya existe; todos los roles menos `docente`): lista con búsqueda y filtros de tipo,
   área y activos; formulario de alta y edición; diálogo de fusión con confirmación. Un 409 por duplicado
-  muestra el conocimiento existente con un enlace. Los controles de escritura aparecen solo para
+  muestra el mensaje del servidor, que nombra el conocimiento existente. Los controles de escritura aparecen solo para
   `analista_puestos`.
-- **Requisitos del puesto**: pestaña en el panel del puesto de `/estructura`, con tabla de conocimiento,
+- **Requisitos del puesto**: diálogo «Requisitos» que se abre desde la tabla de puestos de `/estructura` (como «Ocupantes»), con tabla de conocimiento,
   nivel y excluyente o deseable, edición en línea y botón "Copiar de otro puesto" que muestra copiados y
   omitidos. Escritura solo para `analista_puestos`.
-- **Mis conocimientos** (`/conocimientos/mios`):
+- **Mis conocimientos** (`/conocimiento/mios`):
   - Precargada con los conocimientos que piden los puestos que ocupa hoy, con el nivel requerido debajo.
   - Cada fila tiene un selector de nivel con las cuatro opciones del dominio, que se guarda al elegir, sin
     botón "Guardar", y un texto corto que explica cada nivel.
@@ -234,7 +234,7 @@ No se implementa acá, pero queda fijado:
     crear conocimientos nuevos.
   - Sin ocupaciones vigentes, la pantalla lo explica y ofrece solo el buscador.
   - Una sola pantalla, sin pasos ni vocabulario técnico (RNF06).
-- **Acreditar** (`jefe_catedra` y `jefatura_departamento`): bandeja `/conocimientos/pendientes` y pestaña
+- **Acreditar** (`jefe_catedra` y `jefatura_departamento`): bandeja `/conocimiento/pendientes` y sección
   "Conocimientos" en la ficha de la persona (declarado, acreditado vigente e historial). El formulario pide
   nivel, fecha (hoy por defecto), tipo de evidencia y observaciones. El botón no aparece en el perfil propio.
 - **Administración → Referencia**: `area_tematica` y `tipo_evidencia` aparecen por el registro en `DOMINIOS`.

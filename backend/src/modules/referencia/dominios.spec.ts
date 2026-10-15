@@ -5,13 +5,13 @@ import {
 } from './entities/valor-referencia.base.js';
 
 describe('DOMINIOS', () => {
-  it('define los quince dominios cerrados', () => {
-    expect(DOMINIOS).toHaveLength(15);
+  it('define los diecisiete dominios cerrados', () => {
+    expect(DOMINIOS).toHaveLength(17);
   });
 
   it('no repite slugs ni tablas', () => {
-    expect(new Set(DOMINIOS.map((d) => d.slug)).size).toBe(15);
-    expect(new Set(DOMINIOS.map((d) => d.tabla)).size).toBe(15);
+    expect(new Set(DOMINIOS.map((d) => d.slug)).size).toBe(17);
+    expect(new Set(DOMINIOS.map((d) => d.tabla)).size).toBe(17);
   });
 
   it('tiene exactamente cinco dominios ordinales', () => {
@@ -26,6 +26,18 @@ describe('DOMINIOS', () => {
       'nivel-dominio',
       'nivel-jerarquico',
     ]);
+  });
+
+  it('incluye los dominios de conocimiento', () => {
+    const porSlug = new Map(DOMINIOS.map((d) => [d.slug, d]));
+    expect(porSlug.get('area-tematica')).toMatchObject({
+      tabla: 'area_tematica',
+      ordinal: false,
+    });
+    expect(porSlug.get('tipo-evidencia')).toMatchObject({
+      tabla: 'tipo_evidencia',
+      ordinal: false,
+    });
   });
 
   it('incluye los dominios de personas', () => {

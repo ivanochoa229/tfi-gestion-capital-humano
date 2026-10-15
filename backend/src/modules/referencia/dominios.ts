@@ -14,6 +14,8 @@ import { NivelJerarquico } from './entities/nivel-jerarquico.entity.js';
 import { TipoRelacionContractual } from './entities/tipo-relacion-contractual.entity.js';
 import { SituacionRevista } from './entities/situacion-revista.entity.js';
 import { Dedicacion } from './entities/dedicacion.entity.js';
+import { AreaTematica } from './entities/area-tematica.entity.js';
+import { TipoEvidencia } from './entities/tipo-evidencia.entity.js';
 import type { ValorReferencia } from './entities/valor-referencia.base.js';
 
 export interface DefinicionDominio {
@@ -26,7 +28,7 @@ export interface DefinicionDominio {
   entidad: Type<ValorReferencia>;
 }
 
-/** Los quince dominios cerrados del modelo (RF23). */
+/** Los diecisiete dominios cerrados del modelo (RF23). */
 export const DOMINIOS: readonly DefinicionDominio[] = [
   {
     slug: 'nivel-dominio',
@@ -132,6 +134,20 @@ export const DOMINIOS: readonly DefinicionDominio[] = [
     tabla: 'dedicacion',
     ordinal: true,
     entidad: Dedicacion,
+  },
+  {
+    slug: 'area-tematica',
+    denominacion: 'Área temática',
+    tabla: 'area_tematica',
+    ordinal: false,
+    entidad: AreaTematica,
+  },
+  {
+    slug: 'tipo-evidencia',
+    denominacion: 'Tipo de evidencia',
+    tabla: 'tipo_evidencia',
+    ordinal: false,
+    entidad: TipoEvidencia,
   },
 ];
 

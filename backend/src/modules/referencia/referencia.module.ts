@@ -15,6 +15,8 @@ import { NivelJerarquico } from './entities/nivel-jerarquico.entity.js';
 import { TipoRelacionContractual } from './entities/tipo-relacion-contractual.entity.js';
 import { SituacionRevista } from './entities/situacion-revista.entity.js';
 import { Dedicacion } from './entities/dedicacion.entity.js';
+import { AreaTematica } from './entities/area-tematica.entity.js';
+import { TipoEvidencia } from './entities/tipo-evidencia.entity.js';
 import { ReferenciaController } from './referencia.controller.js';
 import { ReferenciaService } from './referencia.service.js';
 
@@ -40,6 +42,8 @@ import { ReferenciaService } from './referencia.service.js';
       TipoRelacionContractual,
       SituacionRevista,
       Dedicacion,
+      AreaTematica,
+      TipoEvidencia,
     ]),
   ],
   controllers: [ReferenciaController],

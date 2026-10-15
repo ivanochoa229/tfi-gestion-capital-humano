@@ -1,4 +1,4 @@
-Estado: Pendiente | Fecha: 2026-10-15 | PR: —
+Estado: En curso | Fecha: 2026-10-15 | PR: —
 
 # Conocimiento: catálogo, requisitos y conocimiento de las personas: plan de implementación
 
@@ -84,7 +84,7 @@ Frontend (`frontend/src/`): `features/conocimiento/{hooks,components,pages}`, `a
 **Interfaces:**
 - Produces: dominios `area-tematica` y `tipo-evidencia` (ambos simples) en `DOMINIOS`; tablas `area_tematica(id_area_tematica, codigo, denominacion, activo)` y `tipo_evidencia(id_tipo_evidencia, codigo, denominacion, activo)` con sus valores iniciales.
 
-- [ ] **Paso 1: Corregir la spec en cuatro puntos**
+- [x] **Paso 1: Corregir la spec en cuatro puntos**
 
 Al revisar el código real aparecen cuatro diferencias con la spec; se corrigen en el mismo commit para que la spec siga siendo la fuente de verdad. Con `Edit` sobre `docs/superpowers/specs/2026-10-15-conocimiento-catalogo-design.md`:
 
@@ -93,7 +93,7 @@ Al revisar el código real aparecen cuatro diferencias con la spec; se corrigen 
 3. Reemplazar `- **Requisitos del puesto**: pestaña en el panel del puesto de `/estructura`, con tabla` por `- **Requisitos del puesto**: diálogo «Requisitos» que se abre desde la tabla de puestos de `/estructura` (como «Ocupantes»), con tabla`.
 4. Reemplazar `(`/conocimientos/mios`)` por `(`/conocimiento/mios`)` y `bandeja `/conocimientos/pendientes`` por `bandeja `/conocimiento/pendientes``, y en la pestaña de la ficha de persona usar «sección» en lugar de «pestaña».
 
-- [ ] **Paso 2: Actualizar el test de dominios**
+- [x] **Paso 2: Actualizar el test de dominios**
 
 En `dominios.spec.ts`, cambiar el título `define los quince dominios cerrados` por `define los diecisiete dominios cerrados` y las apariciones de `15` por `17`. Agregar dentro del mismo `describe`:
 
@@ -111,12 +111,12 @@ En `dominios.spec.ts`, cambiar el título `define los quince dominios cerrados` 
   });
 ```
 
-- [ ] **Paso 3: Verificar que falla**
+- [x] **Paso 3: Verificar que falla**
 
 Run: `cd backend && npx vitest run src/modules/referencia/dominios.spec.ts`
 Expected: FAIL (`expected 15 to have a length of 17`).
 
-- [ ] **Paso 4: Crear las dos entidades**
+- [x] **Paso 4: Crear las dos entidades**
 
 `area-tematica.entity.ts`:
 
@@ -144,7 +144,7 @@ export class TipoEvidencia extends ValorReferencia {
 }
 ```
 
-- [ ] **Paso 5: Registrar los dominios**
+- [x] **Paso 5: Registrar los dominios**
 
 En `dominios.ts`: importar las dos entidades (`'./entities/area-tematica.entity.js'` y `'./entities/tipo-evidencia.entity.js'`), cambiar el comentario `Los quince dominios` por `Los diecisiete dominios` y agregar al final del arreglo `DOMINIOS`:
 
@@ -167,7 +167,7 @@ En `dominios.ts`: importar las dos entidades (`'./entities/area-tematica.entity.
 
 En `referencia.module.ts`, importar las dos entidades y sumarlas a `TypeOrmModule.forFeature([...])`.
 
-- [ ] **Paso 6: Generar la migración y cargar los valores**
+- [x] **Paso 6: Generar la migración y cargar los valores**
 
 Run: `docker compose up -d db && docker compose exec -T backend npm run migration:generate -- src/infra/database/migrations/CrearReferenciaConocimiento`
 
@@ -213,12 +213,12 @@ const TIPOS_EVIDENCIA: Valor[] = [
 
 Verificar que `down` borra las dos tablas.
 
-- [ ] **Paso 7: Aplicar y verificar**
+- [x] **Paso 7: Aplicar y verificar**
 
 Run: `docker compose exec -T backend npm run migration:run && cd backend && npx vitest run src/modules/referencia`
 Expected: migración aplicada; tests de referencia PASS.
 
-- [ ] **Paso 8: Commit**
+- [x] **Paso 8: Commit**
 
 ```bash
 git add docs/superpowers/specs/2026-10-15-conocimiento-catalogo-design.md backend/src/modules/referencia backend/src/infra/database/migrations
