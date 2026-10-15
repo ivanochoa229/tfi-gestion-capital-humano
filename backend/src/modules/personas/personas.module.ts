@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Puesto } from '../estructura/entities/puesto.entity.js';
+import { UnidadOrganizativa } from '../estructura/entities/unidad-organizativa.entity.js';
 import { ReferenciaModule } from '../referencia/referencia.module.js';
 import { Usuario } from '../usuarios/entities/usuario.entity.js';
 import { Ocupacion } from './entities/ocupacion.entity.js';
 import { Persona } from './entities/persona.entity.js';
+import { ImportacionController } from './importacion/importacion.controller.js';
+import { ImportacionService } from './importacion/importacion.service.js';
 import { OcupacionesController } from './ocupaciones.controller.js';
 import { OcupacionesService } from './ocupaciones.service.js';
 import { PersonasController } from './personas.controller.js';
@@ -16,11 +19,21 @@ import { PersonasService } from './personas.service.js';
  */
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Persona, Ocupacion, Usuario, Puesto]),
+    TypeOrmModule.forFeature([
+      Persona,
+      Ocupacion,
+      Usuario,
+      Puesto,
+      UnidadOrganizativa,
+    ]),
     ReferenciaModule,
   ],
-  controllers: [PersonasController, OcupacionesController],
-  providers: [PersonasService, OcupacionesService],
+  controllers: [
+    ImportacionController,
+    PersonasController,
+    OcupacionesController,
+  ],
+  providers: [PersonasService, OcupacionesService, ImportacionService],
   exports: [PersonasService],
 })
 export class PersonasModule {}

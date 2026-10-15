@@ -1,5 +1,6 @@
-import { Alert, Box, Divider } from '@mui/material';
+import { Alert, Box, Button, Divider } from '@mui/material';
 import { useState } from 'react';
+import { Link as RouterLink } from 'react-router';
 import { useSesion } from '../../../auth/useSesion';
 import { PaginaEnConstruccion } from '../../../components/PaginaEnConstruccion';
 import { FichaPersona } from '../components/FichaPersona';
@@ -30,6 +31,15 @@ export function PersonasPage() {
             onElegir={setIdSeleccionada}
             onNueva={puedeEditar ? () => setCreando(true) : undefined}
           />
+          {puedeEditar && (
+            <Button
+              component={RouterLink}
+              to="/personas/importar"
+              sx={{ mt: 1 }}
+            >
+              Importar CSV
+            </Button>
+          )}
         </Box>
         <Box>
           <Divider sx={{ display: { md: 'none' }, mb: 2 }} />
