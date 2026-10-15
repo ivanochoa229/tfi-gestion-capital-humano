@@ -3333,7 +3333,7 @@ git commit -m "Agregar el acceso al perfil de conocimiento y la declaración del
 - Consumes: `AccesoPerfilService.exigirEvaluacion` (tarea 8), `SQL_ASEGURAR_FILA` y `SQL_REFLEJAR_VIGENTE` (tarea 6), `Acreditacion`, `ConocimientosService.fusionar` (tarea 7, solo en el test de integración).
 - Produces: `AcreditacionesService.acreditar(idPersona: number, idConocimiento: number, dto: AcreditarDto, sesion: SesionUsuario): Promise<AcreditacionDto>`; DTOs `AcreditarDto { idNivel, fechaEvaluacion, idTipoEvidencia, observaciones? }` y `AcreditacionDto { id, idPersona, idConocimiento, idNivelAcreditado, idTipoEvidencia, fechaEvaluacion, idEvaluador, observaciones, registradaEn }`; `aAcreditacionDto(a: Acreditacion)`.
 
-- [ ] **Paso 1: Agregar los DTOs y el mapper**
+- [x] **Paso 1: Agregar los DTOs y el mapper**
 
 Al final de `dto/perfil.dto.ts` (ajustando el `import` de `class-validator` a `IsInt, IsOptional, IsString, Max, MaxLength, Min` y agregando `ApiPropertyOptional`, y `import { FechaIso } from '../../personas/dto/fecha-iso.decorator.js'; import { Trim } from './trim.js';`):
 
@@ -3414,7 +3414,7 @@ export function aAcreditacionDto(a: Acreditacion): AcreditacionDto {
 }
 ```
 
-- [ ] **Paso 2: Escribir los tests unitarios**
+- [x] **Paso 2: Escribir los tests unitarios**
 
 `acreditaciones.service.spec.ts`:
 
@@ -3561,12 +3561,12 @@ describe('AcreditacionesService.acreditar', () => {
 });
 ```
 
-- [ ] **Paso 3: Verificar que falla**
+- [x] **Paso 3: Verificar que falla**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento/acreditaciones.service.spec.ts`
 Expected: FAIL (no se encuentra `./acreditaciones.service.js`).
 
-- [ ] **Paso 4: Implementar el servicio**
+- [x] **Paso 4: Implementar el servicio**
 
 `acreditaciones.service.ts`:
 
@@ -3676,12 +3676,12 @@ export class AcreditacionesService {
 }
 ```
 
-- [ ] **Paso 5: Verificar los unitarios**
+- [x] **Paso 5: Verificar los unitarios**
 
 Run: `cd backend && npx vitest run src/modules/conocimiento/acreditaciones.service.spec.ts`
 Expected: PASS.
 
-- [ ] **Paso 6: Escribir el test de integración del flujo y de la concurrencia**
+- [x] **Paso 6: Escribir el test de integración del flujo y de la concurrencia**
 
 `acreditaciones.int.spec.ts`:
 
@@ -3846,12 +3846,12 @@ describe('Acreditaciones (PostgreSQL real)', () => {
 });
 ```
 
-- [ ] **Paso 7: Correr el test de integración**
+- [x] **Paso 7: Correr el test de integración**
 
 Run: `cd backend && npx vitest run --config vitest.integracion.config.ts src/modules/conocimiento/acreditaciones.int.spec.ts`
 Expected: PASS.
 
-- [ ] **Paso 8: Commit**
+- [x] **Paso 8: Commit**
 
 ```bash
 git add backend/src/modules/conocimiento

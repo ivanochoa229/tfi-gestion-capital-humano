@@ -1,5 +1,6 @@
 import type { ConocimientoDto } from './dto/catalogo.dto.js';
-import type { ConocimientoPersonaDto } from './dto/perfil.dto.js';
+import type { AcreditacionDto, ConocimientoPersonaDto } from './dto/perfil.dto.js';
+import type { Acreditacion } from './entities/acreditacion.entity.js';
 import type { ConocimientoPersona } from './entities/conocimiento-persona.entity.js';
 import type { Conocimiento } from './entities/conocimiento.entity.js';
 
@@ -29,4 +30,19 @@ export function aConocimientoPersonaDto(
     idEvaluador: f.idEvaluador,
   };
 }
+
+export function aAcreditacionDto(a: Acreditacion): AcreditacionDto {
+  return {
+    id: a.id,
+    idPersona: a.idPersona,
+    idConocimiento: a.idConocimiento,
+    idNivelAcreditado: a.idNivelAcreditado,
+    idTipoEvidencia: a.idTipoEvidencia,
+    fechaEvaluacion: a.fechaEvaluacion,
+    idEvaluador: a.idEvaluador,
+    observaciones: a.observaciones,
+    registradaEn: a.registradaEn.toISOString(),
+  };
+}
+
 
