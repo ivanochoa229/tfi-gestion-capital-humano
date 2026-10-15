@@ -1,4 +1,9 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 import { Puesto } from '../../estructura/entities/puesto.entity.js';
@@ -67,7 +72,31 @@ export class ImportacionService {
     private readonly ocupaciones: OcupacionesService,
   ) {}
 
+  private readonly logger = new Logger(ImportacionService.name);
+
   async importar(
+    archivo: Buffer,
+    confirmar: boolean,
+  ): Promise<ResultadoImportacionDto> {
+    try {
+      return await this.procesar(archivo, confirmar);
+    } catch (error) {
+      if (error instanceof HttpException) throw error;
+      // RNF02: solo la clase y el SQLSTATE; el mensaje, el detalle y los
+      // parámetros pueden traer datos personales del archivo.
+      const { code } = (error ?? {}) as { code?: unknown };
+      const clase =
+        error instanceof Error ? error.constructor.name : 'desconocido';
+      this.logger.error(
+        `Importación abortada: ${clase}${typeof code === 'string' ? ` (SQLSTATE ${code})` : ''}`,
+      );
+      throw new InternalServerErrorException(
+        'La importación falló por un error inesperado; no se escribió nada',
+      );
+    }
+  }
+
+  private async procesar(
     archivo: Buffer,
     confirmar: boolean,
   ): Promise<ResultadoImportacionDto> {
@@ -162,6 +191,7 @@ export class ImportacionService {
     return listas;
   }
 
+  /** Agrega los errores de cada fila al arreglo `errores` del llamador (parámetro de salida). */
   private async ejecutar(
     listas: PersonaLista[],
     errores: ErrorImportacion[],

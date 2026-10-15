@@ -1,4 +1,10 @@
-import { ConflictException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
+import { QueryFailedError } from 'typeorm';
 import { COLUMNAS } from './tipos.js';
 import { ImportacionService } from './importacion.service.js';
 
@@ -80,6 +86,8 @@ function crearServicio() {
 }
 
 describe('ImportacionService.importar', () => {
+  afterEach(() => vi.restoreAllMocks());
+
   it('vista previa: cuenta lo que se crearía, no confirma', async () => {
     const { servicio, personas, ocupaciones } = crearServicio();
     const r = await servicio.importar(
@@ -101,7 +109,7 @@ describe('ImportacionService.importar', () => {
     expect(ocupaciones.crearCon).toHaveBeenCalledTimes(3);
   });
 
-  it('confirmar sin errores: importado = true', async () => {
+  it('confirmar sin errores: el resultado informa importado = true', async () => {
     const { servicio } = crearServicio();
     const r = await servicio.importar(csv(fila(persona('L-1'))), true);
     expect(r.importado).toBe(true);
@@ -178,12 +186,95 @@ describe('ImportacionService.importar', () => {
     expect(r.ocupaciones).toBe(2);
   });
 
-  it('un error inesperado (no HTTP) se propaga y revierte todo', async () => {
+  it('un error inesperado (no HTTP) no se reporta como error de fila: la importación falla', async () => {
+    vi.spyOn(Logger.prototype, 'error').mockImplementation(() => undefined);
     const { servicio, personas } = crearServicio();
     personas.crearCon.mockRejectedValueOnce(new Error('conexión caída'));
     await expect(
       servicio.importar(csv(fila(persona('L-1'))), true),
-    ).rejects.toThrow('conexión caída');
+    ).rejects.toBeInstanceOf(InternalServerErrorException);
+  });
+
+  const errorDeBase = (code: string, detail: string) =>
+    new QueryFailedError(
+      'INSERT INTO persona ...',
+      [],
+      Object.assign(new Error('dup'), { code, detail }),
+    );
+
+  it('un error de base traducible (documento duplicado) es error de fila y sigue con la próxima persona', async () => {
+    const { servicio, personas } = crearServicio();
+    personas.crearCon
+      .mockRejectedValueOnce(
+        errorDeBase('23505', 'Key (documento)=(30110001) already exists.'),
+      )
+      .mockResolvedValue(101);
+    const r = await servicio.importar(
+      csv(fila(persona('L-1')), fila(persona('L-2'))),
+      true,
+    );
+    expect(r.importado).toBe(false);
+    expect(r.errores).toEqual([
+      { fila: 2, mensaje: 'Ya existe una persona con ese documento' },
+    ]);
+    expect(r.personas).toBe(1);
+    expect(personas.crearCon).toHaveBeenCalledTimes(2);
+  });
+
+  it('un solape detectado por la base (23P01) es error de fila', async () => {
+    const { servicio, ocupaciones } = crearServicio();
+    ocupaciones.crearCon.mockRejectedValueOnce(
+      errorDeBase('23P01', 'Key conflicts with existing key'),
+    );
+    const r = await servicio.importar(csv(fila(persona('L-1'))), true);
+    expect(r.errores).toHaveLength(1);
+    expect(r.errores[0].fila).toBe(2);
+    expect(r.errores[0].mensaje).toMatch(/ya ocupa ese puesto/);
+  });
+
+  describe('errores inesperados', () => {
+    it.each([
+      ['Error genérico', () => new Error('conexión caída L-SECRETO')],
+      [
+        'QueryFailedError 23514',
+        () => errorDeBase('23514', 'Key (legajo)=(L-SECRETO) viola el CHECK'),
+      ],
+    ])('%s: 500 genérico y sin datos en el log', async (_n, crear) => {
+      const registro = vi
+        .spyOn(Logger.prototype, 'error')
+        .mockImplementation(() => undefined);
+      const { servicio, personas } = crearServicio();
+      personas.crearCon.mockRejectedValueOnce(crear());
+      const promesa = servicio.importar(csv(fila(persona('L-1'))), true);
+      await expect(promesa).rejects.toBeInstanceOf(
+        InternalServerErrorException,
+      );
+      await promesa.catch((e: Error) => {
+        expect(e.message).not.toMatch(/SECRETO|conexión|legajo/);
+      });
+      const registrado = JSON.stringify(registro.mock.calls);
+      expect(registrado).not.toMatch(/SECRETO|conexión|legajo|INSERT/);
+      expect(registro).toHaveBeenCalledTimes(1);
+    });
+
+    it('el log del QueryFailedError incluye la clase y el SQLSTATE', async () => {
+      const registro = vi
+        .spyOn(Logger.prototype, 'error')
+        .mockImplementation(() => undefined);
+      const { servicio, personas } = crearServicio();
+      personas.crearCon.mockRejectedValueOnce(errorDeBase('23514', 'x'));
+      await servicio.importar(csv(fila(persona('L-1'))), true).catch(() => {});
+      expect(String(registro.mock.calls[0][0])).toMatch(
+        /QueryFailedError.*23514/,
+      );
+    });
+
+    it('una excepción HTTP fuera de las filas (CSV vacío) se propaga como 400', async () => {
+      const { servicio } = crearServicio();
+      await expect(
+        servicio.importar(Buffer.from(''), true),
+      ).rejects.toBeInstanceOf(BadRequestException);
+    });
   });
 
   it('errores de forma y de referencia no abren la transacción si no queda nada válido', async () => {
