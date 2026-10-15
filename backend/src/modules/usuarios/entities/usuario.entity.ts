@@ -6,9 +6,11 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  type Relation,
 } from 'typeorm';
 import { Rol } from './rol.entity.js';
 import { UsuarioUnidad } from './usuario-unidad.entity.js';
+import { Persona } from '../../personas/entities/persona.entity.js';
 
 @Entity('usuario')
 export class Usuario {
@@ -25,9 +27,13 @@ export class Usuario {
   @JoinColumn({ name: 'id_rol' })
   rol: Rol;
 
-  /** Sin clave foránea hasta que exista la tabla `persona`. */
+  /** Persona vinculada; obligatoria para el rol docente (ver `UsuariosService`). */
   @Column({ name: 'id_persona', type: 'int', nullable: true, unique: true })
   idPersona: number | null;
+
+  @ManyToOne(() => Persona, { nullable: true, onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'id_persona' })
+  persona: Relation<Persona> | null;
 
   @Column({ type: 'boolean', default: true })
   activo: boolean;

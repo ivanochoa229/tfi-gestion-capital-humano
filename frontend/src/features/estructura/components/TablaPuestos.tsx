@@ -25,15 +25,23 @@ import {
 } from '../hooks/usePuestos';
 import type { UnidadArbol } from '../hooks/useUnidades';
 import { FormularioPuesto } from './FormularioPuesto';
+import { OcupantesPuestoDialog } from './OcupantesPuestoDialog';
 
 interface Props {
   unidad: UnidadArbol;
   unidadesValidas: number[];
   /** Solo el analista de puestos escribe. */
   puedeEditar: boolean;
+  /** El docente no ve a los ocupantes de otros puestos. */
+  puedeVerOcupantes: boolean;
 }
 
-export function TablaPuestos({ unidad, unidadesValidas, puedeEditar }: Props) {
+export function TablaPuestos({
+  unidad,
+  unidadesValidas,
+  puedeEditar,
+  puedeVerOcupantes,
+}: Props) {
   const { data: todos, isLoading, isError } = usePuestos();
   const { data: niveles } = useValoresReferencia('nivel-jerarquico', true);
   const cambiarEstado = useCambiarEstadoPuesto();
@@ -41,6 +49,7 @@ export function TablaPuestos({ unidad, unidadesValidas, puedeEditar }: Props) {
   const [formulario, setFormulario] = useState<{ puesto?: Puesto } | null>(
     null,
   );
+  const [verOcupantes, setVerOcupantes] = useState<Puesto>();
   const [verBajas, setVerBajas] = useState(false);
   const [texto, setTexto] = useState('');
   const [error, setError] = useState<string>();
@@ -145,7 +154,9 @@ export function TablaPuestos({ unidad, unidadesValidas, puedeEditar }: Props) {
               <TableCell>Nivel</TableCell>
               <TableCell>Superior</TableCell>
               <TableCell>Estado</TableCell>
-              {puedeEditar && <TableCell align="right">Acciones</TableCell>}
+              {(puedeEditar || puedeVerOcupantes) && (
+                <TableCell align="right">Acciones</TableCell>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -171,17 +182,26 @@ export function TablaPuestos({ unidad, unidadesValidas, puedeEditar }: Props) {
                       color={p.activo ? 'success' : 'default'}
                     />
                   </TableCell>
-                  {puedeEditar && (
+                  {(puedeEditar || puedeVerOcupantes) && (
                     <TableCell align="right">
-                      <Button
-                        size="small"
-                        onClick={() => setFormulario({ puesto: p })}
-                      >
-                        Editar
-                      </Button>
-                      <Button size="small" onClick={() => alternar(p)}>
-                        {p.activo ? 'Dar de baja' : 'Reactivar'}
-                      </Button>
+                      {puedeVerOcupantes && (
+                        <Button size="small" onClick={() => setVerOcupantes(p)}>
+                          Ocupantes
+                        </Button>
+                      )}
+                      {puedeEditar && (
+                        <>
+                          <Button
+                            size="small"
+                            onClick={() => setFormulario({ puesto: p })}
+                          >
+                            Editar
+                          </Button>
+                          <Button size="small" onClick={() => alternar(p)}>
+                            {p.activo ? 'Dar de baja' : 'Reactivar'}
+                          </Button>
+                        </>
+                      )}
                     </TableCell>
                   )}
                 </TableRow>
@@ -196,6 +216,12 @@ export function TablaPuestos({ unidad, unidadesValidas, puedeEditar }: Props) {
           unidadesValidas={unidadesValidas}
           puesto={formulario.puesto}
           onCerrar={() => setFormulario(null)}
+        />
+      )}
+      {verOcupantes && (
+        <OcupantesPuestoDialog
+          puesto={verOcupantes}
+          onCerrar={() => setVerOcupantes(undefined)}
         />
       )}
     </Stack>

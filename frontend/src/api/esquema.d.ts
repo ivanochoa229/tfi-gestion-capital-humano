@@ -212,6 +212,134 @@ export interface paths {
     patch: operations['ReferenciaController_actualizar'];
     trace?: never;
   };
+  '/api/personas': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['PersonasController_listar'];
+    put?: never;
+    post: operations['PersonasController_crear'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/personas/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['PersonasController_obtener'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch: operations['PersonasController_actualizar'];
+    trace?: never;
+  };
+  '/api/personas/{id}/baja': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['PersonasController_darDeBaja'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/personas/{id}/reactivar': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['PersonasController_reactivar'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/personas/{idPersona}/ocupaciones': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['OcupacionesController_listarDePersona'];
+    put?: never;
+    post: operations['OcupacionesController_crear'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/personas/{idPersona}/ocupaciones/{idPuesto}/{fechaDesde}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete: operations['OcupacionesController_anular'];
+    options?: never;
+    head?: never;
+    patch: operations['OcupacionesController_actualizar'];
+    trace?: never;
+  };
+  '/api/personas/{idPersona}/ocupaciones/{idPuesto}/{fechaDesde}/cerrar': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['OcupacionesController_cerrar'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/puestos/{idPuesto}/ocupaciones': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['OcupacionesController_listarDePuesto'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/auth/login': {
     parameters: {
       query?: never;
@@ -543,6 +671,200 @@ export interface components {
       /** @description Aviso cuando se desactiva el último valor activo */
       advertencia?: string;
     };
+    PersonaDto: {
+      id: number;
+      /** @example L-1234 */
+      legajo: string;
+      apellido: string;
+      nombre: string;
+      /** @description Solo para recursos humanos y administrador (Ley 25.326) */
+      documento?: string;
+      /**
+       * Format: date
+       * @description Solo para recursos humanos y administrador (Ley 25.326)
+       */
+      fechaNacimiento?: string;
+      /** Format: date */
+      fechaIngreso: string;
+      idSituacionRevista: number;
+      /** Format: date */
+      fechaPrevistaRetiro: string | null;
+      activo: boolean;
+      /** @description Tiene un usuario vinculado */
+      tieneUsuario: boolean;
+    };
+    OcupacionDto: {
+      idPersona: number;
+      idPuesto: number;
+      /**
+       * Format: date
+       * @example 2024-03-01
+       */
+      fechaDesde: string;
+      /**
+       * Format: date
+       * @description null: sin fin
+       */
+      fechaHasta: string | null;
+      idCaracterOcupacion: number;
+      idDedicacion: number;
+      /**
+       * @description Respecto de la fecha de hoy de la base
+       * @enum {string}
+       */
+      estado: 'vigente' | 'futura' | 'pasada';
+    };
+    PersonaDetalleDto: {
+      id: number;
+      /** @example L-1234 */
+      legajo: string;
+      apellido: string;
+      nombre: string;
+      /** @description Solo para recursos humanos y administrador (Ley 25.326) */
+      documento?: string;
+      /**
+       * Format: date
+       * @description Solo para recursos humanos y administrador (Ley 25.326)
+       */
+      fechaNacimiento?: string;
+      /** Format: date */
+      fechaIngreso: string;
+      idSituacionRevista: number;
+      /** Format: date */
+      fechaPrevistaRetiro: string | null;
+      activo: boolean;
+      /** @description Tiene un usuario vinculado */
+      tieneUsuario: boolean;
+      ocupacionesVigentes: components['schemas']['OcupacionDto'][];
+    };
+    CrearPersonaDto: {
+      /**
+       * @description Único
+       * @example L-1234
+       */
+      legajo: string;
+      /** @example Pérez */
+      apellido: string;
+      /** @example Ana */
+      nombre: string;
+      /**
+       * @description DNI de 7 u 8 dígitos, sin puntos. Único
+       * @example 30111111
+       */
+      documento: string;
+      /**
+       * Format: date
+       * @example 1980-05-20
+       */
+      fechaNacimiento: string;
+      /**
+       * Format: date
+       * @description Posterior al nacimiento
+       * @example 2005-03-01
+       */
+      fechaIngreso: string;
+      idSituacionRevista: number;
+      /**
+       * Format: date
+       * @description No anterior al ingreso; null la borra
+       */
+      fechaPrevistaRetiro?: string | null;
+    };
+    ActualizarPersonaDto: {
+      /**
+       * @description Único
+       * @example L-1234
+       */
+      legajo?: string;
+      /** @example Pérez */
+      apellido?: string;
+      /** @example Ana */
+      nombre?: string;
+      /**
+       * @description DNI de 7 u 8 dígitos, sin puntos. Único
+       * @example 30111111
+       */
+      documento?: string;
+      /**
+       * Format: date
+       * @example 1980-05-20
+       */
+      fechaNacimiento?: string;
+      /**
+       * Format: date
+       * @description Posterior al nacimiento
+       * @example 2005-03-01
+       */
+      fechaIngreso?: string;
+      idSituacionRevista?: number;
+      /**
+       * Format: date
+       * @description No anterior al ingreso; null la borra
+       */
+      fechaPrevistaRetiro?: string | null;
+    };
+    ResultadoBajaPersonaDto: {
+      persona: components['schemas']['PersonaDetalleDto'];
+      /** @description Avisos que no impidieron la baja */
+      advertencias: string[];
+    };
+    CrearOcupacionDto: {
+      /** @description Puesto activo */
+      idPuesto: number;
+      /**
+       * Format: date
+       * @example 2024-03-01
+       */
+      fechaDesde: string;
+      /**
+       * Format: date
+       * @description No anterior al inicio; sin valor, la ocupación no tiene fin
+       */
+      fechaHasta?: string | null;
+      idCaracterOcupacion: number;
+      idDedicacion: number;
+    };
+    ActualizarOcupacionDto: {
+      /**
+       * Format: date
+       * @description No anterior al inicio; sin valor, la ocupación no tiene fin
+       */
+      fechaHasta?: string | null;
+      idCaracterOcupacion?: number;
+      idDedicacion?: number;
+    };
+    CerrarOcupacionDto: {
+      /**
+       * Format: date
+       * @example 2026-06-30
+       */
+      fechaHasta: string;
+    };
+    OcupanteDto: {
+      idPersona: number;
+      idPuesto: number;
+      /**
+       * Format: date
+       * @example 2024-03-01
+       */
+      fechaDesde: string;
+      /**
+       * Format: date
+       * @description null: sin fin
+       */
+      fechaHasta: string | null;
+      idCaracterOcupacion: number;
+      idDedicacion: number;
+      /**
+       * @description Respecto de la fecha de hoy de la base
+       * @enum {string}
+       */
+      estado: 'vigente' | 'futura' | 'pasada';
+      /** @example L-1234 */
+      legajo: string;
+      apellido: string;
+      nombre: string;
+    };
     LoginDto: {
       /** @example admin */
       nombreUsuario: string;
@@ -607,7 +929,7 @@ export interface components {
         | 'administrador'
         | 'docente';
       /** @description Obligatoria para el rol docente */
-      idPersona?: Record<string, never> | null;
+      idPersona?: number | null;
       /** @description Solo para jefatura y jefe de cátedra */
       idUnidades?: number[];
     };
@@ -627,7 +949,7 @@ export interface components {
         | 'administrador'
         | 'docente';
       /** @description Obligatoria para el rol docente */
-      idPersona?: Record<string, never> | null;
+      idPersona?: number | null;
       /** @description Solo para jefatura y jefe de cátedra */
       idUnidades?: number[];
       /** @description false desactiva el usuario */
@@ -1173,6 +1495,453 @@ export interface operations {
       };
       /** @description Duplicado, o cambio de código de un valor en uso */
       409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PersonasController_listar: {
+    parameters: {
+      query?: {
+        /** @description Texto contenido en el legajo, el apellido o el nombre */
+        q?: string;
+        activo?: boolean;
+        /** @description true: solo personas que todavía no tienen usuario vinculado */
+        sinUsuario?: boolean;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PersonaDto'][];
+        };
+      };
+    };
+  };
+  PersonasController_crear: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CrearPersonaDto'];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PersonaDetalleDto'];
+        };
+      };
+      /** @description Fechas incoherentes o situación inválida */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Legajo o documento repetidos */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PersonasController_obtener: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PersonaDetalleDto'];
+        };
+      };
+      /** @description El docente solo accede a su propia ficha */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description La persona no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PersonasController_actualizar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ActualizarPersonaDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PersonaDetalleDto'];
+        };
+      };
+      /** @description Fechas incoherentes o situación inválida */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description La persona no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Legajo o documento repetidos */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PersonasController_darDeBaja: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ResultadoBajaPersonaDto'];
+        };
+      };
+      /** @description La persona no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Tiene ocupaciones vigentes o futuras */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PersonasController_reactivar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PersonaDetalleDto'];
+        };
+      };
+      /** @description La persona no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OcupacionesController_listarDePersona: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPersona: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['OcupacionDto'][];
+        };
+      };
+      /** @description El docente solo accede a su propia ficha */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description La persona no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OcupacionesController_crear: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPersona: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CrearOcupacionDto'];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['OcupacionDto'];
+        };
+      };
+      /** @description Fechas incoherentes, persona o puesto de baja */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description La persona no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Se solapa con otra ocupación del mismo puesto */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OcupacionesController_anular: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPersona: number;
+        idPuesto: number;
+        fechaDesde: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Ocupación anulada */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description La ocupación no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description La ocupación ya empezó */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OcupacionesController_actualizar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPersona: number;
+        idPuesto: number;
+        fechaDesde: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ActualizarOcupacionDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['OcupacionDto'];
+        };
+      };
+      /** @description Fechas incoherentes */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description La ocupación no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Ocupación pasada o solape */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OcupacionesController_cerrar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPersona: number;
+        idPuesto: number;
+        fechaDesde: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CerrarOcupacionDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['OcupacionDto'];
+        };
+      };
+      /** @description El fin es anterior al inicio */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description La ocupación no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Ocupación pasada o solape */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OcupacionesController_listarDePuesto: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPuesto: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['OcupanteDto'][];
+        };
+      };
+      /** @description El puesto no existe */
+      404: {
         headers: {
           [name: string]: unknown;
         };

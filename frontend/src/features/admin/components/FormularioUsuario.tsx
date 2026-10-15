@@ -14,6 +14,7 @@ import { useMemo, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import { useUnidades } from '../../estructura/hooks/useUnidades';
+import { usePersonas } from '../../personas/hooks/usePersonas';
 import {
   useActualizarUsuario,
   useCrearUsuario,
@@ -28,20 +29,26 @@ interface Props {
 }
 
 function crearEsquema(esAlta: boolean) {
-  return z.object({
-    nombreUsuario: z
-      .string()
-      .trim()
-      .regex(
-        /^[A-Za-z0-9._-]{3,50}$/,
-        '3 a 50 caracteres: letras, números, punto, guion y guion bajo',
-      ),
-    clave: esAlta
-      ? z.string().min(10, 'Al menos 10 caracteres')
-      : z.string().optional(),
-    rol: z.string().min(1, 'Elegí un rol'),
-    idUnidades: z.array(z.number()),
-  });
+  return z
+    .object({
+      nombreUsuario: z
+        .string()
+        .trim()
+        .regex(
+          /^[A-Za-z0-9._-]{3,50}$/,
+          '3 a 50 caracteres: letras, números, punto, guion y guion bajo',
+        ),
+      clave: esAlta
+        ? z.string().min(10, 'Al menos 10 caracteres')
+        : z.string().optional(),
+      rol: z.string().min(1, 'Elegí un rol'),
+      idPersona: z.string(),
+      idUnidades: z.array(z.number()),
+    })
+    .refine((d) => d.rol !== 'docente' || d.idPersona !== '', {
+      path: ['idPersona'],
+      message: 'El rol docente exige una persona',
+    });
 }
 type Datos = z.infer<ReturnType<typeof crearEsquema>>;
 
@@ -55,6 +62,12 @@ export function FormularioUsuario({ usuario, onCerrar }: Props) {
   const [error, setError] = useState<string>();
 
   const { data: unidades } = useUnidades(true);
+  const { data: personas } = usePersonas({ activo: true });
+  // Solo las que no tienen usuario, más la que ya está vinculada a este.
+  const personasElegibles = (personas ?? []).filter(
+    (p) => !p.tieneUsuario || p.id === usuario?.idPersona,
+  );
+
   const {
     register,
     control,
@@ -67,6 +80,7 @@ export function FormularioUsuario({ usuario, onCerrar }: Props) {
       nombreUsuario: usuario?.nombreUsuario ?? '',
       clave: '',
       rol: usuario?.rol ?? '',
+      idPersona: usuario?.idPersona != null ? String(usuario.idPersona) : '',
       idUnidades: usuario?.idUnidades ?? [],
     },
   });
@@ -84,6 +98,7 @@ export function FormularioUsuario({ usuario, onCerrar }: Props) {
 
   const guardar = handleSubmit(async (datos) => {
     const idUnidades = tipoUnidad ? datos.idUnidades : [];
+    const idPersona = datos.idPersona === '' ? null : Number(datos.idPersona);
     try {
       if (usuario) {
         await actualizar.mutateAsync({
@@ -91,6 +106,7 @@ export function FormularioUsuario({ usuario, onCerrar }: Props) {
           cuerpo: {
             nombreUsuario: datos.nombreUsuario,
             rol: datos.rol as never,
+            idPersona,
             idUnidades,
           },
         });
@@ -99,6 +115,7 @@ export function FormularioUsuario({ usuario, onCerrar }: Props) {
           nombreUsuario: datos.nombreUsuario,
           clave: datos.clave ?? '',
           rol: datos.rol as never,
+          idPersona,
           idUnidades,
         });
       }
@@ -143,12 +160,32 @@ export function FormularioUsuario({ usuario, onCerrar }: Props) {
               error={!!errors.rol}
               helperText={
                 errors.rol?.message ??
-                'El rol docente exige vincular una persona, que se habilita cuando exista el módulo de personas'
+                'El rol docente exige vincular una persona'
               }
             >
               {(roles ?? []).map((r) => (
                 <MenuItem key={r.codigo} value={r.codigo}>
                   {r.denominacion}
+                </MenuItem>
+              ))}
+            </TextField>
+            <TextField
+              select
+              label="Persona vinculada"
+              defaultValue={
+                usuario?.idPersona != null ? String(usuario.idPersona) : ''
+              }
+              {...register('idPersona')}
+              error={!!errors.idPersona}
+              helperText={
+                errors.idPersona?.message ??
+                'Obligatoria para el rol docente; solo se ofrecen personas activas sin usuario'
+              }
+            >
+              <MenuItem value="">Sin persona</MenuItem>
+              {personasElegibles.map((p) => (
+                <MenuItem key={p.id} value={String(p.id)}>
+                  {p.apellido}, {p.nombre} · {p.legajo}
                 </MenuItem>
               ))}
             </TextField>

@@ -52,6 +52,9 @@ export function EstructuraPage() {
                 seleccionada.id,
               )}
               puedeEditar={sesion?.rol === 'analista_puestos'}
+              puedeVerOcupantes={
+                sesion?.rol !== undefined && sesion.rol !== 'docente'
+              }
             />
           ) : (
             <Alert severity="info">

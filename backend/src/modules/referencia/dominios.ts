@@ -12,6 +12,8 @@ import { EstadoPlan } from './entities/estado-plan.entity.js';
 import { TipoUnidad } from './entities/tipo-unidad.entity.js';
 import { NivelJerarquico } from './entities/nivel-jerarquico.entity.js';
 import { TipoRelacionContractual } from './entities/tipo-relacion-contractual.entity.js';
+import { SituacionRevista } from './entities/situacion-revista.entity.js';
+import { Dedicacion } from './entities/dedicacion.entity.js';
 import type { ValorReferencia } from './entities/valor-referencia.base.js';
 
 export interface DefinicionDominio {
@@ -24,7 +26,7 @@ export interface DefinicionDominio {
   entidad: Type<ValorReferencia>;
 }
 
-/** Los trece dominios cerrados del modelo (RF23). */
+/** Los quince dominios cerrados del modelo (RF23). */
 export const DOMINIOS: readonly DefinicionDominio[] = [
   {
     slug: 'nivel-dominio',
@@ -116,6 +118,20 @@ export const DOMINIOS: readonly DefinicionDominio[] = [
     tabla: 'tipo_relacion_contractual',
     ordinal: false,
     entidad: TipoRelacionContractual,
+  },
+  {
+    slug: 'situacion-revista',
+    denominacion: 'Situación de revista',
+    tabla: 'situacion_revista',
+    ordinal: false,
+    entidad: SituacionRevista,
+  },
+  {
+    slug: 'dedicacion',
+    denominacion: 'Dedicación',
+    tabla: 'dedicacion',
+    ordinal: true,
+    entidad: Dedicacion,
   },
 ];
 

@@ -81,6 +81,14 @@ docker compose exec -T db sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"' < b
 
 Cuidados del DBA: el trigger revisa la unidad, no sus puestos. Si se cambia el superior o el tipo de una unidad que ya tiene puestos, o se desactiva una cátedra con puestos activos o usuarios asignados, la aplicación no lo impide: conviene revisar los superiores de los puestos afectados.
 
+## Personas y ocupaciones
+
+- Personas y ocupaciones las carga Recursos Humanos desde la aplicación (`/personas`); no hay `DELETE`: se dan de baja (personas) o se cierran y anulan (ocupaciones).
+- Una ocupación no se solapa con otra de la misma persona en el mismo puesto (lo garantiza la base con `btree_gist`); cerrar fija el último día y el siguiente queda libre. Una ocupación que termina antes de hoy es historial y no se modifica.
+- Datos personales (Ley 25.326, RNF02): `documento` y `fechaNacimiento` solo los devuelve la API a `recursos_humanos` y `administrador`.
+- La baja de una persona o de un puesto se bloquea mientras tengan ocupaciones vigentes o futuras; la baja de la persona no desactiva su usuario.
+- La extensión `btree_gist` se crea en la migración y requiere permiso `CREATE EXTENSION` (el usuario de la base del compose lo tiene).
+
 ## Flujo de trabajo
 
 ### Migraciones
