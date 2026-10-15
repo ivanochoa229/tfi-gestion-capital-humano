@@ -1,4 +1,4 @@
-Estado: Pendiente | Fecha: 2026-10-14 | PR: —
+Estado: Implementado | Fecha: 2026-10-14 | PR: —
 
 # Importación de personas y ocupaciones desde CSV: plan de implementación
 

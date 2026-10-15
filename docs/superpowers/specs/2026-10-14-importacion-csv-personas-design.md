@@ -1,4 +1,4 @@
-Estado: Aprobada | Fecha: 2026-10-14 | Autor: IvanOchoa229
+Estado: Implementada | Fecha: 2026-10-14 | Autor: IvanOchoa229
 
 # Importación de personas y ocupaciones desde CSV
 
