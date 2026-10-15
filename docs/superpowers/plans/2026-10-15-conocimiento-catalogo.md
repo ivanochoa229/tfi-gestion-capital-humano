@@ -1837,7 +1837,7 @@ git commit -m "Implementar los requisitos de puesto con copia entre puestos"
 - Consumes: `Persona` (`personas/entities/persona.entity.js`), `Conocimiento`, `NivelDominio`, `TipoEvidencia`.
 - Produces: `ConocimientoPersona { idPersona, idConocimiento, idNivelDeclarado, fechaDeclaracion, idNivelAcreditado, fechaEvaluacion, idTipoEvidencia, idEvaluador }` (los seis últimos, anulables); `Acreditacion { id, idPersona, idConocimiento, idNivelAcreditado, idTipoEvidencia, fechaEvaluacion, idEvaluador, observaciones: string | null, registradaEn: Date }`; constantes SQL `SQL_ASEGURAR_FILA` (parámetros `[idPersona, idConocimiento, idNivel, fechaEvaluacion, idTipoEvidencia, idEvaluador]`) y `SQL_REFLEJAR_VIGENTE` (parámetros `[idPersona, idConocimiento]`).
 
-- [ ] **Paso 1: Crear las entidades**
+- [x] **Paso 1: Crear las entidades**
 
 `conocimiento-persona.entity.ts`:
 
@@ -2008,7 +2008,7 @@ export class Acreditacion {
 }
 ```
 
-- [ ] **Paso 2: Crear el SQL compartido**
+- [x] **Paso 2: Crear el SQL compartido**
 
 `sql.ts`:
 
@@ -2046,13 +2046,13 @@ export const SQL_REFLEJAR_VIGENTE = `
   WHERE cp.id_persona = $1 AND cp.id_conocimiento = $2`;
 ```
 
-- [ ] **Paso 3: Generar y revisar la migración**
+- [x] **Paso 3: Generar y revisar la migración**
 
 Run: `docker compose exec -T backend npm run migration:generate -- src/infra/database/migrations/CrearConocimientoPersonaYAcreditacion`
 
 Revisar a mano. Debe crear solo `conocimiento_persona` (clave `(id_persona, id_conocimiento)`, los tres CHECK, el índice por `id_conocimiento` y las FK) y `acreditacion` (con `CK_acreditacion_fecha_no_futura`, el índice `IDX_acreditacion_persona_conocimiento`, la FK compuesta `(id_persona, id_conocimiento) → conocimiento_persona` con `ON DELETE RESTRICT`, y las FK a niveles, tipo de evidencia y persona evaluadora). Verificar que `registrada_en` sea `TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()`. Borrar cualquier otra sentencia.
 
-- [ ] **Paso 4: Escribir el test de integración**
+- [x] **Paso 4: Escribir el test de integración**
 
 `conocimiento-persona.int.spec.ts`:
 
@@ -2228,12 +2228,12 @@ describe('Conocimiento de las personas (PostgreSQL real)', () => {
 });
 ```
 
-- [ ] **Paso 5: Correr el test de integración**
+- [x] **Paso 5: Correr el test de integración**
 
 Run: `docker compose up -d db && cd backend && npx vitest run --config vitest.integracion.config.ts src/modules/conocimiento/conocimiento-persona.int.spec.ts`
 Expected: PASS. Si el nombre de una restricción difiere en el mensaje, ajustar la expresión regular del test, no la migración.
 
-- [ ] **Paso 6: Aplicar y commitear**
+- [x] **Paso 6: Aplicar y commitear**
 
 Run: `docker compose exec -T backend npm run migration:run`
 
