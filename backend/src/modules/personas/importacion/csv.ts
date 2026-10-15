@@ -65,7 +65,7 @@ export function leerCsv(archivo: Buffer): FilaCsv[] {
       skip_empty_lines: true,
       trim: true,
       info: true,
-    }) as Registro[];
+    }) as unknown as Registro[]; // los tipos de csv-parse no modelan el resultado de `info: true`
   } catch (error) {
     if (error instanceof CsvError) {
       throw new BadRequestException(`No se pudo leer el CSV: ${error.message}`);
