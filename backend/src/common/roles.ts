@@ -72,3 +72,24 @@ export const ROLES_ESCRITORES_GLOBALES_DE_ACTIVOS: CodigoRol[] = [
   ROLES.analistaPuestos,
   ROLES.administrador,
 ];
+
+/** Evalúan la criticidad de un par conocimiento-puesto (RF12): RR. HH. sin límite; los jefes, dentro de su alcance. */
+export const ROLES_EVALUADORES_DE_CRITICIDAD: CodigoRol[] = [
+  ROLES.recursosHumanos,
+  ROLES.jefaturaDepartamento,
+  ROLES.jefeCatedra,
+];
+
+/** Leen evaluaciones de criticidad (RF24): los evaluadores y las autoridades. El docente no. */
+export const ROLES_LECTORES_DE_CRITICIDAD: CodigoRol[] = [
+  ROLES.recursosHumanos,
+  ROLES.autoridad,
+  ROLES.jefaturaDepartamento,
+  ROLES.jefeCatedra,
+];
+
+/** Leen escalas y matriz: los lectores de criticidad y el administrador, que edita la matriz. */
+export const ROLES_LECTORES_DE_MATRIZ: CodigoRol[] = [
+  ...ROLES_LECTORES_DE_CRITICIDAD,
+  ROLES.administrador,
+];
