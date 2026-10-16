@@ -1,4 +1,4 @@
-Estado: Propuesta | Fecha: 2026-10-16 | Autor: IvanOchoa229
+Estado: Aprobada | Fecha: 2026-10-16 | Autor: IvanOchoa229
 
 # Conocimiento: activos de conocimiento
 
