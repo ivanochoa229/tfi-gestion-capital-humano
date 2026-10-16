@@ -98,3 +98,31 @@ export function useEvaluar() {
     onSuccess: () => cliente.invalidateQueries({ queryKey: ['criticidad'] }),
   });
 }
+
+export function useEditarCelda() {
+  const cliente = useQueryClient();
+  return useMutation({
+    mutationFn: async (c: {
+      idNivelImpacto: number;
+      idNivelDificultad: number;
+      idNivelCriticidad: number;
+    }) => {
+      const { data, error } = await api.PUT(
+        '/api/criticidad/matriz/{idImpacto}/{idDificultad}',
+        {
+          params: {
+            path: {
+              idImpacto: c.idNivelImpacto,
+              idDificultad: c.idNivelDificultad,
+            },
+          },
+          body: { idNivelCriticidad: c.idNivelCriticidad },
+        },
+      );
+      if (error || !data) throw new Error(mensajeError(error));
+      return data;
+    },
+    onSuccess: () =>
+      cliente.invalidateQueries({ queryKey: ['criticidad', 'matriz'] }),
+  });
+}
