@@ -11,6 +11,7 @@ import { NivelImpacto } from './entities/nivel-impacto.entity.js';
 import { EvaluacionesController } from './evaluaciones.controller.js';
 import { EvaluacionesService } from './evaluaciones.service.js';
 import { MatrizService } from './matriz.service.js';
+import { ParesService } from './pares.service.js';
 
 /** Evaluación de criticidad por par conocimiento-puesto (RF12). */
 @Module({
@@ -26,6 +27,6 @@ import { MatrizService } from './matriz.service.js';
     UsuariosModule,
   ],
   controllers: [CriticidadController, EvaluacionesController],
-  providers: [MatrizService, EvaluacionesService],
+  providers: [MatrizService, EvaluacionesService, ParesService],
 })
 export class CriticidadModule {}
