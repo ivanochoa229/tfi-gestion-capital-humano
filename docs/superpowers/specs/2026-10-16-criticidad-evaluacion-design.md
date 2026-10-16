@@ -1,4 +1,4 @@
-Estado: Propuesta | Fecha: 2026-10-16 | Autor: IvanOchoa229
+Estado: Aprobada | Fecha: 2026-10-16 | Autor: IvanOchoa229
 
 # Criticidad: evaluación por par conocimiento-puesto
 
@@ -99,7 +99,7 @@ La migración carga las nueve celdas. Nunca se borran filas: solo se edita `id_n
 | `observaciones` | Texto, opcional |
 | `registrada_en` | `timestamptz`, por defecto `now()` |
 
-Índice `(id_puesto, id_conocimiento, fecha_evaluacion DESC, id_evaluacion DESC)`. No hay edición ni
+Índice `(id_puesto, id_conocimiento, fecha_evaluacion)` (ascendente: TypeORM no declara columnas descendentes y PostgreSQL lo recorre al revés). No hay edición ni
 borrado: un error se corrige con una evaluación nueva.
 
 ### Vista `criticidad_vigente`
