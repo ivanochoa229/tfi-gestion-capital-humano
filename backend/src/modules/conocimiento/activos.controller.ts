@@ -13,6 +13,7 @@ import {
   Res,
   StreamableFile,
   UploadedFile,
+  UseFilters,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -37,6 +38,7 @@ import {
   TODOS_LOS_ROLES,
 } from '../../common/roles.js';
 import type { SesionUsuario } from '../../common/sesion-usuario.js';
+import { ArchivoDemasiadoGrandeFilter } from './archivo-demasiado-grande.filter.js';
 import { ActivosService } from './activos.service.js';
 import { disposicionAdjunto } from './archivo.js';
 import {
@@ -50,6 +52,7 @@ import {
 /** Activos de conocimiento (RF11): documentación vinculada a los conocimientos y a una unidad. */
 @ApiTags('conocimiento')
 @Controller('activos')
+@UseFilters(ArchivoDemasiadoGrandeFilter)
 export class ActivosController {
   constructor(private readonly activos: ActivosService) {}
 

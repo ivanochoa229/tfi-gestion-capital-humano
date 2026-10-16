@@ -14,7 +14,7 @@ import {
 import { useState } from 'react';
 import { useSesion } from '../../../auth/useSesion';
 import { mensajeError } from '../../admin/hooks/useGuardarValor';
-import { puedeEscribirActivos } from '../activos';
+import { esUrlWeb, puedeEscribirActivos } from '../activos';
 import { descargarActivo, useActivos } from '../hooks/useActivos';
 import type { Conocimiento } from '../hooks/useConocimientos';
 import { ChipVigencia } from './ChipVigencia';
@@ -51,21 +51,29 @@ export function ActivosDeConocimientoDialog({ conocimiento, onCerrar }: Props) {
                 Este conocimiento todavía no tiene documentación.
               </Alert>
             )}
+            {data && data.total > data.items.length && (
+              <Alert severity="info">
+                Mostrando {data.items.length} de {data.total} activos; usá la
+                pantalla de Activos para ver el resto.
+              </Alert>
+            )}
             <List dense>
               {(data?.items ?? []).map((a) => (
                 <ListItem
                   key={a.id}
                   secondaryAction={
                     a.origen === 'enlace' ? (
-                      <Button
-                        size="small"
-                        component="a"
-                        href={a.enlace ?? undefined}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Abrir
-                      </Button>
+                      esUrlWeb(a.enlace) ? (
+                        <Button
+                          size="small"
+                          component="a"
+                          href={a.enlace ?? undefined}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Abrir
+                        </Button>
+                      ) : null
                     ) : (
                       <Button
                         size="small"

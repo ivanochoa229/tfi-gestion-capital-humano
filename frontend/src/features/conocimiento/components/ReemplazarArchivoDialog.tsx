@@ -10,8 +10,9 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { mensajeError } from '../../admin/hooks/useGuardarValor';
-import { EXTENSIONES_ACTIVO, formatearTamanio } from '../activos';
+import { formatearTamanio } from '../activos';
 import { useReemplazarArchivo, type Activo } from '../hooks/useActivos';
+import { SelectorArchivo } from './SelectorArchivo';
 
 interface Props {
   activo: Activo;
@@ -46,20 +47,7 @@ export function ReemplazarArchivoDialog({ activo, onCerrar }: Props) {
               ` (${formatearTamanio(activo.tamanio)})`}
             . El archivo anterior se borra y no se guarda su historial.
           </Typography>
-          <Button component="label" variant="outlined">
-            {archivo ? 'Cambiar archivo' : 'Elegir archivo'}
-            <input
-              hidden
-              type="file"
-              accept={EXTENSIONES_ACTIVO}
-              onChange={(e) => setArchivo(e.target.files?.[0])}
-            />
-          </Button>
-          {archivo && (
-            <Typography variant="body2" color="text.secondary">
-              {archivo.name} ({formatearTamanio(archivo.size)})
-            </Typography>
-          )}
+          <SelectorArchivo archivo={archivo} onElegir={setArchivo} />
         </Stack>
       </DialogContent>
       <DialogActions>

@@ -122,18 +122,24 @@ export class FiltroActivosDto {
   @IsOptional()
   @Type(() => Number)
   @IsInt()
+  @Min(1)
+  @Max(MAX_INT4)
   idConocimiento?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @Type(() => Number)
   @IsInt()
+  @Min(1)
+  @Max(MAX_INT4)
   idUnidad?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @Type(() => Number)
   @IsInt()
+  @Min(1)
+  @Max(MAX_INT4)
   idTipoDocumento?: number;
 
   @ApiPropertyOptional({
@@ -156,6 +162,7 @@ export class FiltroActivosDto {
   @Type(() => Number)
   @IsInt()
   @Min(1)
+  @Max(100000)
   pagina: number = 1;
 
   @ApiPropertyOptional({ default: 20, maximum: 100 })

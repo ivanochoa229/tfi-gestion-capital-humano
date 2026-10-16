@@ -14,6 +14,7 @@ import {
   TablePagination,
   TableRow,
   TextField,
+  Typography,
 } from '@mui/material';
 import { useState } from 'react';
 import { useSesion } from '../../../auth/useSesion';
@@ -21,7 +22,7 @@ import { PaginaEnConstruccion } from '../../../components/PaginaEnConstruccion';
 import { mensajeError } from '../../admin/hooks/useGuardarValor';
 import { useValoresReferencia } from '../../admin/hooks/useValoresReferencia';
 import { useUnidades } from '../../estructura/hooks/useUnidades';
-import { puedeEscribirActivos } from '../activos';
+import { esUrlWeb, puedeEscribirActivos } from '../activos';
 import { BajaActivoDialog } from '../components/BajaActivoDialog';
 import { ChipVigencia } from '../components/ChipVigencia';
 import { FormularioActivo } from '../components/FormularioActivo';
@@ -231,15 +232,25 @@ export function ActivosPage() {
                       </TableCell>
                       <TableCell align="right">
                         {a.origen === 'enlace' ? (
-                          <Button
-                            size="small"
-                            component="a"
-                            href={a.enlace ?? undefined}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Abrir
-                          </Button>
+                          esUrlWeb(a.enlace) ? (
+                            <Button
+                              size="small"
+                              component="a"
+                              href={a.enlace ?? undefined}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              Abrir
+                            </Button>
+                          ) : (
+                            <Typography
+                              variant="body2"
+                              component="span"
+                              color="text.secondary"
+                            >
+                              {a.enlace}
+                            </Typography>
+                          )
                         ) : (
                           <Button
                             size="small"

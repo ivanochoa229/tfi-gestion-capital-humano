@@ -47,19 +47,36 @@ export function useActivos(filtro: FiltroActivos = {}) {
   });
 }
 
+const tieneMensaje = (datos: unknown): boolean =>
+  typeof datos === 'object' &&
+  datos !== null &&
+  'message' in datos &&
+  !!(datos as { message: unknown }).message;
+
 /** `openapi-fetch` no arma multipart cómodamente: la subida usa `fetch` y deja que el navegador ponga el boundary. */
 async function enviarMultipart(
   url: string,
   metodo: 'POST' | 'PUT',
   cuerpo: FormData,
 ): Promise<Activo> {
-  const respuesta = await fetch(url, {
-    method: metodo,
-    body: cuerpo,
-    credentials: 'include',
-  });
+  let respuesta: Response;
+  try {
+    respuesta = await fetch(url, {
+      method: metodo,
+      body: cuerpo,
+      credentials: 'include',
+    });
+  } catch {
+    throw new Error('No se pudo conectar con el servidor');
+  }
   const datos: unknown = await respuesta.json().catch(() => null);
-  if (!respuesta.ok) throw new Error(mensajeError(datos));
+  if (!respuesta.ok) {
+    // Un 413 cortado por un proxy puede no traer JSON.
+    if (respuesta.status === 413 && !tieneMensaje(datos)) {
+      throw new Error('El archivo supera el tamaño máximo permitido');
+    }
+    throw new Error(mensajeError(datos));
+  }
   return datos as Activo;
 }
 

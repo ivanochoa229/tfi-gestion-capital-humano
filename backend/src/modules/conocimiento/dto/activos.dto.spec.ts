@@ -132,4 +132,22 @@ describe('FiltroActivosDto', () => {
       'pagina',
     );
   });
+
+  it.each(['idConocimiento', 'idUnidad', 'idTipoDocumento'])(
+    'rechaza %s fuera de rango',
+    (campo) => {
+      expect(validar(FiltroActivosDto, { [campo]: '0' }).propiedades).toContain(
+        campo,
+      );
+      expect(
+        validar(FiltroActivosDto, { [campo]: '2147483648' }).propiedades,
+      ).toContain(campo);
+    },
+  );
+
+  it('rechaza una página desmedida', () => {
+    expect(
+      validar(FiltroActivosDto, { pagina: '100001' }).propiedades,
+    ).toContain('pagina');
+  });
 });

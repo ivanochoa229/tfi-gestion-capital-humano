@@ -18,3 +18,13 @@ export function formatearTamanio(bytes: number): string {
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
+
+/** Solo las URL http(s) se muestran como vínculo; otros esquemas (javascript:, data:) no. */
+export const esUrlWeb = (valor: string | null | undefined): boolean => {
+  if (!valor) return false;
+  try {
+    return ['http:', 'https:'].includes(new URL(valor).protocol);
+  } catch {
+    return false;
+  }
+};

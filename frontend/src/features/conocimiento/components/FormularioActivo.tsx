@@ -12,7 +12,6 @@ import {
   TextField,
   ToggleButton,
   ToggleButtonGroup,
-  Typography,
 } from '@mui/material';
 import { useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
@@ -20,13 +19,14 @@ import { z } from 'zod';
 import { mensajeError } from '../../admin/hooks/useGuardarValor';
 import { useValoresReferencia } from '../../admin/hooks/useValoresReferencia';
 import { useUnidades } from '../../estructura/hooks/useUnidades';
-import { EXTENSIONES_ACTIVO, formatearTamanio } from '../activos';
+import { esUrlWeb } from '../activos';
 import {
   useActualizarActivo,
   useCrearActivo,
   type Activo,
 } from '../hooks/useActivos';
 import { useConocimientos, type Conocimiento } from '../hooks/useConocimientos';
+import { SelectorArchivo } from './SelectorArchivo';
 
 interface Props {
   /** Sin activo, el formulario da de alta uno nuevo. */
@@ -35,14 +35,6 @@ interface Props {
   conocimientoInicial?: Conocimiento;
   onCerrar: () => void;
 }
-
-const esUrlWeb = (valor: string) => {
-  try {
-    return ['http:', 'https:'].includes(new URL(valor).protocol);
-  } catch {
-    return false;
-  }
-};
 
 const esquema = z
   .object({
@@ -241,22 +233,7 @@ export function FormularioActivo({
               </ToggleButtonGroup>
             )}
             {origen === 'archivo' && !activo && (
-              <Stack spacing={1}>
-                <Button component="label" variant="outlined">
-                  {archivo ? 'Cambiar archivo' : 'Elegir archivo'}
-                  <input
-                    hidden
-                    type="file"
-                    accept={EXTENSIONES_ACTIVO}
-                    onChange={(e) => setArchivo(e.target.files?.[0])}
-                  />
-                </Button>
-                <Typography variant="body2" color="text.secondary">
-                  {archivo
-                    ? `${archivo.name} (${formatearTamanio(archivo.size)})`
-                    : 'PDF, DOCX, XLSX, PPTX, ODT, TXT, PNG o JPG'}
-                </Typography>
-              </Stack>
+              <SelectorArchivo archivo={archivo} onElegir={setArchivo} />
             )}
             {origen === 'enlace' && (
               <TextField
