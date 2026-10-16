@@ -99,7 +99,7 @@ El diseño está en `docs/superpowers/specs/2026-10-16-conocimiento-activos-desi
 
 | Capa | Tecnología | Requerimientos que cubre |
 | --- | --- | --- |
-| Base de datos | PostgreSQL | Modelo relacional de veinticinco tablas (RNF07) |
+| Base de datos | PostgreSQL | Modelo relacional de veintiocho tablas (RNF07) |
 | Almacenamiento de archivos | RustFS | Activos de conocimiento (RF11, RNF08) |
 | Backend | NestJS (TypeScript) | API para todos los requerimientos funcionales |
 | ORM y migraciones | TypeORM, con migraciones versionadas y `synchronize` desactivado | Esquema y datos de prueba iguales para todo el grupo |
@@ -121,6 +121,8 @@ El diseño está en `docs/superpowers/specs/2026-10-16-conocimiento-activos-desi
 **Personas:** `persona` y `ocupacion` (clave compuesta, con restricción de exclusión de solapes sobre `btree_gist`); ver `docs/superpowers/specs/2026-10-13-personas-ocupaciones-design.md`. Suma dos dominios de referencia (`situacion_revista`, `dedicacion`) a los administrados por RF23. La carga inicial masiva desde CSV (apoyo a OE4) está en `docs/superpowers/specs/2026-10-14-importacion-csv-personas-design.md`.
 
 **Conocimiento:** `conocimiento`, `requisito_puesto`, `conocimiento_persona` y `acreditacion` (historial de solo inserción; el reflejo de la acreditación vigente vive en `conocimiento_persona`); ver `docs/superpowers/specs/2026-10-15-conocimiento-catalogo-design.md`. Suma dos dominios de referencia (`area_tematica`, `tipo_evidencia`) a los administrados por RF23. Las consultas de detección cuentan solo el nivel acreditado vigente.
+
+**Criticidad:** `evaluacion_criticidad` (historial de solo inserción; la vigente es la vista `criticidad_vigente`), `matriz_criticidad` y las escalas fijas `nivel_impacto` y `nivel_dificultad` (no son dominios de RF23); ver `docs/superpowers/specs/2026-10-16-criticidad-evaluacion-design.md`. Las consultas de detección leen solo `criticidad_vigente`. Un puesto es de criticidad alta si tiene al menos un requisito excluyente con criticidad vigente alta.
 
 Cuidados de implementación:
 
@@ -183,5 +185,3 @@ Deben decidirse antes de implementar el bloque que los usa.
 | Tema | Requerimiento afectado | Qué falta definir |
 | --- | --- | --- |
 | Validación y aprobación | RF05, RF13 | Un estado, quién validó o aprobó y cuándo; `relevamiento` y `plan_sucesion` no lo registran |
-| Criticidad del puesto | RF18 | La criticidad se evalúa por par conocimiento-puesto, pero RF18 habla de puestos críticos. Falta la regla, por ejemplo: un puesto es crítico si tiene al menos un conocimiento de criticidad alta |
-| Regla de combinación | RF12 | Cómo se combinan impacto de pérdida y dificultad de reemplazo para obtener el nivel de criticidad (supuesto 5 del avance) |

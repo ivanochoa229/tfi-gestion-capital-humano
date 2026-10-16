@@ -1,4 +1,4 @@
-Estado: Aprobada | Fecha: 2026-10-16 | Autor: IvanOchoa229
+Estado: Implementada | Fecha: 2026-10-16 | Autor: IvanOchoa229
 
 # Criticidad: evaluación por par conocimiento-puesto
 
