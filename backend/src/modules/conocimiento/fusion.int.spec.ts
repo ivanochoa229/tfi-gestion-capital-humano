@@ -203,4 +203,41 @@ describe('Fusión de conocimientos (PostgreSQL real)', () => {
     );
     expect(origen).toEqual([{ activo: false, fusionado: b }]);
   });
+
+  it('deja la documentación vinculada solo al destino, sin duplicar', async () => {
+    const a = await nuevoConocimiento('Docker 1', 'docker 1'); // origen
+    const b = await nuevoConocimiento('Docker', 'docker'); // destino
+    const nuevoActivo = async (titulo: string) =>
+      (
+        await sql<{ id: number }[]>(
+          `INSERT INTO activo_conocimiento (titulo, id_tipo_documento, id_unidad, origen, ubicacion)
+           SELECT $1::text, (SELECT min(id_tipo_documento) FROM tipo_documento),
+                  (SELECT min(id_unidad) FROM unidad_organizativa), 'enlace', 'https://wiki.example/' || $1::text
+           RETURNING id_activo AS id`,
+          [titulo],
+        )
+      )[0].id;
+    const vincular = (activo: number, conocimiento: number) =>
+      sql(
+        `INSERT INTO activo_conocimiento_conocimiento (id_activo, id_conocimiento) VALUES ($1, $2)`,
+        [activo, conocimiento],
+      );
+    const soloOrigen = await nuevoActivo('solo-origen');
+    const ambos = await nuevoActivo('ambos');
+    await vincular(soloOrigen, a);
+    await vincular(ambos, a);
+    await vincular(ambos, b);
+
+    await servicio.fusionar(a, { idDestino: b });
+
+    const vinculos = await sql<{ a: number; c: number }[]>(
+      `SELECT id_activo AS a, id_conocimiento AS c FROM activo_conocimiento_conocimiento
+       WHERE id_activo IN ($1, $2) ORDER BY id_activo`,
+      [soloOrigen, ambos],
+    );
+    expect(vinculos).toEqual([
+      { a: soloOrigen, c: b },
+      { a: ambos, c: b },
+    ]);
+  });
 });

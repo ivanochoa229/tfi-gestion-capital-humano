@@ -9,7 +9,8 @@ export const SQL_CONTAR_PERSONAS = `SELECT count(*)::int AS n FROM conocimiento_
  * Requisitos: donde un puesto pedía ambos queda el nivel más exigente y
  * excluyente si alguno lo era. Personas: el declarado más alto; las
  * acreditaciones del origen pasan al destino y el reflejo se recalcula con la
- * regla de siempre (la más reciente, no la de nivel más alto).
+ * regla de siempre (la más reciente, no la de nivel más alto). Los activos que
+ * documentaban el origen quedan vinculados al destino.
  */
 export const PASOS_FUSION: string[] = [
   // 1. Puestos que pedían ambos: se endurece el requisito del destino.
@@ -69,4 +70,11 @@ export const PASOS_FUSION: string[] = [
      AND $1::int IS NOT NULL`,
   // 8. Las filas del origen ya no tienen nada que las sostenga.
   `DELETE FROM conocimiento_persona WHERE id_conocimiento = $1 AND $2::int IS NOT NULL`,
+  // 9. Los activos que documentaban el origen pasan a documentar el destino.
+  `INSERT INTO activo_conocimiento_conocimiento (id_activo, id_conocimiento)
+   SELECT id_activo, $2 FROM activo_conocimiento_conocimiento
+   WHERE id_conocimiento = $1
+   ON CONFLICT DO NOTHING`,
+  // 10. Se sueltan los vínculos al origen.
+  `DELETE FROM activo_conocimiento_conocimiento WHERE id_conocimiento = $1 AND $2::int IS NOT NULL`,
 ];

@@ -19,6 +19,7 @@ import { useSesion } from '../../../auth/useSesion';
 import { PaginaEnConstruccion } from '../../../components/PaginaEnConstruccion';
 import { mensajeError } from '../../admin/hooks/useGuardarValor';
 import { useValoresReferencia } from '../../admin/hooks/useValoresReferencia';
+import { ActivosDeConocimientoDialog } from '../components/ActivosDeConocimientoDialog';
 import { FormularioConocimiento } from '../components/FormularioConocimiento';
 import { FusionarDialog } from '../components/FusionarDialog';
 import {
@@ -43,6 +44,7 @@ export function ConocimientoPage() {
     conocimiento?: Conocimiento;
   } | null>(null);
   const [fusionando, setFusionando] = useState<Conocimiento>();
+  const [documentando, setDocumentando] = useState<Conocimiento>();
   const [error, setError] = useState<string>();
 
   const { data, isLoading, isError } = useConocimientos({
@@ -154,6 +156,7 @@ export function ConocimientoPage() {
                 <TableCell>Tipo</TableCell>
                 <TableCell>Área temática</TableCell>
                 <TableCell>Estado</TableCell>
+                <TableCell>Documentación</TableCell>
                 {puedeEditar && <TableCell align="right">Acciones</TableCell>}
               </TableRow>
             </TableHead>
@@ -169,6 +172,11 @@ export function ConocimientoPage() {
                       label={c.activo ? 'Activo' : 'De baja'}
                       color={c.activo ? 'success' : 'default'}
                     />
+                  </TableCell>
+                  <TableCell>
+                    <Button size="small" onClick={() => setDocumentando(c)}>
+                      Documentación
+                    </Button>
                   </TableCell>
                   {puedeEditar && (
                     <TableCell align="right">
@@ -206,6 +214,12 @@ export function ConocimientoPage() {
         <FusionarDialog
           origen={fusionando}
           onCerrar={() => setFusionando(undefined)}
+        />
+      )}
+      {documentando && (
+        <ActivosDeConocimientoDialog
+          conocimiento={documentando}
+          onCerrar={() => setDocumentando(undefined)}
         />
       )}
     </PaginaEnConstruccion>

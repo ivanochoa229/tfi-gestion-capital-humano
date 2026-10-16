@@ -81,14 +81,19 @@ Los documentos se guardan en RustFS y sus metadatos en PostgreSQL, ambos en cont
 | RustFS | Los archivos (manuales, instructivos, procedimientos) en el bucket `activos-conocimiento` |
 | Aplicación | Sube el archivo a RustFS mediante un SDK de S3 y registra sus metadatos en PostgreSQL |
 
-La decisión modifica la tabla `activo_conocimiento`:
+La decisión modifica la tabla `activo_conocimiento` y agrega una tabla puente:
 
 | Atributo | Cambio |
 | --- | --- |
-| ubicacion | Pasa a guardar la clave del objeto en el bucket |
-| tipo_mime | Nuevo: formato del archivo (por ejemplo, application/pdf) |
-| tamanio | Nuevo: tamaño en bytes |
-| hash | Nuevo: huella del contenido, para detectar archivos duplicados |
+| ubicacion | Guarda la clave del objeto en el bucket, o la URL si el activo es un enlace |
+| origen | Nuevo: `archivo` o `enlace` |
+| nombre_original, tipo_mime, tamanio | Nuevos: nombre, formato y tamaño en bytes del archivo (nulos en un enlace) |
+| hash | Nuevo: SHA-256 del contenido, para rechazar archivos duplicados (nulo en un enlace) |
+| activo | Nuevo: baja lógica; el objeto se conserva en RustFS |
+| id_tipo_documento | El tipo de documento pasa a una tabla de referencia (`tipo_documento`) |
+| activo_conocimiento_conocimiento | Nueva tabla puente: un activo documenta uno o más conocimientos (reemplaza la FK `id_conocimiento`) |
+
+El diseño está en `docs/superpowers/specs/2026-10-16-conocimiento-activos-design.md`.
 
 ## 5. Stack tecnológico
 

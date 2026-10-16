@@ -5,13 +5,13 @@ import {
 } from './entities/valor-referencia.base.js';
 
 describe('DOMINIOS', () => {
-  it('define los diecisiete dominios cerrados', () => {
-    expect(DOMINIOS).toHaveLength(17);
+  it('define los dieciocho dominios cerrados', () => {
+    expect(DOMINIOS).toHaveLength(18);
   });
 
   it('no repite slugs ni tablas', () => {
-    expect(new Set(DOMINIOS.map((d) => d.slug)).size).toBe(17);
-    expect(new Set(DOMINIOS.map((d) => d.tabla)).size).toBe(17);
+    expect(new Set(DOMINIOS.map((d) => d.slug)).size).toBe(18);
+    expect(new Set(DOMINIOS.map((d) => d.tabla)).size).toBe(18);
   });
 
   it('tiene exactamente cinco dominios ordinales', () => {
@@ -60,5 +60,13 @@ describe('DOMINIOS', () => {
         d.ordinal,
       );
     }
+  });
+
+  it('incluye el dominio de documentos', () => {
+    const porSlug = new Map(DOMINIOS.map((d) => [d.slug, d]));
+    expect(porSlug.get('tipo-documento')).toMatchObject({
+      tabla: 'tipo_documento',
+      ordinal: false,
+    });
   });
 });

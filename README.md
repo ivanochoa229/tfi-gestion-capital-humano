@@ -104,6 +104,17 @@ Cuidados del DBA: el trigger revisa la unidad, no sus puestos. Si se cambia el s
 - **Fusión:** un duplicado se retira con «Fusionar» en la pantalla del catálogo (no se puede deshacer). Pasa sus requisitos y los datos de las personas al conocimiento que se conserva.
 - **Acreditar:** solo lo hacen la jefatura y los jefes de cátedra, sobre personas con una ocupación vigente en sus unidades. Para que un jefe pueda acreditar, el administrador tiene que vincular su usuario con su persona y asignarle sus unidades. La persona que ocupa la jefatura de departamento no puede ser acreditada por nadie en esta etapa.
 
+### Activos de conocimiento
+
+- **Qué son:** manuales, instructivos y procedimientos vinculados a uno o más conocimientos y a la unidad que los mantiene. Cada uno es un **archivo** (guardado en RustFS, bucket `activos-conocimiento`) o un **enlace** externo.
+- **Archivos:** PDF, DOCX, XLSX, PPTX, ODT, TXT, PNG y JPG, hasta `ACTIVOS_TAMANIO_MAX_MB` (20 por defecto). El tipo se valida por el contenido y debe coincidir con la extensión. El servidor calcula el SHA-256: un archivo idéntico al de otro activo vigente se rechaza.
+- **Clave del objeto:** `activos/{idActivo}/{uuid}-{nombre}`. La base guarda la clave en `ubicacion`; no hay URLs públicas, la descarga pasa por la API.
+- **Vigencia:** `fecha_vigencia` es opcional e informativa. «Vencido» se calcula al consultar; no bloquea nada ni envía avisos.
+- **Baja:** lógica. El objeto se conserva en RustFS y la baja libera el hash. Reemplazar un archivo borra el anterior, sin historial.
+- **Vínculos:** al editar un activo se conservan los vínculos a conocimientos que después se dieron de baja; solo los conocimientos que se agregan deben estar activos.
+- **Quién escribe:** analista de puestos y administrador en cualquier unidad; jefe de cátedra y jefatura de departamento dentro de su alcance. Todos los usuarios consultan y descargan.
+- **Si cargás datos por SQL:** respetá el CHECK (un `archivo` lleva `nombre_original`, `tipo_mime`, `tamanio` y `hash`; un `enlace`, ninguno) y subí el objeto con la clave que pongas en `ubicacion`.
+
 ## Flujo de trabajo
 
 ### Migraciones

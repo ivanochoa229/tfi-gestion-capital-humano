@@ -16,6 +16,7 @@ import { SituacionRevista } from './entities/situacion-revista.entity.js';
 import { Dedicacion } from './entities/dedicacion.entity.js';
 import { AreaTematica } from './entities/area-tematica.entity.js';
 import { TipoEvidencia } from './entities/tipo-evidencia.entity.js';
+import { TipoDocumento } from './entities/tipo-documento.entity.js';
 import type { ValorReferencia } from './entities/valor-referencia.base.js';
 
 export interface DefinicionDominio {
@@ -28,7 +29,7 @@ export interface DefinicionDominio {
   entidad: Type<ValorReferencia>;
 }
 
-/** Los diecisiete dominios cerrados del modelo (RF23). */
+/** Los dieciocho dominios cerrados del modelo (RF23). */
 export const DOMINIOS: readonly DefinicionDominio[] = [
   {
     slug: 'nivel-dominio',
@@ -148,6 +149,13 @@ export const DOMINIOS: readonly DefinicionDominio[] = [
     tabla: 'tipo_evidencia',
     ordinal: false,
     entidad: TipoEvidencia,
+  },
+  {
+    slug: 'tipo-documento',
+    denominacion: 'Tipo de documento',
+    tabla: 'tipo_documento',
+    ordinal: false,
+    entidad: TipoDocumento,
   },
 ];
 
