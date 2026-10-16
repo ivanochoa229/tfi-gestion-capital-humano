@@ -98,6 +98,12 @@ Cuidados del DBA: el trigger revisa la unidad, no sus puestos. Si se cambia el s
 - Primero se muestra una vista previa sin escribir nada; al confirmar se valida todo de nuevo y se importa todo o nada. Máximo 2 MB (HTTP 413) y 2000 filas (HTTP 400, igual que una cabecera inválida). La tabla de errores muestra el número de fila como en Excel y los mensajes están en español. Mientras corre una importación se toma el bloqueo de estructura: las demás escrituras de estructura y personas esperan a que termine. Si se corta la conexión durante la importación, revisá Personas antes de reintentar. Los errores inesperados del servidor responden con un mensaje genérico y nunca incluyen contenido del CSV.
 - El CSV contiene datos personales (Ley 25.326, RNF02): el sistema no lo guarda, pero su custodia y su borrado después de la carga son responsabilidad de Recursos Humanos.
 
+### Catálogo de conocimientos
+
+- **Duplicados:** dos conocimientos activos del mismo tipo no pueden tener la misma `denominacion_normalizada` (minúsculas, sin tildes, espacios colapsados; la `ñ` se conserva). La calcula la aplicación al dar de alta o editar. Si cargás conocimientos con `INSERT` directo en la base, tenés que completar vos esa columna con la misma regla, o el control de duplicados no te protege.
+- **Fusión:** un duplicado se retira con «Fusionar» en la pantalla del catálogo (no se puede deshacer). Pasa sus requisitos y los datos de las personas al conocimiento que se conserva.
+- **Acreditar:** solo lo hacen la jefatura y los jefes de cátedra, sobre personas con una ocupación vigente en sus unidades. Para que un jefe pueda acreditar, el administrador tiene que vincular su usuario con su persona y asignarle sus unidades. La persona que ocupa la jefatura de departamento no puede ser acreditada por nadie en esta etapa.
+
 ## Flujo de trabajo
 
 ### Migraciones

@@ -26,6 +26,7 @@ import {
 import type { UnidadArbol } from '../hooks/useUnidades';
 import { FormularioPuesto } from './FormularioPuesto';
 import { OcupantesPuestoDialog } from './OcupantesPuestoDialog';
+import { RequisitosPuestoDialog } from '../../conocimiento/components/RequisitosPuestoDialog';
 
 interface Props {
   unidad: UnidadArbol;
@@ -50,6 +51,7 @@ export function TablaPuestos({
     null,
   );
   const [verOcupantes, setVerOcupantes] = useState<Puesto>();
+  const [verRequisitos, setVerRequisitos] = useState<Puesto>();
   const [verBajas, setVerBajas] = useState(false);
   const [texto, setTexto] = useState('');
   const [error, setError] = useState<string>();
@@ -185,9 +187,20 @@ export function TablaPuestos({
                   {(puedeEditar || puedeVerOcupantes) && (
                     <TableCell align="right">
                       {puedeVerOcupantes && (
-                        <Button size="small" onClick={() => setVerOcupantes(p)}>
-                          Ocupantes
-                        </Button>
+                        <>
+                          <Button
+                            size="small"
+                            onClick={() => setVerOcupantes(p)}
+                          >
+                            Ocupantes
+                          </Button>
+                          <Button
+                            size="small"
+                            onClick={() => setVerRequisitos(p)}
+                          >
+                            Requisitos
+                          </Button>
+                        </>
                       )}
                       {puedeEditar && (
                         <>
@@ -222,6 +235,13 @@ export function TablaPuestos({
         <OcupantesPuestoDialog
           puesto={verOcupantes}
           onCerrar={() => setVerOcupantes(undefined)}
+        />
+      )}
+      {verRequisitos && (
+        <RequisitosPuestoDialog
+          puesto={verRequisitos}
+          puedeEditar={puedeEditar}
+          onCerrar={() => setVerRequisitos(undefined)}
         />
       )}
     </Stack>

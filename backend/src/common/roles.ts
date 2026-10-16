@@ -36,3 +36,25 @@ export const ROLES_CON_DATOS_PERSONALES: CodigoRol[] = [
   ROLES.recursosHumanos,
   ROLES.administrador,
 ];
+
+/** Declaran su propio conocimiento: todos los que son personas con conocimientos que declarar. */
+export const ROLES_DECLARANTES: CodigoRol[] = [
+  ROLES.docente,
+  ROLES.jefeCatedra,
+  ROLES.jefaturaDepartamento,
+];
+
+/** Acreditan el conocimiento de otras personas, dentro de su alcance por unidad. */
+export const ROLES_EVALUADORES: CodigoRol[] = [
+  ROLES.jefeCatedra,
+  ROLES.jefaturaDepartamento,
+];
+
+/** Leen el perfil de conocimiento de una persona (dato sensible, RNF02). */
+export const ROLES_LECTORES_DE_PERFIL: CodigoRol[] = [
+  ROLES.recursosHumanos,
+  ROLES.autoridad,
+  ROLES.jefaturaDepartamento,
+  ROLES.jefeCatedra,
+  ROLES.docente,
+];

@@ -372,6 +372,214 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/conocimientos': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['ConocimientosController_listar'];
+    put?: never;
+    post: operations['ConocimientosController_crear'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/conocimientos/mios': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['ConocimientosController_mios'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/conocimientos/pendientes-acreditacion': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['ConocimientosController_pendientes'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/conocimientos/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch: operations['ConocimientosController_actualizar'];
+    trace?: never;
+  };
+  '/api/conocimientos/{id}/baja': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['ConocimientosController_baja'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/conocimientos/{id}/reactivar': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['ConocimientosController_reactivar'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/conocimientos/{id}/fusionar': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['ConocimientosController_fusionar'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/puestos/{idPuesto}/requisitos': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['RequisitosController_listar'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/puestos/{idPuesto}/requisitos/{idConocimiento}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put: operations['RequisitosController_guardar'];
+    post?: never;
+    delete: operations['RequisitosController_quitar'];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/puestos/{idPuesto}/requisitos/copiar': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['RequisitosController_copiar'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/personas/{idPersona}/conocimientos': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['PerfilConocimientoController_listar'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/personas/{idPersona}/conocimientos/{idConocimiento}/acreditaciones': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['PerfilConocimientoController_historial'];
+    put?: never;
+    post: operations['PerfilConocimientoController_acreditar'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/personas/{idPersona}/conocimientos/{idConocimiento}/declaracion': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put: operations['PerfilConocimientoController_declarar'];
+    post?: never;
+    delete: operations['PerfilConocimientoController_retirar'];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/auth/login': {
     parameters: {
       query?: never;
@@ -914,6 +1122,166 @@ export interface components {
       legajo: string;
       apellido: string;
       nombre: string;
+    };
+    ConocimientoDto: {
+      id: number;
+      denominacion: string;
+      idTipoConocimiento: number;
+      idAreaTematica: number;
+      descripcion: string | null;
+      activo: boolean;
+      /** @description Conocimiento al que se fusionó, si se retiró por duplicado */
+      idFusionadoEn: number | null;
+    };
+    PuestoQuePideDto: {
+      idPuesto: number;
+      /** @example P-0001 */
+      codigo: string;
+      denominacion: string;
+    };
+    MiConocimientoDto: {
+      idConocimiento: number;
+      denominacion: string;
+      idTipoConocimiento: number;
+      /** @description El más exigente entre los puestos que ocupa; null si ninguno lo pide */
+      idNivelRequerido: number | null;
+      /** @description true si algún puesto lo pide como excluyente */
+      esExcluyente: boolean;
+      puestos: components['schemas']['PuestoQuePideDto'][];
+      idNivelDeclarado: number | null;
+      /** Format: date */
+      fechaDeclaracion: string | null;
+      idNivelAcreditado: number | null;
+      /** Format: date */
+      fechaEvaluacion: string | null;
+      idTipoEvidencia: number | null;
+    };
+    PendienteAcreditacionDto: {
+      idPersona: number;
+      apellido: string;
+      nombre: string;
+      idConocimiento: number;
+      denominacion: string;
+      idNivelDeclarado: number;
+      idNivelAcreditado: number | null;
+      /** Format: date */
+      fechaDeclaracion: string;
+    };
+    CrearConocimientoDto: {
+      /** @example PostgreSQL */
+      denominacion: string;
+      /** @description Tipo de conocimiento activo */
+      idTipoConocimiento: number;
+      /** @description Área temática activa */
+      idAreaTematica: number;
+      descripcion?: string | null;
+    };
+    ActualizarConocimientoDto: {
+      /** @example PostgreSQL */
+      denominacion?: string;
+      /** @description Tipo de conocimiento activo */
+      idTipoConocimiento?: number;
+      /** @description Área temática activa */
+      idAreaTematica?: number;
+      descripcion?: string | null;
+    };
+    FusionarConocimientoDto: {
+      /** @description Conocimiento que se conserva */
+      idDestino: number;
+    };
+    ResultadoFusionDto: {
+      idOrigen: number;
+      idDestino: number;
+      /** @description Requisitos de puesto que pedían el origen */
+      requisitosMovidos: number;
+      /** @description Personas con datos del origen */
+      personasMovidas: number;
+    };
+    RequisitoDto: {
+      idPuesto: number;
+      idConocimiento: number;
+      denominacion: string;
+      idTipoConocimiento: number;
+      idNivelRequerido: number;
+      esExcluyente: boolean;
+    };
+    GuardarRequisitoDto: {
+      /** @description Nivel de dominio requerido (activo) */
+      idNivel: number;
+      /** @description true: excluyente; false: deseable */
+      esExcluyente: boolean;
+    };
+    CopiarRequisitosDto: {
+      /** @description Puesto del que se copian los requisitos */
+      idPuestoOrigen: number;
+    };
+    OmitidoDto: {
+      idConocimiento: number;
+      denominacion: string;
+    };
+    ResultadoCopiaDto: {
+      copiados: number;
+      /** @description Los que el puesto destino ya tenía; no se pisan */
+      omitidos: components['schemas']['OmitidoDto'][];
+    };
+    PerfilConocimientoDto: {
+      idPersona: number;
+      idConocimiento: number;
+      idNivelDeclarado: number | null;
+      /** Format: date */
+      fechaDeclaracion: string | null;
+      idNivelAcreditado: number | null;
+      /** Format: date */
+      fechaEvaluacion: string | null;
+      idTipoEvidencia: number | null;
+      idEvaluador: number | null;
+      denominacion: string;
+      idTipoConocimiento: number;
+      /** @description Declarado que todavía no tiene una acreditación que lo respalde o lo contradiga */
+      pendiente: boolean;
+    };
+    AcreditacionDto: {
+      id: number;
+      idPersona: number;
+      idConocimiento: number;
+      idNivelAcreditado: number;
+      idTipoEvidencia: number;
+      /** Format: date */
+      fechaEvaluacion: string;
+      /** @description Persona que evaluó */
+      idEvaluador: number;
+      observaciones: string | null;
+      /** Format: date-time */
+      registradaEn: string;
+    };
+    DeclararDto: {
+      /** @description Nivel de dominio que declara (activo) */
+      idNivel: number;
+    };
+    ConocimientoPersonaDto: {
+      idPersona: number;
+      idConocimiento: number;
+      idNivelDeclarado: number | null;
+      /** Format: date */
+      fechaDeclaracion: string | null;
+      idNivelAcreditado: number | null;
+      /** Format: date */
+      fechaEvaluacion: string | null;
+      idTipoEvidencia: number | null;
+      idEvaluador: number | null;
+    };
+    AcreditarDto: {
+      /** @description Nivel de dominio que se acredita (activo) */
+      idNivel: number;
+      /**
+       * Format: date
+       * @description No futura
+       * @example 2026-06-15
+       */
+      fechaEvaluacion: string;
+      /** @description Tipo de evidencia activo */
+      idTipoEvidencia: number;
+      observaciones?: string | null;
     };
     LoginDto: {
       /** @example admin */
@@ -2052,6 +2420,569 @@ export interface operations {
         };
       };
       /** @description El puesto no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ConocimientosController_listar: {
+    parameters: {
+      query?: {
+        /** @description Texto contenido en la denominación */
+        q?: string;
+        idTipo?: number;
+        idArea?: number;
+        /** @description Sin valor: activos e inactivos */
+        activo?: boolean;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ConocimientoDto'][];
+        };
+      };
+    };
+  };
+  ConocimientosController_crear: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CrearConocimientoDto'];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ConocimientoDto'];
+        };
+      };
+      /** @description Tipo o área inexistentes o inactivos */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Ya existe un conocimiento activo igual del mismo tipo */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ConocimientosController_mios: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['MiConocimientoDto'][];
+        };
+      };
+      /** @description El usuario no tiene persona vinculada */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ConocimientosController_pendientes: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PendienteAcreditacionDto'][];
+        };
+      };
+    };
+  };
+  ConocimientosController_actualizar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ActualizarConocimientoDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ConocimientoDto'];
+        };
+      };
+      /** @description El conocimiento no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Duplicado o conocimiento dado de baja */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ConocimientosController_baja: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ConocimientoDto'];
+        };
+      };
+      /** @description El conocimiento no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Lo piden puestos activos */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ConocimientosController_reactivar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ConocimientoDto'];
+        };
+      };
+      /** @description El conocimiento no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Ya hay uno activo igual */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ConocimientosController_fusionar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['FusionarConocimientoDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ResultadoFusionDto'];
+        };
+      };
+      /** @description Inactivos, de distinto tipo o el mismo */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Origen o destino inexistentes */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  RequisitosController_listar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPuesto: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['RequisitoDto'][];
+        };
+      };
+      /** @description El puesto no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  RequisitosController_guardar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPuesto: number;
+        idConocimiento: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['GuardarRequisitoDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['RequisitoDto'];
+        };
+      };
+      /** @description Puesto de baja, conocimiento inactivo o nivel inválido */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El puesto no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  RequisitosController_quitar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPuesto: number;
+        idConocimiento: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Requisito quitado */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El puesto no tiene ese requisito */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  RequisitosController_copiar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPuesto: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CopiarRequisitosDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ResultadoCopiaDto'];
+        };
+      };
+      /** @description Mismo puesto o destino de baja */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Puesto de origen o de destino inexistente */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PerfilConocimientoController_listar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPersona: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PerfilConocimientoDto'][];
+        };
+      };
+      /** @description Sin acceso al conocimiento de esa persona */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PerfilConocimientoController_historial: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPersona: number;
+        idConocimiento: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['AcreditacionDto'][];
+        };
+      };
+      /** @description Sin acceso al conocimiento de esa persona */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PerfilConocimientoController_acreditar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPersona: number;
+        idConocimiento: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AcreditarDto'];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['AcreditacionDto'];
+        };
+      };
+      /** @description Sin persona vinculada, fecha futura o datos inactivos */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Fuera del alcance o autoacreditación */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PerfilConocimientoController_declarar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPersona: number;
+        idConocimiento: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['DeclararDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ConocimientoPersonaDto'];
+        };
+      };
+      /** @description Persona, conocimiento o nivel inactivos */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Solo la propia persona declara */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PerfilConocimientoController_retirar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPersona: number;
+        idConocimiento: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Declaración retirada */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Solo la propia persona */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description No hay declaración que retirar */
       404: {
         headers: {
           [name: string]: unknown;

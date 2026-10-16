@@ -2,7 +2,10 @@ import {
   ROLES,
   ROLES_CON_ALCANCE_POR_UNIDAD,
   ROLES_CON_DATOS_PERSONALES,
+  ROLES_DECLARANTES,
+  ROLES_EVALUADORES,
   ROLES_GLOBALES,
+  ROLES_LECTORES_DE_PERFIL,
   ROLES_SIN_DOCENTE,
   TODOS_LOS_ROLES,
 } from './roles.js';
@@ -40,5 +43,27 @@ describe('roles', () => {
       'administrador',
       'recursos_humanos',
     ]);
+  });
+
+  it('define quién declara, quién acredita y quién lee el perfil de conocimiento', () => {
+    expect(ROLES_DECLARANTES).toEqual([
+      ROLES.docente,
+      ROLES.jefeCatedra,
+      ROLES.jefaturaDepartamento,
+    ]);
+    expect(ROLES_EVALUADORES).toEqual([
+      ROLES.jefeCatedra,
+      ROLES.jefaturaDepartamento,
+    ]);
+    expect([...ROLES_LECTORES_DE_PERFIL].sort()).toEqual([
+      'autoridad',
+      'docente',
+      'jefatura_departamento',
+      'jefe_catedra',
+      'recursos_humanos',
+    ]);
+    // El analista de puestos y el administrador no ven el conocimiento de las personas.
+    expect(ROLES_LECTORES_DE_PERFIL).not.toContain(ROLES.analistaPuestos);
+    expect(ROLES_LECTORES_DE_PERFIL).not.toContain(ROLES.administrador);
   });
 });
