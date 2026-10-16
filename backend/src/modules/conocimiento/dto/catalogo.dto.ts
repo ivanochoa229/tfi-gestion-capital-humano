@@ -122,4 +122,7 @@ export class ResultadoFusionDto {
 
   @ApiProperty({ description: 'Personas con datos del origen' })
   personasMovidas: number;
+
+  @ApiProperty({ description: 'Evaluaciones de criticidad del origen' })
+  evaluacionesMovidas: number;
 }
