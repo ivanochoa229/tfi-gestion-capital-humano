@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
+import { mensajeError } from '../../admin/hooks/useGuardarValor';
 import { useCambiarEstadoActivo, type Activo } from '../hooks/useActivos';
 
 interface Props {
@@ -25,7 +26,7 @@ export function BajaActivoDialog({ activo, onCerrar }: Props) {
       await cambiar.mutateAsync({ id: activo.id, accion: 'baja' });
       onCerrar();
     } catch (e) {
-      setError((e as Error).message);
+      setError(mensajeError(e));
     }
   };
 

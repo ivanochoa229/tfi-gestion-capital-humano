@@ -191,109 +191,111 @@ export function ActivosPage() {
         {isError && (
           <Alert severity="error">No se pudieron cargar los activos.</Alert>
         )}
-        {data && data.items.length === 0 && (
+        {data && data.total === 0 && (
           <Alert severity="info">No hay activos para mostrar.</Alert>
         )}
-        {data && data.items.length > 0 && (
+        {data && data.total > 0 && (
           <>
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Título</TableCell>
-                  <TableCell>Tipo</TableCell>
-                  <TableCell>Unidad</TableCell>
-                  <TableCell>Conocimientos</TableCell>
-                  <TableCell>Vigencia</TableCell>
-                  <TableCell>Origen</TableCell>
-                  <TableCell align="right">Acciones</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data.items.map((a) => (
-                  <TableRow key={a.id}>
-                    <TableCell>
-                      {a.titulo}{' '}
-                      {!a.activo && <Chip size="small" label="De baja" />}
-                    </TableCell>
-                    <TableCell>{nombre(tipos, a.idTipoDocumento)}</TableCell>
-                    <TableCell>{nombre(unidades, a.idUnidad)}</TableCell>
-                    <TableCell>
-                      {a.idsConocimiento
-                        .map((id) => nombre(conocimientos, id))
-                        .join(', ')}
-                    </TableCell>
-                    <TableCell>
-                      {a.fechaVigencia ?? '—'} <ChipVigencia activo={a} />
-                    </TableCell>
-                    <TableCell>
-                      {a.origen === 'archivo' ? 'Archivo' : 'Enlace'}
-                    </TableCell>
-                    <TableCell align="right">
-                      {a.origen === 'enlace' ? (
-                        <Button
-                          size="small"
-                          component="a"
-                          href={a.enlace ?? undefined}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Abrir
-                        </Button>
-                      ) : (
-                        <Button
-                          size="small"
-                          onClick={() => intentar(() => descargarActivo(a))}
-                        >
-                          Descargar
-                        </Button>
-                      )}
-                      {puedeEscribir && (
-                        <>
-                          {a.activo && (
-                            <Button
-                              size="small"
-                              onClick={() => setFormulario({ activo: a })}
-                            >
-                              Editar
-                            </Button>
-                          )}
-                          {a.activo && a.origen === 'archivo' && (
-                            <Button
-                              size="small"
-                              onClick={() => setReemplazando(a)}
-                            >
-                              Reemplazar archivo
-                            </Button>
-                          )}
-                          {a.activo ? (
-                            <Button
-                              size="small"
-                              onClick={() => setDandoDeBaja(a)}
-                            >
-                              Dar de baja
-                            </Button>
-                          ) : (
-                            <Button
-                              size="small"
-                              onClick={() =>
-                                intentar(() =>
-                                  cambiarEstado.mutateAsync({
-                                    id: a.id,
-                                    accion: 'reactivar',
-                                  }),
-                                )
-                              }
-                            >
-                              Reactivar
-                            </Button>
-                          )}
-                        </>
-                      )}
-                    </TableCell>
+            {data.items.length > 0 && (
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Título</TableCell>
+                    <TableCell>Tipo</TableCell>
+                    <TableCell>Unidad</TableCell>
+                    <TableCell>Conocimientos</TableCell>
+                    <TableCell>Vigencia</TableCell>
+                    <TableCell>Origen</TableCell>
+                    <TableCell align="right">Acciones</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHead>
+                <TableBody>
+                  {data.items.map((a) => (
+                    <TableRow key={a.id}>
+                      <TableCell>
+                        {a.titulo}{' '}
+                        {!a.activo && <Chip size="small" label="De baja" />}
+                      </TableCell>
+                      <TableCell>{nombre(tipos, a.idTipoDocumento)}</TableCell>
+                      <TableCell>{nombre(unidades, a.idUnidad)}</TableCell>
+                      <TableCell>
+                        {a.idsConocimiento
+                          .map((id) => nombre(conocimientos, id))
+                          .join(', ')}
+                      </TableCell>
+                      <TableCell>
+                        {a.fechaVigencia ?? '—'} <ChipVigencia activo={a} />
+                      </TableCell>
+                      <TableCell>
+                        {a.origen === 'archivo' ? 'Archivo' : 'Enlace'}
+                      </TableCell>
+                      <TableCell align="right">
+                        {a.origen === 'enlace' ? (
+                          <Button
+                            size="small"
+                            component="a"
+                            href={a.enlace ?? undefined}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Abrir
+                          </Button>
+                        ) : (
+                          <Button
+                            size="small"
+                            onClick={() => intentar(() => descargarActivo(a))}
+                          >
+                            Descargar
+                          </Button>
+                        )}
+                        {puedeEscribir && (
+                          <>
+                            {a.activo && (
+                              <Button
+                                size="small"
+                                onClick={() => setFormulario({ activo: a })}
+                              >
+                                Editar
+                              </Button>
+                            )}
+                            {a.activo && a.origen === 'archivo' && (
+                              <Button
+                                size="small"
+                                onClick={() => setReemplazando(a)}
+                              >
+                                Reemplazar archivo
+                              </Button>
+                            )}
+                            {a.activo ? (
+                              <Button
+                                size="small"
+                                onClick={() => setDandoDeBaja(a)}
+                              >
+                                Dar de baja
+                              </Button>
+                            ) : (
+                              <Button
+                                size="small"
+                                onClick={() =>
+                                  intentar(() =>
+                                    cambiarEstado.mutateAsync({
+                                      id: a.id,
+                                      accion: 'reactivar',
+                                    }),
+                                  )
+                                }
+                              >
+                                Reactivar
+                              </Button>
+                            )}
+                          </>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
             <TablePagination
               component="div"
               count={data.total}

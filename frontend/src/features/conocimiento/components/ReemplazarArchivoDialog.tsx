@@ -9,6 +9,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
+import { mensajeError } from '../../admin/hooks/useGuardarValor';
 import { EXTENSIONES_ACTIVO, formatearTamanio } from '../activos';
 import { useReemplazarArchivo, type Activo } from '../hooks/useActivos';
 
@@ -29,7 +30,7 @@ export function ReemplazarArchivoDialog({ activo, onCerrar }: Props) {
       await reemplazar.mutateAsync({ id: activo.id, archivo });
       onCerrar();
     } catch (e) {
-      setError((e as Error).message);
+      setError(mensajeError(e));
     }
   };
 

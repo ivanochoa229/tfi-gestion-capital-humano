@@ -15,8 +15,9 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
+import { mensajeError } from '../../admin/hooks/useGuardarValor';
 import { useValoresReferencia } from '../../admin/hooks/useValoresReferencia';
 import { useUnidades } from '../../estructura/hooks/useUnidades';
 import { EXTENSIONES_ACTIVO, formatearTamanio } from '../activos';
@@ -78,7 +79,7 @@ export function FormularioActivo({
 }: Props) {
   const { data: tipos } = useValoresReferencia('tipo-documento', false);
   const { data: unidades } = useUnidades();
-  const { data: conocimientos } = useConocimientos({ activo: true });
+  const { data: conocimientos } = useConocimientos({});
   const crear = useCrearActivo();
   const actualizar = useActualizarActivo();
   const [archivo, setArchivo] = useState<File>();
@@ -87,7 +88,6 @@ export function FormularioActivo({
   const {
     register,
     control,
-    watch,
     setValue,
     handleSubmit,
     formState: { errors, isSubmitting },
@@ -107,7 +107,7 @@ export function FormularioActivo({
       enlace: activo?.enlace ?? '',
     },
   });
-  const origen = watch('origen');
+  const origen = useWatch({ control, name: 'origen' });
 
   const guardar = handleSubmit(async (datos) => {
     setError(undefined);
@@ -144,7 +144,7 @@ export function FormularioActivo({
       onCerrar();
     } catch (e) {
       // Un duplicado vuelve como 409 con el título del activo existente; 413 y 415 explican el límite y los tipos.
-      setError((e as Error).message);
+      setError(mensajeError(e));
     }
   });
 
@@ -196,7 +196,12 @@ export function FormularioActivo({
                 <Autocomplete
                   multiple
                   options={conocimientos ?? []}
-                  getOptionLabel={(c) => c.denominacion}
+                  getOptionLabel={(c) =>
+                    c.activo ? c.denominacion : `${c.denominacion} (de baja)`
+                  }
+                  getOptionDisabled={(c) =>
+                    !c.activo && !field.value.includes(c.id)
+                  }
                   isOptionEqualToValue={(a, b) => a.id === b.id}
                   value={(conocimientos ?? []).filter((c) =>
                     field.value.includes(c.id),
