@@ -254,13 +254,17 @@ export class ActivosService {
     }
     const ids =
       dto.idsConocimiento !== undefined
-        ? await this.validarConocimientos(dto.idsConocimiento)
+        ? await this.validarConocimientos(
+            dto.idsConocimiento,
+            actual.idsConocimiento,
+          )
         : null;
 
     await this.enTransaccion(async (manager) => {
       const fila = await this.bloquearActivo(manager, id);
       if (!fila.activo) throw this.estaDeBaja();
       await this.exigirEscritura(sesion, fila.idUnidad);
+      if (ids) await this.validarConocimientos(ids, fila.idsConocimiento);
       if (dto.enlace !== undefined && fila.origen !== 'enlace') {
         throw new BadRequestException(
           'Solo los activos de tipo enlace tienen una URL editable',
@@ -445,18 +449,25 @@ export class ActivosService {
   }
 
   /** Devuelve los ids sin repetir; todos deben existir y estar activos. */
-  private async validarConocimientos(ids: number[]): Promise<number[]> {
+  private async validarConocimientos(
+    ids: number[],
+    yaVinculados: number[] = [],
+  ): Promise<number[]> {
     const unicos = [...new Set(ids)];
     if (unicos.length === 0) {
       throw new BadRequestException('Vinculá al menos un conocimiento');
     }
+    // Los vínculos existentes se conservan aunque el conocimiento ya esté de baja.
+    const previos = new Set(yaVinculados.map(Number));
+    const nuevos = unicos.filter((i) => !previos.has(i));
+    if (nuevos.length === 0) return unicos;
     const activos: { id: number }[] = await this.dataSource.query(
       `SELECT id_conocimiento AS id FROM conocimiento WHERE id_conocimiento = ANY($1) AND activo`,
-      [unicos],
+      [nuevos],
     );
-    if (activos.length !== unicos.length) {
+    if (activos.length !== nuevos.length) {
       const validos = new Set(activos.map((f) => Number(f.id)));
-      const faltan = unicos.filter((i) => !validos.has(i));
+      const faltan = nuevos.filter((i) => !validos.has(i));
       throw new BadRequestException(
         `Conocimientos inexistentes o dados de baja: ${faltan.join(', ')}`,
       );

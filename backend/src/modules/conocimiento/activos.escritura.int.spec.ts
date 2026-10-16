@@ -339,6 +339,72 @@ describe('Activos: escritura (PostgreSQL real)', () => {
       }
     });
 
+    describe('con un conocimiento vinculado dado de baja', () => {
+      const conBaja = async () => {
+        const creado = await e.servicio.crear(
+          e.sesiones.analista,
+          dto({ idsConocimiento: [e.ids.conocimientoA, e.ids.conocimientoB] }),
+          pdf('a'),
+        );
+        await e.sql(
+          `UPDATE conocimiento SET activo = false WHERE id_conocimiento = $1`,
+          [e.ids.conocimientoB],
+        );
+        return creado;
+      };
+      afterEach(async () => {
+        await e.sql(
+          `UPDATE conocimiento SET activo = true WHERE id_conocimiento = $1`,
+          [e.ids.conocimientoB],
+        );
+      });
+
+      it('conserva el vínculo al editar otro campo reenviando los mismos ids', async () => {
+        const creado = await conBaja();
+        const editado = await e.servicio.actualizar(
+          e.sesiones.analista,
+          creado.id,
+          {
+            titulo: 'Solo el título',
+            idsConocimiento: [e.ids.conocimientoA, e.ids.conocimientoB],
+          },
+        );
+        expect(editado.titulo).toBe('Solo el título');
+        expect([...editado.idsConocimiento].sort()).toEqual(
+          [e.ids.conocimientoA, e.ids.conocimientoB].sort(),
+        );
+      });
+
+      it('rechaza con 400 sumar otro conocimiento dado de baja', async () => {
+        const creado = await e.servicio.crear(
+          e.sesiones.analista,
+          dto(),
+          pdf('a'),
+        );
+        await e.sql(
+          `UPDATE conocimiento SET activo = false WHERE id_conocimiento = $1`,
+          [e.ids.conocimientoB],
+        );
+        await expect(
+          e.servicio.actualizar(e.sesiones.analista, creado.id, {
+            idsConocimiento: [e.ids.conocimientoA, e.ids.conocimientoB],
+          }),
+        ).rejects.toBeInstanceOf(BadRequestException);
+      });
+
+      it('permite quitar el vínculo dado de baja', async () => {
+        const creado = await conBaja();
+        const editado = await e.servicio.actualizar(
+          e.sesiones.analista,
+          creado.id,
+          {
+            idsConocimiento: [e.ids.conocimientoA],
+          },
+        );
+        expect(editado.idsConocimiento).toEqual([e.ids.conocimientoA]);
+      });
+    });
+
     it('responde 404 si no existe y 409 si está dado de baja', async () => {
       await expect(
         e.servicio.actualizar(e.sesiones.analista, 999999, { titulo: 'xx' }),
