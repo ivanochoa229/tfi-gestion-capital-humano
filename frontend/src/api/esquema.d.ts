@@ -580,6 +580,102 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/activos': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['ActivosController_listar'];
+    put?: never;
+    post: operations['ActivosController_crear'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/activos/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['ActivosController_obtener'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch: operations['ActivosController_actualizar'];
+    trace?: never;
+  };
+  '/api/activos/{id}/descarga': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['ActivosController_descargar'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/activos/{id}/archivo': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put: operations['ActivosController_reemplazarArchivo'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/activos/{id}/baja': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['ActivosController_baja'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/activos/{id}/reactivar': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['ActivosController_reactivar'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/auth/login': {
     parameters: {
       query?: never;
@@ -1282,6 +1378,68 @@ export interface components {
       /** @description Tipo de evidencia activo */
       idTipoEvidencia: number;
       observaciones?: string | null;
+    };
+    ActivoDto: {
+      id: number;
+      titulo: string;
+      idTipoDocumento: number;
+      idUnidad: number;
+      /** @enum {string} */
+      origen: 'archivo' | 'enlace';
+      /** @description URL, solo en los enlaces */
+      enlace: string | null;
+      nombreOriginal: string | null;
+      tipoMime: string | null;
+      /** @description Bytes */
+      tamanio: number | null;
+      /** @example 2027-03-31 */
+      fechaVigencia: string | null;
+      /** @description La fecha de vigencia ya pasó (calculado al consultar) */
+      vencido: boolean;
+      /** @description Días hasta la fecha de vigencia; negativo si ya venció */
+      diasParaVencer: number | null;
+      activo: boolean;
+      idsConocimiento: number[];
+      creadoEn: string;
+      actualizadoEn: string;
+    };
+    PaginaActivosDto: {
+      items: components['schemas']['ActivoDto'][];
+      /** @description Total que cumple el filtro */
+      total: number;
+    };
+    CrearActivoDto: {
+      /** @example Manual de administración de PostgreSQL */
+      titulo: string;
+      /** @description Tipo de documento activo */
+      idTipoDocumento: number;
+      /** @description Unidad que mantiene el activo */
+      idUnidad: number;
+      /** @description Conocimientos que documenta (al menos uno); en multipart, el campo se repite */
+      idsConocimiento: number[];
+      /** @example 2027-03-31 */
+      fechaVigencia?: string | null;
+      /** @description URL http(s) del activo; sin archivo es obligatoria */
+      enlace?: string;
+      /**
+       * Format: binary
+       * @description Archivo (campo multipart `archivo`); sin enlace es obligatorio
+       */
+      archivo?: string;
+    };
+    ActualizarActivoDto: {
+      /** @example Manual de administración de PostgreSQL */
+      titulo?: string;
+      /** @description Tipo de documento activo */
+      idTipoDocumento?: number;
+      /** @description Unidad que mantiene el activo */
+      idUnidad?: number;
+      /** @description Conocimientos que documenta (al menos uno); en multipart, el campo se repite */
+      idsConocimiento?: number[];
+      /** @example 2027-03-31 */
+      fechaVigencia?: string | null;
+      /** @description URL http(s) del activo; sin archivo es obligatoria */
+      enlace?: string;
     };
     LoginDto: {
       /** @example admin */
@@ -2984,6 +3142,317 @@ export interface operations {
       };
       /** @description No hay declaración que retirar */
       404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ActivosController_listar: {
+    parameters: {
+      query?: {
+        /** @description Texto contenido en el título */
+        q?: string;
+        idConocimiento?: number;
+        idUnidad?: number;
+        idTipoDocumento?: number;
+        /** @description true: solo vencidos; false: solo vigentes o sin fecha */
+        vencido?: boolean;
+        /** @description Solo roles de escritura; el resto no ve las bajas */
+        incluirBajas?: boolean;
+        pagina?: number;
+        tamanio?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PaginaActivosDto'];
+        };
+      };
+    };
+  };
+  ActivosController_crear: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'multipart/form-data': components['schemas']['CrearActivoDto'];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ActivoDto'];
+        };
+      };
+      /** @description Datos inválidos, o ni archivo ni enlace */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description La unidad está fuera de tu alcance */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Ya hay un activo con el mismo archivo */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El archivo supera el tamaño máximo */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Tipo de archivo no permitido */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ActivosController_obtener: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ActivoDto'];
+        };
+      };
+      /** @description El activo no existe o está dado de baja */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ActivosController_actualizar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ActualizarActivoDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ActivoDto'];
+        };
+      };
+      /** @description La unidad está fuera de tu alcance */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El activo no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El activo está dado de baja */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ActivosController_descargar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Contenido del archivo */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/octet-stream': string;
+        };
+      };
+      /** @description El activo o su archivo no existen */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El activo es un enlace */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ActivosController_reemplazarArchivo: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'multipart/form-data': {
+          /** Format: binary */
+          archivo: string;
+        };
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ActivoDto'];
+        };
+      };
+      /** @description Falta el archivo, o el activo es un enlace */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Archivo idéntico o repetido, o activo dado de baja */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El archivo supera el tamaño máximo */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Tipo de archivo no permitido */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ActivosController_baja: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ActivoDto'];
+        };
+      };
+      /** @description El activo ya está dado de baja */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ActivosController_reactivar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ActivoDto'];
+        };
+      };
+      /** @description Ya está activo, o su archivo está repetido */
+      409: {
         headers: {
           [name: string]: unknown;
         };
