@@ -47,6 +47,7 @@ export const SECCIONES: Seccion[] = [
     nombre: 'Por acreditar',
     roles: ['jefe_catedra', 'jefatura_departamento'],
   },
+  { ruta: '/conocimiento/activos', nombre: 'Activos de conocimiento' },
   {
     ruta: '/criticidad',
     nombre: 'Criticidad',
