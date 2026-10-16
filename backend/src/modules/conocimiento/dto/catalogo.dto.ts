@@ -46,7 +46,7 @@ export class ActualizarConocimientoDto extends PartialType(
   CrearConocimientoDto,
 ) {}
 
-const aBooleano = ({ value }: { value: unknown }) =>
+export const aBooleano = ({ value }: { value: unknown }) =>
   value === 'true' ? true : value === 'false' ? false : value;
 
 export class FiltroConocimientosDto {
