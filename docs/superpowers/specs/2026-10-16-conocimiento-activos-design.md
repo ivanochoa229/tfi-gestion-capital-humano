@@ -1,4 +1,4 @@
-Estado: Aprobada | Fecha: 2026-10-16 | Autor: IvanOchoa229
+Estado: Implementada | Fecha: 2026-10-16 | Autor: IvanOchoa229
 
 # Conocimiento: activos de conocimiento
 
@@ -33,7 +33,7 @@ conocimientos (uno o muchos). No toca los demás puntos abiertos.
 
 | # | Tema | Decisión |
 | --- | --- | --- |
-| 1 | Relación con conocimientos | Muchos: tabla puente `activo_conocimiento_conocimiento`. `activo_conocimiento` pierde la FK `id_conocimiento` del modelo original. Se exige al menos un vínculo, validado en el servicio dentro de la transacción |
+| 1 | Relación con conocimientos | Muchos: tabla puente `activo_conocimiento_conocimiento`. `activo_conocimiento` pierde la FK `id_conocimiento` del modelo original. Se exige al menos un vínculo, validado en el servicio dentro de la transacción. Al editar se conservan los vínculos a conocimientos dados de baja; solo los ids agregados deben estar activos |
 | 2 | Tipos de archivo | PDF, DOCX, XLSX, PPTX, ODT, TXT, PNG y JPG. Se valida por la firma de bytes y no solo por la extensión; TXT se acepta si es UTF-8 válido y sin bytes nulos. Otro tipo responde 415 |
 | 3 | Tamaño máximo | 20 MB, configurable con `ACTIVOS_TAMANIO_MAX_MB` en `env.validation.ts`. Superado, responde 413 |
 | 4 | Clave del objeto | `activos/{idActivo}/{uuid}-{nombreSaneado}`: sin colisiones y legible. El nombre se sanea (sin rutas ni caracteres de control) |
