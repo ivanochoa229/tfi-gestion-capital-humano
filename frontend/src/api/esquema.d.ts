@@ -804,6 +804,102 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/criticidad/matriz': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['CriticidadController_obtenerMatriz'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/criticidad/matriz/{idImpacto}/{idDificultad}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put: operations['CriticidadController_editarCelda'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/criticidad/pares': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['CriticidadController_listarPares'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/criticidad/avance': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['CriticidadController_avance'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/puestos/{idPuesto}/criticidad/{idConocimiento}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['EvaluacionesController_evaluar'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/puestos/{idPuesto}/criticidad/{idConocimiento}/historial': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['EvaluacionesController_historial'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1292,6 +1388,8 @@ export interface components {
       requisitosMovidos: number;
       /** @description Personas con datos del origen */
       personasMovidas: number;
+      /** @description Evaluaciones de criticidad del origen */
+      evaluacionesMovidas: number;
     };
     RequisitoDto: {
       idPuesto: number;
@@ -1533,6 +1631,83 @@ export interface components {
     };
     RestablecerClaveDto: {
       clave: string;
+    };
+    EscalaDto: {
+      id: number;
+      codigo: string;
+      denominacion: string;
+      orden: number;
+      /** @description Criterio observable del nivel */
+      criterio: string;
+      activo: boolean;
+    };
+    CeldaMatrizDto: {
+      idNivelImpacto: number;
+      idNivelDificultad: number;
+      /** @description Nivel de criticidad que da la combinación */
+      idNivelCriticidad: number;
+    };
+    MatrizDto: {
+      impactos: components['schemas']['EscalaDto'][];
+      dificultades: components['schemas']['EscalaDto'][];
+      celdas: components['schemas']['CeldaMatrizDto'][];
+    };
+    EditarCeldaDto: {
+      /** @description Nivel de criticidad (activo) de la celda */
+      idNivelCriticidad: number;
+    };
+    ParCriticidadDto: {
+      idPuesto: number;
+      codigoPuesto: string;
+      denominacionPuesto: string;
+      idUnidad: number;
+      idConocimiento: number;
+      denominacionConocimiento: string;
+      idNivelRequerido: number;
+      esExcluyente: boolean;
+      /** @enum {string} */
+      estado: 'pendiente' | 'evaluado';
+      idEvaluacion: number | null;
+      idNivelImpacto: number | null;
+      idNivelDificultad: number | null;
+      idNivelCriticidad: number | null;
+      /** Format: date */
+      fechaEvaluacion: string | null;
+    };
+    AvanceDto: {
+      /** @description Pares con evaluación vigente */
+      evaluados: number;
+      /** @description Requisitos activos del alcance */
+      total: number;
+    };
+    EvaluarDto: {
+      /** @description Nivel de impacto de pérdida (escala fija) */
+      idNivelImpacto: number;
+      /** @description Nivel de dificultad de reemplazo (escala fija) */
+      idNivelDificultad: number;
+      /**
+       * Format: date
+       * @description No futura; por defecto, hoy
+       * @example 2026-06-15
+       */
+      fechaEvaluacion?: string;
+      observaciones?: string | null;
+    };
+    EvaluacionDto: {
+      id: number;
+      idPuesto: number;
+      idConocimiento: number;
+      idNivelImpacto: number;
+      idNivelDificultad: number;
+      /** @description Resultado de la matriz al evaluar */
+      idNivelCriticidad: number;
+      /** Format: date */
+      fechaEvaluacion: string;
+      idUsuario: number;
+      nombreUsuario: string;
+      observaciones: string | null;
+      /** Format: date-time */
+      registradaEn: string;
     };
   };
   responses: never;
@@ -3679,6 +3854,203 @@ export interface operations {
         content?: never;
       };
       /** @description El usuario no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  CriticidadController_obtenerMatriz: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['MatrizDto'];
+        };
+      };
+    };
+  };
+  CriticidadController_editarCelda: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idImpacto: number;
+        idDificultad: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['EditarCeldaDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['CeldaMatrizDto'];
+        };
+      };
+      /** @description Nivel de criticidad inexistente o inactivo */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description La celda no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  CriticidadController_listarPares: {
+    parameters: {
+      query?: {
+        /** @description Unidad (incluye sus unidades descendientes) */
+        idUnidad?: number;
+        idPuesto?: number;
+        estado?: 'pendiente' | 'evaluado';
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ParCriticidadDto'][];
+        };
+      };
+    };
+  };
+  CriticidadController_avance: {
+    parameters: {
+      query?: {
+        /** @description Unidad (incluye sus unidades descendientes) */
+        idUnidad?: number;
+        idPuesto?: number;
+        estado?: 'pendiente' | 'evaluado';
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['AvanceDto'];
+        };
+      };
+    };
+  };
+  EvaluacionesController_evaluar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPuesto: number;
+        idConocimiento: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['EvaluarDto'];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['EvaluacionDto'];
+        };
+      };
+      /** @description Fecha futura, escala inactiva o puesto o conocimiento de baja */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El puesto está fuera de tu alcance */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El puesto o el conocimiento no existen */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El puesto no exige ese conocimiento */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  EvaluacionesController_historial: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPuesto: number;
+        idConocimiento: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['EvaluacionDto'][];
+        };
+      };
+      /** @description El puesto está fuera de tu alcance */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El puesto no existe */
       404: {
         headers: {
           [name: string]: unknown;
