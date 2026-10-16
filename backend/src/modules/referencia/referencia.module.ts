@@ -17,6 +17,7 @@ import { SituacionRevista } from './entities/situacion-revista.entity.js';
 import { Dedicacion } from './entities/dedicacion.entity.js';
 import { AreaTematica } from './entities/area-tematica.entity.js';
 import { TipoEvidencia } from './entities/tipo-evidencia.entity.js';
+import { TipoDocumento } from './entities/tipo-documento.entity.js';
 import { ReferenciaController } from './referencia.controller.js';
 import { ReferenciaService } from './referencia.service.js';
 
@@ -44,6 +45,7 @@ import { ReferenciaService } from './referencia.service.js';
       Dedicacion,
       AreaTematica,
       TipoEvidencia,
+      TipoDocumento,
     ]),
   ],
   controllers: [ReferenciaController],

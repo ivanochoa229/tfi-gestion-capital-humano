@@ -6,3 +6,4 @@ export const DOMINIO_TIPO_EVIDENCIA = 'tipo-evidencia';
 
 /** Clave del bloqueo que serializa las escrituras de conocimiento (Usuarios usa 7001, Estructura 7002). */
 export const BLOQUEO_CONOCIMIENTO = 7003;
+export const DOMINIO_TIPO_DOCUMENTO = 'tipo-documento';

@@ -42,10 +42,10 @@ conocimientos (uno o muchos). No toca los demás puntos abiertos.
 | 7 | Activo sin archivo | Se admite: `origen = 'enlace'` con `ubicacion` igual a una URL `http(s)`. Los enlaces no entran en el control de duplicados |
 | 8 | Vigencia | Informativa. `fecha_vigencia` es opcional; `vencido` se calcula por consulta (`fecha_vigencia < CURRENT_DATE`). Sin bloqueo de descarga ni avisos; hay etiqueta y filtro |
 | 9 | Escritura | `analista_puestos` y `administrador` en cualquier unidad. `jefe_catedra` y `jefatura_departamento` solo si la unidad del activo está en su alcance (`AlcanceService`), verificado también sobre la unidad destino en una edición |
-| 10 | Lectura y descarga | Todos los roles autenticados, incluido `docente`. La descarga pasa por el backend; no se exponen URLs de RustFS. Los activos dados de baja solo los ven y descargan los roles de escritura |
+| 10 | Lectura y descarga | Todos los roles autenticados, incluido `docente`. La descarga pasa por el backend; no se exponen URLs de RustFS. Los activos dados de baja solo los ven y descargan los roles de escritura. El criterio de baja es por rol: los cuatro roles de escritura ven y descargan las bajas de cualquier unidad; el alcance por unidad solo limita escribir |
 | 11 | Baja | Baja lógica con `activo = false`. El objeto se conserva en RustFS y la baja se revierte con reactivar. La baja libera el hash; reactivar vuelve a comprobarlo. Sin borrado físico por la API |
 | 12 | Subida | Multipart al backend (Multer en memoria). Se descartan la URL prefirmada y el streaming con hash incremental: el backend debe ver los bytes para validar y calcular el hash, y 20 MB no justifica más complejidad |
-| 13 | Consistencia | Subir a RustFS y guardar en PostgreSQL no es atómico. Alta: se sube, se guarda en transacción y, si la base falla, se borra el objeto recién subido. Reemplazo: se sube el nuevo, se actualiza la fila y recién después se borra el anterior. Si falla la subida, no se escribe nada en la base |
+| 13 | Consistencia | Subir a RustFS y guardar en PostgreSQL no es atómico. Alta: se sube, se guarda en transacción y, si la base falla, se borra el objeto recién subido. Reemplazo: se sube el nuevo, se actualiza la fila y recién después se borra el anterior. Si falla la subida, no se escribe nada en la base. Alta: el servicio reserva el id con `nextval` de la secuencia para armar la clave `activos/{idActivo}/…` antes de insertar. Editar o reemplazar un activo dado de baja responde 409 |
 | 14 | Auditoría | Sin auditoría de RNF05 (cubre solo criticidad y sucesión). Alcanzan `creado_en` y `actualizado_en` |
 
 ## Modelo de datos
@@ -107,22 +107,23 @@ roles de escritura y de alcance se centralizan en el módulo, como en el resto d
 Dentro de la feature `conocimiento` (`pages/`, `components/`, `hooks/`). Antes de escribir código se
 regeneran los tipos con `npm run api:tipos`.
 
-- **Rutas:** `conocimiento/activos` → `ActivosPage`, visible para todos los roles autenticados. La ficha
-  de cada conocimiento suma un bloque "Documentación" con sus activos y un botón "Agregar activo" con el
-  conocimiento precargado.
+- **Rutas:** `conocimiento/activos` → `ActivosPage`, visible para todos los roles autenticados. `ConocimientoPage`
+  es una tabla, no una ficha: suma una columna «Documentación» con un botón por fila que abre
+  `ActivosDeConocimientoDialog` (lista de sus activos y botón «Agregar activo» con el conocimiento
+  precargado).
 - **`ActivosPage`:** tabla paginada (título, tipo, unidad, conocimientos, vigencia, origen) con filtros
   por título, conocimiento, unidad, tipo, "solo vencidos" y "mostrar bajas" (solo roles de escritura).
   Acciones por fila: descargar o abrir el enlace, y para quienes escriben, editar, reemplazar y
-  baja/reactivar. Los botones se ocultan según rol y alcance, pero decide el backend.
+  baja/reactivar. Los botones de escritura se muestran por rol (el frontend no conoce los descendientes de la unidad); si el backend responde 403, se muestra el mensaje.
 - **Componentes nuevos:** `FormularioActivo` (react-hook-form + zod; selector archivo/enlace, selector
-  múltiple de conocimientos con al menos uno, validación previa de tamaño y tipo en el cliente),
+  múltiple de conocimientos con al menos uno, el selector de archivo solo ofrece las extensiones permitidas; el tamaño lo valida el servidor),
   `ReemplazarArchivoDialog`, `BajaActivoDialog` y `ChipVigencia` ("Vencido" o "Vence en N días" si
   faltan 30 o menos; lleva texto, no solo color).
 - **Hooks:** `hooks/useActivos.ts` con lista, detalle y mutaciones, que invalidan las consultas de
   activos. El alta y el reemplazo usan `FormData` (serialización propia o `fetch` directo, porque
   `openapi-fetch` no maneja multipart cómodamente). La descarga es una petición autenticada que arma un
   `Blob`, porque un enlace simple no llevaría el token.
-- **Errores:** 409 por duplicado con el título del activo existente y enlace a su fila; 413 y 415 con
+- **Errores:** 409 por duplicado con el título y el id del activo existente en el mensaje; 413 y 415 con
   el tamaño máximo y los tipos permitidos leídos de la respuesta; si falla la red, el formulario
   conserva lo ingresado y permite reintentar. La subida admite arrastrar y soltar y el selector clásico.
 
