@@ -37,6 +37,8 @@ describe('Activos: escritura (PostgreSQL real)', () => {
     await e.sql('DELETE FROM activo_conocimiento');
     e.almacen.objetos.clear();
     e.almacen.falloSubida = false;
+    e.almacen.alSubir = undefined;
+    e.ganchos.alValidarReferencia = undefined;
   });
 
   describe('alta', () => {
@@ -488,6 +490,18 @@ describe('Activos: escritura (PostgreSQL real)', () => {
       ).rejects.toBeInstanceOf(ConflictException);
     });
 
+    it('reactivar exige alcance sobre la unidad del activo', async () => {
+      const ajeno = await e.servicio.crear(
+        e.sesiones.analista,
+        dto({ idUnidad: e.ids.catedraB }),
+        pdf('b'),
+      );
+      await e.servicio.darDeBaja(e.sesiones.analista, ajeno.id);
+      await expect(
+        e.servicio.reactivar(e.sesiones.jefeA, ajeno.id),
+      ).rejects.toBeInstanceOf(ForbiddenException);
+    });
+
     it('reactiva si el hash está libre y rechaza dar de baja una baja o reactivar un activo', async () => {
       const a = await e.servicio.crear(e.sesiones.analista, dto(), pdf('uno'));
       await expect(
@@ -499,6 +513,70 @@ describe('Activos: escritura (PostgreSQL real)', () => {
       ).rejects.toBeInstanceOf(ConflictException);
       const vuelto = await e.servicio.reactivar(e.sesiones.analista, a.id);
       expect(vuelto.activo).toBe(true);
+    });
+  });
+
+  describe('concurrencia', () => {
+    const ubicacionYHash = (id: number) =>
+      e.sql<{ ubicacion: string; hash: string }[]>(
+        `SELECT ubicacion, hash FROM activo_conocimiento WHERE id_activo = $1`,
+        [id],
+      );
+
+    it('reemplazar un activo dado de baja durante la subida responde 409 y borra el objeto nuevo', async () => {
+      const creado = await e.servicio.crear(
+        e.sesiones.analista,
+        dto(),
+        pdf('viejo'),
+      );
+      const [antes] = await ubicacionYHash(creado.id);
+      e.almacen.alSubir = async () => {
+        e.almacen.alSubir = undefined;
+        await e.servicio.darDeBaja(e.sesiones.analista, creado.id);
+      };
+      await expect(
+        e.servicio.reemplazarArchivo(
+          e.sesiones.analista,
+          creado.id,
+          pdf('nuevo'),
+        ),
+      ).rejects.toBeInstanceOf(ConflictException);
+      expect((await ubicacionYHash(creado.id))[0]).toEqual(antes);
+      expect([...e.almacen.objetos.keys()]).toEqual([antes.ubicacion]);
+    });
+
+    it('editar metadatos no pisa el archivo reemplazado entre la lectura y el bloqueo', async () => {
+      const creado = await e.servicio.crear(
+        e.sesiones.analista,
+        dto(),
+        pdf('viejo'),
+      );
+      const nuevo = pdf('reemplazo', 'v2.pdf');
+      e.ganchos.alValidarReferencia = async () => {
+        e.ganchos.alValidarReferencia = undefined;
+        await e.servicio.reemplazarArchivo(
+          e.sesiones.analista,
+          creado.id,
+          nuevo,
+        );
+      };
+      const tipoOtro = await e.sql<{ id: number }[]>(
+        `SELECT id_tipo_documento AS id FROM tipo_documento WHERE id_tipo_documento <> $1 LIMIT 1`,
+        [e.ids.tipoDocumento],
+      );
+      await e.servicio.actualizar(e.sesiones.analista, creado.id, {
+        titulo: 'Editado',
+        idTipoDocumento: tipoOtro[0].id,
+      });
+      const [fila] = await ubicacionYHash(creado.id);
+      expect(fila.hash).toBe(hashSha256(nuevo.buffer));
+      expect(e.almacen.objetos.has(fila.ubicacion)).toBe(true);
+      expect(e.almacen.objetos.size).toBe(1);
+      const descarga = await e.servicio.descargar(
+        e.sesiones.analista,
+        creado.id,
+      );
+      expect(descarga.nombre).toBe('v2.pdf');
     });
   });
 });

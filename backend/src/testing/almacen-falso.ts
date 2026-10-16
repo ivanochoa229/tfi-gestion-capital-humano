@@ -6,7 +6,11 @@ export class AlmacenFalso {
   /** Con `true`, la próxima subida falla (simula RustFS caído). */
   falloSubida = false;
 
+  /** Gancho opcional que corre dentro de `subir`, antes de guardar (para forzar intercalados). */
+  alSubir?: () => Promise<void>;
+
   async subir(clave: string, contenido: Buffer, tipoMime: string) {
+    await this.alSubir?.();
     if (this.falloSubida) throw new Error('RustFS no disponible');
     this.objetos.set(clave, { contenido, tipoMime });
   }

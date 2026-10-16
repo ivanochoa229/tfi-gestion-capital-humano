@@ -13,6 +13,8 @@ export interface EntornoActivos {
   ds: DataSource;
   servicio: ActivosService;
   almacen: AlmacenFalso;
+  /** Gancho opcional que corre dentro de `referencia.validarActivo`. */
+  ganchos: { alValidarReferencia?: () => Promise<void> };
   sql<T>(consulta: string, parametros?: unknown[]): Promise<T>;
   ids: {
     tipoDocumento: number;
@@ -85,8 +87,11 @@ export async function crearEntornoActivos(): Promise<EntornoActivos> {
   };
 
   const almacen = new AlmacenFalso();
+  const ganchos: EntornoActivos['ganchos'] = {};
   const referencia = {
-    validarActivo: async () => undefined,
+    validarActivo: async () => {
+      await ganchos.alValidarReferencia?.();
+    },
   } as unknown as ReferenciaService;
   const servicio = new ActivosService(
     ds,
@@ -112,6 +117,7 @@ export async function crearEntornoActivos(): Promise<EntornoActivos> {
     ds,
     servicio,
     almacen,
+    ganchos,
     sql,
     ids,
     sesiones: {

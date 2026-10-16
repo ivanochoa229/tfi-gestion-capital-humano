@@ -260,6 +260,12 @@ export class ActivosService {
     await this.enTransaccion(async (manager) => {
       const fila = await this.bloquearActivo(manager, id);
       if (!fila.activo) throw this.estaDeBaja();
+      await this.exigirEscritura(sesion, fila.idUnidad);
+      if (dto.enlace !== undefined && fila.origen !== 'enlace') {
+        throw new BadRequestException(
+          'Solo los activos de tipo enlace tienen una URL editable',
+        );
+      }
       await manager.query(
         `UPDATE activo_conocimiento
          SET titulo = $2, id_tipo_documento = $3, id_unidad = $4,
@@ -267,13 +273,15 @@ export class ActivosService {
          WHERE id_activo = $1`,
         [
           id,
-          dto.titulo ?? actual.titulo,
-          dto.idTipoDocumento ?? actual.idTipoDocumento,
-          dto.idUnidad ?? actual.idUnidad,
+          dto.titulo ?? fila.titulo,
+          dto.idTipoDocumento ?? fila.idTipoDocumento,
+          dto.idUnidad ?? fila.idUnidad,
           dto.fechaVigencia === undefined
-            ? actual.fechaVigencia
+            ? fila.fechaVigencia
             : dto.fechaVigencia,
-          dto.enlace ?? actual.ubicacion,
+          fila.origen === 'enlace'
+            ? (dto.enlace ?? fila.ubicacion)
+            : fila.ubicacion,
         ],
       );
       if (ids) await this.guardarVinculos(manager, id, ids);
@@ -306,6 +314,16 @@ export class ActivosService {
     try {
       anterior = await this.enTransaccion(async (manager) => {
         const fila = await this.bloquearActivo(manager, id);
+        if (!fila.activo) throw this.estaDeBaja();
+        await this.exigirEscritura(sesion, fila.idUnidad);
+        if (fila.origen !== 'archivo') {
+          throw new BadRequestException(
+            'Un activo de tipo enlace no tiene archivo para reemplazar',
+          );
+        }
+        if (preparado.hash === fila.hash) {
+          throw new ConflictException('El archivo es idéntico al actual');
+        }
         await manager.query(
           `UPDATE activo_conocimiento
            SET ubicacion = $2, nombre_original = $3, tipo_mime = $4,
@@ -336,6 +354,7 @@ export class ActivosService {
     await this.enTransaccion(async (manager) => {
       const fila = await this.bloquearActivo(manager, id);
       if (!fila.activo) throw this.estaDeBaja();
+      await this.exigirEscritura(sesion, fila.idUnidad);
       await manager.query(
         `UPDATE activo_conocimiento SET activo = false, actualizado_en = now() WHERE id_activo = $1`,
         [id],
@@ -352,7 +371,9 @@ export class ActivosService {
     }
     if (actual.hash) await this.exigirSinDuplicado(actual.hash, id);
     await this.enTransaccion(async (manager) => {
-      await this.bloquearActivo(manager, id);
+      const fila = await this.bloquearActivo(manager, id);
+      if (fila.activo) throw new ConflictException('El activo ya está activo');
+      await this.exigirEscritura(sesion, fila.idUnidad);
       await manager.query(
         `UPDATE activo_conocimiento SET activo = true, actualizado_en = now() WHERE id_activo = $1`,
         [id],
