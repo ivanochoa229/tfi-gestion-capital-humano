@@ -6,7 +6,9 @@ import {
   IsOptional,
   IsString,
   IsUrl,
+  Max,
   MaxLength,
+  Min,
   MinLength,
   validateSync,
 } from 'class-validator';
@@ -67,6 +69,13 @@ export class Env {
   @IsString()
   @IsNotEmpty()
   S3_BUCKET: string;
+
+  /** Tamaño máximo de un archivo de activo de conocimiento, en MB. */
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(100)
+  ACTIVOS_TAMANIO_MAX_MB: number = 20;
 
   /** Firma la cookie de sesión. */
   @IsString()

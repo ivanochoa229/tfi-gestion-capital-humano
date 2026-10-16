@@ -58,3 +58,17 @@ export const ROLES_LECTORES_DE_PERFIL: CodigoRol[] = [
   ROLES.jefeCatedra,
   ROLES.docente,
 ];
+
+/** Escriben activos de conocimiento (RF11): cualquier unidad o solo las de su alcance. */
+export const ROLES_ESCRITORES_DE_ACTIVOS: CodigoRol[] = [
+  ROLES.analistaPuestos,
+  ROLES.administrador,
+  ROLES.jefaturaDepartamento,
+  ROLES.jefeCatedra,
+];
+
+/** Entre los escritores, los que no están limitados por alcance. */
+export const ROLES_ESCRITORES_GLOBALES_DE_ACTIVOS: CodigoRol[] = [
+  ROLES.analistaPuestos,
+  ROLES.administrador,
+];
