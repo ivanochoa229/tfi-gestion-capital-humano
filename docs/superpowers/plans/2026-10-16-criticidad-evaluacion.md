@@ -1,4 +1,4 @@
-Estado: Implementado | Fecha: 2026-10-16 | PR: —
+Estado: Implementado | Fecha: 2026-10-16 | PR: #7
 
 # Criticidad: evaluación por par conocimiento-puesto: plan de implementación
 
