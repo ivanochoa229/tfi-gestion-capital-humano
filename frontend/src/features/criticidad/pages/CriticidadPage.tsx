@@ -43,7 +43,11 @@ export function CriticidadPage() {
   });
   const avance = useAvance({ idUnidad: unidad });
   // La autoridad consulta pero no evalúa (RF24).
-  const puedeEvaluar = sesion?.rol !== 'autoridad';
+  const puedeEvaluar = [
+    'recursos_humanos',
+    'jefatura_departamento',
+    'jefe_catedra',
+  ].includes(sesion?.rol ?? '');
 
   const buscado = texto.trim().toLowerCase();
   const filas = (pares.data ?? []).filter(
@@ -67,7 +71,9 @@ export function CriticidadPage() {
         <Typography variant="body2" gutterBottom>
           {avance.data
             ? `${avance.data.evaluados} de ${avance.data.total} pares evaluados`
-            : 'Calculando avance…'}
+            : avance.isError
+              ? 'No se pudo calcular el avance'
+              : 'Calculando avance…'}
         </Typography>
         <LinearProgress
           variant="determinate"

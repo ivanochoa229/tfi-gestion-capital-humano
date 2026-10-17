@@ -82,5 +82,8 @@ export const PASOS_FUSION: string[] = [
   // 10. Se sueltan los vínculos al origen.
   `DELETE FROM activo_conocimiento_conocimiento WHERE id_conocimiento = $1 AND $2::int IS NOT NULL`,
   // 11. Las evaluaciones de criticidad del origen pasan al destino; la vigente sale de la vista.
+  // Deliberado: es SQL crudo sobre una tabla auditada, así que `auditoria` no registra este
+  // movimiento (queda trazable por conocimiento.id_fusionado_en). No copiar este patrón para
+  // otras escrituras auditadas (plan, candidato): esas deben usar save()/remove().
   `UPDATE evaluacion_criticidad SET id_conocimiento = $2 WHERE id_conocimiento = $1`,
 ];

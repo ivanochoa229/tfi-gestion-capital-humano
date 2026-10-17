@@ -17,6 +17,7 @@ describe('Fusión de conocimientos (PostgreSQL real)', () => {
   let area: number;
   let puestoX: number;
   let puestoY: number;
+  let usuarioRrhh: number;
 
   const sql = <T>(consulta: string, parametros?: unknown[]) =>
     ds.query(consulta, parametros) as Promise<T>;
@@ -125,6 +126,12 @@ describe('Fusión de conocimientos (PostgreSQL real)', () => {
     )[0].id;
     puestoX = await nuevoPuesto('P-0001');
     puestoY = await nuevoPuesto('P-0002');
+    usuarioRrhh = (
+      await sql<{ id: number }[]>(
+        `INSERT INTO usuario (nombre_usuario, clave_hash, id_rol)
+         SELECT 'rrhh-fusion', 'x', id_rol FROM rol WHERE codigo = 'recursos_humanos' RETURNING id_usuario AS id`,
+      )
+    )[0].id;
   });
   afterAll(async () => {
     await base.destruir();
@@ -152,12 +159,7 @@ describe('Fusión de conocimientos (PostgreSQL real)', () => {
     await fila(p3, b, null, ['avanzado', '2022-01-01', ev]);
     await acreditacion(p3, b, 'avanzado', '2022-01-01', ev);
 
-    const usuario = (
-      await sql<{ id: number }[]>(
-        `INSERT INTO usuario (nombre_usuario, clave_hash, id_rol)
-         SELECT 'rrhh-fusion', 'x', id_rol FROM rol WHERE codigo = 'recursos_humanos' RETURNING id_usuario AS id`,
-      )
-    )[0].id;
+    const usuario = usuarioRrhh;
     const evaluarOrigen = (puesto: number, fecha: string) =>
       sql(
         `INSERT INTO evaluacion_criticidad
@@ -272,11 +274,7 @@ describe('Fusión de conocimientos (PostgreSQL real)', () => {
     const a = await nuevoConocimiento('Git 1', 'git 1'); // origen
     const b = await nuevoConocimiento('Git', 'git'); // destino
     const puesto = await nuevoPuesto('P-0003');
-    const usuario = (
-      await sql<{ id: number }[]>(
-        `SELECT id_usuario AS id FROM usuario WHERE nombre_usuario = 'rrhh-fusion'`,
-      )
-    )[0].id;
+    const usuario = usuarioRrhh;
     const evaluar = (conocimiento: number, fecha: string, nivel: string) =>
       sql(
         `INSERT INTO evaluacion_criticidad

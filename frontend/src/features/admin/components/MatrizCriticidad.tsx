@@ -22,7 +22,7 @@ import { useValoresReferencia } from '../hooks/useValoresReferencia';
 /** Matriz que combina impacto y dificultad en un nivel de criticidad (RF12). */
 export function MatrizCriticidad() {
   const { data: matriz, isLoading, isError } = useMatriz();
-  const { data: niveles } = useValoresReferencia('nivel-criticidad', false);
+  const { data: niveles } = useValoresReferencia('nivel-criticidad', true);
   const editar = useEditarCelda();
   const [mensaje, setMensaje] = useState<{
     tipo: 'success' | 'error';
@@ -108,11 +108,18 @@ export function MatrizCriticidad() {
                       },
                     }}
                   >
-                    {(niveles ?? []).map((n) => (
-                      <MenuItem key={n.id} value={String(n.id)}>
-                        {n.denominacion}
-                      </MenuItem>
-                    ))}
+                    {(niveles ?? [])
+                      .filter((n) => n.activo || n.id === valorDe(i.id, d.id))
+                      .map((n) => (
+                        <MenuItem
+                          key={n.id}
+                          value={String(n.id)}
+                          disabled={!n.activo}
+                        >
+                          {n.denominacion}
+                          {!n.activo && ' (desactivado)'}
+                        </MenuItem>
+                      ))}
                   </TextField>
                 </TableCell>
               ))}

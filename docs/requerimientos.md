@@ -122,7 +122,7 @@ El diseño está en `docs/superpowers/specs/2026-10-16-conocimiento-activos-desi
 
 **Conocimiento:** `conocimiento`, `requisito_puesto`, `conocimiento_persona` y `acreditacion` (historial de solo inserción; el reflejo de la acreditación vigente vive en `conocimiento_persona`); ver `docs/superpowers/specs/2026-10-15-conocimiento-catalogo-design.md`. Suma dos dominios de referencia (`area_tematica`, `tipo_evidencia`) a los administrados por RF23. Las consultas de detección cuentan solo el nivel acreditado vigente.
 
-**Criticidad:** `evaluacion_criticidad` (historial de solo inserción; la vigente es la vista `criticidad_vigente`), `matriz_criticidad` y las escalas fijas `nivel_impacto` y `nivel_dificultad` (no son dominios de RF23); ver `docs/superpowers/specs/2026-10-16-criticidad-evaluacion-design.md`. Las consultas de detección leen solo `criticidad_vigente`. Un puesto es de criticidad alta si tiene al menos un requisito excluyente con criticidad vigente alta.
+**Criticidad:** `evaluacion_criticidad` (historial de solo inserción; la vigente es la vista `criticidad_vigente`), `matriz_criticidad` y las escalas fijas `nivel_impacto` y `nivel_dificultad` (no son dominios de RF23); ver `docs/superpowers/specs/2026-10-16-criticidad-evaluacion-design.md`. Cada evaluación guarda el nivel que daba la matriz al evaluarse (una instantánea): un cambio posterior de la matriz no la recalcula. Las consultas de detección leen solo `criticidad_vigente`. Un puesto es de criticidad alta si tiene al menos un requisito excluyente con criticidad vigente alta.
 
 Cuidados de implementación:
 
