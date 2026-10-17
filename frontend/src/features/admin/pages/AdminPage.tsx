@@ -8,13 +8,14 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { PaginaEnConstruccion } from '../../../components/PaginaEnConstruccion';
+import { MatrizCriticidad } from '../components/MatrizCriticidad';
 import { TablaReferencia } from '../components/TablaReferencia';
 import { TablaUsuarios } from '../components/TablaUsuarios';
 import { useDominiosReferencia } from '../hooks/useValoresReferencia';
 
 export function AdminPage() {
   const { data: dominios, isLoading, isError } = useDominiosReferencia();
-  const [seccion, setSeccion] = useState<'referencia' | 'usuarios'>(
+  const [seccion, setSeccion] = useState<'referencia' | 'usuarios' | 'matriz'>(
     'referencia',
   );
   const [indice, setIndice] = useState(0);
@@ -22,14 +23,17 @@ export function AdminPage() {
   return (
     <PaginaEnConstruccion
       titulo="Administración"
-      descripcion="Usuarios y roles (RF22) y tablas de referencia (RF23)."
+      descripcion="Usuarios y roles (RF22), tablas de referencia (RF23) y matriz de criticidad (RF12)."
     >
       <Tabs value={seccion} onChange={(_, v) => setSeccion(v)} sx={{ mb: 2 }}>
         <Tab value="referencia" label="Tablas de referencia" />
         <Tab value="usuarios" label="Usuarios" />
+        <Tab value="matriz" label="Matriz de criticidad" />
       </Tabs>
 
       {seccion === 'usuarios' && <TablaUsuarios />}
+
+      {seccion === 'matriz' && <MatrizCriticidad />}
 
       {seccion === 'referencia' && (
         <>

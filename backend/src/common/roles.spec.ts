@@ -5,6 +5,9 @@ import {
   ROLES_DECLARANTES,
   ROLES_EVALUADORES,
   ROLES_GLOBALES,
+  ROLES_EVALUADORES_DE_CRITICIDAD,
+  ROLES_LECTORES_DE_CRITICIDAD,
+  ROLES_LECTORES_DE_MATRIZ,
   ROLES_LECTORES_DE_PERFIL,
   ROLES_SIN_DOCENTE,
   TODOS_LOS_ROLES,
@@ -65,5 +68,30 @@ describe('roles', () => {
     // El analista de puestos y el administrador no ven el conocimiento de las personas.
     expect(ROLES_LECTORES_DE_PERFIL).not.toContain(ROLES.analistaPuestos);
     expect(ROLES_LECTORES_DE_PERFIL).not.toContain(ROLES.administrador);
+  });
+
+  it('la criticidad la evalúan RR. HH. y los jefes; la leen además las autoridades; el docente, el analista y el administrador no', () => {
+    expect([...ROLES_EVALUADORES_DE_CRITICIDAD].sort()).toEqual([
+      'jefatura_departamento',
+      'jefe_catedra',
+      'recursos_humanos',
+    ]);
+    expect([...ROLES_LECTORES_DE_CRITICIDAD].sort()).toEqual([
+      'autoridad',
+      'jefatura_departamento',
+      'jefe_catedra',
+      'recursos_humanos',
+    ]);
+    for (const rol of [
+      'docente',
+      'analista_puestos',
+      'administrador',
+    ] as const) {
+      expect(ROLES_LECTORES_DE_CRITICIDAD).not.toContain(rol);
+    }
+    expect(ROLES_LECTORES_DE_MATRIZ).toEqual([
+      ...ROLES_LECTORES_DE_CRITICIDAD,
+      'administrador',
+    ]);
   });
 });

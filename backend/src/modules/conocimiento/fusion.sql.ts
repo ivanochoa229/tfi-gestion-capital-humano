@@ -4,13 +4,17 @@ export const SQL_CONTAR_REQUISITOS = `SELECT count(*)::int AS n FROM requisito_p
 /** Cuántas personas tienen datos del conocimiento (parámetro: id). */
 export const SQL_CONTAR_PERSONAS = `SELECT count(*)::int AS n FROM conocimiento_persona WHERE id_conocimiento = $1`;
 
+/** Cuántas evaluaciones de criticidad tiene el conocimiento (parámetro: id). */
+export const SQL_CONTAR_EVALUACIONES = `SELECT count(*)::int AS n FROM evaluacion_criticidad WHERE id_conocimiento = $1`;
+
 /**
  * Pasos de la fusión, en orden, todos con `[idOrigen, idDestino]`.
  * Requisitos: donde un puesto pedía ambos queda el nivel más exigente y
  * excluyente si alguno lo era. Personas: el declarado más alto; las
  * acreditaciones del origen pasan al destino y el reflejo se recalcula con la
  * regla de siempre (la más reciente, no la de nivel más alto). Los activos que
- * documentaban el origen quedan vinculados al destino.
+ * documentaban el origen quedan vinculados al destino. Las evaluaciones de
+ * criticidad del origen pasan al destino con su historial.
  */
 export const PASOS_FUSION: string[] = [
   // 1. Puestos que pedían ambos: se endurece el requisito del destino.
@@ -77,4 +81,9 @@ export const PASOS_FUSION: string[] = [
    ON CONFLICT DO NOTHING`,
   // 10. Se sueltan los vínculos al origen.
   `DELETE FROM activo_conocimiento_conocimiento WHERE id_conocimiento = $1 AND $2::int IS NOT NULL`,
+  // 11. Las evaluaciones de criticidad del origen pasan al destino; la vigente sale de la vista.
+  // Deliberado: es SQL crudo sobre una tabla auditada, así que `auditoria` no registra este
+  // movimiento (queda trazable por conocimiento.id_fusionado_en). No copiar este patrón para
+  // otras escrituras auditadas (plan, candidato): esas deben usar save()/remove().
+  `UPDATE evaluacion_criticidad SET id_conocimiento = $2 WHERE id_conocimiento = $1`,
 ];

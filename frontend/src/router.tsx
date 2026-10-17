@@ -57,7 +57,21 @@ export const router = createBrowserRouter([
         ),
       },
       { path: 'conocimiento/activos', element: <ActivosPage /> },
-      { path: 'criticidad', element: <CriticidadPage /> },
+      {
+        path: 'criticidad',
+        element: (
+          <RutaProtegida
+            roles={[
+              'recursos_humanos',
+              'autoridad',
+              'jefatura_departamento',
+              'jefe_catedra',
+            ]}
+          >
+            <CriticidadPage />
+          </RutaProtegida>
+        ),
+      },
       { path: 'sucesion', element: <SucesionPage /> },
       {
         path: 'admin',
