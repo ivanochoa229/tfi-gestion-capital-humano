@@ -37,5 +37,6 @@ import { SucesionController } from './sucesion.controller.js';
     AccionesService,
     CoberturaService,
   ],
+  exports: [CoberturaService],
 })
 export class SucesionModule {}

@@ -28,5 +28,6 @@ import { ParesService } from './pares.service.js';
   ],
   controllers: [CriticidadController, EvaluacionesController],
   providers: [MatrizService, EvaluacionesService, ParesService],
+  exports: [ParesService],
 })
 export class CriticidadModule {}
