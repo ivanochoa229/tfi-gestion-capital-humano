@@ -1,4 +1,4 @@
-Estado: Aprobada | Fecha: 2026-10-18 | Autor: IvanOchoa229
+Estado: Implementada | Fecha: 2026-10-18 | Autor: IvanOchoa229
 
 # Sucesión: planes, candidatos y acciones de transferencia
 
@@ -255,6 +255,19 @@ docente.
 - `docs/superpowers/specs/2026-10-12-usuarios-roles-design.md`: la matriz agrega la lectura de planes y
   acciones al `jefe_catedra` y la lectura de acciones propias y como destinatario al `docente`.
 - Esta spec pasa a `Implementada` al cerrar el trabajo.
+
+## Decisiones tomadas durante la implementación
+
+- Las acciones de transferencia pasan al conocimiento destino al fusionar conocimientos (la spec no lo
+  mencionaba); el paso está en `fusion.sql.ts` de Conocimiento.
+- `PATCH /acciones/:id` cancela con `cancelar: true` en el cuerpo, no con un endpoint aparte.
+- `GET /mis-planes` devuelve solo planes `aprobado` donde figura la persona.
+- El filtro `idUnidad` de `GET /planes` incluye las unidades descendientes, siempre dentro del alcance.
+- `reabrir` limpia usuario, fecha y motivo de la resolución; la resolución anterior queda en la
+  auditoría.
+- El CHECK `CK_accion_cumplimiento_estado` y los índices únicos parciales de `plan_sucesion` viven solo
+  en la migración (dependen de ids de estados); las entidades lo documentan, y `migration:generate`
+  puede proponer eliminarlos: hay que descartar esa parte al revisar.
 
 ## Fuera de alcance
 
