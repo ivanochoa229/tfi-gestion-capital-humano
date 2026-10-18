@@ -24,6 +24,7 @@ import type {
 import { Conocimiento } from './entities/conocimiento.entity.js';
 import {
   PASOS_FUSION,
+  SQL_CONTAR_ACCIONES,
   SQL_CONTAR_EVALUACIONES,
   SQL_CONTAR_PERSONAS,
   SQL_CONTAR_REQUISITOS,
@@ -205,6 +206,10 @@ export class ConocimientosService {
         SQL_CONTAR_EVALUACIONES,
         [idOrigen],
       );
+      const [{ n: accionesMovidas }] = await manager.query<{ n: number }[]>(
+        SQL_CONTAR_ACCIONES,
+        [idOrigen],
+      );
       for (const paso of PASOS_FUSION) {
         await manager.query(paso, [idOrigen, idDestino]);
       }
@@ -216,6 +221,7 @@ export class ConocimientosService {
         requisitosMovidos,
         personasMovidas,
         evaluacionesMovidas,
+        accionesMovidas,
       };
     });
   }

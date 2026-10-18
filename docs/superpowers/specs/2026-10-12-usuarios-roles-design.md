@@ -86,10 +86,10 @@ Fuera de alcance: recuperación de clave por correo, bloqueo por intentos fallid
 | `analista_puestos` | Estructura, descripciones, relevamientos, catálogo de conocimientos, requisitos y activos (RF01-04, 08, 09, 11) | Global |
 | `recursos_humanos` | Personas y ocupaciones (RF06-07), criticidad (RF12), acciones de transferencia (RF15), consultas (RF16-20) y lectura de la bitácora | Global |
 | `autoridad` | Tablero y consultas (RF16-21), aprobación de planes (RF13) y lectura de la bitácora | Global |
-| `jefatura_departamento` | Validar descripciones (RF05), criticidad (RF12), planes y candidatos (RF13-14) | Sus unidades y descendientes |
-| `jefe_catedra` | Validar su cátedra (RF05), acreditar conocimientos de su equipo (RF10) y criticidad (RF12) | Sus unidades y descendientes |
+| `jefatura_departamento` | Validar descripciones (RF05), criticidad (RF12), planes y candidatos (RF13-14); avanzar las acciones de transferencia de las que es responsable (RF15) | Sus unidades y descendientes |
+| `jefe_catedra` | Validar su cátedra (RF05), acreditar conocimientos de su equipo (RF10) y criticidad (RF12); leer los planes y las acciones de transferencia de su alcance (RF13, RF15); avanzar las acciones de las que es responsable | Sus unidades y descendientes |
 | `administrador` | Usuarios y roles (RF22) y tablas de referencia (RF23). Sin acceso a criticidad ni sucesión | No aplica |
-| `docente` | Declarar sus conocimientos (RF10), actualizar sus acciones asignadas (RF15), ver su brecha (RF19). Si figura en `candidato_sucesion`, ve además su plan (candidato) | Solo lo propio, por `id_persona` |
+| `docente` | Declarar sus conocimientos (RF10), leer las acciones de transferencia en las que es responsable o destinatario y actualizar las asignadas como responsable (RF15), ver su brecha (RF19). Si figura en `candidato_sucesion`, ve además su plan (candidato) | Solo lo propio, por `id_persona` |
 
 Esta matriz se aplica en cada módulo de negocio al implementarse; este bloque entrega el
 mecanismo y lo prueba.

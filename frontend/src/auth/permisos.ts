@@ -65,6 +65,18 @@ export const SECCIONES: Seccion[] = [
       'recursos_humanos',
       'autoridad',
       'jefatura_departamento',
+      'jefe_catedra',
+    ],
+  },
+  { ruta: '/sucesion/mia', nombre: 'Mi sucesión', roles: ['docente'] },
+  {
+    ruta: '/acciones',
+    nombre: 'Acciones',
+    roles: [
+      'recursos_humanos',
+      'autoridad',
+      'jefatura_departamento',
+      'jefe_catedra',
       'docente',
     ],
   },

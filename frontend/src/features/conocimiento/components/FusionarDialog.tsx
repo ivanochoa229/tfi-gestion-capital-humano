@@ -63,7 +63,8 @@ export function FusionarDialog({ origen, onCerrar }: Props) {
           {resultado ? (
             <Alert severity="success">
               Listo. Se movieron {resultado.requisitosMovidos} requisitos de
-              puesto, {resultado.evaluacionesMovidas} evaluaciones de criticidad
+              puesto, {resultado.evaluacionesMovidas} evaluaciones de
+              criticidad, {resultado.accionesMovidas} acciones de transferencia
               y los datos de {resultado.personasMovidas} personas; «
               {origen.denominacion}» quedó dado de baja.
             </Alert>

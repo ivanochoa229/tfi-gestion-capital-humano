@@ -125,4 +125,7 @@ export class ResultadoFusionDto {
 
   @ApiProperty({ description: 'Evaluaciones de criticidad del origen' })
   evaluacionesMovidas: number;
+
+  @ApiProperty({ description: 'Acciones de transferencia del origen' })
+  accionesMovidas: number;
 }

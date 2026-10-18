@@ -900,6 +900,246 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/planes': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['PlanesController_listar'];
+    put?: never;
+    post: operations['PlanesController_crear'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/planes/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['PlanesController_buscar'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch: operations['PlanesController_editar'];
+    trace?: never;
+  };
+  '/api/planes/{id}/presentar': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['PlanesController_presentar'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/planes/{id}/resolver': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['PlanesController_resolver'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/planes/{id}/reabrir': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['PlanesController_reabrir'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/planes/{id}/nueva-version': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['PlanesController_nuevaVersion'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/planes/{id}/cerrar': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['PlanesController_cerrar'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/planes/{idPlan}/candidatos': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['CandidatosController_agregar'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/planes/{idPlan}/candidatos/orden': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put: operations['CandidatosController_reordenar'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/planes/{idPlan}/candidatos/{idPersona}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete: operations['CandidatosController_quitar'];
+    options?: never;
+    head?: never;
+    patch: operations['CandidatosController_seguimiento'];
+    trace?: never;
+  };
+  '/api/acciones': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['AccionesController_listar'];
+    put?: never;
+    post: operations['AccionesController_crear'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/acciones/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch: operations['AccionesController_editar'];
+    trace?: never;
+  };
+  '/api/acciones/{id}/avanzar': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['AccionesController_avanzar'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/sucesion/cobertura': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['SucesionController_cobertura'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/sucesion/mis-planes': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['SucesionController_misPlanes'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1390,6 +1630,8 @@ export interface components {
       personasMovidas: number;
       /** @description Evaluaciones de criticidad del origen */
       evaluacionesMovidas: number;
+      /** @description Acciones de transferencia del origen */
+      accionesMovidas: number;
     };
     RequisitoDto: {
       idPuesto: number;
@@ -1708,6 +1950,204 @@ export interface components {
       observaciones: string | null;
       /** Format: date-time */
       registradaEn: string;
+    };
+    PlanDto: {
+      id: number;
+      idPuesto: number;
+      codigoPuesto: string;
+      denominacionPuesto: string;
+      idUnidad: number;
+      idResponsable: number;
+      nombreResponsable: string;
+      /** @description Código del estado */
+      estado: string;
+      /** Format: date */
+      fechaElaboracion: string;
+      idPlanAnterior: number | null;
+      nombreUsuarioResolucion: string | null;
+      /** Format: date */
+      fechaResolucion: string | null;
+      motivoResolucion: string | null;
+      observaciones: string | null;
+      cantidadCandidatos: number;
+    };
+    CandidatoDto: {
+      idPlan: number;
+      idPersona: number;
+      apellido: string;
+      nombre: string;
+      /** @description Código del estado de preparación manual */
+      estadoPreparacion: string;
+      prioridad: number;
+      /** Format: date */
+      fechaDisponibilidadEstimada: string | null;
+      observaciones: string | null;
+      /** @description Requisitos excluyentes del puesto que el candidato no cubre con nivel acreditado */
+      excluyentesSinCubrir: number;
+      totalExcluyentes: number;
+      /** @description El estado manual no coincide con la preparación calculada (listo ahora y con faltantes, o al revés) */
+      discrepancia: boolean;
+      /** @description La persona hoy ocupa el puesto del plan o ya no tiene ocupación vigente */
+      aRevisar: boolean;
+    };
+    AccionDto: {
+      id: number;
+      /** @description Código del tipo de acción */
+      tipo: string;
+      idConocimiento: number;
+      denominacionConocimiento: string;
+      idPlan: number | null;
+      idResponsable: number;
+      nombreResponsable: string;
+      idDestinatario: number | null;
+      nombreDestinatario: string | null;
+      descripcion: string;
+      /** Format: date */
+      fechaPrevista: string;
+      /** Format: date */
+      fechaCumplimiento: string | null;
+      /** @description Código del estado */
+      estado: string;
+      notaAvance: string | null;
+      /** @description Calculada: pendiente o en curso con fecha prevista anterior a hoy */
+      vencida: boolean;
+    };
+    PlanDetalleDto: {
+      id: number;
+      idPuesto: number;
+      codigoPuesto: string;
+      denominacionPuesto: string;
+      idUnidad: number;
+      idResponsable: number;
+      nombreResponsable: string;
+      /** @description Código del estado */
+      estado: string;
+      /** Format: date */
+      fechaElaboracion: string;
+      idPlanAnterior: number | null;
+      nombreUsuarioResolucion: string | null;
+      /** Format: date */
+      fechaResolucion: string | null;
+      motivoResolucion: string | null;
+      observaciones: string | null;
+      cantidadCandidatos: number;
+      candidatos: components['schemas']['CandidatoDto'][];
+      acciones: components['schemas']['AccionDto'][];
+    };
+    CrearPlanDto: {
+      /** @description Puesto activo, dentro de tu alcance */
+      idPuesto: number;
+      /** @description Persona activa responsable del plan */
+      idResponsable: number;
+      observaciones?: string | null;
+    };
+    EditarPlanDto: {
+      /** @description Persona activa responsable del plan */
+      idResponsable?: number;
+      observaciones?: string | null;
+    };
+    ResolverPlanDto: {
+      /** @enum {string} */
+      decision: 'aprobar' | 'rechazar';
+      /** @description Obligatorio al rechazar */
+      motivo?: string;
+    };
+    AgregarCandidatoDto: {
+      /** @description Persona activa con ocupación vigente que no ocupa el puesto del plan */
+      idPersona: number;
+      /** @description Única dentro del plan */
+      prioridad: number;
+      /** @description Estado de preparación manual (activo) */
+      idEstadoPreparacion: number;
+      /**
+       * Format: date
+       * @example 2027-03-31
+       */
+      fechaDisponibilidadEstimada?: string;
+      observaciones?: string;
+    };
+    OrdenCandidatosDto: {
+      /** @description Ids de persona de todos los candidatos del plan, en la prioridad nueva (el primero queda con 1) */
+      orden: number[];
+    };
+    SeguimientoCandidatoDto: {
+      idEstadoPreparacion?: number;
+      /**
+       * Format: date
+       * @description null borra la fecha
+       */
+      fechaDisponibilidadEstimada?: string | null;
+      observaciones?: string | null;
+    };
+    CrearAccionDto: {
+      /** @description Tipo de acción activo */
+      idTipoAccion: number;
+      /** @description Conocimiento activo a transferir */
+      idConocimiento: number;
+      /** @description Plan al que pertenece; el conocimiento debe ser requisito de su puesto */
+      idPlan?: number;
+      /** @description Persona activa responsable de la acción */
+      idResponsable: number;
+      /** @description Persona activa que recibe el conocimiento; distinta del responsable */
+      idDestinatario?: number;
+      descripcion: string;
+      /**
+       * Format: date
+       * @example 2027-03-31
+       */
+      fechaPrevista: string;
+    };
+    EditarAccionDto: {
+      idTipoAccion?: number;
+      idResponsable?: number;
+      /** @description null quita al destinatario */
+      idDestinatario?: number | null;
+      descripcion?: string;
+      /** Format: date */
+      fechaPrevista?: string;
+      /** @description true cancela la acción (solo desde pendiente o en curso) */
+      cancelar?: boolean;
+    };
+    AvanzarAccionDto: {
+      /** @enum {string} */
+      estado: 'en_curso' | 'completada';
+      notaAvance?: string;
+      /**
+       * Format: date
+       * @description Solo al completar; por defecto hoy, nunca futura
+       */
+      fechaCumplimiento?: string;
+    };
+    PuestoSinPlanDto: {
+      idPuesto: number;
+      codigo: string;
+      denominacion: string;
+      idUnidad: number;
+      /** @description Plan en borrador o pendiente de aprobación, si lo hay */
+      idPlanEnElaboracion: number | null;
+      estadoPlanEnElaboracion: string | null;
+    };
+    CoberturaDto: {
+      /** @description Puestos críticos activos del alcance */
+      criticos: number;
+      /** @description Críticos con un plan aprobado */
+      conPlan: number;
+      sinPlan: components['schemas']['PuestoSinPlanDto'][];
+    };
+    MiPlanDto: {
+      idPlan: number;
+      idPuesto: number;
+      denominacionPuesto: string;
+      /** @description Código del estado del plan (siempre aprobado) */
+      estadoPlan: string;
+      /** @description Tu estado de preparación */
+      estadoPreparacion: string;
+      /** Format: date */
+      fechaDisponibilidadEstimada: string | null;
+      /** @description Requisitos excluyentes del puesto que todavía no alcanzás (nivel acreditado vigente) */
+      excluyentesSinCubrir: number;
+      /** @description Requisitos excluyentes del puesto */
+      totalExcluyentes: number;
     };
   };
   responses: never;
@@ -4056,6 +4496,797 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
+      };
+    };
+  };
+  PlanesController_listar: {
+    parameters: {
+      query?: {
+        idPuesto?: number;
+        /** @description Unidad del puesto, con sus subunidades */
+        idUnidad?: number;
+        /** @description Código del estado del plan */
+        estado?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PlanDto'][];
+        };
+      };
+    };
+  };
+  PlanesController_crear: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CrearPlanDto'];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PlanDto'];
+        };
+      };
+      /** @description Puesto de baja o responsable inexistente o inactivo */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El puesto está fuera de tu alcance */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El puesto no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El puesto ya tiene un plan en elaboración o aprobado */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PlanesController_buscar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PlanDetalleDto'];
+        };
+      };
+      /** @description El puesto está fuera de tu alcance */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PlanesController_editar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['EditarPlanDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PlanDto'];
+        };
+      };
+      /** @description Responsable inexistente o inactivo */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El puesto está fuera de tu alcance */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan no está en borrador */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PlanesController_presentar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PlanDto'];
+        };
+      };
+      /** @description El puesto está fuera de tu alcance */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan no está en borrador o no tiene candidatos */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PlanesController_resolver: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ResolverPlanDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PlanDto'];
+        };
+      };
+      /** @description Rechazar exige un motivo */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan no está pendiente de aprobación */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PlanesController_reabrir: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PlanDto'];
+        };
+      };
+      /** @description El puesto está fuera de tu alcance */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan no está rechazado */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PlanesController_nuevaVersion: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PlanDto'];
+        };
+      };
+      /** @description El puesto está fuera de tu alcance */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan no está aprobado o el puesto ya tiene uno en elaboración */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PlanesController_cerrar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PlanDto'];
+        };
+      };
+      /** @description El puesto está fuera de tu alcance */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan está pendiente de aprobación o ya cerrado */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  CandidatosController_agregar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPlan: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AgregarCandidatoDto'];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['CandidatoDto'];
+        };
+      };
+      /** @description Persona inexistente, inactiva o sin ocupación vigente; estado de preparación inválido */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El puesto está fuera de tu alcance */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan no está en borrador, la persona ocupa el puesto, ya es candidata o la prioridad está usada */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  CandidatosController_reordenar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPlan: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['OrdenCandidatosDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['CandidatoDto'][];
+        };
+      };
+      /** @description El orden repite, omite o nombra personas ajenas al plan */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El puesto está fuera de tu alcance */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan no está en borrador */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  CandidatosController_quitar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPlan: number;
+        idPersona: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Candidato quitado */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El puesto está fuera de tu alcance */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan o el candidato no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan no está en borrador */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  CandidatosController_seguimiento: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        idPlan: number;
+        idPersona: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SeguimientoCandidatoDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['CandidatoDto'];
+        };
+      };
+      /** @description Estado de preparación inválido */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El puesto está fuera de tu alcance */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan o el candidato no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan no está en borrador ni aprobado */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AccionesController_listar: {
+    parameters: {
+      query?: {
+        idPlan?: number;
+        idConocimiento?: number;
+        /** @description Código del estado de la acción */
+        estado?: string;
+        /** @description true: pendientes o en curso con fecha prevista pasada; false: el resto */
+        vencidas?: boolean;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description RR. HH. y autoridad ven todas; los jefes, las de planes de su alcance; el docente, las suyas */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['AccionDto'][];
+        };
+      };
+    };
+  };
+  AccionesController_crear: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CrearAccionDto'];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['AccionDto'];
+        };
+      };
+      /** @description Conocimiento de baja, tipo o personas inválidos, o destinatario igual al responsable */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El conocimiento o el plan no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description El plan está cerrado o el conocimiento no es requisito de su puesto */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AccionesController_editar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['EditarAccionDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['AccionDto'];
+        };
+      };
+      /** @description Tipo o personas inválidos */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description La acción no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description La acción ya está completada o cancelada */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AccionesController_avanzar: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AvanzarAccionDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['AccionDto'];
+        };
+      };
+      /** @description Fecha de cumplimiento inválida */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description No sos el responsable de la acción ni Recursos Humanos */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description La acción no existe */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Transición de estado no permitida */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  SucesionController_cobertura: {
+    parameters: {
+      query?: {
+        /** @description Unidad con sus descendientes */
+        idUnidad?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['CoberturaDto'];
+        };
+      };
+    };
+  };
+  SucesionController_misPlanes: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['MiPlanDto'][];
+        };
       };
     };
   };

@@ -12,6 +12,10 @@ import { EstructuraPage } from './features/estructura/pages/EstructuraPage';
 import { ImportarPersonasPage } from './features/personas/pages/ImportarPersonasPage';
 import { MiFichaPage } from './features/personas/pages/MiFichaPage';
 import { PersonasPage } from './features/personas/pages/PersonasPage';
+import { AccionesPage } from './features/sucesion/pages/AccionesPage';
+import { MiSucesionPage } from './features/sucesion/pages/MiSucesionPage';
+import { PlanPage } from './features/sucesion/pages/PlanPage';
+import { ROLES_ACCIONES, ROLES_SUCESION } from './features/sucesion/estados';
 import { SucesionPage } from './features/sucesion/pages/SucesionPage';
 import { TableroPage } from './features/tablero/pages/TableroPage';
 
@@ -72,7 +76,38 @@ export const router = createBrowserRouter([
           </RutaProtegida>
         ),
       },
-      { path: 'sucesion', element: <SucesionPage /> },
+      {
+        path: 'sucesion',
+        element: (
+          <RutaProtegida roles={ROLES_SUCESION}>
+            <SucesionPage />
+          </RutaProtegida>
+        ),
+      },
+      {
+        path: 'sucesion/planes/:id',
+        element: (
+          <RutaProtegida roles={ROLES_SUCESION}>
+            <PlanPage />
+          </RutaProtegida>
+        ),
+      },
+      {
+        path: 'sucesion/mia',
+        element: (
+          <RutaProtegida roles={['docente']}>
+            <MiSucesionPage />
+          </RutaProtegida>
+        ),
+      },
+      {
+        path: 'acciones',
+        element: (
+          <RutaProtegida roles={ROLES_ACCIONES}>
+            <AccionesPage />
+          </RutaProtegida>
+        ),
+      },
       {
         path: 'admin',
         element: (

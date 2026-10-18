@@ -89,6 +89,27 @@ describe('AuditoriaSubscriber', () => {
     );
   });
 
+  it('con clave compuesta (entityId objeto) arma el id con las columnas', async () => {
+    const insert = vi.fn(async () => undefined);
+    const e = {
+      metadata: {
+        tableName: 'candidato_sucesion',
+        primaryColumns: [
+          { getEntityValue: (r: { idPlan: number }) => r.idPlan },
+          { getEntityValue: (r: { idPersona: number }) => r.idPersona },
+        ],
+      },
+      manager: { insert },
+      entityId: { idPlan: 4, idPersona: 9 },
+      databaseEntity: { idPlan: 4, idPersona: 9 },
+    } as never;
+    await comoUsuario(7, () => subscriber().afterRemove(e));
+    expect(insert).toHaveBeenCalledWith(
+      Auditoria,
+      expect.objectContaining({ idRegistro: '4-9', operacion: 'baja' }),
+    );
+  });
+
   it('ignora las entidades que no están en la lista auditada', async () => {
     const { insert, evento: e } = evento('persona', { entity: { id: 1 } });
     await comoUsuario(7, () => subscriber().afterInsert(e));

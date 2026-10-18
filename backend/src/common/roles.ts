@@ -93,3 +93,39 @@ export const ROLES_LECTORES_DE_MATRIZ: CodigoRol[] = [
   ...ROLES_LECTORES_DE_CRITICIDAD,
   ROLES.administrador,
 ];
+
+/** Leen planes y candidatos de sucesión (RF13): RR. HH. y autoridad, y los jefes dentro de su alcance. */
+export const ROLES_LECTORES_DE_SUCESION: CodigoRol[] = [
+  ROLES.recursosHumanos,
+  ROLES.autoridad,
+  ROLES.jefaturaDepartamento,
+  ROLES.jefeCatedra,
+];
+
+/** Elaboran planes y candidatos: la jefatura, para puestos de su alcance. */
+export const ROLES_ELABORADORES_DE_PLANES: CodigoRol[] = [
+  ROLES.jefaturaDepartamento,
+];
+
+/** Aprueban o rechazan planes. */
+export const ROLES_APROBADORES_DE_PLANES: CodigoRol[] = [ROLES.autoridad];
+
+/** Crean y editan acciones de transferencia (RF15). */
+export const ROLES_GESTORES_DE_ACCIONES: CodigoRol[] = [ROLES.recursosHumanos];
+
+/** Leen acciones: los lectores de sucesión y el docente (las suyas). */
+export const ROLES_LECTORES_DE_ACCIONES: CodigoRol[] = [
+  ...ROLES_LECTORES_DE_SUCESION,
+  ROLES.docente,
+];
+
+/**
+ * Avanzan el estado de una acción: RR. HH. (cualquiera) y, solo si son el
+ * responsable de la acción, el docente y las jefaturas. La autoridad no.
+ */
+export const ROLES_AVANZADORES_DE_ACCIONES: CodigoRol[] = [
+  ROLES.recursosHumanos,
+  ROLES.docente,
+  ROLES.jefaturaDepartamento,
+  ROLES.jefeCatedra,
+];

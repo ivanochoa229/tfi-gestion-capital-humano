@@ -7,6 +7,9 @@ export const SQL_CONTAR_PERSONAS = `SELECT count(*)::int AS n FROM conocimiento_
 /** Cuántas evaluaciones de criticidad tiene el conocimiento (parámetro: id). */
 export const SQL_CONTAR_EVALUACIONES = `SELECT count(*)::int AS n FROM evaluacion_criticidad WHERE id_conocimiento = $1`;
 
+/** Cuántas acciones de transferencia tiene el conocimiento (parámetro: id). */
+export const SQL_CONTAR_ACCIONES = `SELECT count(*)::int AS n FROM accion_transferencia WHERE id_conocimiento = $1`;
+
 /**
  * Pasos de la fusión, en orden, todos con `[idOrigen, idDestino]`.
  * Requisitos: donde un puesto pedía ambos queda el nivel más exigente y
@@ -14,7 +17,8 @@ export const SQL_CONTAR_EVALUACIONES = `SELECT count(*)::int AS n FROM evaluacio
  * acreditaciones del origen pasan al destino y el reflejo se recalcula con la
  * regla de siempre (la más reciente, no la de nivel más alto). Los activos que
  * documentaban el origen quedan vinculados al destino. Las evaluaciones de
- * criticidad del origen pasan al destino con su historial.
+ * criticidad del origen pasan al destino con su historial, y las acciones de
+ * transferencia del origen pasan al destino con su estado y avance.
  */
 export const PASOS_FUSION: string[] = [
   // 1. Puestos que pedían ambos: se endurece el requisito del destino.
@@ -86,4 +90,7 @@ export const PASOS_FUSION: string[] = [
   // movimiento (queda trazable por conocimiento.id_fusionado_en). No copiar este patrón para
   // otras escrituras auditadas (plan, candidato): esas deben usar save()/remove().
   `UPDATE evaluacion_criticidad SET id_conocimiento = $2 WHERE id_conocimiento = $1`,
+  // 12. Las acciones de transferencia del origen pasan al destino.
+  // Mismo criterio que el paso 11: SQL crudo; accion_transferencia no se audita.
+  `UPDATE accion_transferencia SET id_conocimiento = $2 WHERE id_conocimiento = $1`,
 ];
