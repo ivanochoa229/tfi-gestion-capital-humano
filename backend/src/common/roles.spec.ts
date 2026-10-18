@@ -11,6 +11,9 @@ import {
   ROLES_LECTORES_DE_PERFIL,
   ROLES_SIN_DOCENTE,
   TODOS_LOS_ROLES,
+  ROLES_LECTORES_DE_DETECCION,
+  ROLES_GLOBALES_DE_DETECCION,
+  ROLES_LECTORES_DE_BRECHA_PROPIA,
 } from './roles.js';
 
 describe('roles', () => {
@@ -93,5 +96,32 @@ describe('roles', () => {
       ...ROLES_LECTORES_DE_CRITICIDAD,
       'administrador',
     ]);
+  });
+
+  it('define los roles lectores y globales de detección y de brecha propia', () => {
+    expect([...ROLES_LECTORES_DE_DETECCION].sort()).toEqual([
+      'autoridad',
+      'jefatura_departamento',
+      'jefe_catedra',
+      'recursos_humanos',
+    ]);
+    expect([...ROLES_GLOBALES_DE_DETECCION].sort()).toEqual([
+      'autoridad',
+      'recursos_humanos',
+    ]);
+    expect([...ROLES_LECTORES_DE_BRECHA_PROPIA].sort()).toEqual([
+      'docente',
+      'jefatura_departamento',
+      'jefe_catedra',
+    ]);
+
+    for (const lista of [
+      ROLES_LECTORES_DE_DETECCION,
+      ROLES_GLOBALES_DE_DETECCION,
+      ROLES_LECTORES_DE_BRECHA_PROPIA,
+    ]) {
+      expect(lista).not.toContain(ROLES.analistaPuestos);
+      expect(lista).not.toContain(ROLES.administrador);
+    }
   });
 });

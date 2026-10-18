@@ -129,3 +129,24 @@ export const ROLES_AVANZADORES_DE_ACCIONES: CodigoRol[] = [
   ROLES.jefaturaDepartamento,
   ROLES.jefeCatedra,
 ];
+
+/** Leen los listados de detección y la brecha (RF16–RF20, RF24). */
+export const ROLES_LECTORES_DE_DETECCION: CodigoRol[] = [
+  ROLES.recursosHumanos,
+  ROLES.autoridad,
+  ROLES.jefaturaDepartamento,
+  ROLES.jefeCatedra,
+];
+
+/** Roles con acceso global a detección, CSV y tablero de riesgo (RF21). */
+export const ROLES_GLOBALES_DE_DETECCION: CodigoRol[] = [
+  ROLES.recursosHumanos,
+  ROLES.autoridad,
+];
+
+/** Leen su propia brecha de perfil (RF19, RF24): docente y jefaturas. */
+export const ROLES_LECTORES_DE_BRECHA_PROPIA: CodigoRol[] = [
+  ROLES.docente,
+  ROLES.jefeCatedra,
+  ROLES.jefaturaDepartamento,
+];
