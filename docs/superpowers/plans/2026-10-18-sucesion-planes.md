@@ -1,4 +1,4 @@
-Estado: Implementado | Fecha: 2026-10-18 | PR: —
+Estado: Implementado | Fecha: 2026-10-18 | PR: #8
 
 # Sucesión: planes, candidatos y acciones de transferencia: plan de implementación
 
