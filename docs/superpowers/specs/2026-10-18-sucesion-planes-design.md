@@ -1,4 +1,4 @@
-Estado: Propuesta | Fecha: 2026-10-18 | Autor: IvanOchoa229
+Estado: Aprobada | Fecha: 2026-10-18 | Autor: IvanOchoa229
 
 # Sucesión: planes, candidatos y acciones de transferencia
 
