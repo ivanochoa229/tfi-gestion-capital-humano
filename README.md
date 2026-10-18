@@ -115,6 +115,12 @@ Cuidados del DBA: el trigger revisa la unidad, no sus puestos. Si se cambia el s
 - **Quién escribe:** analista de puestos y administrador en cualquier unidad; jefe de cátedra y jefatura de departamento dentro de su alcance. Todos los usuarios consultan y descargan.
 - **Si cargás datos por SQL:** respetá el CHECK (un `archivo` lleva `nombre_original`, `tipo_mime`, `tamanio` y `hash`; un `enlace`, ninguno) y subí el objeto con la clave que pongas en `ubicacion`.
 
+### Criticidad
+
+- **Quién evalúa:** Recursos Humanos, la jefatura y los jefes de cátedra con el puesto en su alcance. Las autoridades solo leen; el docente, el analista de puestos y el administrador no acceden a las evaluaciones (el administrador solo edita la matriz).
+- **Cómo se calcula:** se cargan el impacto de pérdida y la dificultad de reemplazo, y el nivel lo calcula la matriz de criticidad, editable en Administración → Matriz de criticidad. Cambiar la matriz no altera las evaluaciones ya guardadas.
+- **Qué se evalúa:** solo los conocimientos que el puesto exige (sus requisitos).
+
 ## Flujo de trabajo
 
 ### Migraciones

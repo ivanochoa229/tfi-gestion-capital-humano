@@ -9,6 +9,7 @@ import type { Conocimiento } from './entities/conocimiento.entity.js';
 import { ConocimientosService } from './conocimientos.service.js';
 import {
   PASOS_FUSION,
+  SQL_CONTAR_EVALUACIONES,
   SQL_CONTAR_PERSONAS,
   SQL_CONTAR_REQUISITOS,
 } from './fusion.sql.js';
@@ -281,6 +282,7 @@ describe('ConocimientosService.fusionar', () => {
     manager.query.mockImplementation(async (sql: string) => {
       if (sql === SQL_CONTAR_REQUISITOS) return [{ n: 3 }];
       if (sql === SQL_CONTAR_PERSONAS) return [{ n: 5 }];
+      if (sql === SQL_CONTAR_EVALUACIONES) return [{ n: 2 }];
       return [];
     });
 
@@ -295,6 +297,7 @@ describe('ConocimientosService.fusionar', () => {
       idDestino: 2,
       requisitosMovidos: 3,
       personasMovidas: 5,
+      evaluacionesMovidas: 2,
     });
     expect(filas.find((f) => f.id === 1)).toMatchObject({
       activo: false,

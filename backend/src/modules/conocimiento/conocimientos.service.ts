@@ -24,6 +24,7 @@ import type {
 import { Conocimiento } from './entities/conocimiento.entity.js';
 import {
   PASOS_FUSION,
+  SQL_CONTAR_EVALUACIONES,
   SQL_CONTAR_PERSONAS,
   SQL_CONTAR_REQUISITOS,
 } from './fusion.sql.js';
@@ -200,12 +201,22 @@ export class ConocimientosService {
         SQL_CONTAR_PERSONAS,
         [idOrigen],
       );
+      const [{ n: evaluacionesMovidas }] = await manager.query<{ n: number }[]>(
+        SQL_CONTAR_EVALUACIONES,
+        [idOrigen],
+      );
       for (const paso of PASOS_FUSION) {
         await manager.query(paso, [idOrigen, idDestino]);
       }
       await repo.save({ ...origen, activo: false, idFusionadoEn: idDestino });
 
-      return { idOrigen, idDestino, requisitosMovidos, personasMovidas };
+      return {
+        idOrigen,
+        idDestino,
+        requisitosMovidos,
+        personasMovidas,
+        evaluacionesMovidas,
+      };
     });
   }
 

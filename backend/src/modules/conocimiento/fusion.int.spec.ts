@@ -17,6 +17,7 @@ describe('Fusión de conocimientos (PostgreSQL real)', () => {
   let area: number;
   let puestoX: number;
   let puestoY: number;
+  let usuarioRrhh: number;
 
   const sql = <T>(consulta: string, parametros?: unknown[]) =>
     ds.query(consulta, parametros) as Promise<T>;
@@ -125,6 +126,12 @@ describe('Fusión de conocimientos (PostgreSQL real)', () => {
     )[0].id;
     puestoX = await nuevoPuesto('P-0001');
     puestoY = await nuevoPuesto('P-0002');
+    usuarioRrhh = (
+      await sql<{ id: number }[]>(
+        `INSERT INTO usuario (nombre_usuario, clave_hash, id_rol)
+         SELECT 'rrhh-fusion', 'x', id_rol FROM rol WHERE codigo = 'recursos_humanos' RETURNING id_usuario AS id`,
+      )
+    )[0].id;
   });
   afterAll(async () => {
     await base.destruir();
@@ -152,6 +159,19 @@ describe('Fusión de conocimientos (PostgreSQL real)', () => {
     await fila(p3, b, null, ['avanzado', '2022-01-01', ev]);
     await acreditacion(p3, b, 'avanzado', '2022-01-01', ev);
 
+    const usuario = usuarioRrhh;
+    const evaluarOrigen = (puesto: number, fecha: string) =>
+      sql(
+        `INSERT INTO evaluacion_criticidad
+           (id_puesto, id_conocimiento, id_nivel_impacto, id_nivel_dificultad, id_nivel_criticidad, fecha_evaluacion, id_usuario)
+         SELECT $1, $2, i.id_nivel_impacto, d.id_nivel_dificultad, n.id_nivel_criticidad, $3, $4
+         FROM nivel_impacto i, nivel_dificultad d, nivel_criticidad n
+         WHERE i.codigo = 'alto' AND d.codigo = 'dificil' AND n.codigo = 'alta'`,
+        [puesto, a, fecha, usuario],
+      );
+    await evaluarOrigen(puestoX, '2026-01-05');
+    await evaluarOrigen(puestoY, '2026-01-06');
+
     const resultado = await servicio.fusionar(a, { idDestino: b });
 
     expect(resultado).toEqual({
@@ -159,6 +179,7 @@ describe('Fusión de conocimientos (PostgreSQL real)', () => {
       idDestino: b,
       requisitosMovidos: 2,
       personasMovidas: 3,
+      evaluacionesMovidas: 2,
     });
 
     const requisitos = await sql<
@@ -170,6 +191,14 @@ describe('Fusión de conocimientos (PostgreSQL real)', () => {
     expect(requisitos).toEqual([
       { p: puestoX, c: b, n: niveles.experto, e: true },
       { p: puestoY, c: b, n: niveles.intermedio, e: false },
+    ]);
+
+    const evaluaciones = await sql<{ p: number; c: number }[]>(
+      `SELECT id_puesto AS p, id_conocimiento AS c FROM evaluacion_criticidad ORDER BY id_puesto`,
+    );
+    expect(evaluaciones).toEqual([
+      { p: puestoX, c: b },
+      { p: puestoY, c: b },
     ]);
 
     const personas = await sql<
@@ -239,5 +268,40 @@ describe('Fusión de conocimientos (PostgreSQL real)', () => {
       { a: soloOrigen, c: b },
       { a: ambos, c: b },
     ]);
+  });
+
+  it('la evaluación más reciente del par, sea del origen o del destino, queda como vigente', async () => {
+    const a = await nuevoConocimiento('Git 1', 'git 1'); // origen
+    const b = await nuevoConocimiento('Git', 'git'); // destino
+    const puesto = await nuevoPuesto('P-0003');
+    const usuario = usuarioRrhh;
+    const evaluar = (conocimiento: number, fecha: string, nivel: string) =>
+      sql(
+        `INSERT INTO evaluacion_criticidad
+           (id_puesto, id_conocimiento, id_nivel_impacto, id_nivel_dificultad, id_nivel_criticidad, fecha_evaluacion, id_usuario)
+         SELECT $1, $2, i.id_nivel_impacto, d.id_nivel_dificultad, n.id_nivel_criticidad, $3, $4
+         FROM nivel_impacto i, nivel_dificultad d, nivel_criticidad n
+         WHERE i.codigo = 'alto' AND d.codigo = 'dificil' AND n.codigo = $5`,
+        [puesto, conocimiento, fecha, usuario, nivel],
+      );
+    await evaluar(b, '2026-02-01', 'baja');
+    await evaluar(a, '2026-03-01', 'alta'); // más reciente: la del origen
+    await requisito(puesto, a, 'avanzado', true);
+    await requisito(puesto, b, 'avanzado', true);
+
+    await servicio.fusionar(a, { idDestino: b });
+
+    const vigente = await sql<{ n: string }[]>(
+      `SELECT n.codigo AS n FROM criticidad_vigente v
+       JOIN nivel_criticidad n ON n.id_nivel_criticidad = v.id_nivel_criticidad
+       WHERE v.id_puesto = $1 AND v.id_conocimiento = $2`,
+      [puesto, b],
+    );
+    expect(vigente).toEqual([{ n: 'alta' }]);
+    const [{ total }] = await sql<{ total: number }[]>(
+      `SELECT count(*)::int AS total FROM evaluacion_criticidad WHERE id_puesto = $1 AND id_conocimiento = $2`,
+      [puesto, b],
+    );
+    expect(total).toBe(2);
   });
 });
