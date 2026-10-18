@@ -40,7 +40,17 @@ export function AccionesTabla({
   onCancelar,
   puedeAvanzar,
 }: Props) {
-  const conBotones = !!(onAvanzar || onEditar || onCancelar);
+  const hayAbiertas = acciones.some(
+    (a) => siguientesEstadosAccion(a.estado).length > 0,
+  );
+  // La columna aparece solo si alguna fila puede mostrar un botón.
+  const conBotones =
+    hayAbiertas &&
+    !!(
+      onEditar ||
+      onCancelar ||
+      (onAvanzar && acciones.some((a) => puedeAvanzar?.(a)))
+    );
   return (
     <Table size="small">
       <TableHead>

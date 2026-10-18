@@ -50,8 +50,11 @@ export function AccionesPage() {
   });
 
   const esGestor = sesion?.rol === ROL_GESTOR_ACCIONES;
+  const esDocente = sesion?.rol === 'docente';
+  // El backend solo deja avanzar a recursos humanos y al docente responsable.
   const puedeAvanzar = (a: Accion) =>
-    esGestor || (!!sesion?.idPersona && a.idResponsable === sesion.idPersona);
+    esGestor ||
+    (esDocente && !!sesion?.idPersona && a.idResponsable === sesion.idPersona);
 
   const confirmarCancelar = async () => {
     if (!cancelando) return;
@@ -139,7 +142,7 @@ export function AccionesPage() {
         <AccionesTabla
           acciones={acciones.data}
           puedeAvanzar={puedeAvanzar}
-          onAvanzar={setAvanzando}
+          onAvanzar={esGestor || esDocente ? setAvanzando : undefined}
           onEditar={esGestor ? setEditando : undefined}
           onCancelar={
             esGestor
