@@ -223,4 +223,87 @@ describe('DeteccionService', () => {
       ]);
     });
   });
+
+  describe('horizonteRiesgo (RF20)', () => {
+    it('calcula quedan, filtra quedan <= 1 por defecto y enmascara retiros fuera de alcance', async () => {
+      ds.query.mockResolvedValue([
+        {
+          id_conocimiento: 1,
+          denominacion: 'Conocimiento K1',
+          nivel_requerido: 'Avanzado',
+          cantidad_poseedores: 2,
+          id_persona: 10,
+          apellido: 'García',
+          nombre: 'Beto',
+          fecha_prevista_retiro: '2027-08-18',
+          en_alcance: false,
+          puestos_en_alcance: [
+            {
+              idPuesto: 7,
+              codigo: 'P-C4-AUX',
+              denominacion: 'C4.aux',
+              idUnidad: 14,
+            },
+          ],
+          puestos_fuera_de_alcance: 1,
+        },
+        {
+          id_conocimiento: 6,
+          denominacion: 'Conocimiento K6',
+          nivel_requerido: 'Avanzado',
+          cantidad_poseedores: 3,
+          id_persona: 10,
+          apellido: 'García',
+          nombre: 'Beto',
+          fecha_prevista_retiro: '2027-08-18',
+          en_alcance: true,
+          puestos_en_alcance: [
+            {
+              idPuesto: 1,
+              codigo: 'P-C1-JEF',
+              denominacion: 'C1.jefe',
+              idUnidad: 11,
+            },
+          ],
+          puestos_fuera_de_alcance: 0,
+        },
+      ]);
+
+      const porDefecto = await servicio.horizonteRiesgo({}, sesion);
+      expect(porDefecto.meses).toBe(24);
+      expect(porDefecto.conocimientos).toHaveLength(1);
+      expect(porDefecto.conocimientos[0]).toEqual({
+        idConocimiento: 1,
+        denominacion: 'Conocimiento K1',
+        nivelRequerido: 'Avanzado',
+        cantidadPoseedores: 2,
+        quedan: 1,
+        retiros: [
+          {
+            idPersona: null,
+            apellido: null,
+            nombre: null,
+            fechaPrevistaRetiro: null,
+          },
+        ],
+        puestosCriticos: [
+          {
+            idPuesto: 7,
+            codigo: 'P-C4-AUX',
+            denominacion: 'C4.aux',
+            idUnidad: 14,
+          },
+        ],
+        puestosFueraDeAlcance: 1,
+      });
+
+      const conTodos = await servicio.horizonteRiesgo(
+        { meses: 36, incluirConDosOMas: true },
+        sesion,
+      );
+      expect(conTodos.meses).toBe(36);
+      expect(conTodos.conocimientos).toHaveLength(2);
+      expect(conTodos.conocimientos[1].quedan).toBe(2);
+    });
+  });
 });

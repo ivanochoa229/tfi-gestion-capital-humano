@@ -19,6 +19,10 @@ import { DeteccionService } from './deteccion.service.js';
 import { CatedrasUnaPersonaDto } from './dto/catedra-una-persona.dto.js';
 import { FiltroDeteccionDto } from './dto/filtro-deteccion.dto.js';
 import {
+  FiltroHorizonteDto,
+  HorizonteRespuestaDto,
+} from './dto/horizonte.dto.js';
+import {
   FiltroSinSucesorDto,
   PuestoSinSucesorDto,
 } from './dto/puesto-sin-sucesor.dto.js';
@@ -196,6 +200,57 @@ export class DeteccionController {
       );
 
       this.enviarCsv(res, 'puestos-sin-sucesor.csv', csv);
+      return;
+    }
+
+    return datos;
+  }
+
+  @Get('horizonte-riesgo')
+  @Roles(...ROLES_LECTORES_DE_DETECCION)
+  @ApiOkResponse({ type: HorizonteRespuestaDto })
+  async horizonteRiesgo(
+    @Query() filtro: FiltroHorizonteDto,
+    @UsuarioActual() sesion: SesionUsuario,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<HorizonteRespuestaDto | void> {
+    if (filtro.formato === 'csv') {
+      this.exigirGlobalParaCsv(sesion);
+    }
+
+    const datos = await this.servicio.horizonteRiesgo(filtro, sesion);
+
+    if (filtro.formato === 'csv') {
+      const filas: Record<string, unknown>[] = [];
+      for (const k of datos.conocimientos) {
+        const puestos = k.puestosCriticos.map((p) => p.denominacion).join(', ');
+        for (const r of k.retiros) {
+          filas.push({
+            denominacion: k.denominacion,
+            nivelRequerido: k.nivelRequerido,
+            cantidadPoseedores: k.cantidadPoseedores,
+            quedan: k.quedan,
+            persona: r.apellido && r.nombre ? `${r.apellido}, ${r.nombre}` : '',
+            fechaPrevistaRetiro: r.fechaPrevistaRetiro ?? '',
+            puestosCriticos: puestos,
+          });
+        }
+      }
+
+      const csv = aCsv(
+        [
+          { clave: 'denominacion', titulo: 'Conocimiento' },
+          { clave: 'nivelRequerido', titulo: 'Nivel requerido' },
+          { clave: 'cantidadPoseedores', titulo: 'Poseedores actuales' },
+          { clave: 'quedan', titulo: 'Quedan tras retiros' },
+          { clave: 'persona', titulo: 'Persona que se retira' },
+          { clave: 'fechaPrevistaRetiro', titulo: 'Fecha prevista de retiro' },
+          { clave: 'puestosCriticos', titulo: 'Puestos críticos' },
+        ],
+        filas,
+      );
+
+      this.enviarCsv(res, 'horizonte-riesgo.csv', csv);
       return;
     }
 
