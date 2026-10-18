@@ -65,7 +65,7 @@ export const SECCIONES: Seccion[] = [
       'recursos_humanos',
       'autoridad',
       'jefatura_departamento',
-      'docente',
+      'jefe_catedra',
     ],
   },
   { ruta: '/admin', nombre: 'Administración', roles: ['administrador'] },
