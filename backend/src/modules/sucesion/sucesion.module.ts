@@ -4,6 +4,8 @@ import { ReferenciaModule } from '../referencia/referencia.module.js';
 import { UsuariosModule } from '../usuarios/usuarios.module.js';
 import { CandidatoSucesion } from './entities/candidato-sucesion.entity.js';
 import { PlanSucesion } from './entities/plan-sucesion.entity.js';
+import { CandidatosController } from './candidatos.controller.js';
+import { CandidatosService } from './candidatos.service.js';
 import { PlanesController } from './planes.controller.js';
 import { PlanesService } from './planes.service.js';
 
@@ -14,7 +16,7 @@ import { PlanesService } from './planes.service.js';
     ReferenciaModule,
     UsuariosModule,
   ],
-  controllers: [PlanesController],
-  providers: [PlanesService],
+  controllers: [PlanesController, CandidatosController],
+  providers: [PlanesService, CandidatosService],
 })
 export class SucesionModule {}
