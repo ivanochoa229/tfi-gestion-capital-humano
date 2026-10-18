@@ -134,4 +134,52 @@ describe('DeteccionService', () => {
       expect(resultado.unicoPoseedor[0].poseedor).toBeNull();
     });
   });
+
+  describe('catedrasUnaPersona (RF17)', () => {
+    it('filtra por unidades visibles y enmascara persona si en_alcance es falso', async () => {
+      alcance.unidadesVisibles.mockResolvedValue([10]);
+      ds.query.mockResolvedValue([
+        {
+          id_unidad: 10,
+          denominacion: 'Cátedra 1',
+          cantidad_personas: 1,
+          cantidad_ocupaciones: 2,
+          id_persona: 100,
+          apellido: 'Pérez',
+          nombre: 'Ana',
+          en_alcance: false,
+        },
+        {
+          id_unidad: 15,
+          denominacion: 'Cátedra 5',
+          cantidad_personas: 0,
+          cantidad_ocupaciones: 0,
+          id_persona: null,
+          apellido: null,
+          nombre: null,
+          en_alcance: true,
+        },
+      ]);
+
+      const res = await servicio.catedrasUnaPersona({ idUnidad: 10 }, sesion);
+
+      expect(ds.query).toHaveBeenCalledWith(expect.any(String), [[10], 10]);
+      expect(res.unaPersona).toHaveLength(1);
+      expect(res.unaPersona[0]).toEqual({
+        idUnidad: 10,
+        denominacion: 'Cátedra 1',
+        cantidadPersonas: 1,
+        cantidadCargos: 2,
+        persona: null,
+      });
+      expect(res.sinDotacion).toHaveLength(1);
+      expect(res.sinDotacion[0]).toEqual({
+        idUnidad: 15,
+        denominacion: 'Cátedra 5',
+        cantidadPersonas: 0,
+        cantidadCargos: 0,
+        persona: null,
+      });
+    });
+  });
 });

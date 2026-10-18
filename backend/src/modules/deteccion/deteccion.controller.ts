@@ -16,6 +16,7 @@ import {
 import type { SesionUsuario } from '../../common/sesion-usuario.js';
 import { aCsv } from './csv-salida.js';
 import { DeteccionService } from './deteccion.service.js';
+import { CatedrasUnaPersonaDto } from './dto/catedra-una-persona.dto.js';
 import { FiltroDeteccionDto } from './dto/filtro-deteccion.dto.js';
 import { PuntosUnicosFallaDto } from './dto/punto-unico-falla.dto.js';
 
@@ -98,6 +99,58 @@ export class DeteccionController {
       );
 
       this.enviarCsv(res, 'puntos-unicos-falla.csv', csv);
+      return;
+    }
+
+    return datos;
+  }
+
+  @Get('catedras-una-persona')
+  @Roles(...ROLES_LECTORES_DE_DETECCION)
+  @ApiOkResponse({ type: CatedrasUnaPersonaDto })
+  async catedrasUnaPersona(
+    @Query() filtro: FiltroDeteccionDto,
+    @UsuarioActual() sesion: SesionUsuario,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<CatedrasUnaPersonaDto | void> {
+    if (filtro.formato === 'csv') {
+      this.exigirGlobalParaCsv(sesion);
+    }
+
+    const datos = await this.servicio.catedrasUnaPersona(filtro, sesion);
+
+    if (filtro.formato === 'csv') {
+      const filas = [
+        ...datos.unaPersona.map((f) => ({
+          categoria: 'una_persona',
+          denominacion: f.denominacion,
+          cantidadPersonas: f.cantidadPersonas,
+          cantidadCargos: f.cantidadCargos,
+          persona: f.persona
+            ? `${f.persona.apellido}, ${f.persona.nombre}`
+            : '',
+        })),
+        ...datos.sinDotacion.map((f) => ({
+          categoria: 'sin_dotacion',
+          denominacion: f.denominacion,
+          cantidadPersonas: f.cantidadPersonas,
+          cantidadCargos: f.cantidadCargos,
+          persona: '',
+        })),
+      ];
+
+      const csv = aCsv(
+        [
+          { clave: 'categoria', titulo: 'Categoría' },
+          { clave: 'denominacion', titulo: 'Cátedra' },
+          { clave: 'cantidadPersonas', titulo: 'Cantidad de personas' },
+          { clave: 'cantidadCargos', titulo: 'Cantidad de cargos' },
+          { clave: 'persona', titulo: 'Persona' },
+        ],
+        filas,
+      );
+
+      this.enviarCsv(res, 'catedras-una-persona.csv', csv);
       return;
     }
 
