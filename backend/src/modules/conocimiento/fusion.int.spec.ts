@@ -172,6 +172,17 @@ describe('Fusión de conocimientos (PostgreSQL real)', () => {
     await evaluarOrigen(puestoX, '2026-01-05');
     await evaluarOrigen(puestoY, '2026-01-06');
 
+    const insertarAccion = (descripcion: string) =>
+      sql(
+        `INSERT INTO accion_transferencia (id_tipo_accion, id_conocimiento, id_responsable, descripcion, fecha_prevista, id_estado_accion)
+         SELECT t.id_tipo_accion_transferencia, $1, $2, $3, CURRENT_DATE + 30, e.id_estado_accion_transferencia
+         FROM tipo_accion_transferencia t, estado_accion_transferencia e
+         WHERE e.codigo = 'pendiente' ORDER BY t.id_tipo_accion_transferencia LIMIT 1`,
+        [a, ev, descripcion],
+      );
+    await insertarAccion('Mentoría');
+    await insertarAccion('Taller');
+
     const resultado = await servicio.fusionar(a, { idDestino: b });
 
     expect(resultado).toEqual({
@@ -180,7 +191,18 @@ describe('Fusión de conocimientos (PostgreSQL real)', () => {
       requisitosMovidos: 2,
       personasMovidas: 3,
       evaluacionesMovidas: 2,
+      accionesMovidas: 2,
     });
+
+    const acciones = await sql<{ c: number }[]>(
+      `SELECT id_conocimiento AS c FROM accion_transferencia`,
+    );
+    expect(acciones).toEqual([{ c: b }, { c: b }]);
+    const [{ n: accionesOrigen }] = await sql<{ n: number }[]>(
+      `SELECT count(*)::int AS n FROM accion_transferencia WHERE id_conocimiento = $1`,
+      [a],
+    );
+    expect(accionesOrigen).toBe(0);
 
     const requisitos = await sql<
       { p: number; c: number; n: number; e: boolean }[]
