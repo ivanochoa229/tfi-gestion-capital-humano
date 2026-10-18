@@ -1,7 +1,10 @@
+import type { AccionDto } from './dto/accion.dto.js';
 import type { CandidatoDto } from './dto/candidato.dto.js';
 import type { Persona } from '../personas/entities/persona.entity.js';
 import type { PlanDto } from './dto/plan.dto.js';
+import type { AccionTransferencia } from './entities/accion-transferencia.entity.js';
 import type { PlanSucesion } from './entities/plan-sucesion.entity.js';
+import { ESTADO_ACCION } from './sucesion.constantes.js';
 
 /** El plan debe venir con puesto, responsable, estadoPlan y usuarioResolucion cargados. */
 export function aPlanDto(
@@ -61,4 +64,37 @@ export function aCandidatoDto(fila: FilaCandidato): CandidatoDto {
       (fila.excluyentes_sin_cubrir === 0),
     aRevisar: fila.a_revisar,
   };
+}
+
+/** La acción debe venir con tipoAccion, conocimiento, responsable, destinatario y estadoAccion cargados. */
+export function aAccionDto(
+  accion: AccionTransferencia,
+  hoy: string,
+): AccionDto {
+  const nombre = (p: Persona) => `${p.apellido}, ${p.nombre}`;
+  const estado = accion.estadoAccion.codigo;
+  return {
+    id: accion.id,
+    tipo: accion.tipoAccion.codigo,
+    idConocimiento: accion.idConocimiento,
+    denominacionConocimiento: accion.conocimiento.denominacion,
+    idPlan: accion.idPlan,
+    idResponsable: accion.idResponsable,
+    nombreResponsable: nombre(accion.responsable),
+    idDestinatario: accion.idDestinatario,
+    nombreDestinatario: accion.destinatario
+      ? nombre(accion.destinatario)
+      : null,
+    descripcion: accion.descripcion,
+    fechaPrevista: accion.fechaPrevista,
+    fechaCumplimiento: accion.fechaCumplimiento,
+    estado,
+    notaAvance: accion.notaAvance,
+    // Vencida no es un estado: solo las abiertas pueden estarlo.
+    vencida: esAbierta(estado) && accion.fechaPrevista < hoy,
+  };
+}
+
+export function esAbierta(estado: string): boolean {
+  return estado === ESTADO_ACCION.pendiente || estado === ESTADO_ACCION.enCurso;
 }
