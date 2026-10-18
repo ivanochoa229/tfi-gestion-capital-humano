@@ -217,3 +217,85 @@ export function useQuitarCandidato() {
     onSuccess: invalidar,
   });
 }
+
+export interface FiltroAcciones {
+  idPlan?: number;
+  idConocimiento?: number;
+  estado?: string;
+  vencidas?: boolean;
+}
+
+export type MiPlan = Esquemas['MiPlanDto'];
+type CrearAccion = Esquemas['CrearAccionDto'];
+type EditarAccion = Esquemas['EditarAccionDto'];
+type AvanzarAccion = Esquemas['AvanzarAccionDto'];
+
+export function useAcciones(filtro: FiltroAcciones) {
+  return useQuery({
+    queryKey: ['sucesion', 'acciones', filtro],
+    queryFn: async () => {
+      const { data, error } = await api.GET('/api/acciones', {
+        params: { query: filtro },
+      });
+      if (error || !data) throw new Error('No se pudieron cargar las acciones');
+      return data;
+    },
+  });
+}
+
+export function useMisPlanes(habilitado: boolean) {
+  return useQuery({
+    queryKey: ['sucesion', 'mis-planes'],
+    enabled: habilitado,
+    queryFn: async () => {
+      const { data, error } = await api.GET('/api/sucesion/mis-planes');
+      if (error || !data) throw new Error('No se pudieron cargar tus planes');
+      return data;
+    },
+  });
+}
+
+export function useCrearAccion() {
+  const invalidar = useInvalidar();
+  return useMutation({
+    mutationFn: async (cuerpo: CrearAccion) => {
+      const { data, error } = await api.POST('/api/acciones', {
+        body: cuerpo,
+      });
+      if (error || !data) throw new Error(mensajeError(error));
+      return data;
+    },
+    onSuccess: invalidar,
+  });
+}
+
+/** Edita una acción; con `cancelar: true` la cancela. */
+export function useEditarAccion() {
+  const invalidar = useInvalidar();
+  return useMutation({
+    mutationFn: async (args: { id: number; cuerpo: EditarAccion }) => {
+      const { data, error } = await api.PATCH('/api/acciones/{id}', {
+        params: { path: { id: args.id } },
+        body: args.cuerpo,
+      });
+      if (error || !data) throw new Error(mensajeError(error));
+      return data;
+    },
+    onSuccess: invalidar,
+  });
+}
+
+export function useAvanzarAccion() {
+  const invalidar = useInvalidar();
+  return useMutation({
+    mutationFn: async (args: { id: number; cuerpo: AvanzarAccion }) => {
+      const { data, error } = await api.POST('/api/acciones/{id}/avanzar', {
+        params: { path: { id: args.id } },
+        body: args.cuerpo,
+      });
+      if (error || !data) throw new Error(mensajeError(error));
+      return data;
+    },
+    onSuccess: invalidar,
+  });
+}

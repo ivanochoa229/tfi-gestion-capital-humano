@@ -45,3 +45,21 @@ export const ROLES_SUCESION = [
   'jefatura_departamento',
   'jefe_catedra',
 ];
+
+export const CODIGOS_ESTADO_ACCION = Object.keys(ESTADOS_ACCION);
+
+/** Siguientes estados válidos al avanzar una acción (completada y cancelada son finales). */
+export function siguientesEstadosAccion(codigo: string): string[] {
+  if (codigo === 'pendiente') return ['en_curso'];
+  if (codigo === 'en_curso') return ['completada'];
+  return [];
+}
+
+export const ROL_GESTOR_ACCIONES = 'recursos_humanos';
+export const ROLES_ACCIONES = [
+  'recursos_humanos',
+  'autoridad',
+  'jefatura_departamento',
+  'jefe_catedra',
+  'docente',
+];
