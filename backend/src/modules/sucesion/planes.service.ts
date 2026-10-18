@@ -133,7 +133,7 @@ export class PlanesService {
     return enTransaccionDeSucesion(this.planes, async (manager) => {
       const estados = await this.estados(manager);
       const plan = await this.cargarDeJefatura(manager, id, sesion);
-      this.exigirTransicionOEstado(plan, estados, ESTADO_PLAN.borrador);
+      this.exigirEstado(plan, estados, ESTADO_PLAN.borrador);
       if (dto.idResponsable !== undefined) {
         await this.exigirResponsableActivo(manager, dto.idResponsable);
         plan.idResponsable = dto.idResponsable;
@@ -211,12 +211,24 @@ export class PlanesService {
     return enTransaccionDeSucesion(this.planes, async (manager) => {
       const estados = await this.estados(manager);
       const plan = await this.cargarDeJefatura(manager, id, sesion);
-      this.exigirTransicionOEstado(plan, estados, ESTADO_PLAN.rechazado);
+      this.exigirTransicion(plan, estados, ESTADO_PLAN.borrador);
+      // Un aprobado que no es el anterior de este plan lo dejaría imposible de aprobar.
+      const vigente = await manager.getRepository(PlanSucesion).findOne({
+        where: {
+          idPuesto: plan.idPuesto,
+          idEstadoPlan: estados.id(ESTADO_PLAN.aprobado),
+        },
+      });
+      if (vigente && vigente.id !== plan.idPlanAnterior) {
+        throw new ConflictException(
+          'El puesto ya tiene un plan aprobado más reciente: creá una nueva versión desde él',
+        );
+      }
       plan.idEstadoPlan = estados.id(ESTADO_PLAN.borrador);
-      // La resolución anterior queda en la auditoría; el borrador vuelve a no tener resolución.
+      // El motivo del rechazo se conserva para que la jefatura lo lea al corregir;
+      // el usuario y la fecha de resolución vuelven a nulos (el CHECK los liga).
       plan.idUsuarioResolucion = null;
       plan.fechaResolucion = null;
-      plan.motivoResolucion = null;
       await manager.getRepository(PlanSucesion).save(plan);
       return this.dtoDe(manager, id);
     });
@@ -226,7 +238,7 @@ export class PlanesService {
     return enTransaccionDeSucesion(this.planes, async (manager) => {
       const estados = await this.estados(manager);
       const origen = await this.cargarDeJefatura(manager, id, sesion);
-      this.exigirTransicionOEstado(origen, estados, ESTADO_PLAN.aprobado);
+      this.exigirEstado(origen, estados, ESTADO_PLAN.aprobado);
       const repo = manager.getRepository(PlanSucesion);
       const enElaboracion = await repo.count({
         where: {
@@ -387,8 +399,8 @@ export class PlanesService {
     }
   }
 
-  /** Para operaciones que solo valen desde un estado (editar, reabrir, nueva versión). */
-  private exigirTransicionOEstado(
+  /** Para operaciones que no son una transición y solo valen desde un estado (editar, nueva versión). */
+  private exigirEstado(
     plan: PlanSucesion,
     estados: { codigo: (id: number) => string },
     requerido: string,

@@ -26,6 +26,8 @@ interface FilaMiPlan {
   estado_plan: string;
   estado_preparacion: string;
   fecha_disponibilidad_estimada: string | null;
+  excluyentes_sin_cubrir: number;
+  total_excluyentes: number;
 }
 
 /**
@@ -78,6 +80,8 @@ export class CoberturaService {
       estadoPlan: f.estado_plan,
       estadoPreparacion: f.estado_preparacion,
       fechaDisponibilidadEstimada: f.fecha_disponibilidad_estimada,
+      excluyentesSinCubrir: f.excluyentes_sin_cubrir,
+      totalExcluyentes: f.total_excluyentes,
     }));
   }
 }

@@ -119,8 +119,13 @@ export const ROLES_LECTORES_DE_ACCIONES: CodigoRol[] = [
   ROLES.docente,
 ];
 
-/** Avanzan el estado de una acción: RR. HH. y el docente responsable. */
+/**
+ * Avanzan el estado de una acción: RR. HH. (cualquiera) y, solo si son el
+ * responsable de la acción, el docente y las jefaturas. La autoridad no.
+ */
 export const ROLES_AVANZADORES_DE_ACCIONES: CodigoRol[] = [
   ROLES.recursosHumanos,
   ROLES.docente,
+  ROLES.jefaturaDepartamento,
+  ROLES.jefeCatedra,
 ];

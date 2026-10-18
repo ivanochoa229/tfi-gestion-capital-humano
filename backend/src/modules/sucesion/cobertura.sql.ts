@@ -40,11 +40,28 @@ export const SQL_COBERTURA = `
       WHERE r.id_puesto = p.id_puesto AND r.es_excluyente AND nc.codigo = 'alta')
   ORDER BY p.denominacion, p.id_puesto`;
 
-/** Planes aprobados donde figura la persona. Parámetro: `$1` persona. Sin prioridad ni otros candidatos. */
+/**
+ * Planes aprobados donde figura la persona. Parámetro: `$1` persona. Sin
+ * prioridad ni otros candidatos. Los excluyentes se cuentan como en
+ * `candidatos.sql.ts`: sin cubrir = sin nivel acreditado o de menor `orden`
+ * que el requerido; solo de la propia persona.
+ */
+const EXCLUYENTES_DEL_PUESTO = `
+  FROM requisito_puesto r
+  JOIN conocimiento k ON k.id_conocimiento = r.id_conocimiento AND k.activo
+  JOIN nivel_dominio nr ON nr.id_nivel_dominio = r.id_nivel_requerido
+  LEFT JOIN conocimiento_persona cp
+    ON cp.id_persona = c.id_persona AND cp.id_conocimiento = r.id_conocimiento
+  LEFT JOIN nivel_dominio na ON na.id_nivel_dominio = cp.id_nivel_acreditado
+  WHERE r.id_puesto = pl.id_puesto AND r.es_excluyente`;
+
 export const SQL_MIS_PLANES = `
   SELECT pl.id_plan, pl.id_puesto, pu.denominacion AS denominacion_puesto,
          e.codigo AS estado_plan, ep.codigo AS estado_preparacion,
-         c.fecha_disponibilidad_estimada::text AS fecha_disponibilidad_estimada
+         c.fecha_disponibilidad_estimada::text AS fecha_disponibilidad_estimada,
+         (SELECT count(*)::int ${EXCLUYENTES_DEL_PUESTO}
+            AND (na.orden IS NULL OR na.orden < nr.orden)) AS excluyentes_sin_cubrir,
+         (SELECT count(*)::int ${EXCLUYENTES_DEL_PUESTO}) AS total_excluyentes
   FROM candidato_sucesion c
   JOIN plan_sucesion pl ON pl.id_plan = c.id_plan
   JOIN estado_plan e ON e.id_estado_plan = pl.id_estado_plan

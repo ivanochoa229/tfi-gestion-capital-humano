@@ -187,7 +187,11 @@ export class AccionesService {
 
       const estados = await this.estados(manager);
       const actual = estados.codigo(accion.idEstadoAccion);
-      if (!puedePasar(TRANSICIONES_ACCION, actual, dto.estado)) {
+      // En curso sobre en curso no es una transición: es actualizar la nota (RF15).
+      const soloNota =
+        actual === ESTADO_ACCION.enCurso &&
+        dto.estado === ESTADO_ACCION.enCurso;
+      if (!soloNota && !puedePasar(TRANSICIONES_ACCION, actual, dto.estado)) {
         throw new ConflictException(
           `No se puede pasar una acción de ${actual} a ${dto.estado}`,
         );
@@ -230,8 +234,22 @@ export class AccionesService {
     } else {
       const unidades = await this.alcance.unidadesVisibles(sesion);
       if (unidades !== null) {
-        if (unidades.length === 0) return [];
-        consulta.andWhere('puesto.idUnidad IN (:...unidades)', { unidades });
+        // Los jefes ven además las acciones en que son responsable o destinatario,
+        // tengan plan o no; el listado no se duplica porque todo es una sola fila por acción.
+        const propias =
+          sesion.idPersona !== null
+            ? 'a.idResponsable = :idPersona OR a.idDestinatario = :idPersona'
+            : null;
+        if (unidades.length === 0 && propias === null) return [];
+        const criterios = [
+          ...(unidades.length > 0 ? ['puesto.idUnidad IN (:...unidades)'] : []),
+          ...(propias !== null ? [propias] : []),
+        ];
+        const parametros: Record<string, unknown> = {
+          ...(unidades.length > 0 && { unidades }),
+          ...(propias !== null && { idPersona: sesion.idPersona }),
+        };
+        consulta.andWhere(`(${criterios.join(' OR ')})`, parametros);
       }
     }
 

@@ -65,4 +65,13 @@ export class MiPlanDto {
 
   @ApiProperty({ nullable: true, type: String, format: 'date' })
   fechaDisponibilidadEstimada: string | null;
+
+  @ApiProperty({
+    description:
+      'Requisitos excluyentes del puesto que todavía no alcanzás (nivel acreditado vigente)',
+  })
+  excluyentesSinCubrir: number;
+
+  @ApiProperty({ description: 'Requisitos excluyentes del puesto' })
+  totalExcluyentes: number;
 }

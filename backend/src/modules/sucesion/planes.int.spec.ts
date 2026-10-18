@@ -215,7 +215,49 @@ describe('Planes de sucesión (PostgreSQL real)', () => {
       estado: 'borrador',
       fechaResolucion: null,
       nombreUsuarioResolucion: null,
+      motivoResolucion: 'no',
     });
+  });
+
+  it('reabrir se niega si el puesto ya tiene un aprobado más reciente (escenarios A y B)', async () => {
+    const presentarYRechazar = async (plan: number) => {
+      await correr(jefa, () => servicio.presentar(plan, jefa));
+      await correr(decana, () =>
+        servicio.resolver(plan, { decision: 'rechazar', motivo: 'no' }, decana),
+      );
+    };
+    const aprobar = async (plan: number) => {
+      await correr(jefa, () => servicio.presentar(plan, jefa));
+      await correr(decana, () =>
+        servicio.resolver(plan, { decision: 'aprobar' }, decana),
+      );
+    };
+    // A: V1 aprobado, V2 rechazado, V3 (desde V1) aprobado: V2 ya no se puede reabrir.
+    const puestoA = await nuevoPuesto(unidadA);
+    const v1 = await aprobado(puestoA);
+    const v2 = await correr(jefa, () => servicio.nuevaVersion(v1, jefa));
+    await presentarYRechazar(v2.id);
+    const v3 = await correr(jefa, () => servicio.nuevaVersion(v1, jefa));
+    await aprobar(v3.id);
+    expect(await estadoDe(v1)).toBe('cerrado');
+    await expect(
+      correr(jefa, () => servicio.reabrir(v2.id, jefa)),
+    ).rejects.toThrow(/aprobado más reciente/);
+    expect(await estadoDe(v2.id)).toBe('rechazado');
+
+    // B: R rechazado sin aprobado previo; se crea y aprueba B; R no se puede reabrir.
+    const puestoB = await nuevoPuesto(unidadA);
+    const r = await correr(jefa, () =>
+      servicio.crear({ idPuesto: puestoB, idResponsable: responsable }, jefa),
+    );
+    await agregarCandidato(r.id);
+    await presentarYRechazar(r.id);
+    const b = await aprobado(puestoB);
+    await expect(
+      correr(jefa, () => servicio.reabrir(r.id, jefa)),
+    ).rejects.toThrow(ConflictException);
+    expect(await estadoDe(r.id)).toBe('rechazado');
+    expect(await estadoDe(b)).toBe('aprobado');
   });
 
   it('dos crear simultáneos para el mismo puesto: uno cumple y el otro es conflicto', async () => {

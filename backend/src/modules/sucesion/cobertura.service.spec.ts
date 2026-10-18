@@ -98,6 +98,8 @@ describe('CoberturaService.misPlanes', () => {
         estado_plan: 'aprobado',
         estado_preparacion: 'en_formacion',
         fecha_disponibilidad_estimada: '2027-01-01',
+        excluyentes_sin_cubrir: 1,
+        total_excluyentes: 3,
       },
     ]);
     const r = await servicio.misPlanes(
@@ -112,6 +114,8 @@ describe('CoberturaService.misPlanes', () => {
         estadoPlan: 'aprobado',
         estadoPreparacion: 'en_formacion',
         fechaDisponibilidadEstimada: '2027-01-01',
+        excluyentesSinCubrir: 1,
+        totalExcluyentes: 3,
       },
     ]);
   });

@@ -480,6 +480,67 @@ describe('AccionesService.avanzar', () => {
       servicio.avanzar(9, { estado: 'completada' }, rrhh),
     ).rejects.toThrow(ConflictException);
   });
+  it('un jefe que es el responsable avanza la acción', async () => {
+    for (const rol of ['jefatura_departamento', 'jefe_catedra'] as const) {
+      const { servicio } = crearEntorno({ accion: accionBase() });
+      await expect(
+        servicio.avanzar(
+          9,
+          { estado: 'en_curso' },
+          {
+            ...jefatura,
+            rol,
+            idPersona: 5,
+          },
+        ),
+      ).resolves.toMatchObject({ estado: 'en_curso' });
+    }
+  });
+  it('un jefe que es solo destinatario o no tiene relación recibe 403', async () => {
+    for (const idPersona of [6, 77, null]) {
+      const { servicio, repoAcciones } = crearEntorno({
+        accion: accionBase({ idDestinatario: 6 }),
+      });
+      await expect(
+        servicio.avanzar(9, { estado: 'en_curso' }, { ...jefatura, idPersona }),
+      ).rejects.toThrow(ForbiddenException);
+      expect(repoAcciones.save).not.toHaveBeenCalled();
+    }
+  });
+  it('en_curso sobre una acción en_curso actualiza solo la nota', async () => {
+    const { servicio, almacen } = crearEntorno({
+      accion: accionBase({ idEstadoAccion: idEstado('en_curso') }),
+    });
+    const dto = await servicio.avanzar(
+      9,
+      { estado: 'en_curso', notaAvance: 'va por la mitad' },
+      docente(5),
+    );
+    expect(dto).toMatchObject({
+      estado: 'en_curso',
+      notaAvance: 'va por la mitad',
+      fechaCumplimiento: null,
+    });
+    expect(almacen.accion!.idEstadoAccion).toBe(idEstado('en_curso'));
+  });
+  it('actualizar la nota en curso con fecha de cumplimiento: BadRequestException', async () => {
+    const { servicio } = crearEntorno({
+      accion: accionBase({ idEstadoAccion: idEstado('en_curso') }),
+    });
+    await expect(
+      servicio.avanzar(
+        9,
+        { estado: 'en_curso', fechaCumplimiento: '2026-10-01' },
+        docente(5),
+      ),
+    ).rejects.toThrow(BadRequestException);
+  });
+  it('pendiente a pendiente: ConflictException', async () => {
+    const { servicio } = crearEntorno({ accion: accionBase() });
+    await expect(
+      servicio.avanzar(9, { estado: 'pendiente' as never }, rrhh),
+    ).rejects.toThrow(ConflictException);
+  });
   it('RR. HH. avanza cualquiera', async () => {
     const { servicio } = crearEntorno({ accion: accionBase() });
     await expect(
@@ -516,6 +577,22 @@ describe('AccionesService.listar', () => {
     expect(consultas).toHaveLength(1);
     expect(consultas[0].sql).toContain('idUnidad');
     expect(consultas[0].params).toEqual({ unidades: [10, 11] });
+  });
+  it('la jefatura con persona ve también las que le corresponden como responsable o destinatario', async () => {
+    const { servicio, consultas } = crearEntorno({ visibles: [10] });
+    await servicio.listar({}, { ...jefatura, idPersona: 5 });
+    expect(consultas).toHaveLength(1);
+    expect(consultas[0].sql).toContain('puesto.idUnidad IN (:...unidades)');
+    expect(consultas[0].sql).toContain('a.idResponsable = :idPersona');
+    expect(consultas[0].sql).toContain('a.idDestinatario = :idPersona');
+    expect(consultas[0].params).toEqual({ unidades: [10], idPersona: 5 });
+  });
+  it('la jefatura con persona y sin unidades ve solo las suyas', async () => {
+    const { servicio, consultas, qb } = crearEntorno({ visibles: [] });
+    await servicio.listar({}, { ...jefatura, idPersona: 5 });
+    expect(qb.getMany).toHaveBeenCalled();
+    expect(consultas[0].sql).not.toContain('idUnidad');
+    expect(consultas[0].params).toEqual({ idPersona: 5 });
   });
   it('la jefatura sin unidades visibles recibe lista vacía', async () => {
     const { servicio, qb } = crearEntorno({ visibles: [] });

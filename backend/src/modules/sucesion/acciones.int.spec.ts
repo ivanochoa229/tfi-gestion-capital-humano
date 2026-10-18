@@ -328,4 +328,72 @@ describe('Acciones de transferencia (PostgreSQL real)', () => {
       ),
     ).rejects.toThrow(ForbiddenException);
   });
+
+  it('el responsable reescribe la nota mientras la acción está en curso, sin cambiar el estado', async () => {
+    const responsable = await nuevaPersona();
+    const creada = await servicio.crear(alta(responsable), rrhh);
+    const sesion = docente(responsable);
+    await servicio.avanzar(
+      creada.id,
+      { estado: 'en_curso', notaAvance: 'arrancó' },
+      sesion,
+    );
+    const nueva = await servicio.avanzar(
+      creada.id,
+      { estado: 'en_curso', notaAvance: 'a mitad de camino' },
+      sesion,
+    );
+    expect(nueva).toMatchObject({
+      estado: 'en_curso',
+      notaAvance: 'a mitad de camino',
+    });
+    expect((await fila(creada.id)).estado).toBe('en_curso');
+    await expect(
+      servicio.avanzar(
+        creada.id,
+        { estado: 'en_curso', fechaCumplimiento: '2000-01-01' },
+        sesion,
+      ),
+    ).rejects.toThrow(BadRequestException);
+    // Una pendiente no salta a completada, y una completada no vuelve a en_curso.
+    const pendiente = await servicio.crear(alta(responsable), rrhh);
+    await expect(
+      servicio.avanzar(pendiente.id, { estado: 'completada' }, sesion),
+    ).rejects.toThrow(ConflictException);
+    await servicio.avanzar(creada.id, { estado: 'completada' }, sesion);
+    await expect(
+      servicio.avanzar(creada.id, { estado: 'en_curso' }, sesion),
+    ).rejects.toThrow(ConflictException);
+  });
+
+  it('un jefe ve sin duplicados las acciones sin plan donde es responsable o destinatario, y no las de otro', async () => {
+    const yo = await nuevaPersona();
+    const otro = await nuevaPersona();
+    const jefe: SesionUsuario = {
+      ...jefaA,
+      rol: 'jefe_catedra',
+      idPersona: yo,
+    };
+    const propia = await servicio.crear(alta(yo), rrhh);
+    const comoDestinatario = await servicio.crear(
+      alta(otro, { idDestinatario: yo }),
+      rrhh,
+    );
+    const ajena = await servicio.crear(alta(otro), rrhh);
+    const delAlcance = await servicio.crear(alta(yo, { idPlan: planA }), rrhh);
+    const ids = (await servicio.listar({}, jefe)).map((a) => a.id);
+    expect(ids).toEqual(
+      expect.arrayContaining([propia.id, comoDestinatario.id, delAlcance.id]),
+    );
+    expect(ids).not.toContain(ajena.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    // Ver como destinatario no es poder avanzar.
+    await expect(
+      servicio.avanzar(comoDestinatario.id, { estado: 'en_curso' }, jefe),
+    ).rejects.toThrow(ForbiddenException);
+    // El responsable jefe sí avanza la suya.
+    await expect(
+      servicio.avanzar(propia.id, { estado: 'en_curso' }, jefe),
+    ).resolves.toMatchObject({ estado: 'en_curso' });
+  });
 });

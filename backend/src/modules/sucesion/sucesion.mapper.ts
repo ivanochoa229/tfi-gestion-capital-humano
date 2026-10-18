@@ -58,10 +58,12 @@ export function aCandidatoDto(fila: FilaCandidato): CandidatoDto {
     observaciones: fila.observaciones,
     excluyentesSinCubrir: fila.excluyentes_sin_cubrir,
     totalExcluyentes: fila.total_excluyentes,
-    // El estado manual y el calculado deben contar la misma historia.
+    // El estado manual y el calculado deben contar la misma historia; sin
+    // excluyentes no hay nada que calcular y no hay discrepancia.
     discrepancia:
+      fila.total_excluyentes > 0 &&
       (fila.estado_preparacion === 'listo_ahora') !==
-      (fila.excluyentes_sin_cubrir === 0),
+        (fila.excluyentes_sin_cubrir === 0),
     aRevisar: fila.a_revisar,
   };
 }

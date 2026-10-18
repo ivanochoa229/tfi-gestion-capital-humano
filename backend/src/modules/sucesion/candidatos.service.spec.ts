@@ -368,7 +368,7 @@ describe('CandidatosService.reordenar', () => {
 });
 
 describe('aCandidatoDto', () => {
-  const fila = (estado: string, sinCubrir: number) => ({
+  const fila = (estado: string, sinCubrir: number, total = 2) => ({
     id_plan: 1,
     id_persona: 5,
     apellido: 'Paz',
@@ -378,7 +378,7 @@ describe('aCandidatoDto', () => {
     fecha_disponibilidad_estimada: null,
     observaciones: null,
     excluyentes_sin_cubrir: sinCubrir,
-    total_excluyentes: 2,
+    total_excluyentes: total,
     a_revisar: false,
   });
   it('discrepancia = (listo_ahora) distinto de (sin excluyentes sin cubrir)', () => {
@@ -386,6 +386,11 @@ describe('aCandidatoDto', () => {
     expect(aCandidatoDto(fila('listo_ahora', 1)).discrepancia).toBe(true);
     expect(aCandidatoDto(fila('en_formacion', 0)).discrepancia).toBe(true);
     expect(aCandidatoDto(fila('en_formacion', 1)).discrepancia).toBe(false);
+  });
+  it('sin requisitos excluyentes no hay discrepancia posible', () => {
+    for (const estado of ['listo_ahora', 'en_formacion']) {
+      expect(aCandidatoDto(fila(estado, 0, 0)).discrepancia).toBe(false);
+    }
   });
   it('mapea los campos', () => {
     expect(aCandidatoDto(fila('en_formacion', 1))).toMatchObject({

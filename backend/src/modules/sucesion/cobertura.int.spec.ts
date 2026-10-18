@@ -348,7 +348,21 @@ describe('Cobertura de OE7 y «mis planes» (PostgreSQL real)', () => {
       await agregarCandidato(plan4.id, docente);
       await correr(jefa, () => planes.presentar(plan4.id, jefa));
 
+      // En el puesto del plan 2 la persona acredita el excluyente al nivel requerido.
+      await sql(
+        `INSERT INTO conocimiento_persona (id_persona, id_conocimiento, id_nivel_acreditado, fecha_evaluacion, id_tipo_evidencia, id_evaluador)
+         SELECT $1, r.id_conocimiento, r.id_nivel_requerido, CURRENT_DATE,
+                (SELECT min(id_tipo_evidencia) FROM tipo_evidencia), $3
+         FROM requisito_puesto r WHERE r.id_puesto = $2`,
+        [docente, p2, usuarioEvaluador],
+      );
+
       const filas = await cobertura.misPlanes(sesionDocente);
+      const f2 = filas.find((f) => f.idPlan === plan2.id)!;
+      expect(f2).toMatchObject({
+        excluyentesSinCubrir: 0,
+        totalExcluyentes: 1,
+      });
       expect(filas.map((f) => f.idPlan).sort()).toEqual(
         [plan1.id, plan2.id].sort(),
       );
@@ -360,6 +374,9 @@ describe('Cobertura de OE7 y «mis planes» (PostgreSQL real)', () => {
         estadoPlan: 'aprobado',
         estadoPreparacion: 'listo_ahora',
         fechaDisponibilidadEstimada: '2030-03-01',
+        // El puesto crítico exige un excluyente que la persona no acreditó.
+        excluyentesSinCubrir: 1,
+        totalExcluyentes: 1,
       });
       expect(Object.keys(f1)).not.toContain('prioridad');
       expect(

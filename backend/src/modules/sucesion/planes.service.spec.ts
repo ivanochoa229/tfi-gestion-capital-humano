@@ -335,6 +335,56 @@ describe('PlanesService.reabrir, nuevaVersion y cerrar', () => {
       ConflictException,
     );
   });
+  it('reabrir conserva el motivo del rechazo y limpia usuario y fecha', async () => {
+    const { servicio, planes } = crearEntorno({
+      planes: [
+        plan('rechazado', {
+          idUsuarioResolucion: 9,
+          fechaResolucion: HOY,
+          motivoResolucion: 'falta un candidato',
+        }),
+      ],
+    });
+    const dto = await servicio.reabrir(1, jefatura);
+    expect(planes[0]).toMatchObject({
+      idEstadoPlan: idDe('borrador'),
+      idUsuarioResolucion: null,
+      fechaResolucion: null,
+      motivoResolucion: 'falta un candidato',
+    });
+    expect(dto.motivoResolucion).toBe('falta un candidato');
+  });
+  it('reabrir la versión rechazada de un aprobado vigente es válido', async () => {
+    const { servicio, planes } = crearEntorno({
+      planes: [
+        plan('aprobado', { id: 1 }),
+        plan('rechazado', { id: 2, idPlanAnterior: 1 }),
+      ],
+    });
+    await servicio.reabrir(2, jefatura);
+    expect(planes[1].idEstadoPlan).toBe(idDe('borrador'));
+  });
+  it('reabrir se niega si hay un aprobado más reciente que el plan anterior (escenario A)', async () => {
+    const { servicio, planes } = crearEntorno({
+      planes: [
+        plan('cerrado', { id: 1 }),
+        plan('rechazado', { id: 2, idPlanAnterior: 1 }),
+        plan('aprobado', { id: 3, idPlanAnterior: 1 }),
+      ],
+    });
+    await expect(servicio.reabrir(2, jefatura)).rejects.toThrow(
+      /ya tiene un plan aprobado más reciente/,
+    );
+    expect(planes[1].idEstadoPlan).toBe(idDe('rechazado'));
+  });
+  it('reabrir se niega si hay un aprobado y el rechazado no tenía anterior (escenario B)', async () => {
+    const { servicio } = crearEntorno({
+      planes: [plan('rechazado', { id: 1 }), plan('aprobado', { id: 2 })],
+    });
+    await expect(servicio.reabrir(1, jefatura)).rejects.toThrow(
+      ConflictException,
+    );
+  });
   it('nuevaVersion vale solo desde aprobado', async () => {
     const { servicio } = crearEntorno({ planes: [plan('borrador')] });
     await expect(servicio.nuevaVersion(1, jefatura)).rejects.toThrow(
