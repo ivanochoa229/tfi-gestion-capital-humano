@@ -124,7 +124,7 @@ El diseño está en `docs/superpowers/specs/2026-10-16-conocimiento-activos-desi
 
 **Criticidad:** `evaluacion_criticidad` (historial de solo inserción; la vigente es la vista `criticidad_vigente`), `matriz_criticidad` y las escalas fijas `nivel_impacto` y `nivel_dificultad` (no son dominios de RF23); ver `docs/superpowers/specs/2026-10-16-criticidad-evaluacion-design.md`. Cada evaluación guarda el nivel que daba la matriz al evaluarse (una instantánea): un cambio posterior de la matriz no la recalcula. Las consultas de detección leen solo `criticidad_vigente`. Un puesto es de criticidad alta si tiene al menos un requisito excluyente con criticidad vigente alta.
 
-**Sucesión:** `plan_sucesion` (versionado por puesto, con estados `borrador`, `aprobado` y `rechazado`), `candidato_sucesion` y `accion_transferencia`; ver `docs/superpowers/specs/2026-10-18-sucesion-planes-design.md`. Un puesto crítico tiene sucesor preparado si algún candidato de un plan `aprobado` de ese puesto cubre, con su nivel acreditado vigente, todos los requisitos excluyentes del puesto; el estado de preparación manual no interviene en RF18. Aprueba solo `autoridad`.
+**Sucesión:** `plan_sucesion` (versionado por puesto, con estados `borrador`, `pendiente_aprobacion`, `aprobado`, `rechazado` y `cerrado`), `candidato_sucesion` y `accion_transferencia`; ver `docs/superpowers/specs/2026-10-18-sucesion-planes-design.md`. Un puesto crítico tiene sucesor preparado si algún candidato de un plan `aprobado` de ese puesto cubre, con su nivel acreditado vigente, todos los requisitos excluyentes del puesto; el estado de preparación manual no interviene en RF18. Aprueba solo `autoridad`.
 
 Cuidados de implementación:
 

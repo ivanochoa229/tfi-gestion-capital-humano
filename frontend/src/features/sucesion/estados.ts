@@ -48,10 +48,13 @@ export const ROLES_SUCESION = [
 
 export const CODIGOS_ESTADO_ACCION = Object.keys(ESTADOS_ACCION);
 
-/** Siguientes estados válidos al avanzar una acción (completada y cancelada son finales). */
+/**
+ * Opciones al avanzar una acción (completada y cancelada son finales). En
+ * curso ofrece «en_curso» de nuevo: es actualizar la nota sin cambiar el estado.
+ */
 export function siguientesEstadosAccion(codigo: string): string[] {
   if (codigo === 'pendiente') return ['en_curso'];
-  if (codigo === 'en_curso') return ['completada'];
+  if (codigo === 'en_curso') return ['completada', 'en_curso'];
   return [];
 }
 
@@ -63,3 +66,24 @@ export const ROLES_ACCIONES = [
   'jefe_catedra',
   'docente',
 ];
+
+/** Roles que, sin gestionar, avanzan las acciones de las que son responsables. */
+const ROLES_RESPONSABLES_QUE_AVANZAN = [
+  'docente',
+  'jefatura_departamento',
+  'jefe_catedra',
+];
+
+/** Quién ve «Avanzar»: RR. HH. cualquiera; docente y jefes solo las suyas como responsable. */
+export function puedeAvanzarAccion(
+  sesion: { rol: string; idPersona?: number | null } | null | undefined,
+  accion: { idResponsable: number },
+): boolean {
+  if (!sesion) return false;
+  if (sesion.rol === ROL_GESTOR_ACCIONES) return true;
+  return (
+    ROLES_RESPONSABLES_QUE_AVANZAN.includes(sesion.rol) &&
+    !!sesion.idPersona &&
+    accion.idResponsable === sesion.idPersona
+  );
+}

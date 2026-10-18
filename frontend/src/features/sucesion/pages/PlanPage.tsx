@@ -195,6 +195,11 @@ export function PlanPage() {
       {p.observaciones && (
         <Typography>Observaciones: {p.observaciones}</Typography>
       )}
+      {p.estado === 'borrador' && p.motivoResolucion && (
+        <Alert severity="warning" sx={{ mt: 2 }}>
+          Motivo del último rechazo: {p.motivoResolucion}
+        </Alert>
+      )}
       {p.fechaResolucion && (
         <Alert
           severity={p.estado === 'rechazado' ? 'error' : 'info'}

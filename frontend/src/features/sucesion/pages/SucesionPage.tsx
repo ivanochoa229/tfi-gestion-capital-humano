@@ -122,9 +122,15 @@ export function SucesionPage() {
         Puestos críticos sin plan aprobado
       </Typography>
       {cobertura.data && cobertura.data.sinPlan.length === 0 ? (
-        <Alert severity="success" sx={{ mb: 3 }}>
-          Todos los puestos críticos tienen plan aprobado.
-        </Alert>
+        cobertura.data.criticos === 0 ? (
+          <Alert severity="info" sx={{ mb: 3 }}>
+            Todavía no hay puestos críticos evaluados.
+          </Alert>
+        ) : (
+          <Alert severity="success" sx={{ mb: 3 }}>
+            Todos los puestos críticos tienen plan aprobado.
+          </Alert>
+        )
       ) : (
         cobertura.data && (
           <Table size="small" sx={{ mb: 3 }}>

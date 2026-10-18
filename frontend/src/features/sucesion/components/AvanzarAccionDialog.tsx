@@ -90,7 +90,9 @@ export function AvanzarAccionDialog({ accion, onCerrar }: Props) {
                 <TextField select label="Nuevo estado" {...field}>
                   {opciones.map((c) => (
                     <MenuItem key={c} value={c}>
-                      {etiquetaEstadoAccion(c)}
+                      {c === accion.estado
+                        ? 'Actualizar nota (sigue en curso)'
+                        : etiquetaEstadoAccion(c)}
                     </MenuItem>
                   ))}
                 </TextField>

@@ -151,8 +151,11 @@ Se revisan a mano antes de aplicarse (CLAUDE.md); los índices parciales y los C
 
 - **Crear y editar:** `recursos_humanos`. Responsable y destinatario personas activas. Reglas de las
   decisiones 18 y 19. Cancelar también es de RR. HH.
-- **Avanzar:** el responsable (docente con `usuario.id_persona = id_responsable`) y RR. HH. Transiciones
-  de la decisión 14. Solo el responsable escribe `nota_avance` sin ser RR. HH.
+- **Avanzar:** RR. HH. (cualquiera) y el responsable (`usuario.id_persona = id_responsable`) si su rol es
+  `docente`, `jefatura_departamento` o `jefe_catedra`; la autoridad no. Un destinatario que no es el
+  responsable no avanza (403). Transiciones de la decisión 14, más actualizar la nota de una acción
+  `en_curso` (`estado: 'en_curso'` sobre una acción en curso, sin cambiar el estado). Solo el
+  responsable escribe `nota_avance` sin ser RR. HH.
 - Sin borrado: se cancela.
 
 ### Cobertura y avisos (OE7)
@@ -199,7 +202,7 @@ Todo bajo `/api`; DTOs con class-validator y `@ApiProperty`; tipos del frontend 
 | `GET /acciones` | `recursos_humanos`, `autoridad`; `jefatura_departamento`, `jefe_catedra` por alcance del plan; `docente` las propias | Filtros `idPlan`, `idConocimiento`, `estado`, `vencidas` |
 | `POST /acciones` | `recursos_humanos` | |
 | `PATCH /acciones/:id` | `recursos_humanos` | Campos de la acción y cancelar |
-| `POST /acciones/:id/avanzar` | `recursos_humanos`; `docente` responsable | `{estado, notaAvance?, fechaCumplimiento?}` |
+| `POST /acciones/:id/avanzar` | `recursos_humanos`; `docente`, `jefatura_departamento` y `jefe_catedra` si son el responsable | `{estado, notaAvance?, fechaCumplimiento?}` |
 
 `analista_puestos` y `administrador` no acceden a ninguna ruta. El test que exige `@Roles` en toda ruta
 no pública cubre las rutas nuevas.
@@ -208,10 +211,10 @@ no pública cubre las rutas nuevas.
 
 | Rol | Planes y candidatos | Acciones |
 | --- | --- | --- |
-| `jefatura_departamento` | Crea, edita y presenta los de su alcance; lee | Lee las de planes de su alcance |
+| `jefatura_departamento` | Crea, edita y presenta los de su alcance; lee | Lee las de planes de su alcance y las suyas como responsable o destinatario; avanza las suyas como responsable |
 | `autoridad` | Lee todo; aprueba y rechaza | Lee todas |
 | `recursos_humanos` | Lee todo; no edita planes | Crea, edita, cancela y avanza cualquiera |
-| `jefe_catedra` | Solo lectura de los de su alcance (mi decisión: la matriz de roles no lo excluye y evalúa criticidad sobre esos puestos) | Lee las de su alcance |
+| `jefe_catedra` | Solo lectura de los de su alcance (mi decisión: la matriz de roles no lo excluye y evalúa criticidad sobre esos puestos) | Lee las de su alcance y las suyas como responsable o destinatario; avanza las suyas como responsable |
 | `docente` | Si es candidato: solo su propia fila (estado de preparación, fecha estimada, estado del plan) y su brecha. No ve a los demás candidatos ni la prioridad | Las que tiene como responsable o destinatario; avanza las suyas como responsable |
 
 Sin plan, una acción no tiene puesto: la ven RR. HH., las autoridades, su responsable y su destinatario.
@@ -226,8 +229,8 @@ docente.
 - **Detalle del plan**: estado, responsable, resolución, candidatos ordenados por prioridad con su
   estado de preparación y la marca de discrepancia, y acciones del plan. Los botones dependen del estado
   y del rol (presentar, aprobar, rechazar con motivo, nueva versión, cerrar).
-- **Acciones** (`/acciones`): filtros por estado, vencidas y conocimiento. RR. HH. crea; el docente
-  responsable ve el botón de avanzar en las suyas.
+- **Acciones** (`/acciones`): filtros por estado, vencidas y conocimiento. RR. HH. crea; el responsable
+  (docente o jefatura) ve el botón de avanzar en las suyas.
 - **Mi sucesión** (`docente`): su fila de candidato, sus acciones y su brecha.
 - Formularios con react-hook-form y zod; llamadas con TanStack Query dentro del feature.
 
@@ -263,8 +266,18 @@ docente.
 - `PATCH /acciones/:id` cancela con `cancelar: true` en el cuerpo, no con un endpoint aparte.
 - `GET /mis-planes` devuelve solo planes `aprobado` donde figura la persona.
 - El filtro `idUnidad` de `GET /planes` incluye las unidades descendientes, siempre dentro del alcance.
-- `reabrir` limpia usuario, fecha y motivo de la resolución; la resolución anterior queda en la
-  auditoría.
+- `reabrir` conserva el motivo del rechazo y limpia usuario y fecha de la resolución (la jefatura no
+  lee la bitácora y necesita el motivo para corregir); el detalle lo muestra en un borrador. Se niega
+  con 409 si el puesto tiene un plan `aprobado` que no es el anterior del plan a reabrir, porque ese
+  plan quedaría imposible de aprobar (`resolver` no cierra aprobados ajenos).
+- Una acción `en_curso` admite `avanzar` con `estado: 'en_curso'`: solo actualiza la nota (RF15).
+- Visibilidad de jefes: además del alcance por unidad, `jefatura_departamento` y `jefe_catedra` ven las
+  acciones, con o sin plan, de las que son responsable o destinatario.
+- «Su brecha» en Mi sucesión es un conteo («Te faltan N de M requisitos excluyentes»), calculado como
+  en los candidatos y solo de la propia persona; el detalle por conocimiento es RF19 (Detección).
+- La marca de discrepancia no se emite cuando el puesto no tiene requisitos excluyentes.
+- Decisión del usuario: `jefatura_departamento` y `jefe_catedra` que son responsables de una acción la
+  avanzan (se amplió `ROLES_AVANZADORES_DE_ACCIONES`); `autoridad` sigue sin avanzar.
 - El CHECK `CK_accion_cumplimiento_estado` y los índices únicos parciales de `plan_sucesion` viven solo
   en la migración (dependen de ids de estados); las entidades lo documentan, y `migration:generate`
   puede proponer eliminarlos: hay que descartar esa parte al revisar.

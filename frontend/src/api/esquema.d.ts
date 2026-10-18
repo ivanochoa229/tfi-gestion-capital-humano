@@ -2144,6 +2144,10 @@ export interface components {
       estadoPreparacion: string;
       /** Format: date */
       fechaDisponibilidadEstimada: string | null;
+      /** @description Requisitos excluyentes del puesto que todavía no alcanzás (nivel acreditado vigente) */
+      excluyentesSinCubrir: number;
+      /** @description Requisitos excluyentes del puesto */
+      totalExcluyentes: number;
     };
   };
   responses: never;

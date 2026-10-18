@@ -15,8 +15,23 @@ import { useValoresReferencia } from '../../admin/hooks/useValoresReferencia';
 import { useSesion } from '../../../auth/useSesion';
 import { AccionesTabla } from '../components/AccionesTabla';
 import { AvanzarAccionDialog } from '../components/AvanzarAccionDialog';
-import { colorEstadoPlan, etiquetaEstadoPlan } from '../estados';
+import {
+  colorEstadoPlan,
+  etiquetaEstadoPlan,
+  puedeAvanzarAccion,
+} from '../estados';
 import { useAcciones, useMisPlanes, type Accion } from '../hooks/useSucesion';
+
+/** «Su brecha» es un conteo; el detalle por conocimiento es de Detección (RF19). */
+function textoBrecha(p: {
+  excluyentesSinCubrir: number;
+  totalExcluyentes: number;
+}): string {
+  if (p.totalExcluyentes === 0) return '—';
+  return p.excluyentesSinCubrir === 0
+    ? 'Cubrís todos los requisitos excluyentes'
+    : `Te faltan ${p.excluyentesSinCubrir} de ${p.totalExcluyentes} requisitos excluyentes`;
+}
 
 /** Vista del docente: los planes donde es candidato y sus acciones (sin prioridad ni otros candidatos). */
 export function MiSucesionPage() {
@@ -28,8 +43,7 @@ export function MiSucesionPage() {
 
   const etiquetaPreparacion = (codigo: string) =>
     estados?.find((e) => e.codigo === codigo)?.denominacion ?? codigo;
-  const puedeAvanzar = (a: Accion) =>
-    !!sesion?.idPersona && a.idResponsable === sesion.idPersona;
+  const puedeAvanzar = (a: Accion) => puedeAvanzarAccion(sesion, a);
 
   return (
     <PaginaEnConstruccion
@@ -55,6 +69,7 @@ export function MiSucesionPage() {
               <TableCell>Plan</TableCell>
               <TableCell>Estado de preparación</TableCell>
               <TableCell>Fecha estimada de disponibilidad</TableCell>
+              <TableCell>Requisitos excluyentes</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -72,6 +87,7 @@ export function MiSucesionPage() {
                   {etiquetaPreparacion(p.estadoPreparacion)}
                 </TableCell>
                 <TableCell>{p.fechaDisponibilidadEstimada ?? '—'}</TableCell>
+                <TableCell>{textoBrecha(p)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

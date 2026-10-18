@@ -22,6 +22,7 @@ import { AvanzarAccionDialog } from '../components/AvanzarAccionDialog';
 import {
   CODIGOS_ESTADO_ACCION,
   etiquetaEstadoAccion,
+  puedeAvanzarAccion,
   ROL_GESTOR_ACCIONES,
 } from '../estados';
 import {
@@ -50,11 +51,8 @@ export function AccionesPage() {
   });
 
   const esGestor = sesion?.rol === ROL_GESTOR_ACCIONES;
-  const esDocente = sesion?.rol === 'docente';
-  // El backend solo deja avanzar a recursos humanos y al docente responsable.
-  const puedeAvanzar = (a: Accion) =>
-    esGestor ||
-    (esDocente && !!sesion?.idPersona && a.idResponsable === sesion.idPersona);
+  // El backend deja avanzar a recursos humanos y al responsable (docente o jefatura).
+  const puedeAvanzar = (a: Accion) => puedeAvanzarAccion(sesion, a);
 
   const confirmarCancelar = async () => {
     if (!cancelando) return;
@@ -142,7 +140,7 @@ export function AccionesPage() {
         <AccionesTabla
           acciones={acciones.data}
           puedeAvanzar={puedeAvanzar}
-          onAvanzar={esGestor || esDocente ? setAvanzando : undefined}
+          onAvanzar={setAvanzando}
           onEditar={esGestor ? setEditando : undefined}
           onCancelar={
             esGestor
