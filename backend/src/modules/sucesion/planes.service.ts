@@ -12,10 +12,13 @@ import { Persona } from '../personas/entities/persona.entity.js';
 import { hoyDeLaBase } from '../personas/fechas.js';
 import { EstadoPlan } from '../referencia/entities/estado-plan.entity.js';
 import { AlcanceService } from '../usuarios/alcance.service.js';
+import { AccionesService } from './acciones.service.js';
+import { CandidatosService } from './candidatos.service.js';
 import type {
   CrearPlanDto,
   EditarPlanDto,
   FiltroPlanesDto,
+  PlanDetalleDto,
   PlanDto,
   ResolverPlanDto,
 } from './dto/plan.dto.js';
@@ -28,6 +31,17 @@ import {
   puedePasar,
 } from './sucesion.constantes.js';
 import { enTransaccionDeSucesion } from './transaccion.js';
+
+/** Parámetro: `$1` unidad. Devuelve la unidad y todas sus descendientes. */
+const SQL_UNIDAD_Y_DESCENDIENTES = `
+  WITH RECURSIVE subunidades AS (
+    SELECT id_unidad FROM unidad_organizativa WHERE id_unidad = $1::int
+    UNION
+    SELECT u.id_unidad
+    FROM unidad_organizativa u
+    JOIN subunidades s ON u.id_unidad_superior = s.id_unidad
+  )
+  SELECT id_unidad FROM subunidades`;
 
 const RELACIONES = {
   puesto: true,
@@ -53,6 +67,8 @@ export class PlanesService {
     @InjectRepository(PlanSucesion)
     private readonly planes: Repository<PlanSucesion>,
     private readonly alcance: AlcanceService,
+    private readonly candidatos: CandidatosService,
+    private readonly acciones: AccionesService,
   ) {}
 
   async crear(dto: CrearPlanDto, sesion: SesionUsuario): Promise<PlanDto> {
@@ -278,10 +294,16 @@ export class PlanesService {
     const visibles = await this.alcance.unidadesVisibles(sesion);
     let unidades: number[] | null = visibles;
     if (filtro.idUnidad !== undefined) {
+      // La unidad y sus descendientes, siempre dentro de lo visible.
+      const filas: { id_unidad: number }[] = await this.planes.manager.query(
+        SQL_UNIDAD_Y_DESCENDIENTES,
+        [filtro.idUnidad],
+      );
+      const deLaUnidad = filas.map((f) => Number(f.id_unidad));
       unidades =
-        visibles === null || visibles.includes(filtro.idUnidad)
-          ? [filtro.idUnidad]
-          : [];
+        visibles === null
+          ? deLaUnidad
+          : deLaUnidad.filter((u) => visibles.includes(u));
     }
     if (unidades !== null && unidades.length === 0) return [];
 
@@ -307,6 +329,16 @@ export class PlanesService {
     if (!plan) throw new NotFoundException(`No existe el plan ${id}`);
     await this.alcance.exigirUnidad(sesion, plan.puesto.idUnidad);
     return (await this.aDtos(this.planes.manager, [plan]))[0];
+  }
+
+  /** El plan con sus candidatos y acciones. El alcance se valida en `buscar`. */
+  async detalle(id: number, sesion: SesionUsuario): Promise<PlanDetalleDto> {
+    const plan = await this.buscar(id, sesion);
+    const [candidatos, acciones] = await Promise.all([
+      this.candidatos.listarDePlan(id),
+      this.acciones.listarDePlan(id),
+    ]);
+    return { ...plan, candidatos, acciones };
   }
 
   // --- auxiliares ---

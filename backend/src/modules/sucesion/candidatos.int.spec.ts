@@ -7,6 +7,8 @@ import {
 } from '../../testing/base-temporal.js';
 import { AlcanceService } from '../usuarios/alcance.service.js';
 import { CandidatosService } from './candidatos.service.js';
+import { AccionesService } from './acciones.service.js';
+import { AccionTransferencia } from './entities/accion-transferencia.entity.js';
 import { CandidatoSucesion } from './entities/candidato-sucesion.entity.js';
 import { PlanSucesion } from './entities/plan-sucesion.entity.js';
 import { PlanesService } from './planes.service.js';
@@ -145,7 +147,12 @@ describe('Candidatos de sucesión (PostgreSQL real)', () => {
       ds.getRepository(CandidatoSucesion),
       alcance,
     );
-    planes = new PlanesService(ds.getRepository(PlanSucesion), alcance);
+    planes = new PlanesService(
+      ds.getRepository(PlanSucesion),
+      alcance,
+      servicio,
+      new AccionesService(ds.getRepository(AccionTransferencia), alcance),
+    );
     const { AuditoriaSubscriber } =
       await import('../../infra/auditoria/auditoria.subscriber.js');
     new AuditoriaSubscriber(ds);

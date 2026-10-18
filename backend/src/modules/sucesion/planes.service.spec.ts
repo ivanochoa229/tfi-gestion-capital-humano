@@ -8,6 +8,8 @@ import type { Repository } from 'typeorm';
 import type { SesionUsuario } from '../../common/sesion-usuario.js';
 import type { AlcanceService } from '../usuarios/alcance.service.js';
 import type { PlanSucesion } from './entities/plan-sucesion.entity.js';
+import type { AccionesService } from './acciones.service.js';
+import type { CandidatosService } from './candidatos.service.js';
 import { PlanesService } from './planes.service.js';
 
 const HOY = '2026-06-15';
@@ -125,13 +127,25 @@ function crearEntorno(
     exigirUnidad: vi.fn(async () => {
       if (opciones.fueraDeAlcance) throw new ForbiddenException('fuera');
     }),
-    unidadesVisibles: vi.fn(async () => null),
+    unidadesVisibles: vi.fn<() => Promise<number[] | null>>(async () => null),
   };
+  const candidatosSvc = { listarDePlan: vi.fn(async () => [{ idPersona: 5 }]) };
+  const accionesSvc = { listarDePlan: vi.fn(async () => [{ id: 3 }]) };
   const servicio = new PlanesService(
     repoPlanes as unknown as Repository<PlanSucesion>,
     alcance as unknown as AlcanceService,
+    candidatosSvc as unknown as CandidatosService,
+    accionesSvc as unknown as AccionesService,
   );
-  return { servicio, planes, repoPlanes, repoCandidatos, alcance };
+  return {
+    servicio,
+    candidatosSvc,
+    accionesSvc,
+    planes,
+    repoPlanes,
+    repoCandidatos,
+    alcance,
+  };
 }
 
 const plan = (estado: string, extra: Partial<PlanSucesion> = {}): Plan => ({
@@ -386,5 +400,50 @@ describe('PlanesService.buscar', () => {
         fueraDeAlcance: true,
       }).servicio.buscar(1, jefatura),
     ).rejects.toThrow(ForbiddenException);
+  });
+});
+
+describe('PlanesService.detalle', () => {
+  it('compone el plan con sus candidatos y acciones tras validar el alcance', async () => {
+    const { servicio, candidatosSvc, accionesSvc, alcance } = crearEntorno({
+      planes: [plan('aprobado')],
+    });
+    const d = await servicio.detalle(1, jefatura);
+    expect(alcance.exigirUnidad).toHaveBeenCalled();
+    expect(candidatosSvc.listarDePlan).toHaveBeenCalledWith(1);
+    expect(accionesSvc.listarDePlan).toHaveBeenCalledWith(1);
+    expect(d.id).toBe(1);
+    expect(d.candidatos).toEqual([{ idPersona: 5 }]);
+    expect(d.acciones).toEqual([{ id: 3 }]);
+  });
+  it('fuera de alcance: ForbiddenException y no lee candidatos', async () => {
+    const { servicio, candidatosSvc } = crearEntorno({
+      planes: [plan('aprobado')],
+      fueraDeAlcance: true,
+    });
+    await expect(servicio.detalle(1, jefatura)).rejects.toThrow(
+      ForbiddenException,
+    );
+    expect(candidatosSvc.listarDePlan).not.toHaveBeenCalled();
+  });
+});
+
+describe('PlanesService.listar con idUnidad', () => {
+  it('filtra por la unidad y sus descendientes dentro del alcance', async () => {
+    const { servicio, repoPlanes, alcance } = crearEntorno();
+    alcance.unidadesVisibles.mockResolvedValue([10, 11, 12]);
+    const consulta = vi.fn(async () => [{ id_unidad: 10 }, { id_unidad: 11 }]);
+    (repoPlanes as unknown as { manager: { query: unknown } }).manager.query =
+      consulta;
+    await servicio.listar({ idUnidad: 10 }, jefatura);
+    const where = repoPlanes.find.mock.calls.at(-1)![0].where as {
+      puesto: { idUnidad: { _value: number[] } };
+    };
+    expect(where.puesto.idUnidad._value).toEqual([10, 11]);
+  });
+  it('unidad fuera del alcance: lista vacía', async () => {
+    const { servicio, alcance } = crearEntorno();
+    alcance.unidadesVisibles.mockResolvedValue([10]);
+    expect(await servicio.listar({ idUnidad: 99 }, jefatura)).toEqual([]);
   });
 });

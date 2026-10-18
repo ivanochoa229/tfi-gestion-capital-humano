@@ -6,6 +6,10 @@ import {
   type BaseTemporal,
 } from '../../testing/base-temporal.js';
 import { AlcanceService } from '../usuarios/alcance.service.js';
+import { AccionesService } from './acciones.service.js';
+import { CandidatosService } from './candidatos.service.js';
+import { AccionTransferencia } from './entities/accion-transferencia.entity.js';
+import { CandidatoSucesion } from './entities/candidato-sucesion.entity.js';
 import { PlanSucesion } from './entities/plan-sucesion.entity.js';
 import { PlanesService } from './planes.service.js';
 
@@ -115,9 +119,12 @@ describe('Planes de sucesión (PostgreSQL real)', () => {
     jefa = await sesionDe('jefa', 'jefatura_departamento', [unidadA]);
     jefaDeB = await sesionDe('jefab', 'jefatura_departamento', [unidadB]);
     decana = await sesionDe('decana', 'autoridad', []);
+    const alcance = new AlcanceService(ds);
     servicio = new PlanesService(
       ds.getRepository(PlanSucesion),
-      new AlcanceService(ds),
+      alcance,
+      new CandidatosService(ds.getRepository(CandidatoSucesion), alcance),
+      new AccionesService(ds.getRepository(AccionTransferencia), alcance),
     );
     // El subscriber de auditoría exige usuario en el contexto de cada escritura.
     const { AuditoriaSubscriber } =
@@ -274,5 +281,39 @@ describe('Planes de sucesión (PostgreSQL real)', () => {
     expect(await servicio.listar({ idUnidad: unidadA }, jefaDeB)).toEqual([]);
     const todos = await servicio.listar({ estado: 'borrador' }, decana);
     expect(todos.map((x) => x.id)).toContain(p.id);
+  });
+
+  it('el filtro idUnidad incluye las subunidades y nunca sale del alcance', async () => {
+    // Las cátedras A y B cuelgan del mismo departamento raíz.
+    const raiz = await id(
+      `SELECT id_unidad AS id FROM unidad_organizativa WHERE id_unidad_superior IS NULL`,
+    );
+    const planA = await correr(jefa, async () =>
+      servicio.crear(
+        { idPuesto: await nuevoPuesto(unidadA), idResponsable: responsable },
+        jefa,
+      ),
+    );
+    const planB = await correr(jefaDeB, async () =>
+      servicio.crear(
+        { idPuesto: await nuevoPuesto(unidadB), idResponsable: responsable },
+        jefaDeB,
+      ),
+    );
+
+    // Filtrar por el padre trae los planes de las unidades hijas dentro del alcance.
+    const idsDe = async (idUnidad: number, sesion: SesionUsuario) =>
+      (await servicio.listar({ idUnidad }, sesion)).map((x) => x.id);
+    const deAdmin = await idsDe(raiz, decana);
+    expect(deAdmin).toContain(planA.id);
+    expect(deAdmin).toContain(planB.id);
+    const deJefa = await idsDe(raiz, jefa);
+    expect(deJefa).toContain(planA.id);
+    expect(deJefa).not.toContain(planB.id);
+    expect(await idsDe(unidadA, decana)).toEqual(
+      expect.not.arrayContaining([planB.id]),
+    );
+    // Un plan fuera del alcance nunca aparece, filtre como filtre.
+    expect(await idsDe(unidadB, jefa)).toEqual([]);
   });
 });

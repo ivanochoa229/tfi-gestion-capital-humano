@@ -9,6 +9,8 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
+import { AccionDto } from './accion.dto.js';
+import { CandidatoDto } from './candidato.dto.js';
 import { Trim } from '../../conocimiento/dto/trim.js';
 
 const MAX_INT4 = 2147483647;
@@ -75,7 +77,9 @@ export class FiltroPlanesDto {
   @Max(MAX_INT4)
   idPuesto?: number;
 
-  @ApiPropertyOptional({ description: 'Unidad del puesto' })
+  @ApiPropertyOptional({
+    description: 'Unidad del puesto, con sus subunidades',
+  })
   @IsOptional()
   @Type(() => Number)
   @IsInt()
@@ -135,4 +139,12 @@ export class PlanDto {
 
   @ApiProperty()
   cantidadCandidatos: number;
+}
+
+export class PlanDetalleDto extends PlanDto {
+  @ApiProperty({ type: CandidatoDto, isArray: true })
+  candidatos: CandidatoDto[];
+
+  @ApiProperty({ type: AccionDto, isArray: true })
+  acciones: AccionDto[];
 }

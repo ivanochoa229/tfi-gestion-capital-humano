@@ -9,8 +9,10 @@ import { AccionesController } from './acciones.controller.js';
 import { AccionesService } from './acciones.service.js';
 import { CandidatosController } from './candidatos.controller.js';
 import { CandidatosService } from './candidatos.service.js';
+import { CoberturaService } from './cobertura.service.js';
 import { PlanesController } from './planes.controller.js';
 import { PlanesService } from './planes.service.js';
+import { SucesionController } from './sucesion.controller.js';
 
 /** Planes de sucesión, candidatos y acciones de transferencia (RF13–RF15). */
 @Module({
@@ -23,7 +25,17 @@ import { PlanesService } from './planes.service.js';
     ReferenciaModule,
     UsuariosModule,
   ],
-  controllers: [PlanesController, CandidatosController, AccionesController],
-  providers: [PlanesService, CandidatosService, AccionesService],
+  controllers: [
+    PlanesController,
+    CandidatosController,
+    AccionesController,
+    SucesionController,
+  ],
+  providers: [
+    PlanesService,
+    CandidatosService,
+    AccionesService,
+    CoberturaService,
+  ],
 })
 export class SucesionModule {}

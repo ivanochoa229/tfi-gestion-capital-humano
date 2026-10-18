@@ -30,6 +30,7 @@ import {
   CrearPlanDto,
   EditarPlanDto,
   FiltroPlanesDto,
+  PlanDetalleDto,
   PlanDto,
   ResolverPlanDto,
 } from './dto/plan.dto.js';
@@ -53,14 +54,14 @@ export class PlanesController {
 
   @Get(':id')
   @Roles(...ROLES_LECTORES_DE_SUCESION)
-  @ApiOkResponse({ type: PlanDto })
+  @ApiOkResponse({ type: PlanDetalleDto })
   @ApiNotFoundResponse({ description: 'El plan no existe' })
   @ApiForbiddenResponse({ description: 'El puesto está fuera de tu alcance' })
   buscar(
     @Param('id', ParseIntPipe) id: number,
     @UsuarioActual() sesion: SesionUsuario,
-  ): Promise<PlanDto> {
-    return this.servicio.buscar(id, sesion);
+  ): Promise<PlanDetalleDto> {
+    return this.servicio.detalle(id, sesion);
   }
 
   @Post()
