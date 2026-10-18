@@ -37,6 +37,9 @@ describe('AvanzarAccionDto', () => {
 });
 
 describe('EditarAccionDto', () => {
+  it('acepta null en idDestinatario para quitarlo', () => {
+    expect(validar(EditarAccionDto, { idDestinatario: null })).toEqual([]);
+  });
   it('acepta cancelar y campos propios', () => {
     expect(
       validar(EditarAccionDto, { cancelar: true, descripcion: 'x' }),
@@ -60,6 +63,14 @@ describe('CrearAccionDto', () => {
   };
   it('acepta los obligatorios', () => {
     expect(validar(CrearAccionDto, base)).toEqual([]);
+  });
+  it('rechaza null en idDestinatario e idPlan', () => {
+    expect(
+      validar(CrearAccionDto, { ...base, idDestinatario: null }),
+    ).toContain('idDestinatario');
+    expect(validar(CrearAccionDto, { ...base, idPlan: null })).toContain(
+      'idPlan',
+    );
   });
   it('rechaza una fecha inexistente', () => {
     expect(

@@ -188,7 +188,14 @@ function crearEntorno(
     repoAcciones as unknown as Repository<AccionTransferencia>,
     alcance as unknown as AlcanceService,
   );
-  return { servicio, repoAcciones, qb, consultas, almacen };
+  return {
+    servicio,
+    repoAcciones,
+    qb,
+    consultas,
+    almacen,
+    repos: repos as Record<string, { findOne: unknown }>,
+  };
 }
 
 const alta = {
@@ -273,6 +280,23 @@ describe('AccionesService.crear', () => {
     await expect(servicio.crear(alta, rrhh)).resolves.toMatchObject({
       idPlan: null,
     });
+  });
+  it('idDestinatario e idPlan null se tratan como ausentes y no consultan personas con id null', async () => {
+    const { servicio, repos } = crearEntorno();
+    const dto = await servicio.crear(
+      {
+        ...alta,
+        idDestinatario: null,
+        idPlan: null,
+      } as unknown as Parameters<typeof servicio.crear>[0],
+      rrhh,
+    );
+    expect(dto.idDestinatario).toBeNull();
+    expect(dto.idPlan).toBeNull();
+    const consultadas = (
+      repos.Persona.findOne as ReturnType<typeof vi.fn>
+    ).mock.calls.map((c) => c[0].where.id);
+    expect(consultadas).toEqual([5]);
   });
   it('caso feliz: nace pendiente, con save', async () => {
     const { servicio, repoAcciones } = crearEntorno();

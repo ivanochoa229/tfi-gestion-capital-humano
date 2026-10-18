@@ -58,7 +58,7 @@ export class AccionesService {
   async crear(dto: CrearAccionDto, _sesion: SesionUsuario): Promise<AccionDto> {
     return enTransaccionDeConocimiento(this.acciones, async (manager) => {
       if (
-        dto.idDestinatario !== undefined &&
+        dto.idDestinatario != null &&
         dto.idDestinatario === dto.idResponsable
       ) {
         throw new BadRequestException(
@@ -78,14 +78,14 @@ export class AccionesService {
         throw new BadRequestException('El conocimiento está dado de baja');
       }
       await this.exigirPersonaActiva(manager, dto.idResponsable, 'responsable');
-      if (dto.idDestinatario !== undefined) {
+      if (dto.idDestinatario != null) {
         await this.exigirPersonaActiva(
           manager,
           dto.idDestinatario,
           'destinatario',
         );
       }
-      if (dto.idPlan !== undefined) {
+      if (dto.idPlan != null) {
         await this.exigirPlanAbierto(manager, dto.idPlan, dto.idConocimiento);
       }
 

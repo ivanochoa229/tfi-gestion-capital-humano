@@ -11,6 +11,7 @@ import {
   Max,
   MaxLength,
   MinLength,
+  ValidateIf,
   Min,
 } from 'class-validator';
 import { aBooleano } from '../../conocimiento/dto/catalogo.dto.js';
@@ -36,7 +37,7 @@ export class CrearAccionDto {
     description:
       'Plan al que pertenece; el conocimiento debe ser requisito de su puesto',
   })
-  @IsOptional()
+  @ValidateIf((_, valor) => valor !== undefined)
   @IsInt()
   @Min(1)
   @Max(MAX_INT4)
@@ -52,7 +53,7 @@ export class CrearAccionDto {
     description:
       'Persona activa que recibe el conocimiento; distinta del responsable',
   })
-  @IsOptional()
+  @ValidateIf((_, valor) => valor !== undefined)
   @IsInt()
   @Min(1)
   @Max(MAX_INT4)
