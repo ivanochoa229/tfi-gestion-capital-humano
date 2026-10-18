@@ -1,8 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { DataSource } from 'typeorm';
+import { ROLES_LECTORES_DE_DETECCION } from '../../common/roles.js';
 import type { SesionUsuario } from '../../common/sesion-usuario.js';
 import { AlcanceService } from '../usuarios/alcance.service.js';
+import { SQL_BRECHA, SQL_MI_BRECHA } from './brecha.sql.js';
+import { SQL_CATEDRAS_UNA_PERSONA } from './catedras.sql.js';
 import { MESES_HORIZONTE_DEFECTO } from './deteccion.constantes.js';
+import type {
+  BrechaConocimientoDto,
+  BrechaPuestoDto,
+  FiltroBrechaDto,
+} from './dto/brecha.dto.js';
 import type {
   CatedraUnaPersonaDto,
   CatedrasUnaPersonaDto,
@@ -22,7 +34,6 @@ import type {
   PuntoUnicoFallaDto,
   PuntosUnicosFallaDto,
 } from './dto/punto-unico-falla.dto.js';
-import { SQL_CATEDRAS_UNA_PERSONA } from './catedras.sql.js';
 import { SQL_HORIZONTE_RIESGO } from './horizonte.sql.js';
 import { SQL_PUNTOS_UNICOS } from './puntos-unicos.sql.js';
 import { SQL_PUESTOS_SIN_SUCESOR } from './sin-sucesor.sql.js';
@@ -74,6 +85,26 @@ interface FilaHorizonte {
   en_alcance: boolean;
   puestos_en_alcance: PuestoCriticoDto[];
   puestos_fuera_de_alcance: number;
+}
+
+interface FilaBrecha {
+  contexto: string;
+  id_persona: number;
+  apellido: string;
+  nombre: string;
+  id_puesto: number;
+  denominacion_puesto: string;
+  id_plan: number | null;
+  estado_plan: string | null;
+  a_revisar: boolean;
+  id_conocimiento: number;
+  denominacion_conocimiento: string;
+  es_excluyente: boolean;
+  nivel_requerido: string;
+  nivel_acreditado: string | null;
+  nivel_declarado: string | null;
+  faltante: number;
+  cubierto: boolean;
 }
 
 @Injectable()
@@ -256,5 +287,105 @@ export class DeteccionService {
       .map((e) => e.item);
 
     return { meses, conocimientos: todos };
+  }
+
+  async brecha(
+    filtro: FiltroBrechaDto,
+    sesion: SesionUsuario,
+  ): Promise<BrechaPuestoDto[]> {
+    if (!ROLES_LECTORES_DE_DETECCION.includes(sesion.rol)) {
+      throw new ForbiddenException(
+        'No tenés permiso para consultar la brecha de otras personas',
+      );
+    }
+
+    const unidades = await this.alcance.unidadesVisibles(sesion);
+    const filas: FilaBrecha[] = await this.dataSource.query(SQL_BRECHA, [
+      unidades,
+      filtro.idUnidad ?? null,
+      filtro.idPersona ?? null,
+      filtro.idPuesto ?? null,
+      filtro.contexto ?? null,
+    ]);
+
+    return this.agruparBrecha(filas, false);
+  }
+
+  async miBrecha(sesion: SesionUsuario): Promise<BrechaPuestoDto[]> {
+    if (sesion.idPersona === null) {
+      throw new BadRequestException(
+        'Tu usuario no está vinculado a ninguna persona del departamento',
+      );
+    }
+
+    const filas: FilaBrecha[] = await this.dataSource.query(SQL_MI_BRECHA, [
+      sesion.idPersona,
+    ]);
+
+    const filtradas = filas.filter(
+      (f) => f.contexto === 'ocupante' || f.estado_plan === 'aprobado',
+    );
+
+    return this.agruparBrecha(filtradas, true);
+  }
+
+  private agruparBrecha(
+    filas: FilaBrecha[],
+    incluirDeclarado: boolean,
+  ): BrechaPuestoDto[] {
+    const mapa = new Map<string, BrechaPuestoDto>();
+
+    for (const f of filas) {
+      const clave = `${f.contexto}:${f.id_persona}:${f.id_puesto}:${f.id_plan ?? 'null'}`;
+      let grupo = mapa.get(clave);
+      if (!grupo) {
+        grupo = {
+          contexto: f.contexto,
+          idPersona: Number(f.id_persona),
+          apellido: f.apellido,
+          nombre: f.nombre,
+          idPuesto: Number(f.id_puesto),
+          denominacionPuesto: f.denominacion_puesto,
+          idPlan: f.id_plan !== null ? Number(f.id_plan) : null,
+          estadoPlan: f.estado_plan,
+          aRevisar: Boolean(f.a_revisar),
+          resumen: {
+            excluyentesCubiertos: 0,
+            excluyentesTotal: 0,
+            deseablesCubiertos: 0,
+            deseablesTotal: 0,
+          },
+          conocimientos: [],
+        };
+        mapa.set(clave, grupo);
+      }
+
+      const itemConocimiento: BrechaConocimientoDto = {
+        idConocimiento: Number(f.id_conocimiento),
+        denominacion: f.denominacion_conocimiento,
+        esExcluyente: Boolean(f.es_excluyente),
+        nivelRequerido: f.nivel_requerido,
+        nivelAcreditado: f.nivel_acreditado,
+        nivelDeclarado: incluirDeclarado ? f.nivel_declarado : null,
+        faltante: Number(f.faltante),
+        cubierto: Boolean(f.cubierto),
+      };
+
+      grupo.conocimientos.push(itemConocimiento);
+
+      if (itemConocimiento.esExcluyente) {
+        grupo.resumen.excluyentesTotal += 1;
+        if (itemConocimiento.cubierto) {
+          grupo.resumen.excluyentesCubiertos += 1;
+        }
+      } else {
+        grupo.resumen.deseablesTotal += 1;
+        if (itemConocimiento.cubierto) {
+          grupo.resumen.deseablesCubiertos += 1;
+        }
+      }
+    }
+
+    return [...mapa.values()];
   }
 }

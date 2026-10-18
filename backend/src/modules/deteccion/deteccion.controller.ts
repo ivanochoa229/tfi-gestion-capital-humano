@@ -11,11 +11,13 @@ import { Roles } from '../../common/decorators/roles.decorator.js';
 import { UsuarioActual } from '../../common/decorators/usuario-actual.decorator.js';
 import {
   ROLES_GLOBALES_DE_DETECCION,
+  ROLES_LECTORES_DE_BRECHA_PROPIA,
   ROLES_LECTORES_DE_DETECCION,
 } from '../../common/roles.js';
 import type { SesionUsuario } from '../../common/sesion-usuario.js';
 import { aCsv } from './csv-salida.js';
 import { DeteccionService } from './deteccion.service.js';
+import { BrechaPuestoDto, FiltroBrechaDto } from './dto/brecha.dto.js';
 import { CatedrasUnaPersonaDto } from './dto/catedra-una-persona.dto.js';
 import { FiltroDeteccionDto } from './dto/filtro-deteccion.dto.js';
 import {
@@ -255,5 +257,22 @@ export class DeteccionController {
     }
 
     return datos;
+  }
+
+  @Get('brecha')
+  @Roles(...ROLES_LECTORES_DE_DETECCION)
+  @ApiOkResponse({ type: BrechaPuestoDto, isArray: true })
+  brecha(
+    @Query() filtro: FiltroBrechaDto,
+    @UsuarioActual() sesion: SesionUsuario,
+  ): Promise<BrechaPuestoDto[]> {
+    return this.servicio.brecha(filtro, sesion);
+  }
+
+  @Get('mi-brecha')
+  @Roles(...ROLES_LECTORES_DE_BRECHA_PROPIA)
+  @ApiOkResponse({ type: BrechaPuestoDto, isArray: true })
+  miBrecha(@UsuarioActual() sesion: SesionUsuario): Promise<BrechaPuestoDto[]> {
+    return this.servicio.miBrecha(sesion);
   }
 }
