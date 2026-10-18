@@ -8,12 +8,17 @@ import type {
 } from './dto/catedra-una-persona.dto.js';
 import type { FiltroDeteccionDto } from './dto/filtro-deteccion.dto.js';
 import type {
+  FiltroSinSucesorDto,
+  PuestoSinSucesorDto,
+} from './dto/puesto-sin-sucesor.dto.js';
+import type {
   PuestoCriticoDto,
   PuntoUnicoFallaDto,
   PuntosUnicosFallaDto,
 } from './dto/punto-unico-falla.dto.js';
 import { SQL_CATEDRAS_UNA_PERSONA } from './catedras.sql.js';
 import { SQL_PUNTOS_UNICOS } from './puntos-unicos.sql.js';
+import { SQL_PUESTOS_SIN_SUCESOR } from './sin-sucesor.sql.js';
 
 interface FilaPuntoUnico {
   id_conocimiento: number;
@@ -37,6 +42,17 @@ interface FilaCatedraUnaPersona {
   apellido: string | null;
   nombre: string | null;
   en_alcance: boolean;
+}
+
+interface FilaPuestoSinSucesor {
+  id_puesto: number;
+  codigo: string;
+  denominacion: string;
+  id_unidad: number;
+  motivo: string;
+  id_plan: number | null;
+  candidatos_total: number;
+  candidatos_validos: number;
 }
 
 @Injectable()
@@ -124,5 +140,27 @@ export class DeteccionService {
     }
 
     return { unaPersona, sinDotacion };
+  }
+
+  async puestosSinSucesor(
+    filtro: FiltroSinSucesorDto,
+    sesion: SesionUsuario,
+  ): Promise<PuestoSinSucesorDto[]> {
+    const unidades = await this.alcance.unidadesVisibles(sesion);
+    const filas: FilaPuestoSinSucesor[] = await this.dataSource.query(
+      SQL_PUESTOS_SIN_SUCESOR,
+      [unidades, filtro.idUnidad ?? null, filtro.motivo ?? null],
+    );
+
+    return filas.map((f) => ({
+      idPuesto: Number(f.id_puesto),
+      codigo: f.codigo,
+      denominacion: f.denominacion,
+      idUnidad: Number(f.id_unidad),
+      motivo: f.motivo,
+      idPlan: f.id_plan !== null ? Number(f.id_plan) : null,
+      candidatosTotal: Number(f.candidatos_total),
+      candidatosValidos: Number(f.candidatos_validos),
+    }));
   }
 }

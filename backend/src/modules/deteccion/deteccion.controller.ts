@@ -18,6 +18,10 @@ import { aCsv } from './csv-salida.js';
 import { DeteccionService } from './deteccion.service.js';
 import { CatedrasUnaPersonaDto } from './dto/catedra-una-persona.dto.js';
 import { FiltroDeteccionDto } from './dto/filtro-deteccion.dto.js';
+import {
+  FiltroSinSucesorDto,
+  PuestoSinSucesorDto,
+} from './dto/puesto-sin-sucesor.dto.js';
 import { PuntosUnicosFallaDto } from './dto/punto-unico-falla.dto.js';
 
 @ApiTags('deteccion')
@@ -151,6 +155,47 @@ export class DeteccionController {
       );
 
       this.enviarCsv(res, 'catedras-una-persona.csv', csv);
+      return;
+    }
+
+    return datos;
+  }
+
+  @Get('puestos-sin-sucesor')
+  @Roles(...ROLES_LECTORES_DE_DETECCION)
+  @ApiOkResponse({ type: PuestoSinSucesorDto, isArray: true })
+  async puestosSinSucesor(
+    @Query() filtro: FiltroSinSucesorDto,
+    @UsuarioActual() sesion: SesionUsuario,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<PuestoSinSucesorDto[] | void> {
+    if (filtro.formato === 'csv') {
+      this.exigirGlobalParaCsv(sesion);
+    }
+
+    const datos = await this.servicio.puestosSinSucesor(filtro, sesion);
+
+    if (filtro.formato === 'csv') {
+      const filas = datos.map((f) => ({
+        codigo: f.codigo,
+        denominacion: f.denominacion,
+        motivo: f.motivo,
+        candidatosTotal: f.candidatosTotal,
+        candidatosValidos: f.candidatosValidos,
+      }));
+
+      const csv = aCsv(
+        [
+          { clave: 'codigo', titulo: 'Código' },
+          { clave: 'denominacion', titulo: 'Puesto' },
+          { clave: 'motivo', titulo: 'Motivo' },
+          { clave: 'candidatosTotal', titulo: 'Candidatos totales' },
+          { clave: 'candidatosValidos', titulo: 'Candidatos válidos' },
+        ],
+        filas,
+      );
+
+      this.enviarCsv(res, 'puestos-sin-sucesor.csv', csv);
       return;
     }
 

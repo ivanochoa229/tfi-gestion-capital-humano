@@ -182,4 +182,45 @@ describe('DeteccionService', () => {
       });
     });
   });
+
+  describe('puestosSinSucesor (RF18)', () => {
+    it('pasa unidadesVisibles, idUnidad y motivo al SQL y mapea las filas', async () => {
+      alcance.unidadesVisibles.mockResolvedValue([10, 12]);
+      ds.query.mockResolvedValue([
+        {
+          id_puesto: 3,
+          codigo: 'P-C2-JEF',
+          denominacion: 'C2.jefe',
+          id_unidad: 12,
+          motivo: 'ningun_candidato_cubre',
+          id_plan: 50,
+          candidatos_total: 2,
+          candidatos_validos: 2,
+        },
+      ]);
+
+      const res = await servicio.puestosSinSucesor(
+        { idUnidad: 12, motivo: 'ningun_candidato_cubre' },
+        sesion,
+      );
+
+      expect(ds.query).toHaveBeenCalledWith(expect.any(String), [
+        [10, 12],
+        12,
+        'ningun_candidato_cubre',
+      ]);
+      expect(res).toEqual([
+        {
+          idPuesto: 3,
+          codigo: 'P-C2-JEF',
+          denominacion: 'C2.jefe',
+          idUnidad: 12,
+          motivo: 'ningun_candidato_cubre',
+          idPlan: 50,
+          candidatosTotal: 2,
+          candidatosValidos: 2,
+        },
+      ]);
+    });
+  });
 });
