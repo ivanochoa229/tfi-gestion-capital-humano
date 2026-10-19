@@ -4,5732 +4,5706 @@
  */
 
 export interface paths {
-  '/api/salud': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['SaludController_verificar'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/auditoria': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['AuditoriaController_consultar'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/unidades': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['UnidadesController_listar'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/unidades/arbol': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['UnidadesController_arbol'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/unidades/{id}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['UnidadesController_obtener'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/unidades/{id}/puestos-tipo': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['UnidadesController_crearPuestosTipo'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/puestos': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['PuestosController_listar'];
-    put?: never;
-    post: operations['PuestosController_crear'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/puestos/{id}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['PuestosController_obtener'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch: operations['PuestosController_actualizar'];
-    trace?: never;
-  };
-  '/api/puestos/{id}/baja': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['PuestosController_darDeBaja'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/puestos/{id}/reactivar': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['PuestosController_reactivar'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/referencia': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['ReferenciaController_listarDominios'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/referencia/{dominio}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['ReferenciaController_listarValores'];
-    put?: never;
-    post: operations['ReferenciaController_crear'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/referencia/{dominio}/{id}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete: operations['ReferenciaController_eliminar'];
-    options?: never;
-    head?: never;
-    patch: operations['ReferenciaController_actualizar'];
-    trace?: never;
-  };
-  '/api/personas/importacion': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['ImportacionController_importar'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/personas/importacion/plantilla': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['ImportacionController_plantilla'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/personas': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['PersonasController_listar'];
-    put?: never;
-    post: operations['PersonasController_crear'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/personas/{id}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['PersonasController_obtener'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch: operations['PersonasController_actualizar'];
-    trace?: never;
-  };
-  '/api/personas/{id}/baja': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['PersonasController_darDeBaja'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/personas/{id}/reactivar': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['PersonasController_reactivar'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/personas/{idPersona}/ocupaciones': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['OcupacionesController_listarDePersona'];
-    put?: never;
-    post: operations['OcupacionesController_crear'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/personas/{idPersona}/ocupaciones/{idPuesto}/{fechaDesde}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete: operations['OcupacionesController_anular'];
-    options?: never;
-    head?: never;
-    patch: operations['OcupacionesController_actualizar'];
-    trace?: never;
-  };
-  '/api/personas/{idPersona}/ocupaciones/{idPuesto}/{fechaDesde}/cerrar': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['OcupacionesController_cerrar'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/puestos/{idPuesto}/ocupaciones': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['OcupacionesController_listarDePuesto'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/conocimientos': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['ConocimientosController_listar'];
-    put?: never;
-    post: operations['ConocimientosController_crear'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/conocimientos/mios': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['ConocimientosController_mios'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/conocimientos/pendientes-acreditacion': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['ConocimientosController_pendientes'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/conocimientos/{id}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch: operations['ConocimientosController_actualizar'];
-    trace?: never;
-  };
-  '/api/conocimientos/{id}/baja': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['ConocimientosController_baja'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/conocimientos/{id}/reactivar': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['ConocimientosController_reactivar'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/conocimientos/{id}/fusionar': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['ConocimientosController_fusionar'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/puestos/{idPuesto}/requisitos': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['RequisitosController_listar'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/puestos/{idPuesto}/requisitos/{idConocimiento}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put: operations['RequisitosController_guardar'];
-    post?: never;
-    delete: operations['RequisitosController_quitar'];
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/puestos/{idPuesto}/requisitos/copiar': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['RequisitosController_copiar'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/personas/{idPersona}/conocimientos': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['PerfilConocimientoController_listar'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/personas/{idPersona}/conocimientos/{idConocimiento}/acreditaciones': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['PerfilConocimientoController_historial'];
-    put?: never;
-    post: operations['PerfilConocimientoController_acreditar'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/personas/{idPersona}/conocimientos/{idConocimiento}/declaracion': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put: operations['PerfilConocimientoController_declarar'];
-    post?: never;
-    delete: operations['PerfilConocimientoController_retirar'];
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/activos': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['ActivosController_listar'];
-    put?: never;
-    post: operations['ActivosController_crear'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/activos/{id}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['ActivosController_obtener'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch: operations['ActivosController_actualizar'];
-    trace?: never;
-  };
-  '/api/activos/{id}/descarga': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['ActivosController_descargar'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/activos/{id}/archivo': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put: operations['ActivosController_reemplazarArchivo'];
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/activos/{id}/baja': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['ActivosController_baja'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/activos/{id}/reactivar': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['ActivosController_reactivar'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/auth/login': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['AuthController_login'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/auth/logout': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['AuthController_logout'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/auth/yo': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['AuthController_yo'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/auth/clave': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch: operations['AuthController_cambiarClave'];
-    trace?: never;
-  };
-  '/api/usuarios': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['UsuariosController_listar'];
-    put?: never;
-    post: operations['UsuariosController_crear'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/usuarios/roles': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['UsuariosController_listarRoles'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/usuarios/{id}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch: operations['UsuariosController_actualizar'];
-    trace?: never;
-  };
-  '/api/usuarios/{id}/restablecer-clave': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['UsuariosController_restablecerClave'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/criticidad/matriz': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['CriticidadController_obtenerMatriz'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/criticidad/matriz/{idImpacto}/{idDificultad}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put: operations['CriticidadController_editarCelda'];
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/criticidad/pares': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['CriticidadController_listarPares'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/criticidad/avance': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['CriticidadController_avance'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/puestos/{idPuesto}/criticidad/{idConocimiento}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['EvaluacionesController_evaluar'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/puestos/{idPuesto}/criticidad/{idConocimiento}/historial': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['EvaluacionesController_historial'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/planes': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['PlanesController_listar'];
-    put?: never;
-    post: operations['PlanesController_crear'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/planes/{id}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['PlanesController_buscar'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch: operations['PlanesController_editar'];
-    trace?: never;
-  };
-  '/api/planes/{id}/presentar': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['PlanesController_presentar'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/planes/{id}/resolver': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['PlanesController_resolver'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/planes/{id}/reabrir': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['PlanesController_reabrir'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/planes/{id}/nueva-version': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['PlanesController_nuevaVersion'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/planes/{id}/cerrar': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['PlanesController_cerrar'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/planes/{idPlan}/candidatos': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['CandidatosController_agregar'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/planes/{idPlan}/candidatos/orden': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put: operations['CandidatosController_reordenar'];
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/planes/{idPlan}/candidatos/{idPersona}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete: operations['CandidatosController_quitar'];
-    options?: never;
-    head?: never;
-    patch: operations['CandidatosController_seguimiento'];
-    trace?: never;
-  };
-  '/api/acciones': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['AccionesController_listar'];
-    put?: never;
-    post: operations['AccionesController_crear'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/acciones/{id}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch: operations['AccionesController_editar'];
-    trace?: never;
-  };
-  '/api/acciones/{id}/avanzar': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['AccionesController_avanzar'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/sucesion/cobertura': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['SucesionController_cobertura'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/sucesion/mis-planes': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['SucesionController_misPlanes'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/deteccion/puntos-unicos-falla': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['DeteccionController_puntosUnicosFalla'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/deteccion/catedras-una-persona': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['DeteccionController_catedrasUnaPersona'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/deteccion/puestos-sin-sucesor': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['DeteccionController_puestosSinSucesor'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/deteccion/horizonte-riesgo': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['DeteccionController_horizonteRiesgo'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/deteccion/brecha': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['DeteccionController_brecha'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/deteccion/mi-brecha': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['DeteccionController_miBrecha'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/deteccion/tablero': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations['TableroController_tablero'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
+    "/api/salud": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SaludController_verificar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auditoria": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AuditoriaController_consultar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/unidades": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UnidadesController_listar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/unidades/arbol": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UnidadesController_arbol"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/unidades/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UnidadesController_obtener"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/unidades/{id}/puestos-tipo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["UnidadesController_crearPuestosTipo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/puestos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PuestosController_listar"];
+        put?: never;
+        post: operations["PuestosController_crear"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/puestos/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PuestosController_obtener"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["PuestosController_actualizar"];
+        trace?: never;
+    };
+    "/api/puestos/{id}/baja": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PuestosController_darDeBaja"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/puestos/{id}/reactivar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PuestosController_reactivar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/referencia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ReferenciaController_listarDominios"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/referencia/{dominio}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ReferenciaController_listarValores"];
+        put?: never;
+        post: operations["ReferenciaController_crear"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/referencia/{dominio}/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["ReferenciaController_eliminar"];
+        options?: never;
+        head?: never;
+        patch: operations["ReferenciaController_actualizar"];
+        trace?: never;
+    };
+    "/api/personas/importacion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ImportacionController_importar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/personas/importacion/plantilla": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ImportacionController_plantilla"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/personas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PersonasController_listar"];
+        put?: never;
+        post: operations["PersonasController_crear"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/personas/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PersonasController_obtener"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["PersonasController_actualizar"];
+        trace?: never;
+    };
+    "/api/personas/{id}/baja": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PersonasController_darDeBaja"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/personas/{id}/reactivar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PersonasController_reactivar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/personas/{idPersona}/ocupaciones": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["OcupacionesController_listarDePersona"];
+        put?: never;
+        post: operations["OcupacionesController_crear"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/personas/{idPersona}/ocupaciones/{idPuesto}/{fechaDesde}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["OcupacionesController_anular"];
+        options?: never;
+        head?: never;
+        patch: operations["OcupacionesController_actualizar"];
+        trace?: never;
+    };
+    "/api/personas/{idPersona}/ocupaciones/{idPuesto}/{fechaDesde}/cerrar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["OcupacionesController_cerrar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/puestos/{idPuesto}/ocupaciones": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["OcupacionesController_listarDePuesto"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/conocimientos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ConocimientosController_listar"];
+        put?: never;
+        post: operations["ConocimientosController_crear"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/conocimientos/mios": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ConocimientosController_mios"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/conocimientos/pendientes-acreditacion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ConocimientosController_pendientes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/conocimientos/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["ConocimientosController_actualizar"];
+        trace?: never;
+    };
+    "/api/conocimientos/{id}/baja": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ConocimientosController_baja"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/conocimientos/{id}/reactivar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ConocimientosController_reactivar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/conocimientos/{id}/fusionar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ConocimientosController_fusionar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/puestos/{idPuesto}/requisitos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["RequisitosController_listar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/puestos/{idPuesto}/requisitos/{idConocimiento}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["RequisitosController_guardar"];
+        post?: never;
+        delete: operations["RequisitosController_quitar"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/puestos/{idPuesto}/requisitos/copiar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["RequisitosController_copiar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/personas/{idPersona}/conocimientos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PerfilConocimientoController_listar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/personas/{idPersona}/conocimientos/{idConocimiento}/acreditaciones": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PerfilConocimientoController_historial"];
+        put?: never;
+        post: operations["PerfilConocimientoController_acreditar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/personas/{idPersona}/conocimientos/{idConocimiento}/declaracion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["PerfilConocimientoController_declarar"];
+        post?: never;
+        delete: operations["PerfilConocimientoController_retirar"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/activos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ActivosController_listar"];
+        put?: never;
+        post: operations["ActivosController_crear"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/activos/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ActivosController_obtener"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["ActivosController_actualizar"];
+        trace?: never;
+    };
+    "/api/activos/{id}/descarga": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ActivosController_descargar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/activos/{id}/archivo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["ActivosController_reemplazarArchivo"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/activos/{id}/baja": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ActivosController_baja"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/activos/{id}/reactivar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ActivosController_reactivar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_login"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_logout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/yo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AuthController_yo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/clave": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AuthController_cambiarClave"];
+        trace?: never;
+    };
+    "/api/usuarios": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsuariosController_listar"];
+        put?: never;
+        post: operations["UsuariosController_crear"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/usuarios/roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsuariosController_listarRoles"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/usuarios/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["UsuariosController_actualizar"];
+        trace?: never;
+    };
+    "/api/usuarios/{id}/restablecer-clave": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["UsuariosController_restablecerClave"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/criticidad/matriz": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CriticidadController_obtenerMatriz"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/criticidad/matriz/{idImpacto}/{idDificultad}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["CriticidadController_editarCelda"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/criticidad/pares": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CriticidadController_listarPares"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/criticidad/avance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CriticidadController_avance"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/puestos/{idPuesto}/criticidad/{idConocimiento}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["EvaluacionesController_evaluar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/puestos/{idPuesto}/criticidad/{idConocimiento}/historial": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["EvaluacionesController_historial"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/planes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PlanesController_listar"];
+        put?: never;
+        post: operations["PlanesController_crear"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/planes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PlanesController_buscar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["PlanesController_editar"];
+        trace?: never;
+    };
+    "/api/planes/{id}/presentar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PlanesController_presentar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/planes/{id}/resolver": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PlanesController_resolver"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/planes/{id}/reabrir": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PlanesController_reabrir"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/planes/{id}/nueva-version": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PlanesController_nuevaVersion"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/planes/{id}/cerrar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PlanesController_cerrar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/planes/{idPlan}/candidatos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["CandidatosController_agregar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/planes/{idPlan}/candidatos/orden": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["CandidatosController_reordenar"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/planes/{idPlan}/candidatos/{idPersona}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["CandidatosController_quitar"];
+        options?: never;
+        head?: never;
+        patch: operations["CandidatosController_seguimiento"];
+        trace?: never;
+    };
+    "/api/acciones": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AccionesController_listar"];
+        put?: never;
+        post: operations["AccionesController_crear"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/acciones/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AccionesController_editar"];
+        trace?: never;
+    };
+    "/api/acciones/{id}/avanzar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AccionesController_avanzar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sucesion/cobertura": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SucesionController_cobertura"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sucesion/mis-planes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SucesionController_misPlanes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/deteccion/puntos-unicos-falla": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DeteccionController_puntosUnicosFalla"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/deteccion/catedras-una-persona": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DeteccionController_catedrasUnaPersona"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/deteccion/puestos-sin-sucesor": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DeteccionController_puestosSinSucesor"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/deteccion/horizonte-riesgo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DeteccionController_horizonteRiesgo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/deteccion/brecha": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DeteccionController_brecha"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/deteccion/mi-brecha": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DeteccionController_miBrecha"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/deteccion/tablero": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["TableroController_tablero"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-  schemas: {
-    SaludDto: {
-      /** @example ok */
-      estado: string;
-      /** @description PostgreSQL responde */
-      baseDeDatos: boolean;
-      /** @description RustFS responde y el bucket existe */
-      almacenamiento: boolean;
-    };
-    AuditoriaDto: {
-      id: number;
-      /** @example plan_sucesion */
-      entidad: string;
-      /** @example 5 */
-      idRegistro: string;
-      /** @enum {string} */
-      operacion: 'alta' | 'modificacion' | 'baja';
-      idUsuario: number;
-      /** Format: date-time */
-      fecha: string;
-      valoresAnteriores: {
-        [key: string]: unknown;
-      } | null;
-      valoresNuevos: {
-        [key: string]: unknown;
-      } | null;
-    };
-    UnidadDto: {
-      id: number;
-      /** @example Departamento de Sistemas */
-      denominacion: string;
-      /**
-       * @description Código del tipo de unidad
-       * @example catedra
-       */
-      tipo: string;
-      idUnidadSuperior: number | null;
-      activo: boolean;
-    };
-    UnidadArbolDto: {
-      id: number;
-      /** @example Departamento de Sistemas */
-      denominacion: string;
-      /**
-       * @description Código del tipo de unidad
-       * @example catedra
-       */
-      tipo: string;
-      idUnidadSuperior: number | null;
-      activo: boolean;
-      hijas: components['schemas']['UnidadArbolDto'][];
-    };
-    UnidadDetalleDto: {
-      id: number;
-      /** @example Departamento de Sistemas */
-      denominacion: string;
-      /**
-       * @description Código del tipo de unidad
-       * @example catedra
-       */
-      tipo: string;
-      idUnidadSuperior: number | null;
-      activo: boolean;
-      /** @description Puestos activos de la unidad */
-      cantidadPuestosActivos: number;
-    };
-    PuestoDto: {
-      id: number;
-      /** @example P-0001 */
-      codigo: string;
-      /** @example Jefe de cátedra */
-      denominacion: string;
-      proposito: string | null;
-      condicionesTrabajo: string | null;
-      rangoRetributivo: string | null;
-      dotacionPrevista: number;
-      idUnidad: number;
-      idNivelJerarquico: number;
-      idTipoRelacionContractual: number | null;
-      idPuestoSuperior: number | null;
-      activo: boolean;
-    };
-    PuestosTipoCreadosDto: {
-      puestos: components['schemas']['PuestoDto'][];
-      advertencias: string[];
-    };
-    PuestoResumenDto: {
-      id: number;
-      /** @example P-0001 */
-      codigo: string;
-      denominacion: string;
-      activo: boolean;
-    };
-    PuestoDetalleDto: {
-      id: number;
-      /** @example P-0001 */
-      codigo: string;
-      /** @example Jefe de cátedra */
-      denominacion: string;
-      proposito: string | null;
-      condicionesTrabajo: string | null;
-      rangoRetributivo: string | null;
-      dotacionPrevista: number;
-      idUnidad: number;
-      idNivelJerarquico: number;
-      idTipoRelacionContractual: number | null;
-      idPuestoSuperior: number | null;
-      activo: boolean;
-      superior: components['schemas']['PuestoResumenDto'] | null;
-      /** @description Subordinados directos */
-      subordinados: components['schemas']['PuestoResumenDto'][];
-    };
-    CrearPuestoDto: {
-      /** @example Jefe de cátedra */
-      denominacion: string;
-      proposito?: string | null;
-      condicionesTrabajo?: string | null;
-      /** @description Texto descriptivo; no es un monto */
-      rangoRetributivo?: string | null;
-      /** @default 1 */
-      dotacionPrevista: number;
-      /** @description Unidad del puesto; no se puede cambiar después */
-      idUnidad: number;
-      idNivelJerarquico: number;
-      idTipoRelacionContractual?: number | null;
-      /** @description En la misma unidad o en una ancestra */
-      idPuestoSuperior?: number | null;
-    };
-    ActualizarPuestoDto: {
-      /** @example Jefe de cátedra */
-      denominacion?: string;
-      proposito?: string | null;
-      condicionesTrabajo?: string | null;
-      /** @description Texto descriptivo; no es un monto */
-      rangoRetributivo?: string | null;
-      /** @default 1 */
-      dotacionPrevista: number;
-      idNivelJerarquico?: number;
-      idTipoRelacionContractual?: number | null;
-      /** @description En la misma unidad o en una ancestra */
-      idPuestoSuperior?: number | null;
-    };
-    DominioDto: {
-      /** @example nivel-dominio */
-      dominio: string;
-      /** @example Nivel de dominio */
-      denominacion: string;
-      /** @description Si es true, los valores tienen orden */
-      ordinal: boolean;
-    };
-    ValorReferenciaDto: {
-      id: number;
-      /** @example basico */
-      codigo: string;
-      /** @example Básico */
-      denominacion: string;
-      activo: boolean;
-      /** @description Solo en dominios ordinales */
-      orden?: number;
-      /** @description Hay registros que usan este valor */
-      enUso: boolean;
-    };
-    CrearValorDto: {
-      /**
-       * @description Minúsculas, números y guion bajo; empieza con letra
-       * @example competencia_tecnica
-       */
-      codigo: string;
-      /** @example Competencia técnica */
-      denominacion: string;
-      /** @description Obligatorio en dominios ordinales; prohibido en el resto */
-      orden?: number;
-    };
-    ActualizarValorDto: {
-      /**
-       * @description Minúsculas, números y guion bajo; empieza con letra
-       * @example competencia_tecnica
-       */
-      codigo?: string;
-      /** @example Competencia técnica */
-      denominacion?: string;
-      /** @description Obligatorio en dominios ordinales; prohibido en el resto */
-      orden?: number;
-      /** @description false desactiva el valor */
-      activo?: boolean;
-    };
-    ActualizacionValorDto: {
-      id: number;
-      /** @example basico */
-      codigo: string;
-      /** @example Básico */
-      denominacion: string;
-      activo: boolean;
-      /** @description Solo en dominios ordinales */
-      orden?: number;
-      /** @description Hay registros que usan este valor */
-      enUso: boolean;
-      /** @description Aviso cuando se desactiva el último valor activo */
-      advertencia?: string;
-    };
-    ErrorImportacionDto: {
-      /** @description Fila del archivo; la cabecera es la 1 */
-      fila: number;
-      /** @description Columna del CSV a la que apunta el error */
-      columna?: string;
-      mensaje: string;
-    };
-    ResultadoImportacionDto: {
-      /** @description true solo si se pidió confirmar y no hubo errores: se escribió todo */
-      importado: boolean;
-      /** @description Filas de datos leídas */
-      filas: number;
-      /** @description Personas creadas, o que se crearían en la vista previa */
-      personas: number;
-      /** @description Ocupaciones creadas, o que se crearían en la vista previa */
-      ocupaciones: number;
-      errores: components['schemas']['ErrorImportacionDto'][];
-    };
-    PersonaDto: {
-      id: number;
-      /** @example L-1234 */
-      legajo: string;
-      apellido: string;
-      nombre: string;
-      /** @description Solo para recursos humanos y administrador (Ley 25.326) */
-      documento?: string;
-      /**
-       * Format: date
-       * @description Solo para recursos humanos y administrador (Ley 25.326)
-       */
-      fechaNacimiento?: string;
-      /** Format: date */
-      fechaIngreso: string;
-      idSituacionRevista: number;
-      /** Format: date */
-      fechaPrevistaRetiro: string | null;
-      activo: boolean;
-      /** @description Tiene un usuario vinculado */
-      tieneUsuario: boolean;
-    };
-    OcupacionDto: {
-      idPersona: number;
-      idPuesto: number;
-      /**
-       * Format: date
-       * @example 2024-03-01
-       */
-      fechaDesde: string;
-      /**
-       * Format: date
-       * @description null: sin fin
-       */
-      fechaHasta: string | null;
-      idCaracterOcupacion: number;
-      idDedicacion: number;
-      /**
-       * @description Respecto de la fecha de hoy de la base
-       * @enum {string}
-       */
-      estado: 'vigente' | 'futura' | 'pasada';
-    };
-    PersonaDetalleDto: {
-      id: number;
-      /** @example L-1234 */
-      legajo: string;
-      apellido: string;
-      nombre: string;
-      /** @description Solo para recursos humanos y administrador (Ley 25.326) */
-      documento?: string;
-      /**
-       * Format: date
-       * @description Solo para recursos humanos y administrador (Ley 25.326)
-       */
-      fechaNacimiento?: string;
-      /** Format: date */
-      fechaIngreso: string;
-      idSituacionRevista: number;
-      /** Format: date */
-      fechaPrevistaRetiro: string | null;
-      activo: boolean;
-      /** @description Tiene un usuario vinculado */
-      tieneUsuario: boolean;
-      ocupacionesVigentes: components['schemas']['OcupacionDto'][];
-    };
-    CrearPersonaDto: {
-      /**
-       * @description Único
-       * @example L-1234
-       */
-      legajo: string;
-      /** @example Pérez */
-      apellido: string;
-      /** @example Ana */
-      nombre: string;
-      /**
-       * @description DNI de 7 u 8 dígitos, sin puntos. Único
-       * @example 30111111
-       */
-      documento: string;
-      /**
-       * Format: date
-       * @example 1980-05-20
-       */
-      fechaNacimiento: string;
-      /**
-       * Format: date
-       * @description Posterior al nacimiento
-       * @example 2005-03-01
-       */
-      fechaIngreso: string;
-      idSituacionRevista: number;
-      /**
-       * Format: date
-       * @description No anterior al ingreso; null la borra
-       */
-      fechaPrevistaRetiro?: string | null;
-    };
-    ActualizarPersonaDto: {
-      /**
-       * @description Único
-       * @example L-1234
-       */
-      legajo?: string;
-      /** @example Pérez */
-      apellido?: string;
-      /** @example Ana */
-      nombre?: string;
-      /**
-       * @description DNI de 7 u 8 dígitos, sin puntos. Único
-       * @example 30111111
-       */
-      documento?: string;
-      /**
-       * Format: date
-       * @example 1980-05-20
-       */
-      fechaNacimiento?: string;
-      /**
-       * Format: date
-       * @description Posterior al nacimiento
-       * @example 2005-03-01
-       */
-      fechaIngreso?: string;
-      idSituacionRevista?: number;
-      /**
-       * Format: date
-       * @description No anterior al ingreso; null la borra
-       */
-      fechaPrevistaRetiro?: string | null;
-    };
-    ResultadoBajaPersonaDto: {
-      persona: components['schemas']['PersonaDetalleDto'];
-      /** @description Avisos que no impidieron la baja */
-      advertencias: string[];
-    };
-    CrearOcupacionDto: {
-      /** @description Puesto activo */
-      idPuesto: number;
-      /**
-       * Format: date
-       * @example 2024-03-01
-       */
-      fechaDesde: string;
-      /**
-       * Format: date
-       * @description No anterior al inicio; sin valor, la ocupación no tiene fin
-       */
-      fechaHasta?: string | null;
-      idCaracterOcupacion: number;
-      idDedicacion: number;
-    };
-    ActualizarOcupacionDto: {
-      /**
-       * Format: date
-       * @description No anterior al inicio; sin valor, la ocupación no tiene fin
-       */
-      fechaHasta?: string | null;
-      idCaracterOcupacion?: number;
-      idDedicacion?: number;
-    };
-    CerrarOcupacionDto: {
-      /**
-       * Format: date
-       * @example 2026-06-30
-       */
-      fechaHasta: string;
-    };
-    OcupanteDto: {
-      idPersona: number;
-      idPuesto: number;
-      /**
-       * Format: date
-       * @example 2024-03-01
-       */
-      fechaDesde: string;
-      /**
-       * Format: date
-       * @description null: sin fin
-       */
-      fechaHasta: string | null;
-      idCaracterOcupacion: number;
-      idDedicacion: number;
-      /**
-       * @description Respecto de la fecha de hoy de la base
-       * @enum {string}
-       */
-      estado: 'vigente' | 'futura' | 'pasada';
-      /** @example L-1234 */
-      legajo: string;
-      apellido: string;
-      nombre: string;
-    };
-    ConocimientoDto: {
-      id: number;
-      denominacion: string;
-      idTipoConocimiento: number;
-      idAreaTematica: number;
-      descripcion: string | null;
-      activo: boolean;
-      /** @description Conocimiento al que se fusionó, si se retiró por duplicado */
-      idFusionadoEn: number | null;
-    };
-    PuestoQuePideDto: {
-      idPuesto: number;
-      /** @example P-0001 */
-      codigo: string;
-      denominacion: string;
-    };
-    MiConocimientoDto: {
-      idConocimiento: number;
-      denominacion: string;
-      idTipoConocimiento: number;
-      /** @description El más exigente entre los puestos que ocupa; null si ninguno lo pide */
-      idNivelRequerido: number | null;
-      /** @description true si algún puesto lo pide como excluyente */
-      esExcluyente: boolean;
-      puestos: components['schemas']['PuestoQuePideDto'][];
-      idNivelDeclarado: number | null;
-      /** Format: date */
-      fechaDeclaracion: string | null;
-      idNivelAcreditado: number | null;
-      /** Format: date */
-      fechaEvaluacion: string | null;
-      idTipoEvidencia: number | null;
-    };
-    PendienteAcreditacionDto: {
-      idPersona: number;
-      apellido: string;
-      nombre: string;
-      idConocimiento: number;
-      denominacion: string;
-      idNivelDeclarado: number;
-      idNivelAcreditado: number | null;
-      /** Format: date */
-      fechaDeclaracion: string;
-    };
-    CrearConocimientoDto: {
-      /** @example PostgreSQL */
-      denominacion: string;
-      /** @description Tipo de conocimiento activo */
-      idTipoConocimiento: number;
-      /** @description Área temática activa */
-      idAreaTematica: number;
-      descripcion?: string | null;
-    };
-    ActualizarConocimientoDto: {
-      /** @example PostgreSQL */
-      denominacion?: string;
-      /** @description Tipo de conocimiento activo */
-      idTipoConocimiento?: number;
-      /** @description Área temática activa */
-      idAreaTematica?: number;
-      descripcion?: string | null;
-    };
-    FusionarConocimientoDto: {
-      /** @description Conocimiento que se conserva */
-      idDestino: number;
-    };
-    ResultadoFusionDto: {
-      idOrigen: number;
-      idDestino: number;
-      /** @description Requisitos de puesto que pedían el origen */
-      requisitosMovidos: number;
-      /** @description Personas con datos del origen */
-      personasMovidas: number;
-      /** @description Evaluaciones de criticidad del origen */
-      evaluacionesMovidas: number;
-      /** @description Acciones de transferencia del origen */
-      accionesMovidas: number;
-    };
-    RequisitoDto: {
-      idPuesto: number;
-      idConocimiento: number;
-      denominacion: string;
-      idTipoConocimiento: number;
-      idNivelRequerido: number;
-      esExcluyente: boolean;
-    };
-    GuardarRequisitoDto: {
-      /** @description Nivel de dominio requerido (activo) */
-      idNivel: number;
-      /** @description true: excluyente; false: deseable */
-      esExcluyente: boolean;
-    };
-    CopiarRequisitosDto: {
-      /** @description Puesto del que se copian los requisitos */
-      idPuestoOrigen: number;
-    };
-    OmitidoDto: {
-      idConocimiento: number;
-      denominacion: string;
-    };
-    ResultadoCopiaDto: {
-      copiados: number;
-      /** @description Los que el puesto destino ya tenía; no se pisan */
-      omitidos: components['schemas']['OmitidoDto'][];
-    };
-    PerfilConocimientoDto: {
-      idPersona: number;
-      idConocimiento: number;
-      idNivelDeclarado: number | null;
-      /** Format: date */
-      fechaDeclaracion: string | null;
-      idNivelAcreditado: number | null;
-      /** Format: date */
-      fechaEvaluacion: string | null;
-      idTipoEvidencia: number | null;
-      idEvaluador: number | null;
-      denominacion: string;
-      idTipoConocimiento: number;
-      /** @description Declarado que todavía no tiene una acreditación que lo respalde o lo contradiga */
-      pendiente: boolean;
-    };
-    AcreditacionDto: {
-      id: number;
-      idPersona: number;
-      idConocimiento: number;
-      idNivelAcreditado: number;
-      idTipoEvidencia: number;
-      /** Format: date */
-      fechaEvaluacion: string;
-      /** @description Persona que evaluó */
-      idEvaluador: number;
-      observaciones: string | null;
-      /** Format: date-time */
-      registradaEn: string;
-    };
-    DeclararDto: {
-      /** @description Nivel de dominio que declara (activo) */
-      idNivel: number;
-    };
-    ConocimientoPersonaDto: {
-      idPersona: number;
-      idConocimiento: number;
-      idNivelDeclarado: number | null;
-      /** Format: date */
-      fechaDeclaracion: string | null;
-      idNivelAcreditado: number | null;
-      /** Format: date */
-      fechaEvaluacion: string | null;
-      idTipoEvidencia: number | null;
-      idEvaluador: number | null;
-    };
-    AcreditarDto: {
-      /** @description Nivel de dominio que se acredita (activo) */
-      idNivel: number;
-      /**
-       * Format: date
-       * @description No futura
-       * @example 2026-06-15
-       */
-      fechaEvaluacion: string;
-      /** @description Tipo de evidencia activo */
-      idTipoEvidencia: number;
-      observaciones?: string | null;
-    };
-    ActivoDto: {
-      id: number;
-      titulo: string;
-      idTipoDocumento: number;
-      idUnidad: number;
-      /** @enum {string} */
-      origen: 'archivo' | 'enlace';
-      /** @description URL, solo en los enlaces */
-      enlace: string | null;
-      nombreOriginal: string | null;
-      tipoMime: string | null;
-      /** @description Bytes */
-      tamanio: number | null;
-      /** @example 2027-03-31 */
-      fechaVigencia: string | null;
-      /** @description La fecha de vigencia ya pasó (calculado al consultar) */
-      vencido: boolean;
-      /** @description Días hasta la fecha de vigencia; negativo si ya venció */
-      diasParaVencer: number | null;
-      activo: boolean;
-      idsConocimiento: number[];
-      creadoEn: string;
-      actualizadoEn: string;
-    };
-    PaginaActivosDto: {
-      items: components['schemas']['ActivoDto'][];
-      /** @description Total que cumple el filtro */
-      total: number;
-    };
-    CrearActivoDto: {
-      /** @example Manual de administración de PostgreSQL */
-      titulo: string;
-      /** @description Tipo de documento activo */
-      idTipoDocumento: number;
-      /** @description Unidad que mantiene el activo */
-      idUnidad: number;
-      /** @description Conocimientos que documenta (al menos uno); en multipart, el campo se repite */
-      idsConocimiento: number[];
-      /** @example 2027-03-31 */
-      fechaVigencia?: string | null;
-      /** @description URL http(s) del activo; sin archivo es obligatoria */
-      enlace?: string;
-      /**
-       * Format: binary
-       * @description Archivo (campo multipart `archivo`); sin enlace es obligatorio
-       */
-      archivo?: string;
-    };
-    ActualizarActivoDto: {
-      /** @example Manual de administración de PostgreSQL */
-      titulo?: string;
-      /** @description Tipo de documento activo */
-      idTipoDocumento?: number;
-      /** @description Unidad que mantiene el activo */
-      idUnidad?: number;
-      /** @description Conocimientos que documenta (al menos uno); en multipart, el campo se repite */
-      idsConocimiento?: number[];
-      /** @example 2027-03-31 */
-      fechaVigencia?: string | null;
-      /** @description URL http(s) del activo; sin archivo es obligatoria */
-      enlace?: string;
-    };
-    LoginDto: {
-      /** @example admin */
-      nombreUsuario: string;
-      clave: string;
-    };
-    SesionDto: {
-      id: number;
-      nombreUsuario: string;
-      /** @enum {string} */
-      rol:
-        | 'analista_puestos'
-        | 'recursos_humanos'
-        | 'autoridad'
-        | 'jefatura_departamento'
-        | 'jefe_catedra'
-        | 'administrador'
-        | 'docente';
-      idPersona: number | null;
-      unidades: number[];
-    };
-    CambiarClaveDto: {
-      claveActual: string;
-      /** @description Al menos 10 caracteres */
-      claveNueva: string;
-    };
-    UsuarioDto: {
-      id: number;
-      nombreUsuario: string;
-      /** @enum {string} */
-      rol:
-        | 'analista_puestos'
-        | 'recursos_humanos'
-        | 'autoridad'
-        | 'jefatura_departamento'
-        | 'jefe_catedra'
-        | 'administrador'
-        | 'docente';
-      idPersona: number | null;
-      idUnidades: number[];
-      activo: boolean;
-    };
-    RolDto: {
-      /** @example jefe_catedra */
-      codigo: string;
-      /** @example Jefe de cátedra */
-      denominacion: string;
-    };
-    CrearUsuarioDto: {
-      /**
-       * @description 3 a 50 caracteres; se guarda en minúsculas
-       * @example ana.perez
-       */
-      nombreUsuario: string;
-      clave: string;
-      /** @enum {string} */
-      rol:
-        | 'analista_puestos'
-        | 'recursos_humanos'
-        | 'autoridad'
-        | 'jefatura_departamento'
-        | 'jefe_catedra'
-        | 'administrador'
-        | 'docente';
-      /** @description Obligatoria para el rol docente */
-      idPersona?: number | null;
-      /** @description Solo para jefatura y jefe de cátedra */
-      idUnidades?: number[];
-    };
-    ActualizarUsuarioDto: {
-      /**
-       * @description 3 a 50 caracteres; se guarda en minúsculas
-       * @example ana.perez
-       */
-      nombreUsuario?: string;
-      /** @enum {string} */
-      rol?:
-        | 'analista_puestos'
-        | 'recursos_humanos'
-        | 'autoridad'
-        | 'jefatura_departamento'
-        | 'jefe_catedra'
-        | 'administrador'
-        | 'docente';
-      /** @description Obligatoria para el rol docente */
-      idPersona?: number | null;
-      /** @description Solo para jefatura y jefe de cátedra */
-      idUnidades?: number[];
-      /** @description false desactiva el usuario */
-      activo?: boolean;
-    };
-    RestablecerClaveDto: {
-      clave: string;
-    };
-    EscalaDto: {
-      id: number;
-      codigo: string;
-      denominacion: string;
-      orden: number;
-      /** @description Criterio observable del nivel */
-      criterio: string;
-      activo: boolean;
-    };
-    CeldaMatrizDto: {
-      idNivelImpacto: number;
-      idNivelDificultad: number;
-      /** @description Nivel de criticidad que da la combinación */
-      idNivelCriticidad: number;
-    };
-    MatrizDto: {
-      impactos: components['schemas']['EscalaDto'][];
-      dificultades: components['schemas']['EscalaDto'][];
-      celdas: components['schemas']['CeldaMatrizDto'][];
-    };
-    EditarCeldaDto: {
-      /** @description Nivel de criticidad (activo) de la celda */
-      idNivelCriticidad: number;
-    };
-    ParCriticidadDto: {
-      idPuesto: number;
-      codigoPuesto: string;
-      denominacionPuesto: string;
-      idUnidad: number;
-      idConocimiento: number;
-      denominacionConocimiento: string;
-      idNivelRequerido: number;
-      esExcluyente: boolean;
-      /** @enum {string} */
-      estado: 'pendiente' | 'evaluado';
-      idEvaluacion: number | null;
-      idNivelImpacto: number | null;
-      idNivelDificultad: number | null;
-      idNivelCriticidad: number | null;
-      /** Format: date */
-      fechaEvaluacion: string | null;
-    };
-    AvanceDto: {
-      /** @description Pares con evaluación vigente */
-      evaluados: number;
-      /** @description Requisitos activos del alcance */
-      total: number;
-    };
-    EvaluarDto: {
-      /** @description Nivel de impacto de pérdida (escala fija) */
-      idNivelImpacto: number;
-      /** @description Nivel de dificultad de reemplazo (escala fija) */
-      idNivelDificultad: number;
-      /**
-       * Format: date
-       * @description No futura; por defecto, hoy
-       * @example 2026-06-15
-       */
-      fechaEvaluacion?: string;
-      observaciones?: string | null;
-    };
-    EvaluacionDto: {
-      id: number;
-      idPuesto: number;
-      idConocimiento: number;
-      idNivelImpacto: number;
-      idNivelDificultad: number;
-      /** @description Resultado de la matriz al evaluar */
-      idNivelCriticidad: number;
-      /** Format: date */
-      fechaEvaluacion: string;
-      idUsuario: number;
-      nombreUsuario: string;
-      observaciones: string | null;
-      /** Format: date-time */
-      registradaEn: string;
-    };
-    PlanDto: {
-      id: number;
-      idPuesto: number;
-      codigoPuesto: string;
-      denominacionPuesto: string;
-      idUnidad: number;
-      idResponsable: number;
-      nombreResponsable: string;
-      /** @description Código del estado */
-      estado: string;
-      /** Format: date */
-      fechaElaboracion: string;
-      idPlanAnterior: number | null;
-      nombreUsuarioResolucion: string | null;
-      /** Format: date */
-      fechaResolucion: string | null;
-      motivoResolucion: string | null;
-      observaciones: string | null;
-      cantidadCandidatos: number;
-    };
-    CandidatoDto: {
-      idPlan: number;
-      idPersona: number;
-      apellido: string;
-      nombre: string;
-      /** @description Código del estado de preparación manual */
-      estadoPreparacion: string;
-      prioridad: number;
-      /** Format: date */
-      fechaDisponibilidadEstimada: string | null;
-      observaciones: string | null;
-      /** @description Requisitos excluyentes del puesto que el candidato no cubre con nivel acreditado */
-      excluyentesSinCubrir: number;
-      totalExcluyentes: number;
-      /** @description El estado manual no coincide con la preparación calculada (listo ahora y con faltantes, o al revés) */
-      discrepancia: boolean;
-      /** @description La persona hoy ocupa el puesto del plan o ya no tiene ocupación vigente */
-      aRevisar: boolean;
-    };
-    AccionDto: {
-      id: number;
-      /** @description Código del tipo de acción */
-      tipo: string;
-      idConocimiento: number;
-      denominacionConocimiento: string;
-      idPlan: number | null;
-      idResponsable: number;
-      nombreResponsable: string;
-      idDestinatario: number | null;
-      nombreDestinatario: string | null;
-      descripcion: string;
-      /** Format: date */
-      fechaPrevista: string;
-      /** Format: date */
-      fechaCumplimiento: string | null;
-      /** @description Código del estado */
-      estado: string;
-      notaAvance: string | null;
-      /** @description Calculada: pendiente o en curso con fecha prevista anterior a hoy */
-      vencida: boolean;
-    };
-    PlanDetalleDto: {
-      id: number;
-      idPuesto: number;
-      codigoPuesto: string;
-      denominacionPuesto: string;
-      idUnidad: number;
-      idResponsable: number;
-      nombreResponsable: string;
-      /** @description Código del estado */
-      estado: string;
-      /** Format: date */
-      fechaElaboracion: string;
-      idPlanAnterior: number | null;
-      nombreUsuarioResolucion: string | null;
-      /** Format: date */
-      fechaResolucion: string | null;
-      motivoResolucion: string | null;
-      observaciones: string | null;
-      cantidadCandidatos: number;
-      candidatos: components['schemas']['CandidatoDto'][];
-      acciones: components['schemas']['AccionDto'][];
-    };
-    CrearPlanDto: {
-      /** @description Puesto activo, dentro de tu alcance */
-      idPuesto: number;
-      /** @description Persona activa responsable del plan */
-      idResponsable: number;
-      observaciones?: string | null;
-    };
-    EditarPlanDto: {
-      /** @description Persona activa responsable del plan */
-      idResponsable?: number;
-      observaciones?: string | null;
-    };
-    ResolverPlanDto: {
-      /** @enum {string} */
-      decision: 'aprobar' | 'rechazar';
-      /** @description Obligatorio al rechazar */
-      motivo?: string;
-    };
-    AgregarCandidatoDto: {
-      /** @description Persona activa con ocupación vigente que no ocupa el puesto del plan */
-      idPersona: number;
-      /** @description Única dentro del plan */
-      prioridad: number;
-      /** @description Estado de preparación manual (activo) */
-      idEstadoPreparacion: number;
-      /**
-       * Format: date
-       * @example 2027-03-31
-       */
-      fechaDisponibilidadEstimada?: string;
-      observaciones?: string;
-    };
-    OrdenCandidatosDto: {
-      /** @description Ids de persona de todos los candidatos del plan, en la prioridad nueva (el primero queda con 1) */
-      orden: number[];
-    };
-    SeguimientoCandidatoDto: {
-      idEstadoPreparacion?: number;
-      /**
-       * Format: date
-       * @description null borra la fecha
-       */
-      fechaDisponibilidadEstimada?: string | null;
-      observaciones?: string | null;
-    };
-    CrearAccionDto: {
-      /** @description Tipo de acción activo */
-      idTipoAccion: number;
-      /** @description Conocimiento activo a transferir */
-      idConocimiento: number;
-      /** @description Plan al que pertenece; el conocimiento debe ser requisito de su puesto */
-      idPlan?: number;
-      /** @description Persona activa responsable de la acción */
-      idResponsable: number;
-      /** @description Persona activa que recibe el conocimiento; distinta del responsable */
-      idDestinatario?: number;
-      descripcion: string;
-      /**
-       * Format: date
-       * @example 2027-03-31
-       */
-      fechaPrevista: string;
-    };
-    EditarAccionDto: {
-      idTipoAccion?: number;
-      idResponsable?: number;
-      /** @description null quita al destinatario */
-      idDestinatario?: number | null;
-      descripcion?: string;
-      /** Format: date */
-      fechaPrevista?: string;
-      /** @description true cancela la acción (solo desde pendiente o en curso) */
-      cancelar?: boolean;
-    };
-    AvanzarAccionDto: {
-      /** @enum {string} */
-      estado: 'en_curso' | 'completada';
-      notaAvance?: string;
-      /**
-       * Format: date
-       * @description Solo al completar; por defecto hoy, nunca futura
-       */
-      fechaCumplimiento?: string;
-    };
-    PuestoSinPlanDto: {
-      idPuesto: number;
-      codigo: string;
-      denominacion: string;
-      idUnidad: number;
-      /** @description Plan en borrador o pendiente de aprobación, si lo hay */
-      idPlanEnElaboracion: number | null;
-      estadoPlanEnElaboracion: string | null;
-    };
-    CoberturaDto: {
-      /** @description Puestos críticos activos del alcance */
-      criticos: number;
-      /** @description Críticos con un plan aprobado */
-      conPlan: number;
-      sinPlan: components['schemas']['PuestoSinPlanDto'][];
-    };
-    MiPlanDto: {
-      idPlan: number;
-      idPuesto: number;
-      denominacionPuesto: string;
-      /** @description Código del estado del plan (siempre aprobado) */
-      estadoPlan: string;
-      /** @description Tu estado de preparación */
-      estadoPreparacion: string;
-      /** Format: date */
-      fechaDisponibilidadEstimada: string | null;
-      /** @description Requisitos excluyentes del puesto que todavía no alcanzás (nivel acreditado vigente) */
-      excluyentesSinCubrir: number;
-      /** @description Requisitos excluyentes del puesto */
-      totalExcluyentes: number;
-    };
-    PersonaDeteccionDto: {
-      idPersona: number;
-      apellido: string;
-      nombre: string;
-    };
-    PuestoCriticoDto: {
-      idPuesto: number;
-      codigo: string;
-      denominacion: string;
-      idUnidad: number;
-    };
-    PuntoUnicoFallaDto: {
-      idConocimiento: number;
-      denominacion: string;
-      nivelRequerido: string;
-      /** @enum {number} */
-      cantidadPoseedores: 0 | 1;
-      poseedor: components['schemas']['PersonaDeteccionDto'] | null;
-      puestosCriticos: components['schemas']['PuestoCriticoDto'][];
-      puestosFueraDeAlcance: number;
-    };
-    PuntosUnicosFallaDto: {
-      unicoPoseedor: components['schemas']['PuntoUnicoFallaDto'][];
-      sinPoseedor: components['schemas']['PuntoUnicoFallaDto'][];
-    };
-    CatedraUnaPersonaDto: {
-      idUnidad: number;
-      denominacion: string;
-      /** @enum {number} */
-      cantidadPersonas: 0 | 1;
-      cantidadCargos: number;
-      persona: components['schemas']['PersonaDeteccionDto'] | null;
-    };
-    CatedrasUnaPersonaDto: {
-      unaPersona: components['schemas']['CatedraUnaPersonaDto'][];
-      sinDotacion: components['schemas']['CatedraUnaPersonaDto'][];
-    };
-    PuestoSinSucesorDto: {
-      idPuesto: number;
-      codigo: string;
-      denominacion: string;
-      idUnidad: number;
-      /** @enum {string} */
-      motivo: 'sin_plan' | 'plan_en_elaboracion' | 'ningun_candidato_cubre';
-      idPlan: number | null;
-      candidatosTotal: number;
-      candidatosValidos: number;
-    };
-    RetiroRiesgoDto: {
-      idPersona: number | null;
-      apellido: string | null;
-      nombre: string | null;
-      fechaPrevistaRetiro: string | null;
-    };
-    HorizonteRiesgoDto: {
-      idConocimiento: number;
-      denominacion: string;
-      nivelRequerido: string;
-      cantidadPoseedores: number;
-      quedan: number;
-      retiros: components['schemas']['RetiroRiesgoDto'][];
-      puestosCriticos: components['schemas']['PuestoCriticoDto'][];
-      puestosFueraDeAlcance: number;
-    };
-    HorizonteRespuestaDto: {
-      meses: number;
-      conocimientos: components['schemas']['HorizonteRiesgoDto'][];
-    };
-    ResumenBrechaDto: {
-      excluyentesCubiertos: number;
-      excluyentesTotal: number;
-      deseablesCubiertos: number;
-      deseablesTotal: number;
-    };
-    BrechaConocimientoDto: {
-      idConocimiento: number;
-      denominacion: string;
-      esExcluyente: boolean;
-      nivelRequerido: string;
-      nivelAcreditado: string | null;
-      nivelDeclarado: string | null;
-      faltante: number;
-      cubierto: boolean;
-    };
-    BrechaPuestoDto: {
-      /** @enum {string} */
-      contexto: 'ocupante' | 'candidato';
-      idPersona: number;
-      apellido: string;
-      nombre: string;
-      idPuesto: number;
-      denominacionPuesto: string;
-      idPlan: number | null;
-      estadoPlan: string | null;
-      aRevisar: boolean;
-      resumen: components['schemas']['ResumenBrechaDto'];
-      conocimientos: components['schemas']['BrechaConocimientoDto'][];
-    };
-    ResumenPuntosUnicosTableroDto: {
-      unicoPoseedor: number;
-      sinPoseedor: number;
-    };
-    ResumenCatedrasTableroDto: {
-      unaPersona: number;
-      sinDotacion: number;
-    };
-    MotivoSinSucesorTableroDto: {
-      motivo: string;
-      cantidad: number;
-    };
-    ResumenPuestosSinSucesorTableroDto: {
-      total: number;
-      porMotivo: components['schemas']['MotivoSinSucesorTableroDto'][];
-    };
-    ResumenHorizonteTableroDto: {
-      meses: number;
-      conocimientos: number;
-    };
-    PuntoUnicoPorCatedraDto: {
-      idUnidad: number;
-      denominacion: string;
-      cantidad: number;
-    };
-    RetiroPorSemestreDto: {
-      semestre: string;
-      cantidad: number;
-    };
-    GraficosTableroDto: {
-      puntosUnicosPorCatedra: components['schemas']['PuntoUnicoPorCatedraDto'][];
-      retirosPorSemestre: components['schemas']['RetiroPorSemestreDto'][];
-    };
-    CalidadCriticidadTableroDto: {
-      evaluados: number;
-      total: number;
-    };
-    CalidadPlanesTableroDto: {
-      criticos: number;
-      conPlan: number;
-    };
-    CalidadAcreditacionTableroDto: {
-      acreditados: number;
-      total: number;
-    };
-    CalidadDeDatosTableroDto: {
-      criticidad: components['schemas']['CalidadCriticidadTableroDto'];
-      planes: components['schemas']['CalidadPlanesTableroDto'];
-      acreditacion: components['schemas']['CalidadAcreditacionTableroDto'];
-    };
-    TableroDto: {
-      puntosUnicosFalla: components['schemas']['ResumenPuntosUnicosTableroDto'];
-      catedras: components['schemas']['ResumenCatedrasTableroDto'];
-      puestosSinSucesor: components['schemas']['ResumenPuestosSinSucesorTableroDto'];
-      candidatosConBrecha: number;
-      horizonte: components['schemas']['ResumenHorizonteTableroDto'];
-      graficos: components['schemas']['GraficosTableroDto'];
-      calidadDeDatos: components['schemas']['CalidadDeDatosTableroDto'];
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+    schemas: {
+        SaludDto: {
+            /** @example ok */
+            estado: string;
+            /** @description PostgreSQL responde */
+            baseDeDatos: boolean;
+            /** @description RustFS responde y el bucket existe */
+            almacenamiento: boolean;
+        };
+        AuditoriaDto: {
+            id: number;
+            /** @example plan_sucesion */
+            entidad: string;
+            /** @example 5 */
+            idRegistro: string;
+            /** @enum {string} */
+            operacion: "alta" | "modificacion" | "baja";
+            idUsuario: number;
+            /** Format: date-time */
+            fecha: string;
+            valoresAnteriores: {
+                [key: string]: unknown;
+            } | null;
+            valoresNuevos: {
+                [key: string]: unknown;
+            } | null;
+        };
+        UnidadDto: {
+            id: number;
+            /** @example Departamento de Sistemas */
+            denominacion: string;
+            /**
+             * @description Código del tipo de unidad
+             * @example catedra
+             */
+            tipo: string;
+            idUnidadSuperior: number | null;
+            activo: boolean;
+        };
+        UnidadArbolDto: {
+            id: number;
+            /** @example Departamento de Sistemas */
+            denominacion: string;
+            /**
+             * @description Código del tipo de unidad
+             * @example catedra
+             */
+            tipo: string;
+            idUnidadSuperior: number | null;
+            activo: boolean;
+            hijas: components["schemas"]["UnidadArbolDto"][];
+        };
+        UnidadDetalleDto: {
+            id: number;
+            /** @example Departamento de Sistemas */
+            denominacion: string;
+            /**
+             * @description Código del tipo de unidad
+             * @example catedra
+             */
+            tipo: string;
+            idUnidadSuperior: number | null;
+            activo: boolean;
+            /** @description Puestos activos de la unidad */
+            cantidadPuestosActivos: number;
+        };
+        PuestoDto: {
+            id: number;
+            /** @example P-0001 */
+            codigo: string;
+            /** @example Jefe de cátedra */
+            denominacion: string;
+            proposito: string | null;
+            condicionesTrabajo: string | null;
+            rangoRetributivo: string | null;
+            dotacionPrevista: number;
+            idUnidad: number;
+            idNivelJerarquico: number;
+            idTipoRelacionContractual: number | null;
+            idPuestoSuperior: number | null;
+            activo: boolean;
+        };
+        PuestosTipoCreadosDto: {
+            puestos: components["schemas"]["PuestoDto"][];
+            advertencias: string[];
+        };
+        PuestoResumenDto: {
+            id: number;
+            /** @example P-0001 */
+            codigo: string;
+            denominacion: string;
+            activo: boolean;
+        };
+        PuestoDetalleDto: {
+            id: number;
+            /** @example P-0001 */
+            codigo: string;
+            /** @example Jefe de cátedra */
+            denominacion: string;
+            proposito: string | null;
+            condicionesTrabajo: string | null;
+            rangoRetributivo: string | null;
+            dotacionPrevista: number;
+            idUnidad: number;
+            idNivelJerarquico: number;
+            idTipoRelacionContractual: number | null;
+            idPuestoSuperior: number | null;
+            activo: boolean;
+            superior: components["schemas"]["PuestoResumenDto"] | null;
+            /** @description Subordinados directos */
+            subordinados: components["schemas"]["PuestoResumenDto"][];
+        };
+        CrearPuestoDto: {
+            /** @example Jefe de cátedra */
+            denominacion: string;
+            proposito?: string | null;
+            condicionesTrabajo?: string | null;
+            /** @description Texto descriptivo; no es un monto */
+            rangoRetributivo?: string | null;
+            /** @default 1 */
+            dotacionPrevista: number;
+            /** @description Unidad del puesto; no se puede cambiar después */
+            idUnidad: number;
+            idNivelJerarquico: number;
+            idTipoRelacionContractual?: number | null;
+            /** @description En la misma unidad o en una ancestra */
+            idPuestoSuperior?: number | null;
+        };
+        ActualizarPuestoDto: {
+            /** @example Jefe de cátedra */
+            denominacion?: string;
+            proposito?: string | null;
+            condicionesTrabajo?: string | null;
+            /** @description Texto descriptivo; no es un monto */
+            rangoRetributivo?: string | null;
+            /** @default 1 */
+            dotacionPrevista: number;
+            idNivelJerarquico?: number;
+            idTipoRelacionContractual?: number | null;
+            /** @description En la misma unidad o en una ancestra */
+            idPuestoSuperior?: number | null;
+        };
+        DominioDto: {
+            /** @example nivel-dominio */
+            dominio: string;
+            /** @example Nivel de dominio */
+            denominacion: string;
+            /** @description Si es true, los valores tienen orden */
+            ordinal: boolean;
+        };
+        ValorReferenciaDto: {
+            id: number;
+            /** @example basico */
+            codigo: string;
+            /** @example Básico */
+            denominacion: string;
+            activo: boolean;
+            /** @description Solo en dominios ordinales */
+            orden?: number;
+            /** @description Hay registros que usan este valor */
+            enUso: boolean;
+        };
+        CrearValorDto: {
+            /**
+             * @description Minúsculas, números y guion bajo; empieza con letra
+             * @example competencia_tecnica
+             */
+            codigo: string;
+            /** @example Competencia técnica */
+            denominacion: string;
+            /** @description Obligatorio en dominios ordinales; prohibido en el resto */
+            orden?: number;
+        };
+        ActualizarValorDto: {
+            /**
+             * @description Minúsculas, números y guion bajo; empieza con letra
+             * @example competencia_tecnica
+             */
+            codigo?: string;
+            /** @example Competencia técnica */
+            denominacion?: string;
+            /** @description Obligatorio en dominios ordinales; prohibido en el resto */
+            orden?: number;
+            /** @description false desactiva el valor */
+            activo?: boolean;
+        };
+        ActualizacionValorDto: {
+            id: number;
+            /** @example basico */
+            codigo: string;
+            /** @example Básico */
+            denominacion: string;
+            activo: boolean;
+            /** @description Solo en dominios ordinales */
+            orden?: number;
+            /** @description Hay registros que usan este valor */
+            enUso: boolean;
+            /** @description Aviso cuando se desactiva el último valor activo */
+            advertencia?: string;
+        };
+        ErrorImportacionDto: {
+            /** @description Fila del archivo; la cabecera es la 1 */
+            fila: number;
+            /** @description Columna del CSV a la que apunta el error */
+            columna?: string;
+            mensaje: string;
+        };
+        ResultadoImportacionDto: {
+            /** @description true solo si se pidió confirmar y no hubo errores: se escribió todo */
+            importado: boolean;
+            /** @description Filas de datos leídas */
+            filas: number;
+            /** @description Personas creadas, o que se crearían en la vista previa */
+            personas: number;
+            /** @description Ocupaciones creadas, o que se crearían en la vista previa */
+            ocupaciones: number;
+            errores: components["schemas"]["ErrorImportacionDto"][];
+        };
+        PersonaDto: {
+            id: number;
+            /** @example L-1234 */
+            legajo: string;
+            apellido: string;
+            nombre: string;
+            /** @description Solo para recursos humanos y administrador (Ley 25.326) */
+            documento?: string;
+            /**
+             * Format: date
+             * @description Solo para recursos humanos y administrador (Ley 25.326)
+             */
+            fechaNacimiento?: string;
+            /** Format: date */
+            fechaIngreso: string;
+            idSituacionRevista: number;
+            /** Format: date */
+            fechaPrevistaRetiro: string | null;
+            activo: boolean;
+            /** @description Tiene un usuario vinculado */
+            tieneUsuario: boolean;
+        };
+        OcupacionDto: {
+            idPersona: number;
+            idPuesto: number;
+            /**
+             * Format: date
+             * @example 2024-03-01
+             */
+            fechaDesde: string;
+            /**
+             * Format: date
+             * @description null: sin fin
+             */
+            fechaHasta: string | null;
+            idCaracterOcupacion: number;
+            idDedicacion: number;
+            /**
+             * @description Respecto de la fecha de hoy de la base
+             * @enum {string}
+             */
+            estado: "vigente" | "futura" | "pasada";
+        };
+        PersonaDetalleDto: {
+            id: number;
+            /** @example L-1234 */
+            legajo: string;
+            apellido: string;
+            nombre: string;
+            /** @description Solo para recursos humanos y administrador (Ley 25.326) */
+            documento?: string;
+            /**
+             * Format: date
+             * @description Solo para recursos humanos y administrador (Ley 25.326)
+             */
+            fechaNacimiento?: string;
+            /** Format: date */
+            fechaIngreso: string;
+            idSituacionRevista: number;
+            /** Format: date */
+            fechaPrevistaRetiro: string | null;
+            activo: boolean;
+            /** @description Tiene un usuario vinculado */
+            tieneUsuario: boolean;
+            ocupacionesVigentes: components["schemas"]["OcupacionDto"][];
+        };
+        CrearPersonaDto: {
+            /**
+             * @description Único
+             * @example L-1234
+             */
+            legajo: string;
+            /** @example Pérez */
+            apellido: string;
+            /** @example Ana */
+            nombre: string;
+            /**
+             * @description DNI de 7 u 8 dígitos, sin puntos. Único
+             * @example 30111111
+             */
+            documento: string;
+            /**
+             * Format: date
+             * @example 1980-05-20
+             */
+            fechaNacimiento: string;
+            /**
+             * Format: date
+             * @description Posterior al nacimiento
+             * @example 2005-03-01
+             */
+            fechaIngreso: string;
+            idSituacionRevista: number;
+            /**
+             * Format: date
+             * @description No anterior al ingreso; null la borra
+             */
+            fechaPrevistaRetiro?: string | null;
+        };
+        ActualizarPersonaDto: {
+            /**
+             * @description Único
+             * @example L-1234
+             */
+            legajo?: string;
+            /** @example Pérez */
+            apellido?: string;
+            /** @example Ana */
+            nombre?: string;
+            /**
+             * @description DNI de 7 u 8 dígitos, sin puntos. Único
+             * @example 30111111
+             */
+            documento?: string;
+            /**
+             * Format: date
+             * @example 1980-05-20
+             */
+            fechaNacimiento?: string;
+            /**
+             * Format: date
+             * @description Posterior al nacimiento
+             * @example 2005-03-01
+             */
+            fechaIngreso?: string;
+            idSituacionRevista?: number;
+            /**
+             * Format: date
+             * @description No anterior al ingreso; null la borra
+             */
+            fechaPrevistaRetiro?: string | null;
+        };
+        ResultadoBajaPersonaDto: {
+            persona: components["schemas"]["PersonaDetalleDto"];
+            /** @description Avisos que no impidieron la baja */
+            advertencias: string[];
+        };
+        CrearOcupacionDto: {
+            /** @description Puesto activo */
+            idPuesto: number;
+            /**
+             * Format: date
+             * @example 2024-03-01
+             */
+            fechaDesde: string;
+            /**
+             * Format: date
+             * @description No anterior al inicio; sin valor, la ocupación no tiene fin
+             */
+            fechaHasta?: string | null;
+            idCaracterOcupacion: number;
+            idDedicacion: number;
+        };
+        ActualizarOcupacionDto: {
+            /**
+             * Format: date
+             * @description No anterior al inicio; sin valor, la ocupación no tiene fin
+             */
+            fechaHasta?: string | null;
+            idCaracterOcupacion?: number;
+            idDedicacion?: number;
+        };
+        CerrarOcupacionDto: {
+            /**
+             * Format: date
+             * @example 2026-06-30
+             */
+            fechaHasta: string;
+        };
+        OcupanteDto: {
+            idPersona: number;
+            idPuesto: number;
+            /**
+             * Format: date
+             * @example 2024-03-01
+             */
+            fechaDesde: string;
+            /**
+             * Format: date
+             * @description null: sin fin
+             */
+            fechaHasta: string | null;
+            idCaracterOcupacion: number;
+            idDedicacion: number;
+            /**
+             * @description Respecto de la fecha de hoy de la base
+             * @enum {string}
+             */
+            estado: "vigente" | "futura" | "pasada";
+            /** @example L-1234 */
+            legajo: string;
+            apellido: string;
+            nombre: string;
+        };
+        ConocimientoDto: {
+            id: number;
+            denominacion: string;
+            idTipoConocimiento: number;
+            idAreaTematica: number;
+            descripcion: string | null;
+            activo: boolean;
+            /** @description Conocimiento al que se fusionó, si se retiró por duplicado */
+            idFusionadoEn: number | null;
+        };
+        PuestoQuePideDto: {
+            idPuesto: number;
+            /** @example P-0001 */
+            codigo: string;
+            denominacion: string;
+        };
+        MiConocimientoDto: {
+            idConocimiento: number;
+            denominacion: string;
+            idTipoConocimiento: number;
+            /** @description El más exigente entre los puestos que ocupa; null si ninguno lo pide */
+            idNivelRequerido: number | null;
+            /** @description true si algún puesto lo pide como excluyente */
+            esExcluyente: boolean;
+            puestos: components["schemas"]["PuestoQuePideDto"][];
+            idNivelDeclarado: number | null;
+            /** Format: date */
+            fechaDeclaracion: string | null;
+            idNivelAcreditado: number | null;
+            /** Format: date */
+            fechaEvaluacion: string | null;
+            idTipoEvidencia: number | null;
+            /** @description true si lo declarado espera acreditación (no hay una, o declaró otro nivel después de la última) */
+            pendiente: boolean;
+        };
+        PendienteAcreditacionDto: {
+            idPersona: number;
+            apellido: string;
+            nombre: string;
+            idConocimiento: number;
+            denominacion: string;
+            idNivelDeclarado: number;
+            idNivelAcreditado: number | null;
+            /** Format: date */
+            fechaDeclaracion: string;
+        };
+        CrearConocimientoDto: {
+            /** @example PostgreSQL */
+            denominacion: string;
+            /** @description Tipo de conocimiento activo */
+            idTipoConocimiento: number;
+            /** @description Área temática activa */
+            idAreaTematica: number;
+            descripcion?: string | null;
+        };
+        ActualizarConocimientoDto: {
+            /** @example PostgreSQL */
+            denominacion?: string;
+            /** @description Tipo de conocimiento activo */
+            idTipoConocimiento?: number;
+            /** @description Área temática activa */
+            idAreaTematica?: number;
+            descripcion?: string | null;
+        };
+        FusionarConocimientoDto: {
+            /** @description Conocimiento que se conserva */
+            idDestino: number;
+        };
+        ResultadoFusionDto: {
+            idOrigen: number;
+            idDestino: number;
+            /** @description Requisitos de puesto que pedían el origen */
+            requisitosMovidos: number;
+            /** @description Personas con datos del origen */
+            personasMovidas: number;
+            /** @description Evaluaciones de criticidad del origen */
+            evaluacionesMovidas: number;
+            /** @description Acciones de transferencia del origen */
+            accionesMovidas: number;
+        };
+        RequisitoDto: {
+            idPuesto: number;
+            idConocimiento: number;
+            denominacion: string;
+            idTipoConocimiento: number;
+            idNivelRequerido: number;
+            esExcluyente: boolean;
+        };
+        GuardarRequisitoDto: {
+            /** @description Nivel de dominio requerido (activo) */
+            idNivel: number;
+            /** @description true: excluyente; false: deseable */
+            esExcluyente: boolean;
+        };
+        CopiarRequisitosDto: {
+            /** @description Puesto del que se copian los requisitos */
+            idPuestoOrigen: number;
+        };
+        OmitidoDto: {
+            idConocimiento: number;
+            denominacion: string;
+        };
+        ResultadoCopiaDto: {
+            copiados: number;
+            /** @description Los que el puesto destino ya tenía; no se pisan */
+            omitidos: components["schemas"]["OmitidoDto"][];
+        };
+        PerfilConocimientoDto: {
+            idPersona: number;
+            idConocimiento: number;
+            idNivelDeclarado: number | null;
+            /** Format: date */
+            fechaDeclaracion: string | null;
+            idNivelAcreditado: number | null;
+            /** Format: date */
+            fechaEvaluacion: string | null;
+            idTipoEvidencia: number | null;
+            idEvaluador: number | null;
+            denominacion: string;
+            idTipoConocimiento: number;
+            /** @description Declarado que todavía no tiene una acreditación que lo respalde o lo contradiga */
+            pendiente: boolean;
+        };
+        AcreditacionDto: {
+            id: number;
+            idPersona: number;
+            idConocimiento: number;
+            idNivelAcreditado: number;
+            idTipoEvidencia: number;
+            /** Format: date */
+            fechaEvaluacion: string;
+            /** @description Persona que evaluó */
+            idEvaluador: number;
+            observaciones: string | null;
+            /** Format: date-time */
+            registradaEn: string;
+        };
+        DeclararDto: {
+            /** @description Nivel de dominio que declara (activo) */
+            idNivel: number;
+        };
+        ConocimientoPersonaDto: {
+            idPersona: number;
+            idConocimiento: number;
+            idNivelDeclarado: number | null;
+            /** Format: date */
+            fechaDeclaracion: string | null;
+            idNivelAcreditado: number | null;
+            /** Format: date */
+            fechaEvaluacion: string | null;
+            idTipoEvidencia: number | null;
+            idEvaluador: number | null;
+        };
+        AcreditarDto: {
+            /** @description Nivel de dominio que se acredita (activo) */
+            idNivel: number;
+            /**
+             * Format: date
+             * @description No futura
+             * @example 2026-06-15
+             */
+            fechaEvaluacion: string;
+            /** @description Tipo de evidencia activo */
+            idTipoEvidencia: number;
+            observaciones?: string | null;
+        };
+        ActivoDto: {
+            id: number;
+            titulo: string;
+            idTipoDocumento: number;
+            idUnidad: number;
+            /** @enum {string} */
+            origen: "archivo" | "enlace";
+            /** @description URL, solo en los enlaces */
+            enlace: string | null;
+            nombreOriginal: string | null;
+            tipoMime: string | null;
+            /** @description Bytes */
+            tamanio: number | null;
+            /** @example 2027-03-31 */
+            fechaVigencia: string | null;
+            /** @description La fecha de vigencia ya pasó (calculado al consultar) */
+            vencido: boolean;
+            /** @description Días hasta la fecha de vigencia; negativo si ya venció */
+            diasParaVencer: number | null;
+            activo: boolean;
+            idsConocimiento: number[];
+            creadoEn: string;
+            actualizadoEn: string;
+        };
+        PaginaActivosDto: {
+            items: components["schemas"]["ActivoDto"][];
+            /** @description Total que cumple el filtro */
+            total: number;
+        };
+        CrearActivoDto: {
+            /** @example Manual de administración de PostgreSQL */
+            titulo: string;
+            /** @description Tipo de documento activo */
+            idTipoDocumento: number;
+            /** @description Unidad que mantiene el activo */
+            idUnidad: number;
+            /** @description Conocimientos que documenta (al menos uno); en multipart, el campo se repite */
+            idsConocimiento: number[];
+            /** @example 2027-03-31 */
+            fechaVigencia?: string | null;
+            /** @description URL http(s) del activo; sin archivo es obligatoria */
+            enlace?: string;
+            /**
+             * Format: binary
+             * @description Archivo (campo multipart `archivo`); sin enlace es obligatorio
+             */
+            archivo?: string;
+        };
+        ActualizarActivoDto: {
+            /** @example Manual de administración de PostgreSQL */
+            titulo?: string;
+            /** @description Tipo de documento activo */
+            idTipoDocumento?: number;
+            /** @description Unidad que mantiene el activo */
+            idUnidad?: number;
+            /** @description Conocimientos que documenta (al menos uno); en multipart, el campo se repite */
+            idsConocimiento?: number[];
+            /** @example 2027-03-31 */
+            fechaVigencia?: string | null;
+            /** @description URL http(s) del activo; sin archivo es obligatoria */
+            enlace?: string;
+        };
+        LoginDto: {
+            /** @example admin */
+            nombreUsuario: string;
+            clave: string;
+        };
+        SesionDto: {
+            id: number;
+            nombreUsuario: string;
+            /** @enum {string} */
+            rol: "analista_puestos" | "recursos_humanos" | "autoridad" | "jefatura_departamento" | "jefe_catedra" | "administrador" | "docente";
+            idPersona: number | null;
+            unidades: number[];
+        };
+        CambiarClaveDto: {
+            claveActual: string;
+            /** @description Al menos 10 caracteres */
+            claveNueva: string;
+        };
+        UsuarioDto: {
+            id: number;
+            nombreUsuario: string;
+            /** @enum {string} */
+            rol: "analista_puestos" | "recursos_humanos" | "autoridad" | "jefatura_departamento" | "jefe_catedra" | "administrador" | "docente";
+            idPersona: number | null;
+            idUnidades: number[];
+            activo: boolean;
+        };
+        RolDto: {
+            /** @example jefe_catedra */
+            codigo: string;
+            /** @example Jefe de cátedra */
+            denominacion: string;
+        };
+        CrearUsuarioDto: {
+            /**
+             * @description 3 a 50 caracteres; se guarda en minúsculas
+             * @example ana.perez
+             */
+            nombreUsuario: string;
+            clave: string;
+            /** @enum {string} */
+            rol: "analista_puestos" | "recursos_humanos" | "autoridad" | "jefatura_departamento" | "jefe_catedra" | "administrador" | "docente";
+            /** @description Obligatoria para el rol docente */
+            idPersona?: number | null;
+            /** @description Solo para jefatura y jefe de cátedra */
+            idUnidades?: number[];
+        };
+        ActualizarUsuarioDto: {
+            /**
+             * @description 3 a 50 caracteres; se guarda en minúsculas
+             * @example ana.perez
+             */
+            nombreUsuario?: string;
+            /** @enum {string} */
+            rol?: "analista_puestos" | "recursos_humanos" | "autoridad" | "jefatura_departamento" | "jefe_catedra" | "administrador" | "docente";
+            /** @description Obligatoria para el rol docente */
+            idPersona?: number | null;
+            /** @description Solo para jefatura y jefe de cátedra */
+            idUnidades?: number[];
+            /** @description false desactiva el usuario */
+            activo?: boolean;
+        };
+        RestablecerClaveDto: {
+            clave: string;
+        };
+        EscalaDto: {
+            id: number;
+            codigo: string;
+            denominacion: string;
+            orden: number;
+            /** @description Criterio observable del nivel */
+            criterio: string;
+            activo: boolean;
+        };
+        CeldaMatrizDto: {
+            idNivelImpacto: number;
+            idNivelDificultad: number;
+            /** @description Nivel de criticidad que da la combinación */
+            idNivelCriticidad: number;
+        };
+        MatrizDto: {
+            impactos: components["schemas"]["EscalaDto"][];
+            dificultades: components["schemas"]["EscalaDto"][];
+            celdas: components["schemas"]["CeldaMatrizDto"][];
+        };
+        EditarCeldaDto: {
+            /** @description Nivel de criticidad (activo) de la celda */
+            idNivelCriticidad: number;
+        };
+        ParCriticidadDto: {
+            idPuesto: number;
+            codigoPuesto: string;
+            denominacionPuesto: string;
+            idUnidad: number;
+            idConocimiento: number;
+            denominacionConocimiento: string;
+            idNivelRequerido: number;
+            esExcluyente: boolean;
+            /** @enum {string} */
+            estado: "pendiente" | "evaluado";
+            idEvaluacion: number | null;
+            idNivelImpacto: number | null;
+            idNivelDificultad: number | null;
+            idNivelCriticidad: number | null;
+            /** Format: date */
+            fechaEvaluacion: string | null;
+        };
+        AvanceDto: {
+            /** @description Pares con evaluación vigente */
+            evaluados: number;
+            /** @description Requisitos activos del alcance */
+            total: number;
+        };
+        EvaluarDto: {
+            /** @description Nivel de impacto de pérdida (escala fija) */
+            idNivelImpacto: number;
+            /** @description Nivel de dificultad de reemplazo (escala fija) */
+            idNivelDificultad: number;
+            /**
+             * Format: date
+             * @description No futura; por defecto, hoy
+             * @example 2026-06-15
+             */
+            fechaEvaluacion?: string;
+            observaciones?: string | null;
+        };
+        EvaluacionDto: {
+            id: number;
+            idPuesto: number;
+            idConocimiento: number;
+            idNivelImpacto: number;
+            idNivelDificultad: number;
+            /** @description Resultado de la matriz al evaluar */
+            idNivelCriticidad: number;
+            /** Format: date */
+            fechaEvaluacion: string;
+            idUsuario: number;
+            nombreUsuario: string;
+            observaciones: string | null;
+            /** Format: date-time */
+            registradaEn: string;
+        };
+        PlanDto: {
+            id: number;
+            idPuesto: number;
+            codigoPuesto: string;
+            denominacionPuesto: string;
+            idUnidad: number;
+            idResponsable: number;
+            nombreResponsable: string;
+            /** @description Código del estado */
+            estado: string;
+            /** Format: date */
+            fechaElaboracion: string;
+            idPlanAnterior: number | null;
+            nombreUsuarioResolucion: string | null;
+            /** Format: date */
+            fechaResolucion: string | null;
+            motivoResolucion: string | null;
+            observaciones: string | null;
+            cantidadCandidatos: number;
+        };
+        CandidatoDto: {
+            idPlan: number;
+            idPersona: number;
+            apellido: string;
+            nombre: string;
+            /** @description Código del estado de preparación manual */
+            estadoPreparacion: string;
+            prioridad: number;
+            /** Format: date */
+            fechaDisponibilidadEstimada: string | null;
+            observaciones: string | null;
+            /** @description Requisitos excluyentes del puesto que el candidato no cubre con nivel acreditado */
+            excluyentesSinCubrir: number;
+            totalExcluyentes: number;
+            /** @description El estado manual no coincide con la preparación calculada (listo ahora y con faltantes, o al revés) */
+            discrepancia: boolean;
+            /** @description La persona hoy ocupa el puesto del plan o ya no tiene ocupación vigente */
+            aRevisar: boolean;
+        };
+        AccionDto: {
+            id: number;
+            /** @description Código del tipo de acción */
+            tipo: string;
+            idConocimiento: number;
+            denominacionConocimiento: string;
+            idPlan: number | null;
+            idResponsable: number;
+            nombreResponsable: string;
+            idDestinatario: number | null;
+            nombreDestinatario: string | null;
+            descripcion: string;
+            /** Format: date */
+            fechaPrevista: string;
+            /** Format: date */
+            fechaCumplimiento: string | null;
+            /** @description Código del estado */
+            estado: string;
+            notaAvance: string | null;
+            /** @description Calculada: pendiente o en curso con fecha prevista anterior a hoy */
+            vencida: boolean;
+        };
+        PlanDetalleDto: {
+            id: number;
+            idPuesto: number;
+            codigoPuesto: string;
+            denominacionPuesto: string;
+            idUnidad: number;
+            idResponsable: number;
+            nombreResponsable: string;
+            /** @description Código del estado */
+            estado: string;
+            /** Format: date */
+            fechaElaboracion: string;
+            idPlanAnterior: number | null;
+            nombreUsuarioResolucion: string | null;
+            /** Format: date */
+            fechaResolucion: string | null;
+            motivoResolucion: string | null;
+            observaciones: string | null;
+            cantidadCandidatos: number;
+            candidatos: components["schemas"]["CandidatoDto"][];
+            acciones: components["schemas"]["AccionDto"][];
+        };
+        CrearPlanDto: {
+            /** @description Puesto activo, dentro de tu alcance */
+            idPuesto: number;
+            /** @description Persona activa responsable del plan */
+            idResponsable: number;
+            observaciones?: string | null;
+        };
+        EditarPlanDto: {
+            /** @description Persona activa responsable del plan */
+            idResponsable?: number;
+            observaciones?: string | null;
+        };
+        ResolverPlanDto: {
+            /** @enum {string} */
+            decision: "aprobar" | "rechazar";
+            /** @description Obligatorio al rechazar */
+            motivo?: string;
+        };
+        AgregarCandidatoDto: {
+            /** @description Persona activa con ocupación vigente que no ocupa el puesto del plan */
+            idPersona: number;
+            /** @description Única dentro del plan */
+            prioridad: number;
+            /** @description Estado de preparación manual (activo) */
+            idEstadoPreparacion: number;
+            /**
+             * Format: date
+             * @example 2027-03-31
+             */
+            fechaDisponibilidadEstimada?: string;
+            observaciones?: string;
+        };
+        OrdenCandidatosDto: {
+            /** @description Ids de persona de todos los candidatos del plan, en la prioridad nueva (el primero queda con 1) */
+            orden: number[];
+        };
+        SeguimientoCandidatoDto: {
+            idEstadoPreparacion?: number;
+            /**
+             * Format: date
+             * @description null borra la fecha
+             */
+            fechaDisponibilidadEstimada?: string | null;
+            observaciones?: string | null;
+        };
+        CrearAccionDto: {
+            /** @description Tipo de acción activo */
+            idTipoAccion: number;
+            /** @description Conocimiento activo a transferir */
+            idConocimiento: number;
+            /** @description Plan al que pertenece; el conocimiento debe ser requisito de su puesto */
+            idPlan?: number;
+            /** @description Persona activa responsable de la acción */
+            idResponsable: number;
+            /** @description Persona activa que recibe el conocimiento; distinta del responsable */
+            idDestinatario?: number;
+            descripcion: string;
+            /**
+             * Format: date
+             * @example 2027-03-31
+             */
+            fechaPrevista: string;
+        };
+        EditarAccionDto: {
+            idTipoAccion?: number;
+            idResponsable?: number;
+            /** @description null quita al destinatario */
+            idDestinatario?: number | null;
+            descripcion?: string;
+            /** Format: date */
+            fechaPrevista?: string;
+            /** @description true cancela la acción (solo desde pendiente o en curso) */
+            cancelar?: boolean;
+        };
+        AvanzarAccionDto: {
+            /** @enum {string} */
+            estado: "en_curso" | "completada";
+            notaAvance?: string;
+            /**
+             * Format: date
+             * @description Solo al completar; por defecto hoy, nunca futura
+             */
+            fechaCumplimiento?: string;
+        };
+        PuestoSinPlanDto: {
+            idPuesto: number;
+            codigo: string;
+            denominacion: string;
+            idUnidad: number;
+            /** @description Plan en borrador o pendiente de aprobación, si lo hay */
+            idPlanEnElaboracion: number | null;
+            estadoPlanEnElaboracion: string | null;
+        };
+        CoberturaDto: {
+            /** @description Puestos críticos activos del alcance */
+            criticos: number;
+            /** @description Críticos con un plan aprobado */
+            conPlan: number;
+            sinPlan: components["schemas"]["PuestoSinPlanDto"][];
+        };
+        MiPlanDto: {
+            idPlan: number;
+            idPuesto: number;
+            denominacionPuesto: string;
+            /** @description Código del estado del plan (siempre aprobado) */
+            estadoPlan: string;
+            /** @description Tu estado de preparación */
+            estadoPreparacion: string;
+            /** Format: date */
+            fechaDisponibilidadEstimada: string | null;
+            /** @description Requisitos excluyentes del puesto que todavía no alcanzás (nivel acreditado vigente) */
+            excluyentesSinCubrir: number;
+            /** @description Requisitos excluyentes del puesto */
+            totalExcluyentes: number;
+        };
+        PersonaDeteccionDto: {
+            idPersona: number;
+            apellido: string;
+            nombre: string;
+        };
+        PuestoCriticoDto: {
+            idPuesto: number;
+            codigo: string;
+            denominacion: string;
+            idUnidad: number;
+        };
+        PuntoUnicoFallaDto: {
+            idConocimiento: number;
+            denominacion: string;
+            nivelRequerido: string;
+            /** @enum {number} */
+            cantidadPoseedores: 0 | 1;
+            poseedor: components["schemas"]["PersonaDeteccionDto"] | null;
+            puestosCriticos: components["schemas"]["PuestoCriticoDto"][];
+            puestosFueraDeAlcance: number;
+        };
+        PuntosUnicosFallaDto: {
+            unicoPoseedor: components["schemas"]["PuntoUnicoFallaDto"][];
+            sinPoseedor: components["schemas"]["PuntoUnicoFallaDto"][];
+        };
+        CatedraUnaPersonaDto: {
+            idUnidad: number;
+            denominacion: string;
+            /** @enum {number} */
+            cantidadPersonas: 0 | 1;
+            cantidadCargos: number;
+            persona: components["schemas"]["PersonaDeteccionDto"] | null;
+        };
+        CatedrasUnaPersonaDto: {
+            unaPersona: components["schemas"]["CatedraUnaPersonaDto"][];
+            sinDotacion: components["schemas"]["CatedraUnaPersonaDto"][];
+        };
+        PuestoSinSucesorDto: {
+            idPuesto: number;
+            codigo: string;
+            denominacion: string;
+            idUnidad: number;
+            /** @enum {string} */
+            motivo: "sin_plan" | "plan_en_elaboracion" | "ningun_candidato_cubre";
+            idPlan: number | null;
+            candidatosTotal: number;
+            candidatosValidos: number;
+        };
+        RetiroRiesgoDto: {
+            idPersona: number | null;
+            apellido: string | null;
+            nombre: string | null;
+            fechaPrevistaRetiro: string | null;
+        };
+        HorizonteRiesgoDto: {
+            idConocimiento: number;
+            denominacion: string;
+            nivelRequerido: string;
+            cantidadPoseedores: number;
+            quedan: number;
+            retiros: components["schemas"]["RetiroRiesgoDto"][];
+            puestosCriticos: components["schemas"]["PuestoCriticoDto"][];
+            puestosFueraDeAlcance: number;
+        };
+        HorizonteRespuestaDto: {
+            meses: number;
+            conocimientos: components["schemas"]["HorizonteRiesgoDto"][];
+        };
+        ResumenBrechaDto: {
+            excluyentesCubiertos: number;
+            excluyentesTotal: number;
+            deseablesCubiertos: number;
+            deseablesTotal: number;
+        };
+        BrechaConocimientoDto: {
+            idConocimiento: number;
+            denominacion: string;
+            esExcluyente: boolean;
+            nivelRequerido: string;
+            nivelAcreditado: string | null;
+            nivelDeclarado: string | null;
+            faltante: number;
+            cubierto: boolean;
+        };
+        BrechaPuestoDto: {
+            /** @enum {string} */
+            contexto: "ocupante" | "candidato";
+            idPersona: number;
+            apellido: string;
+            nombre: string;
+            idPuesto: number;
+            denominacionPuesto: string;
+            idPlan: number | null;
+            estadoPlan: string | null;
+            aRevisar: boolean;
+            resumen: components["schemas"]["ResumenBrechaDto"];
+            conocimientos: components["schemas"]["BrechaConocimientoDto"][];
+        };
+        ResumenPuntosUnicosTableroDto: {
+            unicoPoseedor: number;
+            sinPoseedor: number;
+        };
+        ResumenCatedrasTableroDto: {
+            unaPersona: number;
+            sinDotacion: number;
+        };
+        MotivoSinSucesorTableroDto: {
+            motivo: string;
+            cantidad: number;
+        };
+        ResumenPuestosSinSucesorTableroDto: {
+            total: number;
+            porMotivo: components["schemas"]["MotivoSinSucesorTableroDto"][];
+        };
+        ResumenHorizonteTableroDto: {
+            meses: number;
+            conocimientos: number;
+        };
+        PuntoUnicoPorCatedraDto: {
+            idUnidad: number;
+            denominacion: string;
+            cantidad: number;
+        };
+        RetiroPorSemestreDto: {
+            semestre: string;
+            cantidad: number;
+        };
+        GraficosTableroDto: {
+            puntosUnicosPorCatedra: components["schemas"]["PuntoUnicoPorCatedraDto"][];
+            retirosPorSemestre: components["schemas"]["RetiroPorSemestreDto"][];
+        };
+        CalidadCriticidadTableroDto: {
+            evaluados: number;
+            total: number;
+        };
+        CalidadPlanesTableroDto: {
+            criticos: number;
+            conPlan: number;
+        };
+        CalidadAcreditacionTableroDto: {
+            acreditados: number;
+            total: number;
+        };
+        CalidadDeDatosTableroDto: {
+            criticidad: components["schemas"]["CalidadCriticidadTableroDto"];
+            planes: components["schemas"]["CalidadPlanesTableroDto"];
+            acreditacion: components["schemas"]["CalidadAcreditacionTableroDto"];
+        };
+        TableroDto: {
+            puntosUnicosFalla: components["schemas"]["ResumenPuntosUnicosTableroDto"];
+            catedras: components["schemas"]["ResumenCatedrasTableroDto"];
+            puestosSinSucesor: components["schemas"]["ResumenPuestosSinSucesorTableroDto"];
+            candidatosConBrecha: number;
+            horizonte: components["schemas"]["ResumenHorizonteTableroDto"];
+            graficos: components["schemas"]["GraficosTableroDto"];
+            calidadDeDatos: components["schemas"]["CalidadDeDatosTableroDto"];
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-  SaludController_verificar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['SaludDto'];
-        };
-      };
-    };
-  };
-  AuditoriaController_consultar: {
-    parameters: {
-      query?: {
-        entidad?: string;
-        idRegistro?: string;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['AuditoriaDto'][];
-        };
-      };
-    };
-  };
-  UnidadesController_listar: {
-    parameters: {
-      query?: {
-        incluirInactivas?: boolean;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['UnidadDto'][];
-        };
-      };
-    };
-  };
-  UnidadesController_arbol: {
-    parameters: {
-      query?: {
-        incluirInactivas?: boolean;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['UnidadArbolDto'][];
-        };
-      };
-    };
-  };
-  UnidadesController_obtener: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['UnidadDetalleDto'];
-        };
-      };
-      /** @description La unidad no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  UnidadesController_crearPuestosTipo: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PuestosTipoCreadosDto'];
-        };
-      };
-      /** @description La unidad no es una cátedra activa */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description La unidad no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description La cátedra ya tiene alguno de los cargos */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PuestosController_listar: {
-    parameters: {
-      query?: {
-        idUnidad?: number;
-        activo?: boolean;
-        /** @description Texto contenido en el código o la denominación */
-        q?: string;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PuestoDto'][];
-        };
-      };
-    };
-  };
-  PuestosController_crear: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CrearPuestoDto'];
-      };
-    };
-    responses: {
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PuestoDetalleDto'];
-        };
-      };
-      /** @description Unidad, nivel o superior inválidos */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Denominación repetida en la unidad */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PuestosController_obtener: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PuestoDetalleDto'];
-        };
-      };
-      /** @description El puesto no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PuestosController_actualizar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['ActualizarPuestoDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PuestoDetalleDto'];
-        };
-      };
-      /** @description Superior inválido o ciclo */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El puesto no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Denominación repetida en la unidad */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PuestosController_darDeBaja: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PuestoDetalleDto'];
-        };
-      };
-      /** @description El puesto no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Tiene subordinados activos */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PuestosController_reactivar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PuestoDetalleDto'];
-        };
-      };
-      /** @description El puesto no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description La unidad o el superior están inactivos */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ReferenciaController_listarDominios: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['DominioDto'][];
-        };
-      };
-    };
-  };
-  ReferenciaController_listarValores: {
-    parameters: {
-      query?: {
-        incluirInactivos?: boolean;
-      };
-      header?: never;
-      path: {
-        dominio: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ValorReferenciaDto'][];
-        };
-      };
-      /** @description El dominio no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ReferenciaController_crear: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        dominio: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CrearValorDto'];
-      };
-    };
-    responses: {
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ValorReferenciaDto'];
-        };
-      };
-      /** @description El rol no puede modificar las tablas de referencia */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Código, denominación u orden repetido */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ReferenciaController_eliminar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        dominio: string;
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Valor borrado */
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El rol no puede modificar las tablas de referencia */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El dominio o el valor no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El valor está en uso */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ReferenciaController_actualizar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        dominio: string;
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['ActualizarValorDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ActualizacionValorDto'];
-        };
-      };
-      /** @description El rol no puede modificar las tablas de referencia */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El dominio o el valor no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Duplicado, o cambio de código de un valor en uso */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ImportacionController_importar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'multipart/form-data': {
-          /** Format: binary */
-          archivo: string;
-          /** @default false */
-          confirmar?: boolean;
-        };
-      };
-    };
-    responses: {
-      /** @description Reporte de la vista previa o de la importación; los errores de datos van en `errores` */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ResultadoImportacionDto'];
-        };
-      };
-      /** @description Falta el archivo, está vacío, la cabecera es inválida o hay más de 2000 filas */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El archivo supera los 2 MB */
-      413: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ImportacionController_plantilla: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description CSV con la cabecera y una fila de ejemplo */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PersonasController_listar: {
-    parameters: {
-      query?: {
-        /** @description Texto contenido en el legajo, el apellido o el nombre */
-        q?: string;
-        activo?: boolean;
-        /** @description true: solo personas que todavía no tienen usuario vinculado */
-        sinUsuario?: boolean;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PersonaDto'][];
-        };
-      };
-    };
-  };
-  PersonasController_crear: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CrearPersonaDto'];
-      };
-    };
-    responses: {
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PersonaDetalleDto'];
-        };
-      };
-      /** @description Fechas incoherentes o situación inválida */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Legajo o documento repetidos */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PersonasController_obtener: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PersonaDetalleDto'];
-        };
-      };
-      /** @description El docente solo accede a su propia ficha */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description La persona no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PersonasController_actualizar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['ActualizarPersonaDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PersonaDetalleDto'];
-        };
-      };
-      /** @description Fechas incoherentes o situación inválida */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description La persona no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Legajo o documento repetidos */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PersonasController_darDeBaja: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ResultadoBajaPersonaDto'];
-        };
-      };
-      /** @description La persona no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Tiene ocupaciones vigentes o futuras */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PersonasController_reactivar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PersonaDetalleDto'];
-        };
-      };
-      /** @description La persona no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  OcupacionesController_listarDePersona: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPersona: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['OcupacionDto'][];
-        };
-      };
-      /** @description El docente solo accede a su propia ficha */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description La persona no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  OcupacionesController_crear: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPersona: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CrearOcupacionDto'];
-      };
-    };
-    responses: {
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['OcupacionDto'];
-        };
-      };
-      /** @description Fechas incoherentes, persona o puesto de baja */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description La persona no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Se solapa con otra ocupación del mismo puesto */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  OcupacionesController_anular: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPersona: number;
-        idPuesto: number;
-        fechaDesde: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Ocupación anulada */
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description La ocupación no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description La ocupación ya empezó */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  OcupacionesController_actualizar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPersona: number;
-        idPuesto: number;
-        fechaDesde: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['ActualizarOcupacionDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['OcupacionDto'];
-        };
-      };
-      /** @description Fechas incoherentes */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description La ocupación no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Ocupación pasada o solape */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  OcupacionesController_cerrar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPersona: number;
-        idPuesto: number;
-        fechaDesde: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CerrarOcupacionDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['OcupacionDto'];
-        };
-      };
-      /** @description El fin es anterior al inicio */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description La ocupación no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Ocupación pasada o solape */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  OcupacionesController_listarDePuesto: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPuesto: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['OcupanteDto'][];
-        };
-      };
-      /** @description El puesto no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ConocimientosController_listar: {
-    parameters: {
-      query?: {
-        /** @description Texto contenido en la denominación */
-        q?: string;
-        idTipo?: number;
-        idArea?: number;
-        /** @description Sin valor: activos e inactivos */
-        activo?: boolean;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ConocimientoDto'][];
-        };
-      };
-    };
-  };
-  ConocimientosController_crear: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CrearConocimientoDto'];
-      };
-    };
-    responses: {
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ConocimientoDto'];
-        };
-      };
-      /** @description Tipo o área inexistentes o inactivos */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Ya existe un conocimiento activo igual del mismo tipo */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ConocimientosController_mios: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['MiConocimientoDto'][];
-        };
-      };
-      /** @description El usuario no tiene persona vinculada */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ConocimientosController_pendientes: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PendienteAcreditacionDto'][];
-        };
-      };
-    };
-  };
-  ConocimientosController_actualizar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['ActualizarConocimientoDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ConocimientoDto'];
-        };
-      };
-      /** @description El conocimiento no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Duplicado o conocimiento dado de baja */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ConocimientosController_baja: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ConocimientoDto'];
-        };
-      };
-      /** @description El conocimiento no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Lo piden puestos activos */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ConocimientosController_reactivar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ConocimientoDto'];
-        };
-      };
-      /** @description El conocimiento no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Ya hay uno activo igual */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ConocimientosController_fusionar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['FusionarConocimientoDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ResultadoFusionDto'];
-        };
-      };
-      /** @description Inactivos, de distinto tipo o el mismo */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Origen o destino inexistentes */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  RequisitosController_listar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPuesto: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['RequisitoDto'][];
-        };
-      };
-      /** @description El puesto no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  RequisitosController_guardar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPuesto: number;
-        idConocimiento: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['GuardarRequisitoDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['RequisitoDto'];
-        };
-      };
-      /** @description Puesto de baja, conocimiento inactivo o nivel inválido */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El puesto no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  RequisitosController_quitar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPuesto: number;
-        idConocimiento: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Requisito quitado */
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El puesto no tiene ese requisito */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  RequisitosController_copiar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPuesto: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CopiarRequisitosDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ResultadoCopiaDto'];
-        };
-      };
-      /** @description Mismo puesto o destino de baja */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Puesto de origen o de destino inexistente */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PerfilConocimientoController_listar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPersona: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PerfilConocimientoDto'][];
-        };
-      };
-      /** @description Sin acceso al conocimiento de esa persona */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PerfilConocimientoController_historial: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPersona: number;
-        idConocimiento: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['AcreditacionDto'][];
-        };
-      };
-      /** @description Sin acceso al conocimiento de esa persona */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PerfilConocimientoController_acreditar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPersona: number;
-        idConocimiento: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['AcreditarDto'];
-      };
-    };
-    responses: {
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['AcreditacionDto'];
-        };
-      };
-      /** @description Sin persona vinculada, fecha futura o datos inactivos */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Fuera del alcance o autoacreditación */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PerfilConocimientoController_declarar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPersona: number;
-        idConocimiento: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['DeclararDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ConocimientoPersonaDto'];
-        };
-      };
-      /** @description Persona, conocimiento o nivel inactivos */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Solo la propia persona declara */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PerfilConocimientoController_retirar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPersona: number;
-        idConocimiento: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Declaración retirada */
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Solo la propia persona */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description No hay declaración que retirar */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ActivosController_listar: {
-    parameters: {
-      query?: {
-        /** @description Texto contenido en el título */
-        q?: string;
-        idConocimiento?: number;
-        idUnidad?: number;
-        idTipoDocumento?: number;
-        /** @description true: solo vencidos; false: solo vigentes o sin fecha */
-        vencido?: boolean;
-        /** @description Solo roles de escritura; el resto no ve las bajas */
-        incluirBajas?: boolean;
-        pagina?: number;
-        tamanio?: number;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PaginaActivosDto'];
-        };
-      };
-    };
-  };
-  ActivosController_crear: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'multipart/form-data': components['schemas']['CrearActivoDto'];
-      };
-    };
-    responses: {
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ActivoDto'];
-        };
-      };
-      /** @description Datos inválidos, o ni archivo ni enlace */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description La unidad está fuera de tu alcance */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Ya hay un activo con el mismo archivo */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El archivo supera el tamaño máximo */
-      413: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Tipo de archivo no permitido */
-      415: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ActivosController_obtener: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ActivoDto'];
-        };
-      };
-      /** @description El activo no existe o está dado de baja */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ActivosController_actualizar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['ActualizarActivoDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ActivoDto'];
-        };
-      };
-      /** @description La unidad está fuera de tu alcance */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El activo no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El activo está dado de baja */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ActivosController_descargar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Contenido del archivo */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/octet-stream': string;
-        };
-      };
-      /** @description El activo o su archivo no existen */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El activo es un enlace */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ActivosController_reemplazarArchivo: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'multipart/form-data': {
-          /** Format: binary */
-          archivo: string;
-        };
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ActivoDto'];
-        };
-      };
-      /** @description Falta el archivo, o el activo es un enlace */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Archivo idéntico o repetido, o activo dado de baja */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El archivo supera el tamaño máximo */
-      413: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Tipo de archivo no permitido */
-      415: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ActivosController_baja: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ActivoDto'];
-        };
-      };
-      /** @description El activo ya está dado de baja */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  ActivosController_reactivar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ActivoDto'];
-        };
-      };
-      /** @description Ya está activo, o su archivo está repetido */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  AuthController_login: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LoginDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['SesionDto'];
-        };
-      };
-      /** @description Usuario o clave incorrectos */
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  AuthController_logout: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Sesión cerrada */
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  AuthController_yo: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['SesionDto'];
-        };
-      };
-    };
-  };
-  AuthController_cambiarClave: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CambiarClaveDto'];
-      };
-    };
-    responses: {
-      /** @description Clave cambiada */
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  UsuariosController_listar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['UsuarioDto'][];
-        };
-      };
-    };
-  };
-  UsuariosController_crear: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CrearUsuarioDto'];
-      };
-    };
-    responses: {
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['UsuarioDto'];
-        };
-      };
-      /** @description Usuario o persona repetidos */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  UsuariosController_listarRoles: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['RolDto'][];
-        };
-      };
-    };
-  };
-  UsuariosController_actualizar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['ActualizarUsuarioDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['UsuarioDto'];
-        };
-      };
-      /** @description El usuario no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Duplicado o último administrador activo */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  UsuariosController_restablecerClave: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['RestablecerClaveDto'];
-      };
-    };
-    responses: {
-      /** @description Clave restablecida */
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El usuario no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  CriticidadController_obtenerMatriz: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['MatrizDto'];
-        };
-      };
-    };
-  };
-  CriticidadController_editarCelda: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idImpacto: number;
-        idDificultad: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['EditarCeldaDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['CeldaMatrizDto'];
-        };
-      };
-      /** @description Nivel de criticidad inexistente o inactivo */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description La celda no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  CriticidadController_listarPares: {
-    parameters: {
-      query?: {
-        /** @description Unidad (incluye sus unidades descendientes) */
-        idUnidad?: number;
-        idPuesto?: number;
-        estado?: 'pendiente' | 'evaluado';
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ParCriticidadDto'][];
-        };
-      };
-    };
-  };
-  CriticidadController_avance: {
-    parameters: {
-      query?: {
-        /** @description Unidad (incluye sus unidades descendientes) */
-        idUnidad?: number;
-        idPuesto?: number;
-        estado?: 'pendiente' | 'evaluado';
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['AvanceDto'];
-        };
-      };
-    };
-  };
-  EvaluacionesController_evaluar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPuesto: number;
-        idConocimiento: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['EvaluarDto'];
-      };
-    };
-    responses: {
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['EvaluacionDto'];
-        };
-      };
-      /** @description Fecha futura, escala inactiva o puesto o conocimiento de baja */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El puesto está fuera de tu alcance */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El puesto o el conocimiento no existen */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El puesto no exige ese conocimiento */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  EvaluacionesController_historial: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPuesto: number;
-        idConocimiento: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['EvaluacionDto'][];
-        };
-      };
-      /** @description El puesto está fuera de tu alcance */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El puesto no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PlanesController_listar: {
-    parameters: {
-      query?: {
-        idPuesto?: number;
-        /** @description Unidad del puesto, con sus subunidades */
-        idUnidad?: number;
-        /** @description Código del estado del plan */
-        estado?: string;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PlanDto'][];
-        };
-      };
-    };
-  };
-  PlanesController_crear: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CrearPlanDto'];
-      };
-    };
-    responses: {
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PlanDto'];
-        };
-      };
-      /** @description Puesto de baja o responsable inexistente o inactivo */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El puesto está fuera de tu alcance */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El puesto no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El puesto ya tiene un plan en elaboración o aprobado */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PlanesController_buscar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PlanDetalleDto'];
-        };
-      };
-      /** @description El puesto está fuera de tu alcance */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PlanesController_editar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['EditarPlanDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PlanDto'];
-        };
-      };
-      /** @description Responsable inexistente o inactivo */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El puesto está fuera de tu alcance */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan no está en borrador */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PlanesController_presentar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PlanDto'];
-        };
-      };
-      /** @description El puesto está fuera de tu alcance */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan no está en borrador o no tiene candidatos */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PlanesController_resolver: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['ResolverPlanDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PlanDto'];
-        };
-      };
-      /** @description Rechazar exige un motivo */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan no está pendiente de aprobación */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PlanesController_reabrir: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PlanDto'];
-        };
-      };
-      /** @description El puesto está fuera de tu alcance */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan no está rechazado */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PlanesController_nuevaVersion: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PlanDto'];
-        };
-      };
-      /** @description El puesto está fuera de tu alcance */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan no está aprobado o el puesto ya tiene uno en elaboración */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  PlanesController_cerrar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PlanDto'];
-        };
-      };
-      /** @description El puesto está fuera de tu alcance */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan está pendiente de aprobación o ya cerrado */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  CandidatosController_agregar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPlan: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['AgregarCandidatoDto'];
-      };
-    };
-    responses: {
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['CandidatoDto'];
-        };
-      };
-      /** @description Persona inexistente, inactiva o sin ocupación vigente; estado de preparación inválido */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El puesto está fuera de tu alcance */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan no está en borrador, la persona ocupa el puesto, ya es candidata o la prioridad está usada */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  CandidatosController_reordenar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPlan: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['OrdenCandidatosDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['CandidatoDto'][];
-        };
-      };
-      /** @description El orden repite, omite o nombra personas ajenas al plan */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El puesto está fuera de tu alcance */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan no está en borrador */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  CandidatosController_quitar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPlan: number;
-        idPersona: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Candidato quitado */
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El puesto está fuera de tu alcance */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan o el candidato no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan no está en borrador */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  CandidatosController_seguimiento: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        idPlan: number;
-        idPersona: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['SeguimientoCandidatoDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['CandidatoDto'];
-        };
-      };
-      /** @description Estado de preparación inválido */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El puesto está fuera de tu alcance */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan o el candidato no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan no está en borrador ni aprobado */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  AccionesController_listar: {
-    parameters: {
-      query?: {
-        idPlan?: number;
-        idConocimiento?: number;
-        /** @description Código del estado de la acción */
-        estado?: string;
-        /** @description true: pendientes o en curso con fecha prevista pasada; false: el resto */
-        vencidas?: boolean;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description RR. HH. y autoridad ven todas; los jefes, las de planes de su alcance; el docente, las suyas */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['AccionDto'][];
-        };
-      };
-    };
-  };
-  AccionesController_crear: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CrearAccionDto'];
-      };
-    };
-    responses: {
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['AccionDto'];
-        };
-      };
-      /** @description Conocimiento de baja, tipo o personas inválidos, o destinatario igual al responsable */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El conocimiento o el plan no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description El plan está cerrado o el conocimiento no es requisito de su puesto */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  AccionesController_editar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['EditarAccionDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['AccionDto'];
-        };
-      };
-      /** @description Tipo o personas inválidos */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description La acción no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description La acción ya está completada o cancelada */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  AccionesController_avanzar: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['AvanzarAccionDto'];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['AccionDto'];
-        };
-      };
-      /** @description Fecha de cumplimiento inválida */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description No sos el responsable de la acción ni Recursos Humanos */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description La acción no existe */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Transición de estado no permitida */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  SucesionController_cobertura: {
-    parameters: {
-      query?: {
-        /** @description Unidad con sus descendientes */
-        idUnidad?: number;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['CoberturaDto'];
-        };
-      };
-    };
-  };
-  SucesionController_misPlanes: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['MiPlanDto'][];
-        };
-      };
-    };
-  };
-  DeteccionController_puntosUnicosFalla: {
-    parameters: {
-      query?: {
-        /** @description Filtrar por unidad organizativa (con sus descendientes) */
-        idUnidad?: number;
-        /** @description Exportar en formato CSV */
-        formato?: 'csv';
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PuntosUnicosFallaDto'];
-        };
-      };
-    };
-  };
-  DeteccionController_catedrasUnaPersona: {
-    parameters: {
-      query?: {
-        /** @description Filtrar por unidad organizativa (con sus descendientes) */
-        idUnidad?: number;
-        /** @description Exportar en formato CSV */
-        formato?: 'csv';
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['CatedrasUnaPersonaDto'];
-        };
-      };
-    };
-  };
-  DeteccionController_puestosSinSucesor: {
-    parameters: {
-      query?: {
-        /** @description Filtrar por unidad organizativa (con sus descendientes) */
-        idUnidad?: number;
-        /** @description Exportar en formato CSV */
-        formato?: 'csv';
-        /** @description Filtrar por motivo de falta de sucesor preparado */
-        motivo?: 'sin_plan' | 'plan_en_elaboracion' | 'ningun_candidato_cubre';
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['PuestoSinSucesorDto'][];
-        };
-      };
-    };
-  };
-  DeteccionController_horizonteRiesgo: {
-    parameters: {
-      query?: {
-        /** @description Filtrar por unidad organizativa (con sus descendientes) */
-        idUnidad?: number;
-        /** @description Exportar en formato CSV */
-        formato?: 'csv';
-        /** @description Horizonte temporal en meses */
-        meses?: number;
-        /** @description Incluir conocimientos que quedan con 2 o más poseedores tras los retiros */
-        incluirConDosOMas?: boolean;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['HorizonteRespuestaDto'];
-        };
-      };
-    };
-  };
-  DeteccionController_brecha: {
-    parameters: {
-      query?: {
-        /** @description Filtrar por persona */
-        idPersona?: number;
-        /** @description Filtrar por puesto */
-        idPuesto?: number;
-        /** @description Filtrar por unidad organizativa (con sus descendientes) */
-        idUnidad?: number;
-        /** @description Filtrar por contexto (ocupante o candidato) */
-        contexto?: 'ocupante' | 'candidato';
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['BrechaPuestoDto'][];
-        };
-      };
-    };
-  };
-  DeteccionController_miBrecha: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['BrechaPuestoDto'][];
-        };
-      };
-    };
-  };
-  TableroController_tablero: {
-    parameters: {
-      query?: {
-        /** @description Unidad organizativa (incluye sus descendientes) */
-        idUnidad?: number;
-        /** @description Horizonte temporal en meses */
-        meses?: number;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['TableroDto'];
-        };
-      };
-    };
-  };
+    SaludController_verificar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SaludDto"];
+                };
+            };
+        };
+    };
+    AuditoriaController_consultar: {
+        parameters: {
+            query?: {
+                entidad?: string;
+                idRegistro?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditoriaDto"][];
+                };
+            };
+        };
+    };
+    UnidadesController_listar: {
+        parameters: {
+            query?: {
+                incluirInactivas?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UnidadDto"][];
+                };
+            };
+        };
+    };
+    UnidadesController_arbol: {
+        parameters: {
+            query?: {
+                incluirInactivas?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UnidadArbolDto"][];
+                };
+            };
+        };
+    };
+    UnidadesController_obtener: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UnidadDetalleDto"];
+                };
+            };
+            /** @description La unidad no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    UnidadesController_crearPuestosTipo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PuestosTipoCreadosDto"];
+                };
+            };
+            /** @description La unidad no es una cátedra activa */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description La unidad no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description La cátedra ya tiene alguno de los cargos */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PuestosController_listar: {
+        parameters: {
+            query?: {
+                idUnidad?: number;
+                activo?: boolean;
+                /** @description Texto contenido en el código o la denominación */
+                q?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PuestoDto"][];
+                };
+            };
+        };
+    };
+    PuestosController_crear: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CrearPuestoDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PuestoDetalleDto"];
+                };
+            };
+            /** @description Unidad, nivel o superior inválidos */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Denominación repetida en la unidad */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PuestosController_obtener: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PuestoDetalleDto"];
+                };
+            };
+            /** @description El puesto no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PuestosController_actualizar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActualizarPuestoDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PuestoDetalleDto"];
+                };
+            };
+            /** @description Superior inválido o ciclo */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El puesto no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Denominación repetida en la unidad */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PuestosController_darDeBaja: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PuestoDetalleDto"];
+                };
+            };
+            /** @description El puesto no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Tiene subordinados activos */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PuestosController_reactivar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PuestoDetalleDto"];
+                };
+            };
+            /** @description El puesto no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description La unidad o el superior están inactivos */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ReferenciaController_listarDominios: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DominioDto"][];
+                };
+            };
+        };
+    };
+    ReferenciaController_listarValores: {
+        parameters: {
+            query?: {
+                incluirInactivos?: boolean;
+            };
+            header?: never;
+            path: {
+                dominio: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValorReferenciaDto"][];
+                };
+            };
+            /** @description El dominio no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ReferenciaController_crear: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dominio: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CrearValorDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValorReferenciaDto"];
+                };
+            };
+            /** @description El rol no puede modificar las tablas de referencia */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Código, denominación u orden repetido */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ReferenciaController_eliminar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dominio: string;
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Valor borrado */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El rol no puede modificar las tablas de referencia */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El dominio o el valor no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El valor está en uso */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ReferenciaController_actualizar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dominio: string;
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActualizarValorDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActualizacionValorDto"];
+                };
+            };
+            /** @description El rol no puede modificar las tablas de referencia */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El dominio o el valor no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Duplicado, o cambio de código de un valor en uso */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ImportacionController_importar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    archivo: string;
+                    /** @default false */
+                    confirmar?: boolean;
+                };
+            };
+        };
+        responses: {
+            /** @description Reporte de la vista previa o de la importación; los errores de datos van en `errores` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResultadoImportacionDto"];
+                };
+            };
+            /** @description Falta el archivo, está vacío, la cabecera es inválida o hay más de 2000 filas */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El archivo supera los 2 MB */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ImportacionController_plantilla: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description CSV con la cabecera y una fila de ejemplo */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PersonasController_listar: {
+        parameters: {
+            query?: {
+                /** @description Texto contenido en el legajo, el apellido o el nombre */
+                q?: string;
+                activo?: boolean;
+                /** @description true: solo personas que todavía no tienen usuario vinculado */
+                sinUsuario?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonaDto"][];
+                };
+            };
+        };
+    };
+    PersonasController_crear: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CrearPersonaDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonaDetalleDto"];
+                };
+            };
+            /** @description Fechas incoherentes o situación inválida */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Legajo o documento repetidos */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PersonasController_obtener: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonaDetalleDto"];
+                };
+            };
+            /** @description El docente solo accede a su propia ficha */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description La persona no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PersonasController_actualizar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActualizarPersonaDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonaDetalleDto"];
+                };
+            };
+            /** @description Fechas incoherentes o situación inválida */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description La persona no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Legajo o documento repetidos */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PersonasController_darDeBaja: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResultadoBajaPersonaDto"];
+                };
+            };
+            /** @description La persona no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Tiene ocupaciones vigentes o futuras */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PersonasController_reactivar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonaDetalleDto"];
+                };
+            };
+            /** @description La persona no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OcupacionesController_listarDePersona: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPersona: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OcupacionDto"][];
+                };
+            };
+            /** @description El docente solo accede a su propia ficha */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description La persona no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OcupacionesController_crear: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPersona: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CrearOcupacionDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OcupacionDto"];
+                };
+            };
+            /** @description Fechas incoherentes, persona o puesto de baja */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description La persona no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Se solapa con otra ocupación del mismo puesto */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OcupacionesController_anular: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPersona: number;
+                idPuesto: number;
+                fechaDesde: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Ocupación anulada */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description La ocupación no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description La ocupación ya empezó */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OcupacionesController_actualizar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPersona: number;
+                idPuesto: number;
+                fechaDesde: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActualizarOcupacionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OcupacionDto"];
+                };
+            };
+            /** @description Fechas incoherentes */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description La ocupación no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Ocupación pasada o solape */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OcupacionesController_cerrar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPersona: number;
+                idPuesto: number;
+                fechaDesde: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CerrarOcupacionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OcupacionDto"];
+                };
+            };
+            /** @description El fin es anterior al inicio */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description La ocupación no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Ocupación pasada o solape */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OcupacionesController_listarDePuesto: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPuesto: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OcupanteDto"][];
+                };
+            };
+            /** @description El puesto no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ConocimientosController_listar: {
+        parameters: {
+            query?: {
+                /** @description Texto contenido en la denominación */
+                q?: string;
+                idTipo?: number;
+                idArea?: number;
+                /** @description Sin valor: activos e inactivos */
+                activo?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConocimientoDto"][];
+                };
+            };
+        };
+    };
+    ConocimientosController_crear: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CrearConocimientoDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConocimientoDto"];
+                };
+            };
+            /** @description Tipo o área inexistentes o inactivos */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Ya existe un conocimiento activo igual del mismo tipo */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ConocimientosController_mios: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MiConocimientoDto"][];
+                };
+            };
+            /** @description El usuario no tiene persona vinculada */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ConocimientosController_pendientes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PendienteAcreditacionDto"][];
+                };
+            };
+        };
+    };
+    ConocimientosController_actualizar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActualizarConocimientoDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConocimientoDto"];
+                };
+            };
+            /** @description El conocimiento no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Duplicado o conocimiento dado de baja */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ConocimientosController_baja: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConocimientoDto"];
+                };
+            };
+            /** @description El conocimiento no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Lo piden puestos activos */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ConocimientosController_reactivar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConocimientoDto"];
+                };
+            };
+            /** @description El conocimiento no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Ya hay uno activo igual */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ConocimientosController_fusionar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FusionarConocimientoDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResultadoFusionDto"];
+                };
+            };
+            /** @description Inactivos, de distinto tipo o el mismo */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Origen o destino inexistentes */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    RequisitosController_listar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPuesto: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RequisitoDto"][];
+                };
+            };
+            /** @description El puesto no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    RequisitosController_guardar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPuesto: number;
+                idConocimiento: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GuardarRequisitoDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RequisitoDto"];
+                };
+            };
+            /** @description Puesto de baja, conocimiento inactivo o nivel inválido */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El puesto no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    RequisitosController_quitar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPuesto: number;
+                idConocimiento: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Requisito quitado */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El puesto no tiene ese requisito */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    RequisitosController_copiar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPuesto: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CopiarRequisitosDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResultadoCopiaDto"];
+                };
+            };
+            /** @description Mismo puesto o destino de baja */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Puesto de origen o de destino inexistente */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PerfilConocimientoController_listar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPersona: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PerfilConocimientoDto"][];
+                };
+            };
+            /** @description Sin acceso al conocimiento de esa persona */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PerfilConocimientoController_historial: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPersona: number;
+                idConocimiento: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AcreditacionDto"][];
+                };
+            };
+            /** @description Sin acceso al conocimiento de esa persona */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PerfilConocimientoController_acreditar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPersona: number;
+                idConocimiento: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AcreditarDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AcreditacionDto"];
+                };
+            };
+            /** @description Sin persona vinculada, fecha futura o datos inactivos */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Fuera del alcance o autoacreditación */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PerfilConocimientoController_declarar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPersona: number;
+                idConocimiento: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeclararDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConocimientoPersonaDto"];
+                };
+            };
+            /** @description Persona, conocimiento o nivel inactivos */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Solo la propia persona declara */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PerfilConocimientoController_retirar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPersona: number;
+                idConocimiento: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Declaración retirada */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Solo la propia persona */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description No hay declaración que retirar */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ActivosController_listar: {
+        parameters: {
+            query?: {
+                /** @description Texto contenido en el título */
+                q?: string;
+                idConocimiento?: number;
+                idUnidad?: number;
+                idTipoDocumento?: number;
+                /** @description true: solo vencidos; false: solo vigentes o sin fecha */
+                vencido?: boolean;
+                /** @description Solo roles de escritura; el resto no ve las bajas */
+                incluirBajas?: boolean;
+                pagina?: number;
+                tamanio?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginaActivosDto"];
+                };
+            };
+        };
+    };
+    ActivosController_crear: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["CrearActivoDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivoDto"];
+                };
+            };
+            /** @description Datos inválidos, o ni archivo ni enlace */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description La unidad está fuera de tu alcance */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Ya hay un activo con el mismo archivo */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El archivo supera el tamaño máximo */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Tipo de archivo no permitido */
+            415: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ActivosController_obtener: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivoDto"];
+                };
+            };
+            /** @description El activo no existe o está dado de baja */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ActivosController_actualizar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActualizarActivoDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivoDto"];
+                };
+            };
+            /** @description La unidad está fuera de tu alcance */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El activo no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El activo está dado de baja */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ActivosController_descargar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Contenido del archivo */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+            /** @description El activo o su archivo no existen */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El activo es un enlace */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ActivosController_reemplazarArchivo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    archivo: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivoDto"];
+                };
+            };
+            /** @description Falta el archivo, o el activo es un enlace */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Archivo idéntico o repetido, o activo dado de baja */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El archivo supera el tamaño máximo */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Tipo de archivo no permitido */
+            415: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ActivosController_baja: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivoDto"];
+                };
+            };
+            /** @description El activo ya está dado de baja */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ActivosController_reactivar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivoDto"];
+                };
+            };
+            /** @description Ya está activo, o su archivo está repetido */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AuthController_login: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SesionDto"];
+                };
+            };
+            /** @description Usuario o clave incorrectos */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AuthController_logout: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Sesión cerrada */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AuthController_yo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SesionDto"];
+                };
+            };
+        };
+    };
+    AuthController_cambiarClave: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CambiarClaveDto"];
+            };
+        };
+        responses: {
+            /** @description Clave cambiada */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    UsuariosController_listar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UsuarioDto"][];
+                };
+            };
+        };
+    };
+    UsuariosController_crear: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CrearUsuarioDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UsuarioDto"];
+                };
+            };
+            /** @description Usuario o persona repetidos */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    UsuariosController_listarRoles: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RolDto"][];
+                };
+            };
+        };
+    };
+    UsuariosController_actualizar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActualizarUsuarioDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UsuarioDto"];
+                };
+            };
+            /** @description El usuario no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Duplicado o último administrador activo */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    UsuariosController_restablecerClave: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RestablecerClaveDto"];
+            };
+        };
+        responses: {
+            /** @description Clave restablecida */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El usuario no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CriticidadController_obtenerMatriz: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MatrizDto"];
+                };
+            };
+        };
+    };
+    CriticidadController_editarCelda: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idImpacto: number;
+                idDificultad: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EditarCeldaDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CeldaMatrizDto"];
+                };
+            };
+            /** @description Nivel de criticidad inexistente o inactivo */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description La celda no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CriticidadController_listarPares: {
+        parameters: {
+            query?: {
+                /** @description Unidad (incluye sus unidades descendientes) */
+                idUnidad?: number;
+                idPuesto?: number;
+                estado?: "pendiente" | "evaluado";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ParCriticidadDto"][];
+                };
+            };
+        };
+    };
+    CriticidadController_avance: {
+        parameters: {
+            query?: {
+                /** @description Unidad (incluye sus unidades descendientes) */
+                idUnidad?: number;
+                idPuesto?: number;
+                estado?: "pendiente" | "evaluado";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AvanceDto"];
+                };
+            };
+        };
+    };
+    EvaluacionesController_evaluar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPuesto: number;
+                idConocimiento: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EvaluarDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EvaluacionDto"];
+                };
+            };
+            /** @description Fecha futura, escala inactiva o puesto o conocimiento de baja */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El puesto está fuera de tu alcance */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El puesto o el conocimiento no existen */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El puesto no exige ese conocimiento */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    EvaluacionesController_historial: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPuesto: number;
+                idConocimiento: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EvaluacionDto"][];
+                };
+            };
+            /** @description El puesto está fuera de tu alcance */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El puesto no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PlanesController_listar: {
+        parameters: {
+            query?: {
+                idPuesto?: number;
+                /** @description Unidad del puesto, con sus subunidades */
+                idUnidad?: number;
+                /** @description Código del estado del plan */
+                estado?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"][];
+                };
+            };
+        };
+    };
+    PlanesController_crear: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CrearPlanDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+            /** @description Puesto de baja o responsable inexistente o inactivo */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El puesto está fuera de tu alcance */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El puesto no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El puesto ya tiene un plan en elaboración o aprobado */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PlanesController_buscar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDetalleDto"];
+                };
+            };
+            /** @description El puesto está fuera de tu alcance */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PlanesController_editar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EditarPlanDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+            /** @description Responsable inexistente o inactivo */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El puesto está fuera de tu alcance */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no está en borrador */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PlanesController_presentar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+            /** @description El puesto está fuera de tu alcance */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no está en borrador o no tiene candidatos */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PlanesController_resolver: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResolverPlanDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+            /** @description Rechazar exige un motivo */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no está pendiente de aprobación */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PlanesController_reabrir: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+            /** @description El puesto está fuera de tu alcance */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no está rechazado */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PlanesController_nuevaVersion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+            /** @description El puesto está fuera de tu alcance */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no está aprobado o el puesto ya tiene uno en elaboración */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PlanesController_cerrar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+            /** @description El puesto está fuera de tu alcance */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan está pendiente de aprobación o ya cerrado */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CandidatosController_agregar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPlan: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AgregarCandidatoDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CandidatoDto"];
+                };
+            };
+            /** @description Persona inexistente, inactiva o sin ocupación vigente; estado de preparación inválido */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El puesto está fuera de tu alcance */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no está en borrador, la persona ocupa el puesto, ya es candidata o la prioridad está usada */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CandidatosController_reordenar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPlan: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OrdenCandidatosDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CandidatoDto"][];
+                };
+            };
+            /** @description El orden repite, omite o nombra personas ajenas al plan */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El puesto está fuera de tu alcance */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no está en borrador */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CandidatosController_quitar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPlan: number;
+                idPersona: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Candidato quitado */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El puesto está fuera de tu alcance */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan o el candidato no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no está en borrador */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CandidatosController_seguimiento: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPlan: number;
+                idPersona: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SeguimientoCandidatoDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CandidatoDto"];
+                };
+            };
+            /** @description Estado de preparación inválido */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El puesto está fuera de tu alcance */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan o el candidato no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no está en borrador ni aprobado */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AccionesController_listar: {
+        parameters: {
+            query?: {
+                idPlan?: number;
+                idConocimiento?: number;
+                /** @description Código del estado de la acción */
+                estado?: string;
+                /** @description true: pendientes o en curso con fecha prevista pasada; false: el resto */
+                vencidas?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description RR. HH. y autoridad ven todas; los jefes, las de planes de su alcance; el docente, las suyas */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccionDto"][];
+                };
+            };
+        };
+    };
+    AccionesController_crear: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CrearAccionDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccionDto"];
+                };
+            };
+            /** @description Conocimiento de baja, tipo o personas inválidos, o destinatario igual al responsable */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El conocimiento o el plan no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan está cerrado o el conocimiento no es requisito de su puesto */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AccionesController_editar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EditarAccionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccionDto"];
+                };
+            };
+            /** @description Tipo o personas inválidos */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description La acción no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description La acción ya está completada o cancelada */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AccionesController_avanzar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AvanzarAccionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccionDto"];
+                };
+            };
+            /** @description Fecha de cumplimiento inválida */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description No sos el responsable de la acción ni Recursos Humanos */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description La acción no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Transición de estado no permitida */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SucesionController_cobertura: {
+        parameters: {
+            query?: {
+                /** @description Unidad con sus descendientes */
+                idUnidad?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CoberturaDto"];
+                };
+            };
+        };
+    };
+    SucesionController_misPlanes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MiPlanDto"][];
+                };
+            };
+        };
+    };
+    DeteccionController_puntosUnicosFalla: {
+        parameters: {
+            query?: {
+                /** @description Filtrar por unidad organizativa (con sus descendientes) */
+                idUnidad?: number;
+                /** @description Exportar en formato CSV */
+                formato?: "csv";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PuntosUnicosFallaDto"];
+                };
+            };
+        };
+    };
+    DeteccionController_catedrasUnaPersona: {
+        parameters: {
+            query?: {
+                /** @description Filtrar por unidad organizativa (con sus descendientes) */
+                idUnidad?: number;
+                /** @description Exportar en formato CSV */
+                formato?: "csv";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatedrasUnaPersonaDto"];
+                };
+            };
+        };
+    };
+    DeteccionController_puestosSinSucesor: {
+        parameters: {
+            query?: {
+                /** @description Filtrar por unidad organizativa (con sus descendientes) */
+                idUnidad?: number;
+                /** @description Exportar en formato CSV */
+                formato?: "csv";
+                /** @description Filtrar por motivo de falta de sucesor preparado */
+                motivo?: "sin_plan" | "plan_en_elaboracion" | "ningun_candidato_cubre";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PuestoSinSucesorDto"][];
+                };
+            };
+        };
+    };
+    DeteccionController_horizonteRiesgo: {
+        parameters: {
+            query?: {
+                /** @description Filtrar por unidad organizativa (con sus descendientes) */
+                idUnidad?: number;
+                /** @description Exportar en formato CSV */
+                formato?: "csv";
+                /** @description Horizonte temporal en meses */
+                meses?: number;
+                /** @description Incluir conocimientos que quedan con 2 o más poseedores tras los retiros */
+                incluirConDosOMas?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HorizonteRespuestaDto"];
+                };
+            };
+        };
+    };
+    DeteccionController_brecha: {
+        parameters: {
+            query?: {
+                /** @description Filtrar por persona */
+                idPersona?: number;
+                /** @description Filtrar por puesto */
+                idPuesto?: number;
+                /** @description Filtrar por unidad organizativa (con sus descendientes) */
+                idUnidad?: number;
+                /** @description Filtrar por contexto (ocupante o candidato) */
+                contexto?: "ocupante" | "candidato";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BrechaPuestoDto"][];
+                };
+            };
+        };
+    };
+    DeteccionController_miBrecha: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BrechaPuestoDto"][];
+                };
+            };
+        };
+    };
+    TableroController_tablero: {
+        parameters: {
+            query?: {
+                /** @description Unidad organizativa (incluye sus descendientes) */
+                idUnidad?: number;
+                /** @description Horizonte temporal en meses */
+                meses?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TableroDto"];
+                };
+            };
+        };
+    };
 }

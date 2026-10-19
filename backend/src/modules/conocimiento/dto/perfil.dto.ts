@@ -170,6 +170,12 @@ export class MiConocimientoDto {
 
   @ApiProperty({ nullable: true, type: Number })
   idTipoEvidencia: number | null;
+
+  @ApiProperty({
+    description:
+      'true si lo declarado espera acreditación (no hay una, o declaró otro nivel después de la última)',
+  })
+  pendiente: boolean;
 }
 
 export class PendienteAcreditacionDto {

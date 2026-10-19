@@ -31,6 +31,7 @@ const filaVacia = (c: Conocimiento): MiConocimiento => ({
   idNivelAcreditado: null,
   fechaEvaluacion: null,
   idTipoEvidencia: null,
+  pendiente: false,
 });
 
 /**

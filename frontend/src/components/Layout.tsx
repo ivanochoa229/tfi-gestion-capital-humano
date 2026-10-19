@@ -28,6 +28,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import { NavLink, Outlet, useNavigate } from 'react-router';
 import { api } from '../api/cliente';
+import logoUtn from '../assets/utn-logo.png';
 import { puedeVer, SECCIONES } from '../auth/permisos';
 import { useSesion } from '../auth/useSesion';
 
@@ -69,21 +70,19 @@ export function Layout() {
       <AppBar position="fixed" sx={{ zIndex: (t) => t.zIndex.drawer + 1 }}>
         <Toolbar>
           <Box
+            component="img"
+            src={logoUtn}
+            alt="UTN Facultad Regional Tucumán"
             sx={{
-              width: 32,
-              height: 32,
+              width: 36,
+              height: 36,
               mr: 1.5,
+              p: 0.5,
               borderRadius: 1,
               bgcolor: '#ffffff',
-              color: 'primary.main',
-              display: 'grid',
-              placeItems: 'center',
-              fontWeight: 800,
-              fontSize: 14,
+              objectFit: 'contain',
             }}
-          >
-            UTN
-          </Box>
+          />
           <Typography variant="h6" component="div" noWrap>
             Gestión del conocimiento crítico
           </Typography>

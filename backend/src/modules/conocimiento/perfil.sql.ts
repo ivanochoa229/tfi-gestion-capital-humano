@@ -42,7 +42,8 @@ export const SQL_FILAS_PROPIAS = `
   SELECT cp.id_conocimiento, c.denominacion, c.id_tipo_conocimiento,
          cp.id_nivel_declarado, cp.fecha_declaracion::text AS fecha_declaracion,
          cp.id_nivel_acreditado, cp.fecha_evaluacion::text AS fecha_evaluacion,
-         cp.id_tipo_evidencia
+         cp.id_tipo_evidencia,
+         ${SQL_PENDIENTE} AS pendiente
   FROM conocimiento_persona cp
   JOIN conocimiento c ON c.id_conocimiento = cp.id_conocimiento AND c.activo
   WHERE cp.id_persona = $1`;

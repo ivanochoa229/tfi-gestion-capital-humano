@@ -92,7 +92,7 @@ export function FilaMiConocimiento({
               label={`Se pide: ${nombre(todosLosNiveles, fila.idNivelRequerido)}${fila.esExcluyente ? ' (excluyente)' : ''}`}
             />
           )}
-          {acreditado ? (
+          {acreditado && (
             <Chip
               size="small"
               color="success"
@@ -102,10 +102,17 @@ export function FilaMiConocimiento({
                   : ''
               }`}
             />
-          ) : (
-            fila.idNivelDeclarado !== null && (
-              <Chip size="small" label="Declarado, esperando acreditación" />
-            )
+          )}
+          {fila.pendiente && (
+            <Chip
+              size="small"
+              color="warning"
+              label={
+                acreditado
+                  ? 'Cambiaste tu nivel, esperando nueva acreditación'
+                  : 'Declarado, esperando acreditación'
+              }
+            />
           )}
         </Stack>
         {fila.puestos.length > 0 && (
