@@ -79,6 +79,12 @@ Para el entorno local, `backend/scripts/catedras-ejemplo.sql` carga tres cátedr
 docker compose exec -T db sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"' < backend/scripts/catedras-ejemplo.sql
 ```
 
+Para probar las consultas de detección y ver el tablero de riesgo con datos representativos (RF16–RF21), `backend/scripts/datos-prueba-deteccion.sql` carga el juego de datos de prueba (personas, cátedras, puestos, conocimientos críticos, acreditaciones y planes de sucesión) con resultados conocidos (se ejecuta una sola vez):
+
+```bash
+docker compose exec -T db sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"' < backend/scripts/datos-prueba-deteccion.sql
+```
+
 Cuidados del DBA: el trigger revisa la unidad, no sus puestos. Si se cambia el superior o el tipo de una unidad que ya tiene puestos, o se desactiva una cátedra con puestos activos o usuarios asignados, la aplicación no lo impide: conviene revisar los superiores de los puestos afectados.
 
 ## Personas y ocupaciones

@@ -1140,6 +1140,118 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/deteccion/puntos-unicos-falla': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['DeteccionController_puntosUnicosFalla'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/deteccion/catedras-una-persona': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['DeteccionController_catedrasUnaPersona'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/deteccion/puestos-sin-sucesor': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['DeteccionController_puestosSinSucesor'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/deteccion/horizonte-riesgo': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['DeteccionController_horizonteRiesgo'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/deteccion/brecha': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['DeteccionController_brecha'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/deteccion/mi-brecha': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['DeteccionController_miBrecha'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/deteccion/tablero': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['TableroController_tablero'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2148,6 +2260,163 @@ export interface components {
       excluyentesSinCubrir: number;
       /** @description Requisitos excluyentes del puesto */
       totalExcluyentes: number;
+    };
+    PersonaDeteccionDto: {
+      idPersona: number;
+      apellido: string;
+      nombre: string;
+    };
+    PuestoCriticoDto: {
+      idPuesto: number;
+      codigo: string;
+      denominacion: string;
+      idUnidad: number;
+    };
+    PuntoUnicoFallaDto: {
+      idConocimiento: number;
+      denominacion: string;
+      nivelRequerido: string;
+      /** @enum {number} */
+      cantidadPoseedores: 0 | 1;
+      poseedor: components['schemas']['PersonaDeteccionDto'] | null;
+      puestosCriticos: components['schemas']['PuestoCriticoDto'][];
+      puestosFueraDeAlcance: number;
+    };
+    PuntosUnicosFallaDto: {
+      unicoPoseedor: components['schemas']['PuntoUnicoFallaDto'][];
+      sinPoseedor: components['schemas']['PuntoUnicoFallaDto'][];
+    };
+    CatedraUnaPersonaDto: {
+      idUnidad: number;
+      denominacion: string;
+      /** @enum {number} */
+      cantidadPersonas: 0 | 1;
+      cantidadCargos: number;
+      persona: components['schemas']['PersonaDeteccionDto'] | null;
+    };
+    CatedrasUnaPersonaDto: {
+      unaPersona: components['schemas']['CatedraUnaPersonaDto'][];
+      sinDotacion: components['schemas']['CatedraUnaPersonaDto'][];
+    };
+    PuestoSinSucesorDto: {
+      idPuesto: number;
+      codigo: string;
+      denominacion: string;
+      idUnidad: number;
+      /** @enum {string} */
+      motivo: 'sin_plan' | 'plan_en_elaboracion' | 'ningun_candidato_cubre';
+      idPlan: number | null;
+      candidatosTotal: number;
+      candidatosValidos: number;
+    };
+    RetiroRiesgoDto: {
+      idPersona: number | null;
+      apellido: string | null;
+      nombre: string | null;
+      fechaPrevistaRetiro: string | null;
+    };
+    HorizonteRiesgoDto: {
+      idConocimiento: number;
+      denominacion: string;
+      nivelRequerido: string;
+      cantidadPoseedores: number;
+      quedan: number;
+      retiros: components['schemas']['RetiroRiesgoDto'][];
+      puestosCriticos: components['schemas']['PuestoCriticoDto'][];
+      puestosFueraDeAlcance: number;
+    };
+    HorizonteRespuestaDto: {
+      meses: number;
+      conocimientos: components['schemas']['HorizonteRiesgoDto'][];
+    };
+    ResumenBrechaDto: {
+      excluyentesCubiertos: number;
+      excluyentesTotal: number;
+      deseablesCubiertos: number;
+      deseablesTotal: number;
+    };
+    BrechaConocimientoDto: {
+      idConocimiento: number;
+      denominacion: string;
+      esExcluyente: boolean;
+      nivelRequerido: string;
+      nivelAcreditado: string | null;
+      nivelDeclarado: string | null;
+      faltante: number;
+      cubierto: boolean;
+    };
+    BrechaPuestoDto: {
+      /** @enum {string} */
+      contexto: 'ocupante' | 'candidato';
+      idPersona: number;
+      apellido: string;
+      nombre: string;
+      idPuesto: number;
+      denominacionPuesto: string;
+      idPlan: number | null;
+      estadoPlan: string | null;
+      aRevisar: boolean;
+      resumen: components['schemas']['ResumenBrechaDto'];
+      conocimientos: components['schemas']['BrechaConocimientoDto'][];
+    };
+    ResumenPuntosUnicosTableroDto: {
+      unicoPoseedor: number;
+      sinPoseedor: number;
+    };
+    ResumenCatedrasTableroDto: {
+      unaPersona: number;
+      sinDotacion: number;
+    };
+    MotivoSinSucesorTableroDto: {
+      motivo: string;
+      cantidad: number;
+    };
+    ResumenPuestosSinSucesorTableroDto: {
+      total: number;
+      porMotivo: components['schemas']['MotivoSinSucesorTableroDto'][];
+    };
+    ResumenHorizonteTableroDto: {
+      meses: number;
+      conocimientos: number;
+    };
+    PuntoUnicoPorCatedraDto: {
+      idUnidad: number;
+      denominacion: string;
+      cantidad: number;
+    };
+    RetiroPorSemestreDto: {
+      semestre: string;
+      cantidad: number;
+    };
+    GraficosTableroDto: {
+      puntosUnicosPorCatedra: components['schemas']['PuntoUnicoPorCatedraDto'][];
+      retirosPorSemestre: components['schemas']['RetiroPorSemestreDto'][];
+    };
+    CalidadCriticidadTableroDto: {
+      evaluados: number;
+      total: number;
+    };
+    CalidadPlanesTableroDto: {
+      criticos: number;
+      conPlan: number;
+    };
+    CalidadAcreditacionTableroDto: {
+      acreditados: number;
+      total: number;
+    };
+    CalidadDeDatosTableroDto: {
+      criticidad: components['schemas']['CalidadCriticidadTableroDto'];
+      planes: components['schemas']['CalidadPlanesTableroDto'];
+      acreditacion: components['schemas']['CalidadAcreditacionTableroDto'];
+    };
+    TableroDto: {
+      puntosUnicosFalla: components['schemas']['ResumenPuntosUnicosTableroDto'];
+      catedras: components['schemas']['ResumenCatedrasTableroDto'];
+      puestosSinSucesor: components['schemas']['ResumenPuestosSinSucesorTableroDto'];
+      candidatosConBrecha: number;
+      horizonte: components['schemas']['ResumenHorizonteTableroDto'];
+      graficos: components['schemas']['GraficosTableroDto'];
+      calidadDeDatos: components['schemas']['CalidadDeDatosTableroDto'];
     };
   };
   responses: never;
@@ -5286,6 +5555,179 @@ export interface operations {
         };
         content: {
           'application/json': components['schemas']['MiPlanDto'][];
+        };
+      };
+    };
+  };
+  DeteccionController_puntosUnicosFalla: {
+    parameters: {
+      query?: {
+        /** @description Filtrar por unidad organizativa (con sus descendientes) */
+        idUnidad?: number;
+        /** @description Exportar en formato CSV */
+        formato?: 'csv';
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PuntosUnicosFallaDto'];
+        };
+      };
+    };
+  };
+  DeteccionController_catedrasUnaPersona: {
+    parameters: {
+      query?: {
+        /** @description Filtrar por unidad organizativa (con sus descendientes) */
+        idUnidad?: number;
+        /** @description Exportar en formato CSV */
+        formato?: 'csv';
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['CatedrasUnaPersonaDto'];
+        };
+      };
+    };
+  };
+  DeteccionController_puestosSinSucesor: {
+    parameters: {
+      query?: {
+        /** @description Filtrar por unidad organizativa (con sus descendientes) */
+        idUnidad?: number;
+        /** @description Exportar en formato CSV */
+        formato?: 'csv';
+        /** @description Filtrar por motivo de falta de sucesor preparado */
+        motivo?: 'sin_plan' | 'plan_en_elaboracion' | 'ningun_candidato_cubre';
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PuestoSinSucesorDto'][];
+        };
+      };
+    };
+  };
+  DeteccionController_horizonteRiesgo: {
+    parameters: {
+      query?: {
+        /** @description Filtrar por unidad organizativa (con sus descendientes) */
+        idUnidad?: number;
+        /** @description Exportar en formato CSV */
+        formato?: 'csv';
+        /** @description Horizonte temporal en meses */
+        meses?: number;
+        /** @description Incluir conocimientos que quedan con 2 o más poseedores tras los retiros */
+        incluirConDosOMas?: boolean;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['HorizonteRespuestaDto'];
+        };
+      };
+    };
+  };
+  DeteccionController_brecha: {
+    parameters: {
+      query?: {
+        /** @description Filtrar por persona */
+        idPersona?: number;
+        /** @description Filtrar por puesto */
+        idPuesto?: number;
+        /** @description Filtrar por unidad organizativa (con sus descendientes) */
+        idUnidad?: number;
+        /** @description Filtrar por contexto (ocupante o candidato) */
+        contexto?: 'ocupante' | 'candidato';
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['BrechaPuestoDto'][];
+        };
+      };
+    };
+  };
+  DeteccionController_miBrecha: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['BrechaPuestoDto'][];
+        };
+      };
+    };
+  };
+  TableroController_tablero: {
+    parameters: {
+      query?: {
+        /** @description Unidad organizativa (incluye sus descendientes) */
+        idUnidad?: number;
+        /** @description Horizonte temporal en meses */
+        meses?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['TableroDto'];
         };
       };
     };

@@ -7,7 +7,11 @@ export interface Seccion {
 }
 
 export const SECCIONES: Seccion[] = [
-  { ruta: '/', nombre: 'Tablero de riesgo' },
+  {
+    ruta: '/',
+    nombre: 'Tablero de riesgo',
+    roles: ['recursos_humanos', 'autoridad'],
+  },
   {
     ruta: '/estructura',
     nombre: 'Estructura y puestos',
@@ -79,6 +83,21 @@ export const SECCIONES: Seccion[] = [
       'jefe_catedra',
       'docente',
     ],
+  },
+  {
+    ruta: '/deteccion/puntos-unicos-falla',
+    nombre: 'Detección',
+    roles: [
+      'recursos_humanos',
+      'autoridad',
+      'jefatura_departamento',
+      'jefe_catedra',
+    ],
+  },
+  {
+    ruta: '/deteccion/mi-brecha',
+    nombre: 'Mi brecha',
+    roles: ['docente', 'jefe_catedra', 'jefatura_departamento'],
   },
   { ruta: '/admin', nombre: 'Administración', roles: ['administrador'] },
 ];

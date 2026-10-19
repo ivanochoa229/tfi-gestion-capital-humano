@@ -1,7 +1,10 @@
 import {
   Alert,
+  Box,
+  Button,
   Chip,
   CircularProgress,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -10,9 +13,10 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
+import { Link as RouterLink } from 'react-router';
+import { useSesion } from '../../../auth/useSesion';
 import { PaginaEnConstruccion } from '../../../components/PaginaEnConstruccion';
 import { useValoresReferencia } from '../../admin/hooks/useValoresReferencia';
-import { useSesion } from '../../../auth/useSesion';
 import { AccionesTabla } from '../components/AccionesTabla';
 import { AvanzarAccionDialog } from '../components/AvanzarAccionDialog';
 import {
@@ -50,9 +54,24 @@ export function MiSucesionPage() {
       titulo="Mi sucesión"
       descripcion="Los planes de sucesión en los que figurás como candidato y tus acciones de transferencia."
     >
-      <Typography variant="h6" component="h2" sx={{ mb: 1 }}>
-        Mis planes
-      </Typography>
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        spacing={2}
+        sx={{ mb: 1.5, alignItems: { sm: 'center' } }}
+      >
+        <Typography variant="h6" component="h2">
+          Mis planes
+        </Typography>
+        <Box sx={{ flexGrow: 1 }} />
+        <Button
+          component={RouterLink}
+          to="/deteccion/mi-brecha"
+          variant="outlined"
+          size="small"
+        >
+          Ver el detalle de mi brecha
+        </Button>
+      </Stack>
       {planes.isPending ? (
         <CircularProgress aria-label="Cargando planes" />
       ) : planes.isError ? (
