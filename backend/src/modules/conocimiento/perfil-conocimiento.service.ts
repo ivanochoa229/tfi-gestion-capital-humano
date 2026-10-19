@@ -29,12 +29,12 @@ interface FilaPropia {
   id_nivel_acreditado: number | null;
   fecha_evaluacion: string | null;
   id_tipo_evidencia: number | null;
+  pendiente: boolean;
 }
 
 interface FilaPerfil extends FilaPropia {
   id_persona: number;
   id_evaluador: number | null;
-  pendiente: boolean;
 }
 
 interface FilaRequisito {
@@ -142,6 +142,7 @@ export class PerfilConocimientoService {
       idNivelAcreditado: p?.id_nivel_acreditado ?? null,
       fechaEvaluacion: p?.fecha_evaluacion ?? null,
       idTipoEvidencia: p?.id_tipo_evidencia ?? null,
+      pendiente: p?.pendiente ?? false,
     });
 
     const filas: MiConocimientoDto[] = combinados.map((r) => ({
