@@ -39,6 +39,7 @@ export const router = createBrowserRouter([
     ),
     children: [
       { index: true, element: <TableroPage /> },
+      { path: 'tablero', element: <TableroPage /> },
       { path: 'estructura', element: <EstructuraPage /> },
       { path: 'personas', element: <PersonasPage /> },
       {

@@ -7,7 +7,11 @@ export interface Seccion {
 }
 
 export const SECCIONES: Seccion[] = [
-  { ruta: '/', nombre: 'Tablero de riesgo' },
+  {
+    ruta: '/',
+    nombre: 'Tablero de riesgo',
+    roles: ['recursos_humanos', 'autoridad'],
+  },
   {
     ruta: '/estructura',
     nombre: 'Estructura y puestos',
