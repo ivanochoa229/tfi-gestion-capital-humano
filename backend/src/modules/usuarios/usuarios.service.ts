@@ -60,17 +60,23 @@ export class UsuariosService {
     await this.validarUnidades(dto.rol, dto.idUnidades ?? []);
     await this.validarPersona(idPersona);
 
-    const creado = await this.usuarios.save(
-      this.usuarios.create({
-        nombreUsuario,
-        claveHash: await this.passwords.hashear(dto.clave),
-        rol,
-        idPersona,
-        activo: true,
-        unidades: this.unidades(dto.idUnidades ?? []),
-      }),
-    );
-    return this.aDto(creado);
+    const claveHash = await this.passwords.hashear(dto.clave);
+    // `usuario_unidad` necesita el id del usuario, que existe recién al insertarlo.
+    return this.usuarios.manager.transaction(async (manager) => {
+      const repo = manager.getRepository(Usuario);
+      const creado = await repo.save(
+        repo.create({
+          nombreUsuario,
+          claveHash,
+          rol,
+          idPersona,
+          activo: true,
+          unidades: [],
+        }),
+      );
+      creado.unidades = this.unidades(dto.idUnidades ?? [], creado.id);
+      return this.aDto(await repo.save(creado));
+    });
   }
 
   async actualizar(id: number, dto: ActualizarUsuarioDto): Promise<UsuarioDto> {
