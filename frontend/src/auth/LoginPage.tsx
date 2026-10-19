@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router';
 import { z } from 'zod';
 import { api } from '../api/cliente';
+import logoUtn from '../assets/utn-logo.png';
 
 const esquema = z.object({
   nombreUsuario: z.string().min(1, 'Ingresá tu usuario'),
@@ -64,6 +65,21 @@ export function LoginPage() {
       >
         <Stack spacing={2.5}>
           <Box>
+            <Box
+              component="img"
+              src={logoUtn}
+              alt="UTN Facultad Regional Tucumán"
+              sx={(t) => ({
+                width: 64,
+                height: 64,
+                mb: 1.5,
+                objectFit: 'contain',
+                // El PNG es negro sobre blanco: se funde con el fondo de la tarjeta.
+                ...(t.palette.mode === 'dark'
+                  ? { filter: 'invert(1)', mixBlendMode: 'screen' }
+                  : { mixBlendMode: 'multiply' }),
+              })}
+            />
             <Typography
               variant="overline"
               color="secondary"
