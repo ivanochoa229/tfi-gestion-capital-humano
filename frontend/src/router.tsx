@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router';
+import { createBrowserRouter, Navigate } from 'react-router';
 import { LoginPage } from './auth/LoginPage';
 import { RutaProtegida } from './auth/RutaProtegida';
 import { Layout } from './components/Layout';
@@ -8,14 +8,23 @@ import { ConocimientoPage } from './features/conocimiento/pages/ConocimientoPage
 import { MisConocimientosPage } from './features/conocimiento/pages/MisConocimientosPage';
 import { PendientesAcreditacionPage } from './features/conocimiento/pages/PendientesAcreditacionPage';
 import { CriticidadPage } from './features/criticidad/pages/CriticidadPage';
+import {
+  ROLES_LECTORES_DETECCION,
+  ROLES_MI_BRECHA,
+} from './features/deteccion/hooks/useDeteccion';
+import { BrechaPage } from './features/deteccion/pages/BrechaPage';
+import { CatedrasPage } from './features/deteccion/pages/CatedrasPage';
+import { HorizontePage } from './features/deteccion/pages/HorizontePage';
+import { PuestosSinSucesorPage } from './features/deteccion/pages/PuestosSinSucesorPage';
+import { PuntosUnicosPage } from './features/deteccion/pages/PuntosUnicosPage';
 import { EstructuraPage } from './features/estructura/pages/EstructuraPage';
 import { ImportarPersonasPage } from './features/personas/pages/ImportarPersonasPage';
 import { MiFichaPage } from './features/personas/pages/MiFichaPage';
 import { PersonasPage } from './features/personas/pages/PersonasPage';
+import { ROLES_ACCIONES, ROLES_SUCESION } from './features/sucesion/estados';
 import { AccionesPage } from './features/sucesion/pages/AccionesPage';
 import { MiSucesionPage } from './features/sucesion/pages/MiSucesionPage';
 import { PlanPage } from './features/sucesion/pages/PlanPage';
-import { ROLES_ACCIONES, ROLES_SUCESION } from './features/sucesion/estados';
 import { SucesionPage } from './features/sucesion/pages/SucesionPage';
 import { TableroPage } from './features/tablero/pages/TableroPage';
 
@@ -105,6 +114,58 @@ export const router = createBrowserRouter([
         element: (
           <RutaProtegida roles={ROLES_ACCIONES}>
             <AccionesPage />
+          </RutaProtegida>
+        ),
+      },
+      {
+        path: 'deteccion',
+        element: <Navigate to="/deteccion/puntos-unicos-falla" replace />,
+      },
+      {
+        path: 'deteccion/puntos-unicos-falla',
+        element: (
+          <RutaProtegida roles={ROLES_LECTORES_DETECCION}>
+            <PuntosUnicosPage />
+          </RutaProtegida>
+        ),
+      },
+      {
+        path: 'deteccion/catedras',
+        element: (
+          <RutaProtegida roles={ROLES_LECTORES_DETECCION}>
+            <CatedrasPage />
+          </RutaProtegida>
+        ),
+      },
+      {
+        path: 'deteccion/puestos-sin-sucesor',
+        element: (
+          <RutaProtegida roles={ROLES_LECTORES_DETECCION}>
+            <PuestosSinSucesorPage />
+          </RutaProtegida>
+        ),
+      },
+      {
+        path: 'deteccion/horizonte',
+        element: (
+          <RutaProtegida roles={ROLES_LECTORES_DETECCION}>
+            <HorizontePage />
+          </RutaProtegida>
+        ),
+      },
+      {
+        path: 'deteccion/brecha',
+        element: (
+          <RutaProtegida roles={ROLES_LECTORES_DETECCION}>
+            <BrechaPage modo="gestion" />
+          </RutaProtegida>
+        ),
+      },
+      {
+        path: 'deteccion/mi-brecha',
+        element: (
+          <RutaProtegida roles={ROLES_MI_BRECHA}>
+            <BrechaPage modo="propia" />
           </RutaProtegida>
         ),
       },

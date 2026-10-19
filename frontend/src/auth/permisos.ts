@@ -80,6 +80,21 @@ export const SECCIONES: Seccion[] = [
       'docente',
     ],
   },
+  {
+    ruta: '/deteccion/puntos-unicos-falla',
+    nombre: 'Detección',
+    roles: [
+      'recursos_humanos',
+      'autoridad',
+      'jefatura_departamento',
+      'jefe_catedra',
+    ],
+  },
+  {
+    ruta: '/deteccion/mi-brecha',
+    nombre: 'Mi brecha',
+    roles: ['docente', 'jefe_catedra', 'jefatura_departamento'],
+  },
   { ruta: '/admin', nombre: 'Administración', roles: ['administrador'] },
 ];
 
