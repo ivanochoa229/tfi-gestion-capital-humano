@@ -46,18 +46,38 @@ export function LoginPage() {
 
   return (
     <Box
-      sx={{ display: 'grid', placeItems: 'center', minHeight: '100vh', p: 2 }}
+      sx={{
+        display: 'grid',
+        placeItems: 'center',
+        minHeight: '100vh',
+        p: 2,
+        background: (t) =>
+          `linear-gradient(160deg, #072a57 0%, #0a3d7c 45%, ${t.palette.background.default} 45%)`,
+      }}
     >
       <Paper
         component="form"
         onSubmit={ingresar}
         noValidate
-        sx={{ p: 4, width: 360 }}
+        elevation={6}
+        sx={{ p: 5, width: '100%', maxWidth: 440 }}
       >
-        <Stack spacing={2}>
-          <Typography variant="h5" component="h1">
-            Gestión del conocimiento crítico
-          </Typography>
+        <Stack spacing={2.5}>
+          <Box>
+            <Typography
+              variant="overline"
+              color="secondary"
+              sx={{ fontWeight: 700, letterSpacing: 1.5 }}
+            >
+              UTN · Facultad Regional Tucumán
+            </Typography>
+            <Typography variant="h5" component="h1">
+              Gestión del conocimiento crítico
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Iniciá sesión para continuar
+            </Typography>
+          </Box>
           {error && <Alert severity="error">{error}</Alert>}
           <TextField
             label="Usuario"
@@ -75,7 +95,12 @@ export function LoginPage() {
             error={!!errors.clave}
             helperText={errors.clave?.message}
           />
-          <Button type="submit" variant="contained" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            variant="contained"
+            size="large"
+            disabled={isSubmitting}
+          >
             Ingresar
           </Button>
         </Stack>
