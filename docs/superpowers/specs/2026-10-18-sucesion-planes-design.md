@@ -172,9 +172,10 @@ Por consulta, para el alcance de quien consulta:
 
 No se implementa acá, pero queda fijado para RF18 y RF19:
 
-- Un puesto crítico tiene sucesor preparado si algún candidato de un plan `aprobado` de ese puesto
-  tiene, para **todos** sus requisitos excluyentes, `conocimiento_persona.id_nivel_acreditado >=
-  requisito_puesto.id_nivel` (por `orden`).
+- Un puesto crítico tiene sucesor preparado si algún candidato **válido** (persona activa, con al menos una
+  ocupación vigente, sin fecha prevista de retiro cumplida y que no ocupe ya el puesto del plan; decisión 7 de
+  la spec de Detección) de un plan `aprobado` de ese puesto tiene, para **todos** sus requisitos excluyentes,
+  `conocimiento_persona.id_nivel_acreditado >= requisito_puesto.id_nivel` (por `orden`).
 - El estado manual `estado_preparacion` no interviene.
 - La brecha del candidato (RF19) se calcula contra el puesto del plan, no contra el que ocupa.
 
@@ -231,7 +232,8 @@ docente.
   y del rol (presentar, aprobar, rechazar con motivo, nueva versión, cerrar).
 - **Acciones** (`/acciones`): filtros por estado, vencidas y conocimiento. RR. HH. crea; el responsable
   (docente o jefatura) ve el botón de avanzar en las suyas.
-- **Mi sucesión** (`docente`): su fila de candidato, sus acciones y su brecha.
+- **Mi sucesión** (`docente`): su fila de candidato, sus acciones, el conteo de excluyentes y un enlace a la
+  brecha detallada (`/deteccion/mi-brecha`).
 - Formularios con react-hook-form y zod; llamadas con TanStack Query dentro del feature.
 
 ## Pruebas

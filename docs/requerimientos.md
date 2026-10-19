@@ -126,6 +126,8 @@ El diseño está en `docs/superpowers/specs/2026-10-16-conocimiento-activos-desi
 
 **Sucesión:** `plan_sucesion` (versionado por puesto, con estados `borrador`, `pendiente_aprobacion`, `aprobado`, `rechazado` y `cerrado`), `candidato_sucesion` y `accion_transferencia`; ver `docs/superpowers/specs/2026-10-18-sucesion-planes-design.md`. Un puesto crítico tiene sucesor preparado si algún candidato de un plan `aprobado` de ese puesto cubre, con su nivel acreditado vigente, todos los requisitos excluyentes del puesto; el estado de preparación manual no interviene en RF18. Aprueba solo `autoridad`.
 
+**Detección:** siete vistas de PostgreSQL sin almacenamiento de resultados ni instantáneas (`poseedor_vigente`, `par_critico`, `deteccion_punto_unico_falla`, `deteccion_catedra_una_persona`, `deteccion_puesto_sin_sucesor`, `deteccion_brecha_perfil` y `deteccion_retiro_poseedor`) más el tablero de riesgo consolidado; ver `docs/superpowers/specs/2026-10-18-deteccion-tablero-design.md`. Un poseedor es una persona activa, con al menos una ocupación vigente, sin fecha prevista de retiro cumplida y con nivel acreditado vigente suficiente para el nivel requerido más exigente entre los pares críticos del conocimiento. Para RF18, un sucesor preparado válido debe ser además persona activa, con ocupación vigente, sin retiro cumplido y no ocupar ya el puesto del plan aprobado.
+
 Cuidados de implementación:
 
 - **Claves compuestas:** `ocupacion`, `requisito_puesto`, `conocimiento_persona` y `candidato_sucesion` se mapean con varias columnas `@PrimaryColumn`.
@@ -161,7 +163,7 @@ Cada módulo: `entities/`, `dto/`, `<modulo>.controller.ts`, `<modulo>.service.t
 
 ```
 frontend/src/
-├── features/       # estructura, personas, conocimiento, criticidad, sucesion, tablero, admin
+├── features/       # estructura, personas, conocimiento, criticidad, sucesion, deteccion, tablero, admin
 │   └── <feature>/  pages/, components/, hooks/
 ├── api/            # cliente y tipos generados desde Swagger
 ├── auth/           # sesión y rutas protegidas por rol
