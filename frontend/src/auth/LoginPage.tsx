@@ -64,14 +64,16 @@ export function LoginPage() {
         sx={{ p: 5, width: '100%', maxWidth: 440 }}
       >
         <Stack spacing={2.5}>
-          <Box>
+          <Box sx={{ textAlign: 'center' }}>
             <Box
               component="img"
               src={logoUtn}
               alt="UTN Facultad Regional Tucumán"
               sx={(t) => ({
-                width: 64,
-                height: 64,
+                display: 'block',
+                width: 72,
+                height: 72,
+                mx: 'auto',
                 mb: 1.5,
                 objectFit: 'contain',
                 // El PNG es negro sobre blanco: se funde con el fondo de la tarjeta.
@@ -83,7 +85,7 @@ export function LoginPage() {
             <Typography
               variant="overline"
               color="secondary"
-              sx={{ fontWeight: 700, letterSpacing: 1.5 }}
+              sx={{ display: 'block', fontWeight: 700, letterSpacing: 1.5 }}
             >
               UTN · Facultad Regional Tucumán
             </Typography>
