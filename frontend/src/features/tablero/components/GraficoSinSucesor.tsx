@@ -39,7 +39,7 @@ export function GraficoSinSucesor({ total, porMotivo }: Propiedades) {
   return (
     <Paper variant="outlined" sx={{ p: 2, height: '100%' }}>
       <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>
-        Puestos críticos sin sucesor por motivo (RF18)
+        Puestos críticos sin sucesor por motivo
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
         Distribución entre puestos sin plan, con plan en elaboración y con plan

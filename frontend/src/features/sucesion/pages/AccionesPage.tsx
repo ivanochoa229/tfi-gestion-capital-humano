@@ -71,7 +71,7 @@ export function AccionesPage() {
   return (
     <PaginaEnConstruccion
       titulo="Acciones"
-      descripcion="Acciones de transferencia de conocimiento: responsable, fecha prevista y avance (RF15)."
+      descripcion="Acciones de transferencia de conocimiento: responsable, fecha prevista y avance."
     >
       <Stack
         direction={{ xs: 'column', sm: 'row' }}

@@ -78,7 +78,7 @@ export function PuestosSinSucesorPage() {
 
   return (
     <ListadoConPestanias
-      titulo="Puestos críticos sin sucesor preparado (RF18)"
+      titulo="Puestos críticos sin sucesor preparado"
       descripcion="Puestos con al menos un requisito excluyente de criticidad vigente alta que aún no cuentan con un candidato válido en un plan aprobado que cubra todos sus requisitos excluyentes."
       idUnidad={idUnidad}
       onCambiarUnidad={(v) => actualizarParametro('idUnidad', v)}

@@ -87,8 +87,7 @@ export function CalidadDeDatos({ calidad }: Propiedades) {
         <Alert severity="info">
           Mientras las evaluaciones de criticidad, la aprobación de planes o las
           acreditaciones de nivel no estén completas, los indicadores de puntos
-          únicos de falla (RF16) y puestos sin sucesor (RF18) sobreestiman el
-          riesgo real.
+          únicos de falla y puestos sin sucesor sobreestiman el riesgo real.
         </Alert>
       )}
     </Paper>
