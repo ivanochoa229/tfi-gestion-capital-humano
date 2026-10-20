@@ -91,7 +91,7 @@ export function CatedrasPage() {
 
   return (
     <ListadoConPestanias
-      titulo="Cátedras vulnerables (RF17)"
+      titulo="Cátedras vulnerables"
       descripcion="Cátedras activas cuya dotación vigente recae en una única persona (aunque ocupe más de un cargo) y cátedras sin ocupaciones vigentes."
       idUnidad={idUnidad}
       onCambiarUnidad={cambiarUnidad}

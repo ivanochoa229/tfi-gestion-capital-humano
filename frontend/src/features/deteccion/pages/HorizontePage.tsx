@@ -93,7 +93,7 @@ export function HorizontePage() {
 
   return (
     <ListadoConPestanias
-      titulo="Horizonte de riesgo por retiros (RF20)"
+      titulo="Horizonte de riesgo por retiros"
       descripcion="Conocimientos críticos que pierden poseedores acreditados por fecha prevista de retiro dentro del plazo seleccionado."
       idUnidad={idUnidad}
       onCambiarUnidad={(v) => actualizarParametro('idUnidad', v)}

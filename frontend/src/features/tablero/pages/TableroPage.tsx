@@ -88,8 +88,8 @@ export function TableroPage() {
 
   return (
     <PaginaEnConstruccion
-      titulo="Tablero de riesgo (RF21)"
-      descripcion="Consolidación de puntos únicos de falla, cátedras sostenidas por una sola persona, puestos críticos sin sucesor, brechas de candidatos y horizonte de retiro (RF16–RF20)."
+      titulo="Tablero de riesgo"
+      descripcion="Consolidación de puntos únicos de falla, cátedras sostenidas por una sola persona, puestos críticos sin sucesor, brechas de candidatos y horizonte de retiro."
     >
       <FiltrosTablero
         idUnidad={idUnidad}
@@ -117,7 +117,7 @@ export function TableroPage() {
             }}
           >
             <TarjetaIndicador
-              titulo="Puntos únicos de falla (RF16)"
+              titulo="Puntos únicos de falla"
               cifraPrincipal={consulta.data.puntosUnicosFalla.unicoPoseedor}
               etiquetaPrincipal="conocimientos con un único poseedor"
               cifraSecundaria={`${consulta.data.puntosUnicosFalla.sinPoseedor} sin poseedor`}
@@ -125,7 +125,7 @@ export function TableroPage() {
             />
 
             <TarjetaIndicador
-              titulo="Cátedras vulnerables (RF17)"
+              titulo="Cátedras vulnerables"
               cifraPrincipal={consulta.data.catedras.unaPersona}
               etiquetaPrincipal="cátedras con una sola persona"
               cifraSecundaria={`${consulta.data.catedras.sinDotacion} sin dotación`}
@@ -133,21 +133,21 @@ export function TableroPage() {
             />
 
             <TarjetaIndicador
-              titulo="Puestos sin sucesor (RF18)"
+              titulo="Puestos sin sucesor"
               cifraPrincipal={consulta.data.puestosSinSucesor.total}
               etiquetaPrincipal="puestos críticos sin sucesor preparado"
               enlace={`/deteccion/puestos-sin-sucesor${sufijoUnidad}`}
             />
 
             <TarjetaIndicador
-              titulo="Candidatos con brecha (RF19)"
+              titulo="Candidatos con brecha"
               cifraPrincipal={consulta.data.candidatosConBrecha}
               etiquetaPrincipal="candidatos en planes aprobados con excluyentes sin cubrir"
               enlace={`/deteccion/brecha${sufijoBrecha}`}
             />
 
             <TarjetaIndicador
-              titulo="Horizonte de retiros (RF20)"
+              titulo="Horizonte de retiros"
               cifraPrincipal={consulta.data.horizonte.conocimientos}
               etiquetaPrincipal={`conocimientos críticos comprometidos en ${consulta.data.horizonte.meses} meses`}
               enlace={`/deteccion/horizonte${sufijoHorizonte}`}

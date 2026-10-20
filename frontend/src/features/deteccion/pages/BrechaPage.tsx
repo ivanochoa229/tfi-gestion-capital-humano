@@ -37,7 +37,7 @@ function MiBrechaVista() {
 
   return (
     <PaginaEnConstruccion
-      titulo="Mi brecha de perfil (RF19)"
+      titulo="Mi brecha de perfil"
       descripcion="Comparación entre los conocimientos requeridos por los puestos que ocupás hoy y por los planes de sucesión aprobados en los que figurás como candidato, frente a tus niveles acreditados."
     >
       <Alert severity="info" sx={{ mb: 2 }}>
@@ -100,7 +100,7 @@ function BrechaGestionVista() {
 
   return (
     <ListadoConPestanias
-      titulo="Brecha de perfil por persona y puesto (RF19)"
+      titulo="Brecha de perfil por persona y puesto"
       descripcion="Comparación entre el perfil de conocimientos exigido por cada puesto y el nivel acreditado vigente de sus ocupantes o candidatos."
       idUnidad={idUnidad}
       onCambiarUnidad={(v) => actualizarParametro('idUnidad', v)}

@@ -23,7 +23,7 @@ export function AdminPage() {
   return (
     <PaginaEnConstruccion
       titulo="Administración"
-      descripcion="Usuarios y roles (RF22), tablas de referencia (RF23) y matriz de criticidad (RF12)."
+      descripcion="Usuarios y roles, tablas de referencia y matriz de criticidad."
     >
       <Tabs value={seccion} onChange={(_, v) => setSeccion(v)} sx={{ mb: 2 }}>
         <Tab value="referencia" label="Tablas de referencia" />

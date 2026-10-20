@@ -25,7 +25,7 @@ export function GraficoPuntosUnicos({ datos }: Propiedades) {
   return (
     <Paper variant="outlined" sx={{ p: 2, height: '100%' }}>
       <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>
-        Puntos únicos de falla por cátedra (RF16)
+        Puntos únicos de falla por cátedra
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
         Conocimientos críticos con un único poseedor vigente según la unidad de

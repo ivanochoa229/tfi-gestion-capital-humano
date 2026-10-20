@@ -58,7 +58,7 @@ export function SucesionPage() {
   return (
     <PaginaEnConstruccion
       titulo="Sucesión"
-      descripcion="Planes de sucesión y candidatos de los puestos críticos (RF13, RF14)."
+      descripcion="Planes de sucesión y candidatos de los puestos críticos."
     >
       <Stack
         direction={{ xs: 'column', sm: 'row' }}

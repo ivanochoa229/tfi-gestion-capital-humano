@@ -24,7 +24,7 @@ export function EstructuraPage() {
   return (
     <PaginaEnConstruccion
       titulo="Estructura y puestos"
-      descripcion="Unidades organizativas (solo consulta) e inventario de puestos (RF01, RF02). La descripción de cada puesto vendrá en un bloque posterior."
+      descripcion="Unidades organizativas (solo consulta) e inventario de puestos. La descripción de cada puesto vendrá en un bloque posterior."
     >
       <Box
         sx={{

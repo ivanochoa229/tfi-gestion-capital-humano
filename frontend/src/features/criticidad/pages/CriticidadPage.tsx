@@ -65,7 +65,7 @@ export function CriticidadPage() {
   return (
     <PaginaEnConstruccion
       titulo="Criticidad"
-      descripcion="Impacto de pérdida y dificultad de reemplazo de cada conocimiento que exige un puesto (RF12)."
+      descripcion="Impacto de pérdida y dificultad de reemplazo de cada conocimiento que exige un puesto."
     >
       <Box sx={{ mb: 3 }}>
         <Typography variant="body2" gutterBottom>

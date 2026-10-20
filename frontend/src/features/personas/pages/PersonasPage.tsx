@@ -21,7 +21,7 @@ export function PersonasPage() {
   return (
     <PaginaEnConstruccion
       titulo="Personas"
-      descripcion="Personas y ocupaciones, incluidas las simultáneas y el historial (RF06, RF07)."
+      descripcion="Personas y ocupaciones, incluidas las simultáneas y el historial."
     >
       <Box
         sx={{

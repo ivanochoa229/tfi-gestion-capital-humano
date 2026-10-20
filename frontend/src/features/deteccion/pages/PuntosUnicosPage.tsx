@@ -99,7 +99,7 @@ export function PuntosUnicosPage() {
 
   return (
     <ListadoConPestanias
-      titulo="Puntos únicos de falla (RF16)"
+      titulo="Puntos únicos de falla"
       descripcion="Conocimientos con criticidad vigente alta que dependen de una única persona acreditada en el departamento o que no cuentan con ningún poseedor."
       idUnidad={idUnidad}
       onCambiarUnidad={cambiarUnidad}
