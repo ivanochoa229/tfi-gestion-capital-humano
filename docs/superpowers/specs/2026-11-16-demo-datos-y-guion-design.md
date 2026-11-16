@@ -1,4 +1,4 @@
-Estado: Propuesta | Fecha: 2026-11-16 | Autor: IvanOchoa229
+Estado: Implementada | Fecha: 2026-11-16 | Autor: IvanOchoa229
 
 # Datos de demostración y guion de prueba de los casos de uso
 
