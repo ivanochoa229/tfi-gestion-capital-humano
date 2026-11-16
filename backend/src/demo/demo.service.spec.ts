@@ -61,6 +61,9 @@ describe('DemoService', () => {
     await expect(servicio.onApplicationBootstrap()).resolves.toBeUndefined();
 
     expect(advertencia).toHaveBeenCalledOnce();
+    expect(String(advertencia.mock.calls[0][0])).toMatch(
+      /borra todos los datos/,
+    );
   });
 
   it('no relanza si la carga falla, por ejemplo por tablas inexistentes', async () => {

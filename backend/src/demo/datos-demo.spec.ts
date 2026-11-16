@@ -134,6 +134,17 @@ describe('datos de demo', () => {
     }
   });
 
+  it('nadie figura como evaluador de sus propias acreditaciones', () => {
+    for (const c of DATOS_DEMO.conocimientosPersona) {
+      if (c.acreditado) {
+        expect(
+          c.acreditado.evaluador,
+          `${c.legajo} / ${c.conocimiento}`,
+        ).not.toBe(c.legajo);
+      }
+    }
+  });
+
   it('una acción no tiene al responsable como destinatario', () => {
     for (const a of DATOS_DEMO.acciones) {
       expect(a.destinatario).not.toBe(a.responsable);

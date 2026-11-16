@@ -37,7 +37,7 @@ export class DemoService implements OnApplicationBootstrap {
         this.log.debug('Los datos de demostración ya estaban cargados');
       } else {
         this.log.warn(
-          'Hay datos de demostración (legajos DEMO-) pero falta el usuario demo.admin: no se carga nada. Para empezar de cero: docker compose down -v',
+          'Hay datos de demostración (legajos DEMO-) pero falta el usuario demo.admin: no se carga nada. Para empezar de cero: docker compose down -v (borra todos los datos y archivos de los volúmenes)',
         );
       }
     } catch (error) {

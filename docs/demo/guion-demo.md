@@ -2,7 +2,7 @@
 
 Recorrido manual de los casos de uso core del sistema, pensado para mostrárselo al profesor. Cuenta una historia: **se detecta el riesgo de perder conocimiento crítico y se actúa para reducirlo**.
 
-Spec: `docs/superpowers/specs/2026-11-16-demo-datos-y-guion-design.md`. Duración estimada: unos 45 minutos (cada caso indica la suya).
+Spec: `docs/superpowers/specs/2026-11-16-demo-datos-y-guion-design.md`. Duración estimada: unos 50 minutos (cada caso indica la suya).
 
 > **Cómo se verificó este guion.** Se levantó el sistema desde cero (`down -v` y `up --build`) y se ejecutó la historia completa **por la API** con los siete usuarios, anotando cada resultado. Los nombres de pantallas, botones y campos se tomaron del código del frontend (no del navegador: la extensión del navegador no estaba conectada). Antes de presentar, conviene recorrerlo una vez a mano en la interfaz. Si un texto de pantalla difiere de lo escrito acá, vale el de la pantalla.
 
@@ -14,7 +14,7 @@ Spec: `docs/superpowers/specs/2026-11-16-demo-datos-y-guion-design.md`. Duració
    cp .env.example .env
    docker compose up --build
    ```
-   `.env.example` ya trae `CARGAR_DATOS_DEMO=true`: el backend carga los datos de demostración al arrancar (el log dice «Datos de demostración cargados»). La primera vez tarda unos minutos por la construcción de las imágenes.
+   `.env.example` ya trae `CARGAR_DATOS_DEMO=true`: el backend carga los datos de demostración al arrancar (el log dice «Datos de demostración cargados»). La primera vez tarda unos minutos por la construcción de las imágenes. Está pensado para una base nueva: si ya hay datos propios (por ejemplo las cátedras de ejemplo de `backend/scripts/`), no lo actives, porque se mezclarían con los de la demo y los números del guion dejarían de valer.
 3. Direcciones:
 
    | Qué | URL |
@@ -31,10 +31,10 @@ Spec: `docs/superpowers/specs/2026-11-16-demo-datos-y-guion-design.md`. Duració
    | --- | --- | --- | --- |
    | `demo.autoridad` | Autoridad | Toda la facultad | Tablero de riesgo, Estructura, Personas, Catálogo, Activos, Criticidad, Sucesión, Acciones, Detección |
    | `demo.rrhh` | Recursos Humanos | Toda la facultad; ve el documento de las personas | Igual que la autoridad |
-   | `demo.jefatura` | Jefatura de Departamento | Departamento de Sistemas | Sin Tablero; Mis conocimientos, Por acreditar, Mi brecha |
-   | `demo.jefecatedra` | Jefe de cátedra | Laura Benítez; solo la cátedra de Bases de Datos | Igual que la jefatura, limitado a su cátedra |
+   | `demo.jefatura` | Jefatura de Departamento | Departamento de Sistemas | Estructura y puestos, Personas, Catálogo, Mis conocimientos, Por acreditar, Activos, Criticidad, Sucesión, Acciones, Detección, Mi brecha (sin Tablero ni Administración) |
+   | `demo.jefecatedra` | Jefe de cátedra | Laura Benítez; solo la cátedra de Bases de Datos | Igual que la jefatura, con los datos limitados a su cátedra |
    | `demo.analista` | Analista de puestos | Toda la facultad | Estructura y puestos, Personas, Catálogo, Activos |
-   | `demo.docente` | Docente | Diego Paz (Algoritmos) | Mi ficha, Mis conocimientos, Mi sucesión, Acciones, Mi brecha |
+   | `demo.docente` | Docente | Diego Paz (Algoritmos) | Estructura y puestos, Mi ficha, Mis conocimientos, Activos de conocimiento, Mi sucesión, Acciones, Mi brecha |
    | `demo.admin` | Administrador | Toda la facultad | Estructura y puestos, Personas, Catálogo, Activos, Administración |
 
 5. **Volver al estado inicial entre ensayos:** `docker compose down -v && docker compose up --build`. Borra todos los datos y archivos y recarga la demo. (Atención: borra también cualquier dato propio que hubiera en esos volúmenes.)
@@ -170,7 +170,7 @@ Con la API (opcional, Swagger): `demo.docente` pidiendo `/api/deteccion/tablero`
 | 6.4 | Guardar | — | El avance pasa a **3 de 5** y el par queda evaluado |
 | 6.5 | **Historial** del par | Mirar | La evaluación, con quién la hizo y cuándo; las evaluaciones nunca se sobrescriben |
 | 6.6 | Como `demo.admin`, **Administración → Matriz de criticidad** | Mirar | Alto + Moderada = Alta; Medio + Moderada = Media. La criticidad sale de esta matriz |
-| 6.7 | Como `demo.rrhh`, **Criticidad** | Mirar | Ve los 16 pares de toda la facultad, no solo los 5 de la jefa de cátedra |
+| 6.7 | Como `demo.rrhh`, **Criticidad** | Mirar | Ve los pares de toda la facultad (18: los 16 iniciales más los 2 requisitos del puesto que se creó en el caso 2), no solo los 5 de la jefa de cátedra |
 
 ---
 
@@ -182,9 +182,9 @@ Con la API (opcional, Swagger): `demo.docente` pidiendo `/api/deteccion/tablero`
 | --- | --- | --- | --- |
 | 7.1 | `demo.autoridad`, **Sucesión** | Mirar | Tres planes: *Jefe de cátedra de Ingeniería de Software* (Borrador), *…de Bases de Datos* (Pendiente de aprobación) y *…de Sistemas Operativos* (Aprobado). Debajo, «Cobertura de planes de sucesión» con los puestos críticos sin plan |
 | 7.2 | Abrir el plan de **Bases de Datos** | Mirar candidatos | Martín Acosta, prioridad 1, preparación «Listo a mediano plazo». Como ya está acreditado en SQL avanzado, cubre todos los excluyentes. Acciones del plan: mentoría de SQL (en curso) y documentación de Optimización de consultas (pendiente) |
-| 7.3 | Botón **Aprobar** | Aprobar el plan; motivo opcional | Estado **Aprobado**. Solo la autoridad aprueba (RF24) |
-| 7.4 | Comprobar permiso (antes de 7.3 se puede hacer con el plan de Bases de Datos pendiente) | Entrar como `demo.jefatura` y abrir un plan en estado Pendiente de aprobación | Ve el plan pero **no** tiene los botones Aprobar ni Rechazar; la API responde 403 |
-| 7.5 | `demo.jefatura`, **Sucesión**, en «Cobertura de planes de sucesión», en el puesto sin plan *Jefe de cátedra de Redes de Datos*, **Crear plan** | Puesto `Jefe de cátedra de Redes de Datos`; Responsable del plan `Quiroga, Hernán`; Observaciones `Redes depende hoy de una sola persona.` | Plan en **Borrador**. Recursos Humanos no puede crear planes: solo la jefatura y la autoridad |
+| 7.3 | Comprobar permiso | Entrar como `demo.jefatura` y abrir el plan de Bases de Datos (estado Pendiente de aprobación) | Ve el plan pero **no** tiene los botones Aprobar ni Rechazar; la API responde 403 |
+| 7.4 | `demo.autoridad`, en el mismo plan, botón **Aprobar** | Aprobar el plan; motivo opcional | Estado **Aprobado**. Solo la autoridad aprueba (RF24) |
+| 7.5 | `demo.jefatura`, **Sucesión**, en «Cobertura de planes de sucesión», en el puesto sin plan *Jefe de cátedra de Redes de Datos*, **Crear plan** | Puesto `Jefe de cátedra de Redes de Datos`; Responsable del plan `Quiroga, Hernán`; Observaciones `Redes depende hoy de una sola persona.` | Plan en **Borrador**. Solo la jefatura crea planes (y solo la autoridad los aprueba): Recursos Humanos no puede crear planes |
 | 7.6 | En ese plan, **Agregar candidato** | Persona `Fernández, Paula`; Prioridad `1`; Estado de preparación `En desarrollo`; Fecha estimada `01/03/2027` | La tabla de candidatos lo marca como que todavía no cubre el requisito excluyente (no acredita Redes TCP/IP) |
 | 7.7 | `demo.jefatura`, en el plan de Redes, **Presentar para aprobación** | — | Estado **Pendiente de aprobación** |
 | 7.8 | `demo.autoridad`, abrir el plan de Redes, **Aprobar** | — | Estado **Aprobado** |

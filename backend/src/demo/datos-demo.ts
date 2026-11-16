@@ -185,6 +185,14 @@ const acreditado = (nivel: string, evidencia = 'certificado', dias = -200) => ({
   evaluador: EVALUADOR,
 });
 
+/** Nadie se acredita a sí mismo: a Sofía la evalúa otra persona. */
+const sinAutoEvaluacion = (
+  c: ConocimientoPersonaDemo,
+): ConocimientoPersonaDemo =>
+  c.acreditado?.evaluador === c.legajo
+    ? { ...c, acreditado: { ...c.acreditado, evaluador: 'DEMO-005' } }
+    : c;
+
 export const USUARIOS_DEMO: UsuarioDemo[] = [
   {
     nombreUsuario: 'demo.admin',
@@ -788,7 +796,7 @@ export const DATOS_DEMO: DatosDemo = {
       declarado: declarado('intermedio'),
       acreditado: acreditado('intermedio', 'entrevista'),
     },
-  ],
+  ].map(sinAutoEvaluacion),
 
   // Quedan sin evaluar, a propósito, los pares de los puestos de auxiliar, el de
   // JTP de Bases de Datos y los deseables, para evaluar uno en vivo (RF12).
