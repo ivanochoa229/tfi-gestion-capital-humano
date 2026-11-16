@@ -1,0 +1,22 @@
+Procedimiento de respaldo y restauración de PostgreSQL
+Cátedra de Bases de Datos - Departamento de Sistemas
+
+Objetivo
+Dejar por escrito cómo se respalda y se restaura la base de datos de los
+trabajos prácticos, para que cualquier docente de la cátedra pueda hacerlo.
+
+Respaldo
+1. Abrir una terminal en el servidor del laboratorio.
+2. Ejecutar: pg_dump -U practicos -Fc bd_practicos > respaldo.dump
+3. Verificar que el archivo respaldo.dump no esté vacío.
+4. Copiarlo a la carpeta compartida de la cátedra con la fecha en el nombre.
+
+Restauración
+1. Crear una base vacía: createdb -U practicos bd_practicos_restaurada
+2. Ejecutar: pg_restore -U practicos -d bd_practicos_restaurada respaldo.dump
+3. Comprobar con psql que las tablas y la cantidad de filas coinciden.
+
+Observaciones
+- El respaldo se hace antes de cada examen y al terminar cada cuatrimestre.
+- Este procedimiento es el conocimiento que hoy tiene una sola persona de la
+  cátedra; documentarlo es parte del plan de transferencia.

@@ -1,0 +1,6 @@
+legajo;apellido;nombre;documento;fecha_nacimiento;fecha_ingreso;situacion_revista;fecha_prevista_retiro;unidad;puesto;fecha_desde;fecha_hasta;caracter;dedicacion
+IMP-01;Gómez;Lucía;31111101;1991-04-12;2022-03-01;Contratado;;Ingeniería de Software;Auxiliar docente de Ingeniería de Software;2022-03-01;;Interino;Simple
+IMP-02;Vega;Tomás;32111102;1993-09-30;2023-03-01;Contratado;;Sistemas Operativos;Auxiliar docente de Sistemas Operativos;2023-03-01;;Suplente;Simple
+IMP-03;Arias;Julieta;33111103;1989-01-25;2021-08-01;Planta permanente;;;;;;;
+IMP-04;Navarro;Camila;34111104;1995-06-08;2024-03-01;Contratado;;Ingeniería de Software;Auxiliar docente de Ingeniería de Software;2024-03-01;;Interino;Simple
+IMP-05;Ibarra;Franco;35111105;1990-11-17;2020-03-01;Planta permanente;;Bases de Datos;Jefe de trabajos prácticos de Bases de Datos;2020-03-01;;Titular;Exclusiva
