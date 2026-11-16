@@ -1,4 +1,4 @@
-Estado: Implementado | Fecha: 2026-11-16 | PR: pendiente
+Estado: Implementado | Fecha: 2026-11-16 | PR: #13
 
 # Datos de demostración y guion de prueba: plan de implementación
 
