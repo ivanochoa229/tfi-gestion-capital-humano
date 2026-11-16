@@ -20,6 +20,22 @@ describe('validarEnv', () => {
     expect(env.ADMIN_CLAVE).toBeUndefined();
   });
 
+  it('CARGAR_DATOS_DEMO es false si no se define', () => {
+    expect(validarEnv(base).CARGAR_DATOS_DEMO).toBe(false);
+  });
+
+  it('acepta "true" y lo convierte a booleano', () => {
+    expect(
+      validarEnv({ ...base, CARGAR_DATOS_DEMO: 'true' }).CARGAR_DATOS_DEMO,
+    ).toBe(true);
+  });
+
+  it('"false" da false', () => {
+    expect(
+      validarEnv({ ...base, CARGAR_DATOS_DEMO: 'false' }).CARGAR_DATOS_DEMO,
+    ).toBe(false);
+  });
+
   it('rechaza un SESION_SECRETO corto', () => {
     expect(() => validarEnv({ ...base, SESION_SECRETO: 'corto' })).toThrow(
       /SESION_SECRETO/,

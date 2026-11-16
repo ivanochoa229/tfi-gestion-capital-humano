@@ -52,6 +52,14 @@ export class Env {
   @IsBoolean()
   DB_MIGRATIONS_RUN: boolean = true;
 
+  /** Carga los datos de demostración al arrancar. */
+  @Transform(
+    ({ obj }) =>
+      obj.CARGAR_DATOS_DEMO === true || obj.CARGAR_DATOS_DEMO === 'true',
+  )
+  @IsBoolean()
+  CARGAR_DATOS_DEMO: boolean = false;
+
   @IsUrl({ require_tld: false, require_protocol: true })
   S3_ENDPOINT: string;
 
