@@ -44,6 +44,12 @@ import { UsuariosService } from './usuarios.service.js';
     { provide: APP_GUARD, useClass: SesionGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
   ],
-  exports: [AuthService, UsuariosService, AlcanceService, TypeOrmModule],
+  exports: [
+    AuthService,
+    UsuariosService,
+    AlcanceService,
+    PasswordService,
+    TypeOrmModule,
+  ],
 })
 export class UsuariosModule {}

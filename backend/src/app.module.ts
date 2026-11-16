@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { validarEnv } from './infra/config/env.validation.js';
+import { DemoModule } from './demo/demo.module.js';
 import { DatabaseModule } from './infra/database/database.module.js';
 import { SaludController } from './infra/salud/salud.controller.js';
 import { StorageModule } from './infra/storage/storage.module.js';
@@ -34,6 +35,7 @@ import { UsuariosModule } from './modules/usuarios/usuarios.module.js';
     DeteccionModule,
     UsuariosModule,
     ReferenciaModule,
+    DemoModule,
   ],
   controllers: [SaludController],
 })

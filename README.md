@@ -44,6 +44,33 @@ cd backend && npm install && npm run start:dev
 cd frontend && npm install && npm run dev
 ```
 
+## Demostración
+
+Para mostrar el sistema con datos de prueba basta clonar el repositorio, copiar el `.env` y levantarlo:
+
+```bash
+cp .env.example .env
+docker compose up --build
+```
+
+`.env.example` trae `CARGAR_DATOS_DEMO=true`: al arrancar, el backend carga una sola vez (en una transacción, sin duplicar si se reinicia) los datos del Departamento de Sistemas (cátedras, puestos, docentes, conocimientos, criticidad, planes de sucesión y acciones) y siete usuarios, uno por rol. Con `CARGAR_DATOS_DEMO=false` (o sin la línea) no se carga nada. Está pensado para una base nueva: no lo actives sobre una base con datos propios, porque se mezclarían con los de la demo.
+
+Todos los usuarios de demostración usan la clave `DemoUTN2026` (son solo para uso local):
+
+| Usuario | Rol |
+| --- | --- |
+| `demo.autoridad` | Autoridad |
+| `demo.rrhh` | Recursos Humanos |
+| `demo.jefatura` | Jefatura de Departamento |
+| `demo.jefecatedra` | Jefe de cátedra (Bases de Datos) |
+| `demo.analista` | Analista de puestos |
+| `demo.docente` | Docente |
+| `demo.admin` | Administrador |
+
+Para volver al estado inicial entre ensayos (borra todos los datos y archivos de los volúmenes): `docker compose down -v && docker compose up --build`.
+
+El recorrido de los casos de uso, paso a paso, está en [`docs/demo/guion-demo.md`](docs/demo/guion-demo.md), con los archivos de ejemplo en `docs/demo/archivos/`. Los scripts de `backend/scripts/*.sql` son para probar la detección en desarrollo y no forman parte de la demo.
+
 ## Estructura
 
 ```
