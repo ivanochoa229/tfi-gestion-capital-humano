@@ -21,6 +21,10 @@ import { EstadoPlan } from '../../referencia/entities/estado-plan.entity.js';
  */
 @Entity('plan_sucesion')
 @Check(
+  'CK_plan_sucesion_documento',
+  '("documento_clave" IS NULL AND "documento_nombre" IS NULL AND "documento_tipo_mime" IS NULL AND "documento_tamanio" IS NULL AND "documento_hash" IS NULL) OR ("documento_clave" IS NOT NULL AND "documento_nombre" IS NOT NULL AND "documento_tipo_mime" IS NOT NULL AND "documento_tamanio" IS NOT NULL AND "documento_hash" IS NOT NULL)',
+)
+@Check(
   'CK_plan_sucesion_resolucion',
   '("id_usuario_resolucion" IS NULL) = ("fecha_resolucion" IS NULL)',
 )
@@ -54,6 +58,22 @@ export class PlanSucesion {
 
   @Column({ type: 'text', nullable: true })
   observaciones: string | null;
+
+  // Documento del plan en RustFS (todas nulas o todas con valor).
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  documentoClave: string | null;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  documentoNombre: string | null;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  documentoTipoMime: string | null;
+
+  @Column({ type: 'int', nullable: true })
+  documentoTamanio: number | null;
+
+  @Column({ type: 'varchar', length: 64, nullable: true })
+  documentoHash: string | null;
 
   @ManyToOne(() => Puesto, { nullable: false })
   @JoinColumn({ name: 'id_puesto' })

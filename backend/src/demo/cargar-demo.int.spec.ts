@@ -1,3 +1,5 @@
+import { AlcanceService } from '../modules/usuarios/alcance.service.js';
+import { AccesoPerfilService } from '../modules/conocimiento/acceso-perfil.service.js';
 import {
   crearBaseTemporal,
   type BaseTemporal,
@@ -108,6 +110,46 @@ describe('cargarDatosDemo', () => {
        WHERE u.nombre_usuario = 'demo.jefecatedra'`,
     );
     expect(alcance.map((a) => a.unidad)).toEqual(['Bases de Datos']);
+  });
+
+  it('carga la jerarquía de puestos y la jefatura acredita a toda la cadena', async () => {
+    await cargarDatosDemo(base.dataSource, hashDePrueba);
+
+    const sinSuperior = await consultar<{ codigo: string }>(
+      `SELECT codigo FROM puesto WHERE codigo LIKE 'P-%' AND id_puesto_superior IS NULL`,
+    );
+    expect(sinSuperior.map((p) => p.codigo)).toEqual(['P-DEP-JEF']);
+    const jtp = await consultar<{ superior: string }>(
+      `SELECT s.codigo AS superior FROM puesto p JOIN puesto s ON s.id_puesto = p.id_puesto_superior
+       WHERE p.codigo = 'P-BD-JTP'`,
+    );
+    expect(jtp[0].superior).toBe('P-BD-JEF');
+
+    const acceso = new AccesoPerfilService(
+      base.dataSource,
+      new AlcanceService(base.dataSource),
+    );
+    const persona = async (legajo: string) =>
+      (
+        await consultar<{ id: number }>(
+          `SELECT id_persona AS id FROM persona WHERE legajo = $1`,
+          [legajo],
+        )
+      )[0].id;
+    const [andrea, laura, martin, diego] = await Promise.all(
+      ['DEMO-010', 'DEMO-001', 'DEMO-002', 'DEMO-004'].map(persona),
+    );
+    const jefatura = await consultar<{ id_persona: number }>(
+      `SELECT id_persona FROM usuario WHERE nombre_usuario = 'demo.jefatura'`,
+    );
+    expect(jefatura[0].id_persona).toBe(andrea);
+    // Laura acredita a Martín (su JTP) y no a Diego (de Algoritmos).
+    expect(await acceso.esSuperior(laura, martin)).toBe(true);
+    expect(await acceso.esSuperior(laura, diego)).toBe(false);
+    // La jefatura baja por toda la cadena; nadie acredita hacia arriba.
+    expect(await acceso.esSuperior(andrea, diego)).toBe(true);
+    expect(await acceso.esSuperior(andrea, laura)).toBe(true);
+    expect(await acceso.esSuperior(martin, laura)).toBe(false);
   });
 
   it('si falta demo.admin pero hay datos DEMO- devuelve "parcial" y no escribe', async () => {

@@ -32,9 +32,13 @@ describe('datos de demo', () => {
     expect(repetidos(nombres)).toEqual([]);
   });
 
-  it('el docente y el jefe de cátedra están vinculados a una persona, y ninguna persona a dos usuarios', () => {
+  it('el docente y los evaluadores están vinculados a una persona, y ninguna persona a dos usuarios', () => {
     for (const u of USUARIOS_DEMO) {
-      if (u.rol === 'docente' || u.rol === 'jefe_catedra') {
+      if (
+        u.rol === 'docente' ||
+        u.rol === 'jefe_catedra' ||
+        u.rol === 'jefatura_departamento'
+      ) {
         expect(u.legajo, u.nombreUsuario).not.toBeNull();
       }
       if (u.legajo !== null) expect(legajos.has(u.legajo)).toBe(true);
@@ -58,7 +62,14 @@ describe('datos de demo', () => {
 
   it('toda referencia apunta a algo definido', () => {
     const d = DATOS_DEMO;
-    expect(d.puestos.every((p) => catedras.has(p.catedra))).toBe(true);
+    expect(
+      d.puestos.every(
+        (p) => catedras.has(p.unidad) || p.unidad === DEPARTAMENTO,
+      ),
+    ).toBe(true);
+    expect(
+      d.puestos.every((p) => p.superior === null || puestos.has(p.superior)),
+    ).toBe(true);
     expect(d.requisitos.every((r) => puestos.has(r.puesto))).toBe(true);
     expect(d.requisitos.every((r) => conocimientos.has(r.conocimiento))).toBe(
       true,
@@ -142,6 +153,35 @@ describe('datos de demo', () => {
           `${c.legajo} / ${c.conocimiento}`,
         ).not.toBe(c.legajo);
       }
+    }
+  });
+
+  it('solo la jefatura del departamento no tiene superior', () => {
+    expect(
+      DATOS_DEMO.puestos
+        .filter((p) => p.superior === null)
+        .map((p) => p.codigo),
+    ).toEqual(['P-DEP-JEF']);
+  });
+
+  it('cada acreditación la firma quien ocupa un puesto superior al de la persona', () => {
+    const d = DATOS_DEMO;
+    const superiorDe = new Map(d.puestos.map((p) => [p.codigo, p.superior]));
+    const ancestros = (codigo: string): string[] => {
+      const sup = superiorDe.get(codigo) ?? null;
+      return sup === null ? [] : [sup, ...ancestros(sup)];
+    };
+    const vigentes = (legajo: string) =>
+      d.ocupaciones
+        .filter((o) => o.legajo === legajo && o.hasta === null)
+        .map((o) => o.puesto);
+    for (const c of d.conocimientosPersona) {
+      if (!c.acreditado) continue;
+      const delEvaluador = new Set(vigentes(c.acreditado.evaluador));
+      const porEncima = vigentes(c.legajo).some((puesto) =>
+        ancestros(puesto).some((a) => delEvaluador.has(a)),
+      );
+      expect(porEncima, `${c.legajo} / ${c.conocimiento}`).toBe(true);
     }
   });
 

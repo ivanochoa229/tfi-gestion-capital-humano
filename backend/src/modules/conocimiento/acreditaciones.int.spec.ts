@@ -9,6 +9,8 @@ import type { AccesoPerfilService } from './acceso-perfil.service.js';
 import { AcreditacionesService } from './acreditaciones.service.js';
 import { ConocimientosService } from './conocimientos.service.js';
 import { Acreditacion } from './entities/acreditacion.entity.js';
+import type { StorageService } from '../../infra/storage/storage.service.js';
+import { AlmacenFalso } from '../../testing/almacen-falso.js';
 import { Conocimiento } from './entities/conocimiento.entity.js';
 
 describe('Acreditaciones (PostgreSQL real)', () => {
@@ -24,6 +26,7 @@ describe('Acreditaciones (PostgreSQL real)', () => {
   let avanzado: number;
   let evidencia: number;
   let jefe: SesionUsuario;
+  const almacen = new AlmacenFalso();
 
   const sql = <T>(consulta: string, parametros?: unknown[]) =>
     ds.query(consulta, parametros) as Promise<T>;
@@ -78,6 +81,7 @@ describe('Acreditaciones (PostgreSQL real)', () => {
       ds.getRepository(Acreditacion),
       referencia,
       acceso,
+      almacen as unknown as StorageService,
     );
     catalogo = new ConocimientosService(
       ds.getRepository(Conocimiento),
@@ -208,5 +212,31 @@ describe('Acreditaciones (PostgreSQL real)', () => {
       [b],
     );
     expect(enDestino[0].n).toBe(resultados[1].status === 'fulfilled' ? 2 : 1);
+  });
+
+  it('guarda la evidencia y la CHECK exige todos sus metadatos juntos', async () => {
+    const creada = await acreditaciones.acreditar(
+      persona,
+      a,
+      dto(basico, await dia(0)),
+      jefe,
+      { originalname: 'titulo.txt', buffer: Buffer.from('Título de grado') },
+    );
+    expect(creada.evidencia).toEqual({
+      nombre: 'titulo.txt',
+      tipoMime: 'text/plain',
+      tamanio: Buffer.byteLength('Título de grado'),
+    });
+    const [fila] = await sql<{ clave: string }[]>(
+      `SELECT evidencia_clave AS clave FROM acreditacion WHERE id_acreditacion = $1`,
+      [creada.id],
+    );
+    expect(almacen.objetos.has(fila.clave)).toBe(true);
+    await expect(
+      sql(
+        `UPDATE acreditacion SET evidencia_nombre = NULL WHERE id_acreditacion = $1`,
+        [creada.id],
+      ),
+    ).rejects.toThrow(/CK_acreditacion_evidencia/);
   });
 });

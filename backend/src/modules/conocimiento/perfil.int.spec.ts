@@ -17,6 +17,7 @@ describe('Lecturas del perfil de conocimiento (PostgreSQL real)', () => {
   let evidencia: number;
   let unidadCatedra: number;
   let otraCatedra: number;
+  let puestoJefe: number;
   let puesto: number;
   let puestoAjeno: number;
   let conocimiento: number;
@@ -87,7 +88,6 @@ describe('Lecturas del perfil de conocimiento (PostgreSQL real)', () => {
       ds,
       ds.getRepository(Acreditacion),
       new AccesoPerfilService(ds, alcance),
-      alcance,
     );
     const departamento = (
       await sql<{ id: number }[]>(
@@ -104,15 +104,21 @@ describe('Lecturas del perfil de conocimiento (PostgreSQL real)', () => {
       )[0].id;
     unidadCatedra = await nuevaCatedra('Cátedra A');
     otraCatedra = await nuevaCatedra('Cátedra B');
-    const nuevoPuesto = async (codigo: string, unidad: number) =>
+    const nuevoPuesto = async (
+      codigo: string,
+      unidad: number,
+      superior: number | null = null,
+    ) =>
       (
         await sql<{ id: number }[]>(
-          `INSERT INTO puesto (codigo, denominacion, id_unidad, id_nivel_jerarquico)
-           SELECT $1, $1, $2, id_nivel_jerarquico FROM nivel_jerarquico WHERE codigo = 'operativo_docente' RETURNING id_puesto AS id`,
-          [codigo, unidad],
+          `INSERT INTO puesto (codigo, denominacion, id_unidad, id_nivel_jerarquico, id_puesto_superior)
+           SELECT $1, $1, $2, id_nivel_jerarquico, $3 FROM nivel_jerarquico WHERE codigo = 'operativo_docente' RETURNING id_puesto AS id`,
+          [codigo, unidad, superior],
         )
       )[0].id;
-    puesto = await nuevoPuesto('P-0001', unidadCatedra);
+    // El jefe de la cátedra A tiene a cargo el puesto de auxiliar; el de la B no.
+    puestoJefe = await nuevoPuesto('P-0000', unidadCatedra);
+    puesto = await nuevoPuesto('P-0001', unidadCatedra, puestoJefe);
     puestoAjeno = await nuevoPuesto('P-0002', otraCatedra);
     conocimiento = (
       await sql<{ id: number }[]>(
@@ -134,10 +140,10 @@ describe('Lecturas del perfil de conocimiento (PostgreSQL real)', () => {
   });
 
   describe('pendientes', () => {
-    it('lista lo declarado sin acreditar por personas del alcance y excluye al propio evaluador', async () => {
+    it('lista lo declarado sin acreditar por quienes ocupan un puesto a cargo del evaluador, y no al evaluador', async () => {
       const evaluador = await nuevaPersona(1);
       const docente = await nuevaPersona(2);
-      await ocupar(evaluador, puesto, -100, null);
+      await ocupar(evaluador, puestoJefe, -100, null);
       await ocupar(docente, puesto, -100, null);
       await declarar(evaluador, 'basico', -5);
       await declarar(docente, 'avanzado', -5);
@@ -153,14 +159,18 @@ describe('Lecturas del perfil de conocimiento (PostgreSQL real)', () => {
       });
     });
 
-    it('no incluye a personas de otra cátedra ni a quien ya no ocupa un puesto vigente', async () => {
+    it('no incluye a personas de otra cátedra, a pares ni a quien ya no ocupa un puesto vigente', async () => {
       const evaluador = await nuevaPersona(1);
       const ajena = await nuevaPersona(2);
       const exOcupante = await nuevaPersona(3);
+      const par = await nuevaPersona(4);
+      await ocupar(evaluador, puestoJefe, -100, null);
       await ocupar(ajena, puestoAjeno, -100, null);
       await ocupar(exOcupante, puesto, -100, -1);
+      await ocupar(par, puestoJefe, -100, null);
       await declarar(ajena, 'basico', -5);
       await declarar(exOcupante, 'basico', -5);
+      await declarar(par, 'basico', -5);
       expect(
         await servicio.pendientes(jefe(evaluador, [unidadCatedra])),
       ).toEqual([]);
@@ -169,6 +179,7 @@ describe('Lecturas del perfil de conocimiento (PostgreSQL real)', () => {
     it('una ocupación que vence hoy sigue contando', async () => {
       const evaluador = await nuevaPersona(1);
       const docente = await nuevaPersona(2);
+      await ocupar(evaluador, puestoJefe, -100, null);
       await ocupar(docente, puesto, -100, 0);
       await declarar(docente, 'basico', -5);
       expect(
@@ -181,6 +192,7 @@ describe('Lecturas del perfil de conocimiento (PostgreSQL real)', () => {
       const igual = await nuevaPersona(2);
       const posterior = await nuevaPersona(3);
       const redeclarado = await nuevaPersona(4);
+      await ocupar(evaluador, puestoJefe, -100, null);
       for (const p of [igual, posterior, redeclarado])
         await ocupar(p, puesto, -100, null);
       const conAcreditacion = async (

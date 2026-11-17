@@ -1,0 +1,12 @@
+PLAN DE SUCESIÓN: Jefe de cátedra de Redes de Datos (ejemplo para la demo)
+
+Situación: la cátedra depende hoy de una sola persona (Hernán Quiroga).
+Objetivo: preparar una sucesora para el puesto en 18 meses.
+Candidata propuesta: Paula Fernández (auxiliar docente de Redes de Datos).
+Acciones previstas:
+  1. Mentoría en Redes TCP/IP a cargo del jefe de cátedra.
+  2. Documentación de las prácticas del laboratorio de redes.
+  3. Acreditación de Redes TCP/IP en nivel intermedio.
+
+Archivo de ejemplo para el caso 7 del guion de la demo:
+se sube como documento del plan antes de presentarlo para aprobación.

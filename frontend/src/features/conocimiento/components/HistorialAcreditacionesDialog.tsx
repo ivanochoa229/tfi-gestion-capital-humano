@@ -13,7 +13,11 @@ import {
   TableRow,
 } from '@mui/material';
 import { useValoresReferencia } from '../../admin/hooks/useValoresReferencia';
-import { useHistorialAcreditaciones } from '../hooks/useAcreditaciones';
+import { useState } from 'react';
+import {
+  descargarEvidencia,
+  useHistorialAcreditaciones,
+} from '../hooks/useAcreditaciones';
 
 interface Props {
   idPersona: number;
@@ -39,6 +43,7 @@ export function HistorialAcreditacionesDialog({
     lista: { id: number; denominacion: string }[] | undefined,
     id: number,
   ) => lista?.find((v) => v.id === id)?.denominacion ?? String(id);
+  const [errorDescarga, setErrorDescarga] = useState<string>();
 
   return (
     <Dialog open onClose={onCerrar} fullWidth maxWidth="md">
@@ -48,6 +53,7 @@ export function HistorialAcreditacionesDialog({
         {isError && (
           <Alert severity="error">No se pudo cargar el historial.</Alert>
         )}
+        {errorDescarga && <Alert severity="error">{errorDescarga}</Alert>}
         {data && data.length === 0 && (
           <Alert severity="info">Todavía no hay acreditaciones.</Alert>
         )}
@@ -59,6 +65,7 @@ export function HistorialAcreditacionesDialog({
                 <TableCell>Nivel</TableCell>
                 <TableCell>Evidencia</TableCell>
                 <TableCell>Observaciones</TableCell>
+                <TableCell>Archivo</TableCell>
                 <TableCell>Vigente</TableCell>
               </TableRow>
             </TableHead>
@@ -69,6 +76,23 @@ export function HistorialAcreditacionesDialog({
                   <TableCell>{nombre(niveles, a.idNivelAcreditado)}</TableCell>
                   <TableCell>{nombre(evidencias, a.idTipoEvidencia)}</TableCell>
                   <TableCell>{a.observaciones ?? '—'}</TableCell>
+                  <TableCell>
+                    {a.evidencia ? (
+                      <Button
+                        size="small"
+                        onClick={() => {
+                          setErrorDescarga(undefined);
+                          descargarEvidencia(a).catch((e: Error) =>
+                            setErrorDescarga(e.message),
+                          );
+                        }}
+                      >
+                        Descargar evidencia
+                      </Button>
+                    ) : (
+                      '—'
+                    )}
+                  </TableCell>
                   <TableCell>{i === 0 ? 'Sí' : ''}</TableCell>
                 </TableRow>
               ))}

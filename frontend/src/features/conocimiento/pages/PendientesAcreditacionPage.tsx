@@ -30,7 +30,7 @@ export function PendientesAcreditacionPage() {
   return (
     <PaginaEnConstruccion
       titulo="Conocimientos por acreditar"
-      descripcion="Lo que declaró tu equipo y todavía no tiene una acreditación que lo respalde."
+      descripcion="Lo que declararon quienes ocupan un puesto por debajo del tuyo y todavía no tiene una acreditación que lo respalde."
     >
       {isLoading && <CircularProgress aria-label="Cargando" />}
       {isError && <Alert severity="error">No se pudo cargar la bandeja.</Alert>}

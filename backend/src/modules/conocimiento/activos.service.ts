@@ -6,7 +6,6 @@ import {
   Injectable,
   Logger,
   NotFoundException,
-  UnsupportedMediaTypeException,
 } from '@nestjs/common';
 import { DataSource, QueryFailedError, type EntityManager } from 'typeorm';
 import { escaparLike } from '../../common/like.js';
@@ -23,13 +22,7 @@ import {
   SQL_SELECT_ACTIVO,
   type FilaActivo,
 } from './activos.sql.js';
-import {
-  claveObjeto,
-  decodificarNombre,
-  detectarTipo,
-  hashSha256,
-  limpiarNombre,
-} from './archivo.js';
+import { claveObjeto, prepararArchivo, type ArchivoSubido } from './archivo.js';
 import { DOMINIO_TIPO_DOCUMENTO } from './conocimiento.constantes.js';
 import type {
   ActualizarActivoDto,
@@ -40,20 +33,7 @@ import type {
 } from './dto/activos.dto.js';
 
 /** Lo que Multer deja en `req.file` (en memoria) y que el servicio necesita. */
-export interface ArchivoSubido {
-  originalname: string;
-  buffer: Buffer;
-}
-
-interface ArchivoPreparado {
-  nombre: string;
-  tipoMime: string;
-  tamanio: number;
-  hash: string;
-}
-
 const INDICE_HASH = 'UQ_activo_hash_activo';
-const TIPOS_PERMITIDOS_MENSAJE = 'PDF, DOCX, XLSX, PPTX, ODT, TXT, PNG y JPG';
 
 export interface DescargaActivo {
   flujo: Readable;
@@ -173,7 +153,7 @@ export class ActivosService {
     await this.validarTipoDocumento(dto.idTipoDocumento);
     await this.validarUnidad(dto.idUnidad);
     const ids = await this.validarConocimientos(dto.idsConocimiento);
-    const preparado = archivo ? this.prepararArchivo(archivo) : null;
+    const preparado = archivo ? prepararArchivo(archivo) : null;
     if (preparado) await this.exigirSinDuplicado(preparado.hash);
 
     // Se reserva el id para armar la clave antes de insertar.
@@ -306,7 +286,7 @@ export class ActivosService {
         'Un activo de tipo enlace no tiene archivo para reemplazar',
       );
     }
-    const preparado = this.prepararArchivo(archivo);
+    const preparado = prepararArchivo(archivo);
     if (preparado.hash === actual.hash) {
       throw new ConflictException('El archivo es idéntico al actual');
     }
@@ -473,22 +453,6 @@ export class ActivosService {
       );
     }
     return unicos;
-  }
-
-  private prepararArchivo(archivo: ArchivoSubido): ArchivoPreparado {
-    const nombre = limpiarNombre(decodificarNombre(archivo.originalname));
-    const tipo = detectarTipo(archivo.buffer, nombre);
-    if (!tipo) {
-      throw new UnsupportedMediaTypeException(
-        `El archivo no es de un tipo permitido (${TIPOS_PERMITIDOS_MENSAJE}) o su contenido no coincide con su extensión`,
-      );
-    }
-    return {
-      nombre,
-      tipoMime: tipo.mime,
-      tamanio: archivo.buffer.length,
-      hash: hashSha256(archivo.buffer),
-    };
   }
 
   /** Mensaje que nombra al activo existente; la base lo respalda con el índice único parcial. */

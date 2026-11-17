@@ -2,7 +2,10 @@ import {
   BadRequestException,
   ForbiddenException,
   NotFoundException,
+  UnsupportedMediaTypeException,
 } from '@nestjs/common';
+import type { StorageService } from '../../infra/storage/storage.service.js';
+import { AlmacenFalso } from '../../testing/almacen-falso.js';
 import type { Repository } from 'typeorm';
 import type { SesionUsuario } from '../../common/sesion-usuario.js';
 import type { ReferenciaService } from '../referencia/referencia.service.js';
@@ -31,6 +34,7 @@ function crearEntorno(
     persona?: { activo: boolean } | null;
     conocimiento?: { activo: boolean } | null;
     acceso?: () => Promise<void>;
+    falloAlGuardar?: boolean;
   } = {},
 ) {
   const persona =
@@ -43,6 +47,7 @@ function crearEntorno(
   const repoAcreditaciones = {
     create: vi.fn((datos: Partial<Acreditacion>) => ({ ...datos })),
     save: vi.fn(async (datos: Partial<Acreditacion>) => {
+      if (opciones.falloAlGuardar) throw new Error('falló la base');
       guardadas.push(datos);
       return {
         ...datos,
@@ -70,12 +75,14 @@ function crearEntorno(
   const acceso = {
     exigirEvaluacion: vi.fn(opciones.acceso ?? (async () => undefined)),
   };
+  const almacen = new AlmacenFalso();
   const servicio = new AcreditacionesService(
     repoAcreditaciones as unknown as Repository<Acreditacion>,
     referencia as unknown as ReferenciaService,
     acceso as unknown as AccesoPerfilService,
+    almacen as unknown as StorageService,
   );
-  return { servicio, referencia, acceso, consultas, guardadas };
+  return { servicio, referencia, acceso, consultas, guardadas, almacen };
 }
 
 describe('AcreditacionesService.acreditar', () => {
@@ -183,5 +190,71 @@ describe('AcreditacionesService.acreditar', () => {
     const { servicio, guardadas } = crearEntorno();
     await servicio.acreditar(5, 20, { ...dto, observaciones: undefined }, jefe);
     expect(guardadas[0].observaciones).toBeNull();
+  });
+});
+
+describe('AcreditacionesService: evidencia', () => {
+  const pdf = {
+    originalname: 'Certificado SQL.pdf',
+    buffer: Buffer.from('%PDF-1.4 certificado'),
+  };
+
+  it('sube la evidencia a evidencias/{persona}/ y guarda sus metadatos', async () => {
+    const { servicio, guardadas, almacen } = crearEntorno();
+    const resultado = await servicio.acreditar(5, 20, dto, jefe, pdf);
+
+    const [clave] = [...almacen.objetos.keys()];
+    expect(clave).toMatch(/^evidencias\/5\/[0-9a-f-]+-Certificado_SQL\.pdf$/);
+    expect(guardadas[0]).toMatchObject({
+      evidenciaClave: clave,
+      evidenciaNombre: 'Certificado SQL.pdf',
+      evidenciaTipoMime: 'application/pdf',
+      evidenciaTamanio: pdf.buffer.length,
+      evidenciaHash: expect.stringMatching(/^[0-9a-f]{64}$/),
+    });
+    expect(resultado.evidencia).toEqual({
+      nombre: 'Certificado SQL.pdf',
+      tipoMime: 'application/pdf',
+      tamanio: pdf.buffer.length,
+    });
+  });
+
+  it('sin archivo la acreditación no tiene evidencia', async () => {
+    const { servicio, guardadas, almacen } = crearEntorno();
+    const resultado = await servicio.acreditar(5, 20, dto, jefe);
+    expect(almacen.objetos.size).toBe(0);
+    expect(guardadas[0]).toMatchObject({ evidenciaClave: null });
+    expect(resultado.evidencia).toBeNull();
+  });
+
+  it('rechaza un tipo no permitido sin subir nada', async () => {
+    const { servicio, almacen } = crearEntorno();
+    await expect(
+      servicio.acreditar(5, 20, dto, jefe, {
+        originalname: 'virus.pdf',
+        buffer: Buffer.from([0x4d, 0x5a, 0x00, 0x01]),
+      }),
+    ).rejects.toBeInstanceOf(UnsupportedMediaTypeException);
+    expect(almacen.objetos.size).toBe(0);
+  });
+
+  it('si la base falla, borra el objeto recién subido', async () => {
+    const { servicio, almacen } = crearEntorno({ falloAlGuardar: true });
+    await expect(servicio.acreditar(5, 20, dto, jefe, pdf)).rejects.toThrow(
+      'falló la base',
+    );
+    expect(almacen.objetos.size).toBe(0);
+  });
+
+  it('si el acceso se rechaza, no sube el archivo', async () => {
+    const { servicio, almacen } = crearEntorno({
+      acceso: async () => {
+        throw new ForbiddenException('no');
+      },
+    });
+    await expect(
+      servicio.acreditar(5, 20, dto, jefe, pdf),
+    ).rejects.toBeInstanceOf(ForbiddenException);
+    expect(almacen.objetos.size).toBe(0);
   });
 });

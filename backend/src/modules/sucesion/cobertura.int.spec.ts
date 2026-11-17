@@ -1,3 +1,5 @@
+import type { StorageService } from '../../infra/storage/storage.service.js';
+import { AlmacenFalso } from '../../testing/almacen-falso.js';
 import type { DataSource } from 'typeorm';
 import type { SesionUsuario } from '../../common/sesion-usuario.js';
 import {
@@ -14,6 +16,7 @@ import { PlanSucesion } from './entities/plan-sucesion.entity.js';
 import { PlanesService } from './planes.service.js';
 
 describe('Cobertura de OE7 y «mis planes» (PostgreSQL real)', () => {
+  const almacen = new AlmacenFalso();
   let base: BaseTemporal;
   let ds: DataSource;
   let planes: PlanesService;
@@ -166,6 +169,7 @@ describe('Cobertura de OE7 y «mis planes» (PostgreSQL real)', () => {
       alcance,
       new CandidatosService(ds.getRepository(CandidatoSucesion), alcance),
       new AccionesService(ds.getRepository(AccionTransferencia), alcance),
+      almacen as unknown as StorageService,
     );
     cobertura = new CoberturaService(ds, alcance);
     const { AuditoriaSubscriber } =

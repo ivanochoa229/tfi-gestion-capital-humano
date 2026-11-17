@@ -1,3 +1,4 @@
+import { aArchivoAdjunto } from './dto/archivo-adjunto.dto.js';
 import type { ConocimientoDto } from './dto/catalogo.dto.js';
 import type {
   AcreditacionDto,
@@ -45,5 +46,10 @@ export function aAcreditacionDto(a: Acreditacion): AcreditacionDto {
     idEvaluador: a.idEvaluador,
     observaciones: a.observaciones,
     registradaEn: a.registradaEn.toISOString(),
+    evidencia: aArchivoAdjunto(
+      a.evidenciaNombre,
+      a.evidenciaTipoMime,
+      a.evidenciaTamanio,
+    ),
   };
 }

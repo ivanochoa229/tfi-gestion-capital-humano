@@ -6,7 +6,14 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, type EntityManager, type Repository } from 'typeorm';
+import type { Readable } from 'node:stream';
 import type { SesionUsuario } from '../../common/sesion-usuario.js';
+import { StorageService } from '../../infra/storage/storage.service.js';
+import {
+  claveEnCarpeta,
+  prepararArchivo,
+  type ArchivoSubido,
+} from '../conocimiento/archivo.js';
 import { Puesto } from '../estructura/entities/puesto.entity.js';
 import { Persona } from '../personas/entities/persona.entity.js';
 import { hoyDeLaBase } from '../personas/fechas.js';
@@ -69,6 +76,7 @@ export class PlanesService {
     private readonly alcance: AlcanceService,
     private readonly candidatos: CandidatosService,
     private readonly acciones: AccionesService,
+    private readonly almacenamiento: StorageService,
   ) {}
 
   async crear(dto: CrearPlanDto, sesion: SesionUsuario): Promise<PlanDto> {
@@ -266,6 +274,12 @@ export class PlanesService {
           fechaResolucion: null,
           motivoResolucion: null,
           observaciones: origen.observaciones,
+          // La nueva versión arranca con el mismo documento (el objeto se comparte).
+          documentoClave: origen.documentoClave,
+          documentoNombre: origen.documentoNombre,
+          documentoTipoMime: origen.documentoTipoMime,
+          documentoTamanio: origen.documentoTamanio,
+          documentoHash: origen.documentoHash,
         }),
       );
       const repoCandidatos = manager.getRepository(CandidatoSucesion);
@@ -353,7 +367,85 @@ export class PlanesService {
     return { ...plan, candidatos, acciones };
   }
 
+  /**
+   * Sube o reemplaza el documento del plan (uno por plan), solo en borrador.
+   * El objeto anterior queda en RustFS y su clave, en la auditoría del plan.
+   */
+  async subirDocumento(
+    id: number,
+    archivo: ArchivoSubido,
+    sesion: SesionUsuario,
+  ): Promise<PlanDto> {
+    const preparado = prepararArchivo(archivo);
+    // Se valida antes de subir para no dejar objetos huérfanos en los casos comunes.
+    await this.exigirBorradorDeJefatura(this.planes.manager, id, sesion);
+
+    const clave = claveEnCarpeta('planes', id, preparado.nombre);
+    await this.almacenamiento.subir(clave, archivo.buffer, preparado.tipoMime);
+    try {
+      return await enTransaccionDeSucesion(this.planes, async (manager) => {
+        const plan = await this.exigirBorradorDeJefatura(manager, id, sesion);
+        plan.documentoClave = clave;
+        plan.documentoNombre = preparado.nombre;
+        plan.documentoTipoMime = preparado.tipoMime;
+        plan.documentoTamanio = preparado.tamanio;
+        plan.documentoHash = preparado.hash;
+        // `save()` para que la auditoría registre quién cambió el documento (RNF05).
+        await manager.getRepository(PlanSucesion).save(plan);
+        return this.dtoDe(manager, id);
+      });
+    } catch (error) {
+      try {
+        await this.almacenamiento.eliminar(clave);
+      } catch {
+        // El objeto huérfano no afecta a la base; el error que importa es el original.
+      }
+      throw error;
+    }
+  }
+
+  /** Descarga el documento del plan; lo lee quien puede ver el plan. */
+  async documento(
+    id: number,
+    sesion: SesionUsuario,
+  ): Promise<{
+    flujo: Readable;
+    nombre: string;
+    tipoMime: string;
+    tamanio: number;
+  }> {
+    await this.buscar(id, sesion);
+    const plan = await this.planes.findOneOrFail({ where: { id } });
+    if (plan.documentoClave === null) {
+      throw new NotFoundException('El plan no tiene documento');
+    }
+    try {
+      return {
+        flujo: await this.almacenamiento.obtener(plan.documentoClave),
+        nombre: plan.documentoNombre ?? 'plan',
+        tipoMime: plan.documentoTipoMime ?? 'application/octet-stream',
+        tamanio: plan.documentoTamanio ?? 0,
+      };
+    } catch (error) {
+      if ((error as { name?: string }).name === 'NoSuchKey') {
+        throw new NotFoundException('El archivo no está en el almacenamiento');
+      }
+      throw error;
+    }
+  }
+
   // --- auxiliares ---
+
+  private async exigirBorradorDeJefatura(
+    manager: EntityManager,
+    id: number,
+    sesion: SesionUsuario,
+  ): Promise<PlanSucesion> {
+    const estados = await this.estados(manager);
+    const plan = await this.cargarDeJefatura(manager, id, sesion);
+    this.exigirEstado(plan, estados, ESTADO_PLAN.borrador);
+    return plan;
+  }
 
   private async estados(manager: EntityManager) {
     const filas = await manager.getRepository(EstadoPlan).find();

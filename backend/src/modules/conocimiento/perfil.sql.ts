@@ -48,8 +48,59 @@ export const SQL_FILAS_PROPIAS = `
   JOIN conocimiento c ON c.id_conocimiento = cp.id_conocimiento AND c.activo
   WHERE cp.id_persona = $1`;
 
-/** Parámetros: unidades del alcance, persona del evaluador (excluida: no se acredita a sí misma). */
-export const SQL_PENDIENTES = `
+/**
+ * Puestos que dependen, a cualquier profundidad, de los puestos activos que la
+ * persona `$1` ocupa hoy (sin incluirlos). Sigue `puesto.id_puesto_superior`;
+ * `UNION` corta ante un ciclo.
+ */
+const CTE_PUESTOS_A_CARGO = `
+  WITH RECURSIVE a_cargo AS (
+    SELECT pu.id_puesto
+    FROM ocupacion o
+    JOIN puesto pu ON pu.id_puesto = o.id_puesto AND pu.activo
+    WHERE o.id_persona = $1
+      AND o.fecha_desde <= CURRENT_DATE
+      AND (o.fecha_hasta IS NULL OR o.fecha_hasta >= CURRENT_DATE)
+    UNION
+    SELECT hijo.id_puesto
+    FROM puesto hijo
+    JOIN a_cargo a ON hijo.id_puesto_superior = a.id_puesto
+    WHERE hijo.activo
+  ),
+  subordinados AS (
+    SELECT DISTINCT a.id_puesto
+    FROM a_cargo a
+    JOIN puesto pu ON pu.id_puesto = a.id_puesto
+    -- Solo lo que está por debajo: se descartan los puestos propios salvo que
+    -- además dependan de otro puesto propio.
+    WHERE EXISTS (
+      SELECT 1 FROM a_cargo padre WHERE padre.id_puesto = pu.id_puesto_superior
+    )
+  )`;
+
+/** ¿Ocupa hoy la persona (columna o parámetro) alguno de los puestos subordinados? */
+const ocupaSubordinado = (columnaPersona: string) => `EXISTS (
+    SELECT 1
+    FROM ocupacion o
+    JOIN subordinados s ON s.id_puesto = o.id_puesto
+    WHERE o.id_persona = ${columnaPersona}
+      AND o.fecha_desde <= CURRENT_DATE
+      AND (o.fecha_hasta IS NULL OR o.fecha_hasta >= CURRENT_DATE)
+  )`;
+
+/**
+ * Parámetros: persona del evaluador, persona evaluada. Devuelve una fila si la
+ * evaluada ocupa hoy un puesto que depende de uno que el evaluador ocupa hoy.
+ */
+export const SQL_ES_SUBORDINADO = `${CTE_PUESTOS_A_CARGO}
+  SELECT 1 AS es_subordinado
+  WHERE ${ocupaSubordinado('$2')}`;
+
+/**
+ * Parámetro: persona del evaluador (excluida: no se acredita a sí misma).
+ * Lo declarado sin acreditar por quienes ocupan hoy un puesto a su cargo.
+ */
+export const SQL_PENDIENTES = `${CTE_PUESTOS_A_CARGO}
   SELECT cp.id_persona, p.apellido, p.nombre, cp.id_conocimiento, c.denominacion,
          cp.id_nivel_declarado, cp.id_nivel_acreditado,
          cp.fecha_declaracion::text AS fecha_declaracion
@@ -57,14 +108,6 @@ export const SQL_PENDIENTES = `
   JOIN persona p ON p.id_persona = cp.id_persona AND p.activo
   JOIN conocimiento c ON c.id_conocimiento = cp.id_conocimiento AND c.activo
   WHERE ${SQL_PENDIENTE}
-    AND p.id_persona IS DISTINCT FROM $2
-    AND EXISTS (
-      SELECT 1
-      FROM ocupacion o
-      JOIN puesto pu ON pu.id_puesto = o.id_puesto
-      WHERE o.id_persona = cp.id_persona
-        AND pu.id_unidad = ANY($1)
-        AND o.fecha_desde <= CURRENT_DATE
-        AND (o.fecha_hasta IS NULL OR o.fecha_hasta >= CURRENT_DATE)
-    )
+    AND p.id_persona <> $1
+    AND ${ocupaSubordinado('cp.id_persona')}
   ORDER BY p.apellido, p.nombre, c.denominacion`;

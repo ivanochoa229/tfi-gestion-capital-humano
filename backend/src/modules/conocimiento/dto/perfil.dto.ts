@@ -1,3 +1,5 @@
+import { Type } from 'class-transformer';
+import { ArchivoAdjuntoDto } from './archivo-adjunto.dto.js';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsInt,
@@ -47,8 +49,13 @@ export class ConocimientoPersonaDto {
   idEvaluador: number | null;
 }
 
+/**
+ * Datos de la acreditación. Llega como JSON o, con evidencia, como
+ * `multipart/form-data` (los números vienen como texto: `@Type` los convierte).
+ */
 export class AcreditarDto {
   @ApiProperty({ description: 'Nivel de dominio que se acredita (activo)' })
+  @Type(() => Number)
   @IsInt()
   @Min(1)
   @Max(MAX_INT4)
@@ -63,6 +70,7 @@ export class AcreditarDto {
   fechaEvaluacion: string;
 
   @ApiProperty({ description: 'Tipo de evidencia activo' })
+  @Type(() => Number)
   @IsInt()
   @Min(1)
   @Max(MAX_INT4)
@@ -103,6 +111,13 @@ export class AcreditacionDto {
 
   @ApiProperty({ format: 'date-time' })
   registradaEn: string;
+
+  @ApiProperty({
+    type: ArchivoAdjuntoDto,
+    nullable: true,
+    description: 'Archivo de evidencia (certificado, título…), si se adjuntó',
+  })
+  evidencia: ArchivoAdjuntoDto | null;
 }
 
 /** Una fila del perfil de conocimiento de una persona. */
@@ -202,4 +217,20 @@ export class PendienteAcreditacionDto {
 
   @ApiProperty({ format: 'date' })
   fechaDeclaracion: string;
+}
+
+/** Lo que el usuario puede hacer sobre el conocimiento de una persona. */
+export class PermisosPerfilDto {
+  @ApiProperty({
+    description:
+      'true si el usuario es evaluador y ocupa hoy un puesto superior a alguno de los que ocupa la persona',
+  })
+  puedeAcreditar: boolean;
+
+  @ApiProperty({
+    nullable: true,
+    type: String,
+    description: 'Por qué no puede acreditar; null si puede',
+  })
+  motivo: string | null;
 }

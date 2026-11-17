@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { descargarArchivo, enviarMultipart } from '../../../api/archivos';
 import { api, type Esquemas } from '../../../api/cliente';
 import { mensajeError } from '../../admin/hooks/useGuardarValor';
 
@@ -59,6 +60,30 @@ export function usePlan(id: number) {
 function useInvalidar() {
   const cliente = useQueryClient();
   return () => cliente.invalidateQueries({ queryKey: ['sucesion'] });
+}
+
+/** Sube o reemplaza el documento del plan (solo en borrador). */
+export function useSubirDocumentoPlan() {
+  const invalidar = useInvalidar();
+  return useMutation({
+    mutationFn: (a: { id: number; archivo: File }) => {
+      const formulario = new FormData();
+      formulario.append('archivo', a.archivo);
+      return enviarMultipart<Plan>(
+        `/api/planes/${a.id}/documento`,
+        'PUT',
+        formulario,
+      );
+    },
+    onSuccess: invalidar,
+  });
+}
+
+export function descargarDocumentoPlan(plan: Plan): Promise<void> {
+  return descargarArchivo(
+    `/api/planes/${plan.id}/documento`,
+    plan.documento?.nombre ?? 'plan',
+  );
 }
 
 export function useCrearPlan() {

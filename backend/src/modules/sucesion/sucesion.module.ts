@@ -1,5 +1,8 @@
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { MulterModule } from '@nestjs/platform-express';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import type { Env } from '../../infra/config/env.validation.js';
 import { ReferenciaModule } from '../referencia/referencia.module.js';
 import { UsuariosModule } from '../usuarios/usuarios.module.js';
 import { AccionTransferencia } from './entities/accion-transferencia.entity.js';
@@ -24,6 +27,17 @@ import { SucesionController } from './sucesion.controller.js';
     ]),
     ReferenciaModule,
     UsuariosModule,
+    // El documento del plan usa el mismo límite que los activos de conocimiento.
+    MulterModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService<Env, true>) => ({
+        limits: {
+          files: 1,
+          fileSize:
+            config.get('ACTIVOS_TAMANIO_MAX_MB', { infer: true }) * 1024 * 1024,
+        },
+      }),
+    }),
   ],
   controllers: [
     PlanesController,

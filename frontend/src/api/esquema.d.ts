@@ -548,6 +548,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/personas/{idPersona}/conocimientos/permisos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PerfilConocimientoController_permisos"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/personas/{idPersona}/conocimientos/{idConocimiento}/acreditaciones": {
         parameters: {
             query?: never;
@@ -575,6 +591,22 @@ export interface paths {
         put: operations["PerfilConocimientoController_declarar"];
         post?: never;
         delete: operations["PerfilConocimientoController_retirar"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/personas/{idPersona}/conocimientos/{idConocimiento}/acreditaciones/{idAcreditacion}/evidencia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PerfilConocimientoController_evidencia"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -930,6 +962,22 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["PlanesController_editar"];
+        trace?: never;
+    };
+    "/api/planes/{id}/documento": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PlanesController_documento"];
+        put: operations["PlanesController_subirDocumento"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/planes/{id}/presentar": {
@@ -1790,6 +1838,20 @@ export interface components {
             /** @description Declarado que todavía no tiene una acreditación que lo respalde o lo contradiga */
             pendiente: boolean;
         };
+        PermisosPerfilDto: {
+            /** @description true si el usuario es evaluador y ocupa hoy un puesto superior a alguno de los que ocupa la persona */
+            puedeAcreditar: boolean;
+            /** @description Por qué no puede acreditar; null si puede */
+            motivo: string | null;
+        };
+        ArchivoAdjuntoDto: {
+            /** @example certificado.pdf */
+            nombre: string;
+            /** @example application/pdf */
+            tipoMime: string;
+            /** @description Tamaño en bytes */
+            tamanio: number;
+        };
         AcreditacionDto: {
             id: number;
             idPersona: number;
@@ -1803,6 +1865,8 @@ export interface components {
             observaciones: string | null;
             /** Format: date-time */
             registradaEn: string;
+            /** @description Archivo de evidencia (certificado, título…), si se adjuntó */
+            evidencia: components["schemas"]["ArchivoAdjuntoDto"] | null;
         };
         DeclararDto: {
             /** @description Nivel de dominio que declara (activo) */
@@ -2056,6 +2120,8 @@ export interface components {
             motivoResolucion: string | null;
             observaciones: string | null;
             cantidadCandidatos: number;
+            /** @description Documento del plan, si se subió */
+            documento: components["schemas"]["ArchivoAdjuntoDto"] | null;
         };
         CandidatoDto: {
             idPlan: number;
@@ -2117,6 +2183,8 @@ export interface components {
             motivoResolucion: string | null;
             observaciones: string | null;
             cantidadCandidatos: number;
+            /** @description Documento del plan, si se subió */
+            documento: components["schemas"]["ArchivoAdjuntoDto"] | null;
             candidatos: components["schemas"]["CandidatoDto"][];
             acciones: components["schemas"]["AccionDto"][];
         };
@@ -3863,6 +3931,34 @@ export interface operations {
             };
         };
     };
+    PerfilConocimientoController_permisos: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPersona: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PermisosPerfilDto"];
+                };
+            };
+            /** @description Sin acceso al conocimiento de esa persona */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     PerfilConocimientoController_historial: {
         parameters: {
             query?: never;
@@ -3905,6 +4001,7 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["AcreditarDto"];
+                "multipart/form-data": components["schemas"]["AcreditarDto"];
             };
         };
         responses: {
@@ -3923,8 +4020,22 @@ export interface operations {
                 };
                 content?: never;
             };
-            /** @description Fuera del alcance o autoacreditación */
+            /** @description La persona no ocupa un puesto por debajo del evaluador, o es autoacreditación */
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description La evidencia supera el tamaño máximo */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Tipo de archivo de evidencia no permitido */
+            415: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -3999,6 +4110,44 @@ export interface operations {
                 content?: never;
             };
             /** @description No hay declaración que retirar */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PerfilConocimientoController_evidencia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPersona: number;
+                idConocimiento: number;
+                idAcreditacion: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Archivo de evidencia de la acreditación */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+            /** @description Sin acceso al conocimiento de esa persona */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description La acreditación no existe o no tiene evidencia */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -4899,6 +5048,112 @@ export interface operations {
             };
             /** @description El plan no está en borrador */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PlanesController_documento: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Documento del plan */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+            /** @description El puesto está fuera de tu alcance */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no existe o no tiene documento */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PlanesController_subirDocumento: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    archivo: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+            /** @description Falta el archivo */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El puesto está fuera de tu alcance */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no existe */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El plan no está en borrador */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description El archivo supera el tamaño máximo */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Tipo de archivo no permitido */
+            415: {
                 headers: {
                     [name: string]: unknown;
                 };
