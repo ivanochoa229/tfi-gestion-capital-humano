@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { descargarArchivo, enviarMultipart } from '../../../api/archivos';
 import { api, type Esquemas } from '../../../api/cliente';
 import { mensajeError } from '../../admin/hooks/useGuardarValor';
 import { invalidarConocimiento } from './useConocimientos';
@@ -75,6 +76,14 @@ export function usePendientesAcreditacion() {
   });
 }
 
+/** Descarga el archivo de evidencia de una acreditación. */
+export function descargarEvidencia(a: Acreditacion): Promise<void> {
+  return descargarArchivo(
+    `/api/personas/${a.idPersona}/conocimientos/${a.idConocimiento}/acreditaciones/${a.id}/evidencia`,
+    a.evidencia?.nombre ?? 'evidencia',
+  );
+}
+
 export function useAcreditar() {
   const cliente = useQueryClient();
   return useMutation({
@@ -85,7 +94,23 @@ export function useAcreditar() {
       fechaEvaluacion: string;
       idTipoEvidencia: number;
       observaciones: string | null;
+      /** Evidencia opcional: con archivo, el pedido viaja como multipart. */
+      evidencia?: File;
     }) => {
+      if (a.evidencia) {
+        const formulario = new FormData();
+        formulario.append('idNivel', String(a.idNivel));
+        formulario.append('fechaEvaluacion', a.fechaEvaluacion);
+        formulario.append('idTipoEvidencia', String(a.idTipoEvidencia));
+        if (a.observaciones)
+          formulario.append('observaciones', a.observaciones);
+        formulario.append('archivo', a.evidencia);
+        return enviarMultipart<Acreditacion>(
+          `/api/personas/${a.idPersona}/conocimientos/${a.idConocimiento}/acreditaciones`,
+          'POST',
+          formulario,
+        );
+      }
       const { data, error } = await api.POST(
         '/api/personas/{idPersona}/conocimientos/{idConocimiento}/acreditaciones',
         {

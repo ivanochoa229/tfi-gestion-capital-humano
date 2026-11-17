@@ -10,6 +10,7 @@ import {
   MenuItem,
   Stack,
   TextField,
+  Typography,
 } from '@mui/material';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -17,6 +18,7 @@ import { z } from 'zod';
 import { useValoresReferencia } from '../../admin/hooks/useValoresReferencia';
 import { useAcreditar } from '../hooks/useAcreditaciones';
 import { useConocimientos, type Conocimiento } from '../hooks/useConocimientos';
+import { SelectorArchivo } from './SelectorArchivo';
 
 interface Props {
   idPersona: number;
@@ -56,6 +58,7 @@ export function AcreditarDialog({
   const acreditar = useAcreditar();
   const [elegido, setElegido] = useState<Conocimiento | null>(null);
   const [error, setError] = useState<string>();
+  const [evidencia, setEvidencia] = useState<File>();
 
   const destino =
     conocimiento ??
@@ -89,6 +92,7 @@ export function AcreditarDialog({
         fechaEvaluacion: datos.fechaEvaluacion,
         idTipoEvidencia: Number(datos.idTipoEvidencia),
         observaciones: datos.observaciones.trim() || null,
+        evidencia,
       });
       onCerrar();
     } catch (e) {
@@ -97,7 +101,7 @@ export function AcreditarDialog({
   });
 
   return (
-    <Dialog open onClose={onCerrar} fullWidth maxWidth="xs">
+    <Dialog open onClose={onCerrar} fullWidth maxWidth="sm">
       <form onSubmit={guardar} noValidate>
         <DialogTitle>
           Acreditar conocimiento{nombrePersona ? ` de ${nombrePersona}` : ''}
@@ -162,11 +166,17 @@ export function AcreditarDialog({
               minRows={2}
               {...register('observaciones')}
               error={!!errors.observaciones}
-              helperText={
-                errors.observaciones?.message ??
-                'Por ejemplo, dónde está el comprobante. No se adjuntan archivos.'
-              }
+              helperText={errors.observaciones?.message}
             />
+            <Stack spacing={1}>
+              <Typography variant="subtitle2">Evidencia (opcional)</Typography>
+              <Typography variant="body2" color="text.secondary">
+                El certificado, el título o el comprobante que respalda el
+                nivel. Queda guardado con la acreditación y no se puede cambiar
+                después.
+              </Typography>
+              <SelectorArchivo archivo={evidencia} onElegir={setEvidencia} />
+            </Stack>
           </Stack>
         </DialogContent>
         <DialogActions>

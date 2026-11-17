@@ -21,6 +21,10 @@ import { ConocimientoPersona } from './conocimiento-persona.entity.js';
  * empate, mayor `id`.
  */
 @Entity('acreditacion')
+@Check(
+  'CK_acreditacion_evidencia',
+  '("evidencia_clave" IS NULL AND "evidencia_nombre" IS NULL AND "evidencia_tipo_mime" IS NULL AND "evidencia_tamanio" IS NULL AND "evidencia_hash" IS NULL) OR ("evidencia_clave" IS NOT NULL AND "evidencia_nombre" IS NOT NULL AND "evidencia_tipo_mime" IS NOT NULL AND "evidencia_tamanio" IS NOT NULL AND "evidencia_hash" IS NOT NULL)',
+)
 @Check('CK_acreditacion_fecha_no_futura', '"fecha_evaluacion" <= CURRENT_DATE')
 @Index('IDX_acreditacion_persona_conocimiento', ['idPersona', 'idConocimiento'])
 export class Acreditacion {
@@ -47,6 +51,22 @@ export class Acreditacion {
 
   @Column({ type: 'text', nullable: true })
   observaciones: string | null;
+
+  // Evidencia en RustFS (todas nulas o todas con valor).
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  evidenciaClave: string | null;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  evidenciaNombre: string | null;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  evidenciaTipoMime: string | null;
+
+  @Column({ type: 'int', nullable: true })
+  evidenciaTamanio: number | null;
+
+  @Column({ type: 'varchar', length: 64, nullable: true })
+  evidenciaHash: string | null;
 
   @CreateDateColumn({ type: 'timestamptz' })
   registradaEn: Date;

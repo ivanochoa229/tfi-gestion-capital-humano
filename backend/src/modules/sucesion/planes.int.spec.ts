@@ -1,3 +1,5 @@
+import type { StorageService } from '../../infra/storage/storage.service.js';
+import { AlmacenFalso } from '../../testing/almacen-falso.js';
 import { ConflictException, ForbiddenException } from '@nestjs/common';
 import type { DataSource } from 'typeorm';
 import type { SesionUsuario } from '../../common/sesion-usuario.js';
@@ -14,6 +16,7 @@ import { PlanSucesion } from './entities/plan-sucesion.entity.js';
 import { PlanesService } from './planes.service.js';
 
 describe('Planes de sucesión (PostgreSQL real)', () => {
+  const almacen = new AlmacenFalso();
   let base: BaseTemporal;
   let ds: DataSource;
   let servicio: PlanesService;
@@ -125,6 +128,7 @@ describe('Planes de sucesión (PostgreSQL real)', () => {
       alcance,
       new CandidatosService(ds.getRepository(CandidatoSucesion), alcance),
       new AccionesService(ds.getRepository(AccionTransferencia), alcance),
+      almacen as unknown as StorageService,
     );
     // El subscriber de auditoría exige usuario en el contexto de cada escritura.
     const { AuditoriaSubscriber } =
@@ -357,5 +361,81 @@ describe('Planes de sucesión (PostgreSQL real)', () => {
     );
     // Un plan fuera del alcance nunca aparece, filtre como filtre.
     expect(await idsDe(unidadB, jefa)).toEqual([]);
+  });
+
+  describe('documento del plan', () => {
+    const pdf = (texto: string) => ({
+      originalname: 'Plan de sucesión.pdf',
+      buffer: Buffer.from(`%PDF-1.4 ${texto}`),
+    });
+
+    it('se sube en borrador, se reemplaza, queda auditado y se descarga', async () => {
+      const puesto = await nuevoPuesto(unidadA);
+      const p = await correr(jefa, () =>
+        servicio.crear({ idPuesto: puesto, idResponsable: responsable }, jefa),
+      );
+      expect(p.documento).toBeNull();
+
+      const v1 = await correr(jefa, () =>
+        servicio.subirDocumento(p.id, pdf('uno'), jefa),
+      );
+      expect(v1.documento).toEqual({
+        nombre: 'Plan de sucesión.pdf',
+        tipoMime: 'application/pdf',
+        tamanio: pdf('uno').buffer.length,
+      });
+      await correr(jefa, () => servicio.subirDocumento(p.id, pdf('dos'), jefa));
+
+      // El objeto anterior se conserva en RustFS; la auditoría guarda las dos claves.
+      expect(
+        [...almacen.objetos.keys()].filter((k) =>
+          k.startsWith(`planes/${p.id}/`),
+        ),
+      ).toHaveLength(2);
+      const cambios = await sql<{ antes: { documento_clave?: string } }[]>(
+        `SELECT valores_anteriores AS antes FROM auditoria
+         WHERE entidad = 'plan_sucesion' AND id_registro = $1 AND operacion = 'modificacion'
+         ORDER BY id_auditoria`,
+        [String(p.id)],
+      );
+      expect(cambios.at(-1)?.antes.documento_clave).toMatch(
+        new RegExp(`^planes/${p.id}/`),
+      );
+
+      const descarga = await servicio.documento(p.id, decana);
+      const partes: Buffer[] = [];
+      for await (const c of descarga.flujo) partes.push(c as Buffer);
+      expect(Buffer.concat(partes).toString()).toBe('%PDF-1.4 dos');
+    });
+
+    it('fuera de borrador da 409 y no deja objetos; otra unidad, 403', async () => {
+      const id = await aprobado(await nuevoPuesto(unidadA));
+      const antes = almacen.objetos.size;
+      await expect(
+        correr(jefa, () => servicio.subirDocumento(id, pdf('x'), jefa)),
+      ).rejects.toThrow(/borrador/);
+      await expect(
+        correr(jefaDeB, () => servicio.subirDocumento(id, pdf('x'), jefaDeB)),
+      ).rejects.toThrow(/alcance/);
+      expect(almacen.objetos.size).toBe(antes);
+      await expect(servicio.documento(id, decana)).rejects.toThrow(
+        /no tiene documento/,
+      );
+    });
+
+    it('la nueva versión de un plan aprobado arranca con el mismo documento', async () => {
+      const puesto = await nuevoPuesto(unidadA);
+      const p = await correr(jefa, () =>
+        servicio.crear({ idPuesto: puesto, idResponsable: responsable }, jefa),
+      );
+      await correr(jefa, () => servicio.subirDocumento(p.id, pdf('v1'), jefa));
+      await agregarCandidato(p.id);
+      await correr(jefa, () => servicio.presentar(p.id, jefa));
+      await correr(decana, () =>
+        servicio.resolver(p.id, { decision: 'aprobar' }, decana),
+      );
+      const nueva = await correr(jefa, () => servicio.nuevaVersion(p.id, jefa));
+      expect(nueva.documento?.nombre).toBe('Plan de sucesión.pdf');
+    });
   });
 });

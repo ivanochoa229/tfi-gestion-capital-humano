@@ -1,0 +1,8 @@
+CERTIFICADO DE APROBACIÓN (ejemplo para la demo)
+
+Se certifica que Martín Acosta aprobó el curso
+«SQL avanzado y modelado relacional», de 40 horas,
+con evaluación final integradora.
+
+Archivo de ejemplo para el caso 4 del guion de la demo:
+se adjunta como evidencia al acreditar SQL avanzado.

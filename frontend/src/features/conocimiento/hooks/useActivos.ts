@@ -4,6 +4,10 @@ import {
   useQueryClient,
   type QueryClient,
 } from '@tanstack/react-query';
+import {
+  descargarArchivo,
+  enviarMultipart as enviarArchivo,
+} from '../../../api/archivos';
 import { api, type Esquemas } from '../../../api/cliente';
 import { mensajeError } from '../../admin/hooks/useGuardarValor';
 
@@ -47,38 +51,11 @@ export function useActivos(filtro: FiltroActivos = {}) {
   });
 }
 
-const tieneMensaje = (datos: unknown): boolean =>
-  typeof datos === 'object' &&
-  datos !== null &&
-  'message' in datos &&
-  !!(datos as { message: unknown }).message;
-
-/** `openapi-fetch` no arma multipart cómodamente: la subida usa `fetch` y deja que el navegador ponga el boundary. */
-async function enviarMultipart(
+const enviarMultipart = (
   url: string,
   metodo: 'POST' | 'PUT',
   cuerpo: FormData,
-): Promise<Activo> {
-  let respuesta: Response;
-  try {
-    respuesta = await fetch(url, {
-      method: metodo,
-      body: cuerpo,
-      credentials: 'include',
-    });
-  } catch {
-    throw new Error('No se pudo conectar con el servidor');
-  }
-  const datos: unknown = await respuesta.json().catch(() => null);
-  if (!respuesta.ok) {
-    // Un 413 cortado por un proxy puede no traer JSON.
-    if (respuesta.status === 413 && !tieneMensaje(datos)) {
-      throw new Error('El archivo supera el tamaño máximo permitido');
-    }
-    throw new Error(mensajeError(datos));
-  }
-  return datos as Activo;
-}
+) => enviarArchivo<Activo>(url, metodo, cuerpo);
 
 function aFormData(cuerpo: CuerpoActivo, archivo?: File): FormData {
   const formulario = new FormData();
@@ -169,18 +146,9 @@ export function useCambiarEstadoActivo() {
 }
 
 /** La descarga lleva la cookie de sesión, así que se pide por `fetch` y se guarda desde un `Blob`. */
-export async function descargarActivo(activo: Activo): Promise<void> {
-  const respuesta = await fetch(`/api/activos/${activo.id}/descarga`, {
-    credentials: 'include',
-  });
-  if (!respuesta.ok) {
-    const datos: unknown = await respuesta.json().catch(() => null);
-    throw new Error(mensajeError(datos));
-  }
-  const url = URL.createObjectURL(await respuesta.blob());
-  const enlace = document.createElement('a');
-  enlace.href = url;
-  enlace.download = activo.nombreOriginal ?? 'activo';
-  enlace.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+export function descargarActivo(activo: Activo): Promise<void> {
+  return descargarArchivo(
+    `/api/activos/${activo.id}/descarga`,
+    activo.nombreOriginal ?? 'activo',
+  );
 }

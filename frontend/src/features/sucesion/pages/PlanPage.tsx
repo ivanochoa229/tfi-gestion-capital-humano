@@ -13,6 +13,7 @@ import { Link as RouterLink, useNavigate, useParams } from 'react-router';
 import { useSesion } from '../../../auth/useSesion';
 import { AccionesDelPlan } from '../components/AccionesDelPlan';
 import { CandidatosTabla } from '../components/CandidatosTabla';
+import { DocumentoDelPlan } from '../components/DocumentoDelPlan';
 import { ResolverPlanDialog } from '../components/ResolverPlanDialog';
 import {
   colorEstadoPlan,
@@ -28,7 +29,7 @@ import {
   useReabrirPlan,
 } from '../hooks/useSucesion';
 
-/** Detalle de un plan: estado, resolución, candidatos y acciones. */
+/** Detalle de un plan: estado, resolución, documento, candidatos y acciones. */
 export function PlanPage() {
   const { id } = useParams();
   const idPlan = Number(id);
@@ -224,6 +225,11 @@ export function PlanPage() {
         </Stack>
       )}
 
+      <Divider sx={{ my: 3 }} />
+      <DocumentoDelPlan
+        plan={p}
+        puedeSubir={esJefatura && p.estado === 'borrador'}
+      />
       <Divider sx={{ my: 3 }} />
       <CandidatosTabla
         idPlan={p.id}

@@ -137,8 +137,8 @@ Con la API (opcional, Swagger): `demo.docente` pidiendo `/api/deteccion/tablero`
 | 4.2 | Misma pantalla | En *Algoritmos y estructuras de datos*, cambiar **Mi nivel** a `Avanzado` | Aparece «Cambiaste tu nivel, esperando nueva acreditación» (ya tenía una acreditación). En *Testing automatizado* la marca es «Declarado, esperando acreditación». No hace falta capacitación previa |
 | 4.3 | **Sumar otro conocimiento del catálogo** | Elegir `Redes TCP/IP` y nivel `Básico` | Se suma como declarado, pendiente de acreditar |
 | 4.4 | `demo.jefecatedra`, **Por acreditar** | Mirar la bandeja | Solo quien ocupa un puesto por debajo del de Laura (jefa de Bases de Datos): *Acosta, Martín*, su JTP, en *SQL y modelado relacional* (declaró Avanzado; acreditado hasta ahora Intermedio) y en *Docker y contenedores* (declaró Básico). **No** aparece Diego: su puesto depende de la jefa de Algoritmos, no de Laura |
-| 4.5 | En la fila de Martín / SQL, **Acreditar** | Nivel acreditado `Avanzado`; Fecha de evaluación: hoy; Tipo de evidencia `Observación directa`; Observaciones `Resolvió el caso de optimización frente a la cátedra.` Guardar | La fila sale de la bandeja |
-| 4.6 | Como `demo.jefecatedra`, **Personas**, ficha de Martín, **Historial** del conocimiento SQL | Mirar | Dos acreditaciones: la anterior (Intermedio) y la nueva (Avanzado, vigente). El historial no se pisa |
+| 4.5 | En la fila de Martín / SQL, **Acreditar** | Nivel acreditado `Avanzado`; Fecha de evaluación: hoy; Tipo de evidencia `Certificado`; Observaciones `Aprobó el curso y resolvió el caso de optimización frente a la cátedra.`; en **Evidencia (opcional)**, elegir `docs/demo/archivos/certificado-sql-avanzado.txt`. Guardar | La fila sale de la bandeja. El certificado queda guardado en RustFS junto con la acreditación |
+| 4.6 | Como `demo.jefecatedra`, **Personas**, ficha de Martín, **Historial** del conocimiento SQL | Mirar y pulsar **Descargar evidencia** en la fila nueva | Dos acreditaciones: la anterior (Intermedio, sin archivo) y la nueva (Avanzado, vigente). La descarga trae el certificado. El historial no se pisa y la evidencia no se puede cambiar: un error se corrige con otra acreditación |
 | 4.7 | Como `demo.jefecatedra`, **Personas**, ficha de Laura (su propia persona) | Buscar el botón **Acreditar** | No se ofrece: nadie acredita sus propios conocimientos |
 | 4.8 | Como `demo.jefecatedra`, en Swagger, `POST /api/personas/{id de Diego}/conocimientos/{id de Docker}/acreditaciones` | Intentar acreditar a Diego | 403 «Solo podés acreditar a quien ocupa hoy un puesto por debajo del tuyo». La autoridad sale de la jerarquía de puestos, no del rol ni de la cátedra asignada al usuario |
 | 4.9 | `demo.jefatura` (Andrea Gómez), **Por acreditar** | Mirar la bandeja | Lo pendiente de todas las cátedras, porque su puesto está arriba de los jefes de cátedra y, bajando, de todos los docentes: *Acosta* (Docker), *Paz* (Algoritmos, Docker, Redes TCP/IP y Testing) y *Ríos* (Java) |
@@ -179,7 +179,7 @@ Con la API (opcional, Swagger): `demo.docente` pidiendo `/api/deteccion/tablero`
 
 ---
 
-## Caso 7. Sucesión, candidatos y acciones de transferencia (RF13 a RF15) · ~9 min
+## Caso 7. Sucesión, candidatos y acciones de transferencia (RF13 a RF15) · ~10 min
 
 **Objetivo:** convertir el riesgo detectado en un plan con responsables y fechas.
 
@@ -191,8 +191,9 @@ Con la API (opcional, Swagger): `demo.docente` pidiendo `/api/deteccion/tablero`
 | 7.4 | `demo.autoridad`, en el mismo plan, botón **Aprobar** | Aprobar el plan; motivo opcional | Estado **Aprobado**. Solo la autoridad aprueba (RF24) |
 | 7.5 | `demo.jefatura`, **Sucesión**, en «Cobertura de planes de sucesión», en el puesto sin plan *Jefe de cátedra de Redes de Datos*, **Crear plan** | Puesto `Jefe de cátedra de Redes de Datos`; Responsable del plan `Quiroga, Hernán`; Observaciones `Redes depende hoy de una sola persona.` | Plan en **Borrador**. Solo la jefatura crea planes (y solo la autoridad los aprueba): Recursos Humanos no puede crear planes |
 | 7.6 | En ese plan, **Agregar candidato** | Persona `Fernández, Paula`; Prioridad `1`; Estado de preparación `En desarrollo`; Fecha estimada `01/03/2027` | La tabla de candidatos lo marca como que todavía no cubre el requisito excluyente (no acredita Redes TCP/IP) |
-| 7.7 | `demo.jefatura`, en el plan de Redes, **Presentar para aprobación** | — | Estado **Pendiente de aprobación** |
-| 7.8 | `demo.autoridad`, abrir el plan de Redes, **Aprobar** | — | Estado **Aprobado** |
+| 7.6b | En el mismo plan (Borrador), bloque **Documento del plan** | **Elegir archivo** `docs/demo/archivos/plan-sucesion-redes.txt` y **Subir documento** | «Documento guardado.» y el nombre del archivo con **Descargar**. Mientras el plan esté en borrador se puede reemplazar; el cambio queda en la auditoría |
+| 7.7 | `demo.jefatura`, en el plan de Redes, **Presentar para aprobación** | — | Estado **Pendiente de aprobación**. El bloque del documento ya no ofrece subir: lo que se aprueba no cambia |
+| 7.8 | `demo.autoridad`, abrir el plan de Redes, **Descargar** el documento y después **Aprobar** | — | La descarga trae el plan. Estado **Aprobado** |
 | 7.9 | `demo.docente`, **Mi sucesión** | Mirar | Aviso «No figurás como candidato en ningún plan de sucesión.» |
 | 7.10 | `demo.docente`, **Acciones** | Mirar | Una acción asignada: «Escribir la guía de Java para las prácticas de Algoritmos» (Pendiente) |
 | 7.11 | Fila de la acción, **Avanzar** | Nuevo estado `En curso`; Nota de avance `Armé el índice y los primeros ejemplos.` | La acción queda **En curso**. El docente solo ve sus acciones y no tiene el botón **Nueva acción** |
@@ -240,10 +241,12 @@ Cierre sugerido: lo que queda (Arquitectura de software depende de Ricardo, Rede
 | 4. Declaración y acreditación | 8 |
 | 5. Activos de conocimiento | 4 |
 | 6. Criticidad | 4 |
-| 7. Sucesión y acciones | 9 |
+| 7. Sucesión y acciones | 10 |
 | 8-B. Vuelta al tablero | 3 |
-| **Total** | **53** |
+| **Total** | **54** |
 
 Verificado el 16/11/2026 sobre la rama `feat/demo-datos-y-guion` (último commit de código: `1199a06`): se levantó el sistema con volúmenes vacíos y se ejecutaron todos los casos en este orden por la API, con **69 comprobaciones** de los resultados esperados (cantidades, estados, permisos y valores del tablero) sin ninguna falla. Lo que **no** se comprobó en el navegador son los textos exactos de pantallas y botones, que se tomaron del código del frontend.
 
 Actualizado el 17/11/2026 con la acreditación por jerarquía de puestos: el caso 4 (pasos 4.2 a 4.10) se ejecutó por la API sobre una base recién creada y el tablero quedó como indica el guion (puntos únicos de falla de 3 a 2; el resto sin cambios).
+
+Actualizado el 17/11/2026 con los archivos adjuntos: la evidencia del paso 4.5 y el documento del plan de los pasos 7.6b a 7.8 se probaron por la API contra RustFS y en el navegador (subida, reemplazo, descarga y rechazo fuera de borrador).

@@ -1,3 +1,4 @@
+import { aArchivoAdjunto } from '../conocimiento/dto/archivo-adjunto.dto.js';
 import type { AccionDto } from './dto/accion.dto.js';
 import type { CandidatoDto } from './dto/candidato.dto.js';
 import type { Persona } from '../personas/entities/persona.entity.js';
@@ -28,6 +29,11 @@ export function aPlanDto(
     motivoResolucion: plan.motivoResolucion,
     observaciones: plan.observaciones,
     cantidadCandidatos,
+    documento: aArchivoAdjunto(
+      plan.documentoNombre,
+      plan.documentoTipoMime,
+      plan.documentoTamanio,
+    ),
   };
 }
 

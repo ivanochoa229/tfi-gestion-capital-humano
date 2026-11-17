@@ -1,3 +1,5 @@
+import type { StorageService } from '../../infra/storage/storage.service.js';
+import { AlmacenFalso } from '../../testing/almacen-falso.js';
 import type { DataSource } from 'typeorm';
 import type { SesionUsuario } from '../../common/sesion-usuario.js';
 import {
@@ -13,6 +15,7 @@ import { PlanSucesion } from './entities/plan-sucesion.entity.js';
 import { PlanesService } from './planes.service.js';
 
 describe('Detalle del plan de sucesión (PostgreSQL real)', () => {
+  const almacen = new AlmacenFalso();
   let base: BaseTemporal;
   let ds: DataSource;
   let servicio: PlanesService;
@@ -68,6 +71,7 @@ describe('Detalle del plan de sucesión (PostgreSQL real)', () => {
       alcance,
       new CandidatosService(ds.getRepository(CandidatoSucesion), alcance),
       new AccionesService(ds.getRepository(AccionTransferencia), alcance),
+      almacen as unknown as StorageService,
     );
     const { AuditoriaSubscriber } =
       await import('../../infra/auditoria/auditoria.subscriber.js');

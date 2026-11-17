@@ -1,3 +1,4 @@
+import { UnsupportedMediaTypeException } from '@nestjs/common';
 import { createHash, randomUUID } from 'node:crypto';
 import { extname } from 'node:path';
 
@@ -116,9 +117,52 @@ export function nombreParaClave(nombre: string): string {
   return seguro.slice(-100) || 'archivo';
 }
 
-/** `activos/{idActivo}/{uuid}-{nombre}`: sin colisiones y legible en la consola de RustFS. */
+/** `{carpeta}/{id}/{uuid}-{nombre}`: sin colisiones y legible en la consola de RustFS. */
+export function claveEnCarpeta(
+  carpeta: 'activos' | 'planes' | 'evidencias',
+  id: number,
+  nombre: string,
+): string {
+  return `${carpeta}/${id}/${randomUUID()}-${nombreParaClave(nombre)}`;
+}
+
+/** `activos/{idActivo}/{uuid}-{nombre}`. */
 export function claveObjeto(idActivo: number, nombre: string): string {
-  return `activos/${idActivo}/${randomUUID()}-${nombreParaClave(nombre)}`;
+  return claveEnCarpeta('activos', idActivo, nombre);
+}
+
+/** Lo que entrega Multer y usa el servicio: el nombre y los bytes. */
+export interface ArchivoSubido {
+  originalname: string;
+  buffer: Buffer;
+}
+
+/** Metadatos de un archivo ya validado, listos para guardar en la base. */
+export interface ArchivoPreparado {
+  nombre: string;
+  tipoMime: string;
+  tamanio: number;
+  hash: string;
+}
+
+export const TIPOS_PERMITIDOS_MENSAJE =
+  'PDF, DOCX, XLSX, PPTX, ODT, TXT, PNG y JPG';
+
+/** Valida el tipo por contenido y calcula los metadatos. 415 si el tipo no está permitido. */
+export function prepararArchivo(archivo: ArchivoSubido): ArchivoPreparado {
+  const nombre = limpiarNombre(decodificarNombre(archivo.originalname));
+  const tipo = detectarTipo(archivo.buffer, nombre);
+  if (!tipo) {
+    throw new UnsupportedMediaTypeException(
+      `El archivo no es de un tipo permitido (${TIPOS_PERMITIDOS_MENSAJE}) o su contenido no coincide con su extensión`,
+    );
+  }
+  return {
+    nombre,
+    tipoMime: tipo.mime,
+    tamanio: archivo.buffer.length,
+    hash: hashSha256(archivo.buffer),
+  };
 }
 
 export function hashSha256(contenido: Buffer): string {

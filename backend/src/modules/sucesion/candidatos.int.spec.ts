@@ -1,3 +1,5 @@
+import type { StorageService } from '../../infra/storage/storage.service.js';
+import { AlmacenFalso } from '../../testing/almacen-falso.js';
 import { ConflictException } from '@nestjs/common';
 import type { DataSource } from 'typeorm';
 import type { SesionUsuario } from '../../common/sesion-usuario.js';
@@ -14,6 +16,7 @@ import { PlanSucesion } from './entities/plan-sucesion.entity.js';
 import { PlanesService } from './planes.service.js';
 
 describe('Candidatos de sucesión (PostgreSQL real)', () => {
+  const almacen = new AlmacenFalso();
   let base: BaseTemporal;
   let ds: DataSource;
   let servicio: CandidatosService;
@@ -152,6 +155,7 @@ describe('Candidatos de sucesión (PostgreSQL real)', () => {
       alcance,
       servicio,
       new AccionesService(ds.getRepository(AccionTransferencia), alcance),
+      almacen as unknown as StorageService,
     );
     const { AuditoriaSubscriber } =
       await import('../../infra/auditoria/auditoria.subscriber.js');

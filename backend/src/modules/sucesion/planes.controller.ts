@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -7,17 +8,31 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Put,
   Query,
+  Res,
+  StreamableFile,
+  UploadedFile,
+  UseFilters,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBadRequestResponse,
+  ApiBody,
   ApiConflictResponse,
+  ApiConsumes,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiPayloadTooLargeResponse,
   ApiTags,
+  ApiUnsupportedMediaTypeResponse,
 } from '@nestjs/swagger';
+import type { Response } from 'express';
+import { ArchivoDemasiadoGrandeFilter } from '../conocimiento/archivo-demasiado-grande.filter.js';
+import { disposicionAdjunto } from '../conocimiento/archivo.js';
 import { Roles } from '../../common/decorators/roles.decorator.js';
 import { UsuarioActual } from '../../common/decorators/usuario-actual.decorator.js';
 import {
@@ -96,6 +111,68 @@ export class PlanesController {
     @UsuarioActual() sesion: SesionUsuario,
   ): Promise<PlanDto> {
     return this.servicio.editar(id, dto, sesion);
+  }
+
+  @Get(':id/documento')
+  @Roles(...ROLES_LECTORES_DE_SUCESION)
+  @ApiOkResponse({
+    description: 'Documento del plan',
+    content: {
+      'application/octet-stream': {
+        schema: { type: 'string', format: 'binary' },
+      },
+    },
+  })
+  @ApiNotFoundResponse({
+    description: 'El plan no existe o no tiene documento',
+  })
+  @ApiForbiddenResponse({ description: 'El puesto está fuera de tu alcance' })
+  async documento(
+    @Param('id', ParseIntPipe) id: number,
+    @UsuarioActual() sesion: SesionUsuario,
+    @Res({ passthrough: true }) respuesta: Response,
+  ): Promise<StreamableFile> {
+    const descarga = await this.servicio.documento(id, sesion);
+    respuesta.set('X-Content-Type-Options', 'nosniff');
+    return new StreamableFile(descarga.flujo, {
+      type: descarga.tipoMime,
+      disposition: disposicionAdjunto(descarga.nombre),
+      length: descarga.tamanio,
+    });
+  }
+
+  @Put(':id/documento')
+  @Roles(...ROLES_ELABORADORES_DE_PLANES)
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['archivo'],
+      properties: { archivo: { type: 'string', format: 'binary' } },
+    },
+  })
+  @UseInterceptors(FileInterceptor('archivo'))
+  @UseFilters(ArchivoDemasiadoGrandeFilter)
+  @ApiOkResponse({ type: PlanDto })
+  @ApiBadRequestResponse({ description: 'Falta el archivo' })
+  @ApiNotFoundResponse({ description: 'El plan no existe' })
+  @ApiConflictResponse({ description: 'El plan no está en borrador' })
+  @ApiForbiddenResponse({ description: 'El puesto está fuera de tu alcance' })
+  @ApiPayloadTooLargeResponse({
+    description: 'El archivo supera el tamaño máximo',
+  })
+  @ApiUnsupportedMediaTypeResponse({
+    description: 'Tipo de archivo no permitido',
+  })
+  subirDocumento(
+    @Param('id', ParseIntPipe) id: number,
+    @UsuarioActual() sesion: SesionUsuario,
+    @UploadedFile() archivo?: Express.Multer.File,
+  ): Promise<PlanDto> {
+    if (!archivo) {
+      throw new BadRequestException('Falta el campo "archivo"');
+    }
+    return this.servicio.subirDocumento(id, archivo, sesion);
   }
 
   @Post(':id/presentar')

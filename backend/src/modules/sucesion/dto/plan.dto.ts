@@ -1,3 +1,4 @@
+import { ArchivoAdjuntoDto } from '../../conocimiento/dto/archivo-adjunto.dto.js';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
@@ -139,6 +140,13 @@ export class PlanDto {
 
   @ApiProperty()
   cantidadCandidatos: number;
+
+  @ApiProperty({
+    type: ArchivoAdjuntoDto,
+    nullable: true,
+    description: 'Documento del plan, si se subió',
+  })
+  documento: ArchivoAdjuntoDto | null;
 }
 
 export class PlanDetalleDto extends PlanDto {

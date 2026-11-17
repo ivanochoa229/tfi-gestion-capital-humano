@@ -1,3 +1,5 @@
+import type { StorageService } from '../../infra/storage/storage.service.js';
+import { AlmacenFalso } from '../../testing/almacen-falso.js';
 import {
   BadRequestException,
   ConflictException,
@@ -131,11 +133,13 @@ function crearEntorno(
   };
   const candidatosSvc = { listarDePlan: vi.fn(async () => [{ idPersona: 5 }]) };
   const accionesSvc = { listarDePlan: vi.fn(async () => [{ id: 3 }]) };
+  const almacen = new AlmacenFalso();
   const servicio = new PlanesService(
     repoPlanes as unknown as Repository<PlanSucesion>,
     alcance as unknown as AlcanceService,
     candidatosSvc as unknown as CandidatosService,
     accionesSvc as unknown as AccionesService,
+    almacen as unknown as StorageService,
   );
   return {
     servicio,
