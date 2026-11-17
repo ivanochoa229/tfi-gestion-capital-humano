@@ -548,6 +548,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/personas/{idPersona}/conocimientos/permisos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PerfilConocimientoController_permisos"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/personas/{idPersona}/conocimientos/{idConocimiento}/acreditaciones": {
         parameters: {
             query?: never;
@@ -1789,6 +1805,12 @@ export interface components {
             idTipoConocimiento: number;
             /** @description Declarado que todavía no tiene una acreditación que lo respalde o lo contradiga */
             pendiente: boolean;
+        };
+        PermisosPerfilDto: {
+            /** @description true si el usuario es evaluador y ocupa hoy un puesto superior a alguno de los que ocupa la persona */
+            puedeAcreditar: boolean;
+            /** @description Por qué no puede acreditar; null si puede */
+            motivo: string | null;
         };
         AcreditacionDto: {
             id: number;
@@ -3863,6 +3885,34 @@ export interface operations {
             };
         };
     };
+    PerfilConocimientoController_permisos: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idPersona: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PermisosPerfilDto"];
+                };
+            };
+            /** @description Sin acceso al conocimiento de esa persona */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     PerfilConocimientoController_historial: {
         parameters: {
             query?: never;
@@ -3923,7 +3973,7 @@ export interface operations {
                 };
                 content?: never;
             };
-            /** @description Fuera del alcance o autoacreditación */
+            /** @description La persona no ocupa un puesto por debajo del evaluador, o es autoacreditación */
             403: {
                 headers: {
                     [name: string]: unknown;

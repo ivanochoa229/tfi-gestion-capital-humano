@@ -16,6 +16,7 @@ import { useSesion } from '../../../auth/useSesion';
 import { useValoresReferencia } from '../../admin/hooks/useValoresReferencia';
 import {
   usePerfilDePersona,
+  usePermisosDeAcreditar,
   type FilaPerfil,
 } from '../hooks/useAcreditaciones';
 import { AcreditarDialog } from './AcreditarDialog';
@@ -23,7 +24,10 @@ import { HistorialAcreditacionesDialog } from './HistorialAcreditacionesDialog';
 
 interface Props {
   idPersona: number;
-  /** Jefatura y jefes de cátedra; el botón no aparece en el perfil propio. */
+  /**
+   * El rol del usuario es evaluador (jefatura o jefe de cátedra). Si acredita a
+   * esta persona en particular lo decide el backend por la jerarquía de puestos.
+   */
   puedeAcreditar: boolean;
 }
 
@@ -38,7 +42,13 @@ export function ConocimientosDePersona({ idPersona, puedeAcreditar }: Props) {
   );
   const [historial, setHistorial] = useState<FilaPerfil>();
 
-  const acreditaAqui = puedeAcreditar && sesion?.idPersona !== idPersona;
+  const esPropio = sesion?.idPersona === idPersona;
+  const { data: permisos } = usePermisosDeAcreditar(
+    idPersona,
+    puedeAcreditar && !esPropio,
+  );
+  const acreditaAqui =
+    puedeAcreditar && !esPropio && !!permisos?.puedeAcreditar;
   const nombre = (
     lista: { id: number; denominacion: string }[] | undefined,
     id: number | null,
@@ -59,6 +69,11 @@ export function ConocimientosDePersona({ idPersona, puedeAcreditar }: Props) {
           </Button>
         )}
       </Stack>
+      {puedeAcreditar && !esPropio && permisos?.motivo && (
+        <Typography variant="body2" color="text.secondary">
+          {permisos.motivo}.
+        </Typography>
+      )}
       {isLoading && <CircularProgress aria-label="Cargando" />}
       {isError && (
         <Alert severity="warning">

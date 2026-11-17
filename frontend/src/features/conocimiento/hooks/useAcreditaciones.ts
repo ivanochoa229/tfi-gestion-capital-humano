@@ -25,6 +25,26 @@ export function usePerfilDePersona(idPersona: number) {
   });
 }
 
+/**
+ * Si el usuario puede acreditar a la persona: lo decide el backend según la
+ * jerarquía de puestos. Solo se consulta para los roles evaluadores.
+ */
+export function usePermisosDeAcreditar(idPersona: number, habilitado: boolean) {
+  return useQuery({
+    queryKey: ['perfil-conocimiento', idPersona, 'permisos'],
+    queryFn: async () => {
+      const { data, error } = await api.GET(
+        '/api/personas/{idPersona}/conocimientos/permisos',
+        { params: { path: { idPersona } } },
+      );
+      if (error || !data) throw new Error('No se pudieron cargar los permisos');
+      return data;
+    },
+    enabled: habilitado,
+    retry: false,
+  });
+}
+
 export function useHistorialAcreditaciones(
   idPersona: number,
   idConocimiento: number,

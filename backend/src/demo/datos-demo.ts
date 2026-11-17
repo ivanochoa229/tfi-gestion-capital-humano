@@ -43,7 +43,10 @@ export interface UsuarioDemo {
 export interface PuestoDemo {
   codigo: string;
   denominacion: string;
-  catedra: string;
+  /** Cátedra o, para la jefatura, el departamento. */
+  unidad: string;
+  /** Código del puesto superior inmediato; null solo en la jefatura del departamento. */
+  superior: string | null;
   nivelJerarquico: string;
   dotacion: number;
   proposito: string;
@@ -172,7 +175,22 @@ const REDES = 'Redes TCP/IP';
 const DOCKER = 'Docker y contenedores';
 const DIDACTICA = 'Didáctica universitaria';
 
-const EVALUADOR = 'DEMO-003';
+/**
+ * Quién firmó las acreditaciones precargadas: el superior por puesto de cada
+ * persona, como exige la regla de acreditación. A los jefes de cátedra los
+ * acredita la jefatura del departamento.
+ */
+export const EVALUADOR_DE: Record<string, string> = {
+  'DEMO-001': 'DEMO-010',
+  'DEMO-002': 'DEMO-001',
+  'DEMO-003': 'DEMO-010',
+  'DEMO-004': 'DEMO-003',
+  'DEMO-005': 'DEMO-010',
+  'DEMO-006': 'DEMO-005',
+  'DEMO-007': 'DEMO-010',
+  'DEMO-008': 'DEMO-010',
+  'DEMO-009': 'DEMO-008',
+};
 
 const declarado = (nivel: string, dias = -400) => ({
   nivel,
@@ -182,15 +200,18 @@ const acreditado = (nivel: string, evidencia = 'certificado', dias = -200) => ({
   nivel,
   evidencia,
   hace: { dias },
-  evaluador: EVALUADOR,
+  // Se completa con `firmadaPorElSuperior`.
+  evaluador: '',
 });
 
-/** Nadie se acredita a sí mismo: a Sofía la evalúa otra persona. */
-const sinAutoEvaluacion = (
+const firmadaPorElSuperior = (
   c: ConocimientoPersonaDemo,
 ): ConocimientoPersonaDemo =>
-  c.acreditado?.evaluador === c.legajo
-    ? { ...c, acreditado: { ...c.acreditado, evaluador: 'DEMO-005' } }
+  c.acreditado
+    ? {
+        ...c,
+        acreditado: { ...c.acreditado, evaluador: EVALUADOR_DE[c.legajo] },
+      }
     : c;
 
 export const USUARIOS_DEMO: UsuarioDemo[] = [
@@ -221,7 +242,7 @@ export const USUARIOS_DEMO: UsuarioDemo[] = [
   {
     nombreUsuario: 'demo.jefatura',
     rol: 'jefatura_departamento',
-    legajo: null,
+    legajo: 'DEMO-010',
     unidades: [DEPARTAMENTO],
   },
   {
@@ -242,10 +263,23 @@ export const DATOS_DEMO: DatosDemo = {
   catedras: [BD, AED, IS, RD, SO],
 
   puestos: [
+    // La jerarquía de puestos decide quién acredita a quién: cada jefe de
+    // cátedra depende de la jefatura y cada JTP o auxiliar, del jefe de su cátedra.
+    {
+      codigo: 'P-DEP-JEF',
+      denominacion: 'Jefe del Departamento de Sistemas',
+      unidad: DEPARTAMENTO,
+      superior: null,
+      nivelJerarquico: 'conduccion_departamento',
+      dotacion: 1,
+      proposito:
+        'Conducir el departamento, coordinar las cátedras y validar sus puestos.',
+    },
     {
       codigo: 'P-BD-JEF',
       denominacion: 'Jefe de cátedra de Bases de Datos',
-      catedra: BD,
+      unidad: BD,
+      superior: 'P-DEP-JEF',
       nivelJerarquico: 'conduccion_catedra',
       dotacion: 1,
       proposito:
@@ -254,7 +288,8 @@ export const DATOS_DEMO: DatosDemo = {
     {
       codigo: 'P-BD-JTP',
       denominacion: 'Jefe de trabajos prácticos de Bases de Datos',
-      catedra: BD,
+      unidad: BD,
+      superior: 'P-BD-JEF',
       nivelJerarquico: 'coordinacion_docente',
       dotacion: 1,
       proposito: 'Coordinar los trabajos prácticos de la cátedra.',
@@ -262,7 +297,8 @@ export const DATOS_DEMO: DatosDemo = {
     {
       codigo: 'P-AED-JEF',
       denominacion: 'Jefe de cátedra de Algoritmos y Estructuras de Datos',
-      catedra: AED,
+      unidad: AED,
+      superior: 'P-DEP-JEF',
       nivelJerarquico: 'conduccion_catedra',
       dotacion: 1,
       proposito: 'Conducir la cátedra de programación inicial.',
@@ -270,7 +306,8 @@ export const DATOS_DEMO: DatosDemo = {
     {
       codigo: 'P-AED-AUX',
       denominacion: 'Auxiliar docente de Algoritmos y Estructuras de Datos',
-      catedra: AED,
+      unidad: AED,
+      superior: 'P-AED-JEF',
       nivelJerarquico: 'operativo_docente',
       dotacion: 2,
       proposito: 'Dictar prácticas y apoyar a los estudiantes.',
@@ -278,7 +315,8 @@ export const DATOS_DEMO: DatosDemo = {
     {
       codigo: 'P-IS-JEF',
       denominacion: 'Jefe de cátedra de Ingeniería de Software',
-      catedra: IS,
+      unidad: IS,
+      superior: 'P-DEP-JEF',
       nivelJerarquico: 'conduccion_catedra',
       dotacion: 1,
       proposito:
@@ -287,7 +325,8 @@ export const DATOS_DEMO: DatosDemo = {
     {
       codigo: 'P-IS-AUX',
       denominacion: 'Auxiliar docente de Ingeniería de Software',
-      catedra: IS,
+      unidad: IS,
+      superior: 'P-IS-JEF',
       nivelJerarquico: 'operativo_docente',
       dotacion: 1,
       proposito:
@@ -296,7 +335,8 @@ export const DATOS_DEMO: DatosDemo = {
     {
       codigo: 'P-RD-JEF',
       denominacion: 'Jefe de cátedra de Redes de Datos',
-      catedra: RD,
+      unidad: RD,
+      superior: 'P-DEP-JEF',
       nivelJerarquico: 'conduccion_catedra',
       dotacion: 1,
       proposito: 'Conducir la cátedra y el laboratorio de redes.',
@@ -304,7 +344,8 @@ export const DATOS_DEMO: DatosDemo = {
     {
       codigo: 'P-SO-JEF',
       denominacion: 'Jefe de cátedra de Sistemas Operativos',
-      catedra: SO,
+      unidad: SO,
+      superior: 'P-DEP-JEF',
       nivelJerarquico: 'conduccion_catedra',
       dotacion: 1,
       proposito: 'Conducir la cátedra y el laboratorio de sistemas operativos.',
@@ -312,7 +353,8 @@ export const DATOS_DEMO: DatosDemo = {
     {
       codigo: 'P-SO-AUX',
       denominacion: 'Auxiliar docente de Sistemas Operativos',
-      catedra: SO,
+      unidad: SO,
+      superior: 'P-SO-JEF',
       nivelJerarquico: 'operativo_docente',
       dotacion: 1,
       proposito: 'Dictar las prácticas del laboratorio.',
@@ -546,9 +588,29 @@ export const DATOS_DEMO: DatosDemo = {
       situacionRevista: 'contratado',
       retiro: null,
     },
+    // Andrea (demo.jefatura) ocupa la jefatura del departamento: acredita a los
+    // jefes de cátedra y, bajando por la jerarquía, a todos los docentes.
+    {
+      legajo: 'DEMO-010',
+      apellido: 'Gómez',
+      nombre: 'Andrea',
+      documento: '23111010',
+      edadAnios: 55,
+      ingresoHaceAnios: 22,
+      situacionRevista: 'planta_permanente',
+      retiro: null,
+    },
   ],
 
   ocupaciones: [
+    {
+      legajo: 'DEMO-010',
+      puesto: 'P-DEP-JEF',
+      desde: { anios: -4 },
+      hasta: null,
+      caracter: 'titular',
+      dedicacion: 'exclusiva',
+    },
     {
       legajo: 'DEMO-001',
       puesto: 'P-BD-JEF',
@@ -796,7 +858,7 @@ export const DATOS_DEMO: DatosDemo = {
       declarado: declarado('intermedio'),
       acreditado: acreditado('intermedio', 'entrevista'),
     },
-  ].map(sinAutoEvaluacion),
+  ].map(firmadaPorElSuperior),
 
   // Quedan sin evaluar, a propósito, los pares de los puestos de auxiliar, el de
   // JTP de Bases de Datos y los deseables, para evaluar uno en vivo (RF12).

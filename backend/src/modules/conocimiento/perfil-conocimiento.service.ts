@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, type Repository } from 'typeorm';
+import { ROLES_CON_ALCANCE_POR_UNIDAD } from '../../common/roles.js';
 import type { SesionUsuario } from '../../common/sesion-usuario.js';
-import { AlcanceService } from '../usuarios/alcance.service.js';
 import { AccesoPerfilService } from './acceso-perfil.service.js';
 import { aAcreditacionDto } from './conocimiento.mapper.js';
 import type {
@@ -10,6 +10,7 @@ import type {
   MiConocimientoDto,
   PendienteAcreditacionDto,
   PerfilConocimientoDto,
+  PermisosPerfilDto,
 } from './dto/perfil.dto.js';
 import { Acreditacion } from './entities/acreditacion.entity.js';
 import { combinarRequisitos, type RequisitoDePuesto } from './perfil.js';
@@ -68,7 +69,6 @@ export class PerfilConocimientoService {
     @InjectRepository(Acreditacion)
     private readonly acreditaciones: Repository<Acreditacion>,
     private readonly acceso: AccesoPerfilService,
-    private readonly alcance: AlcanceService,
   ) {}
 
   async perfilDe(
@@ -172,12 +172,23 @@ export class PerfilConocimientoService {
     );
   }
 
-  /** Bandeja del evaluador: lo declarado por personas de su alcance que falta acreditar. */
+  /** Si el usuario puede acreditar a la persona y, si no, por qué. Requiere poder leer su perfil. */
+  async permisos(
+    idPersona: number,
+    sesion: SesionUsuario,
+  ): Promise<PermisosPerfilDto> {
+    await this.acceso.exigirLectura(sesion, idPersona);
+    return this.acceso.permisoDeAcreditar(sesion, idPersona);
+  }
+
+  /**
+   * Bandeja del evaluador: lo declarado sin acreditar por quienes ocupan hoy un
+   * puesto a su cargo en la jerarquía de puestos (los mismos que puede acreditar).
+   */
   async pendientes(sesion: SesionUsuario): Promise<PendienteAcreditacionDto[]> {
-    const visibles = await this.alcance.unidadesVisibles(sesion);
-    if (!visibles || visibles.length === 0) return [];
+    if (!ROLES_CON_ALCANCE_POR_UNIDAD.includes(sesion.rol)) return [];
+    if (sesion.idPersona === null) return [];
     const filas: FilaPendiente[] = await this.dataSource.query(SQL_PENDIENTES, [
-      visibles,
       sesion.idPersona,
     ]);
     return filas.map((f) => ({

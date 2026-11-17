@@ -203,3 +203,19 @@ export class PendienteAcreditacionDto {
   @ApiProperty({ format: 'date' })
   fechaDeclaracion: string;
 }
+
+/** Lo que el usuario puede hacer sobre el conocimiento de una persona. */
+export class PermisosPerfilDto {
+  @ApiProperty({
+    description:
+      'true si el usuario es evaluador y ocupa hoy un puesto superior a alguno de los que ocupa la persona',
+  })
+  puedeAcreditar: boolean;
+
+  @ApiProperty({
+    nullable: true,
+    type: String,
+    description: 'Por qué no puede acreditar; null si puede',
+  })
+  motivo: string | null;
+}

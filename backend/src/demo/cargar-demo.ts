@@ -113,8 +113,19 @@ async function cargarTodo(
       (c) =>
         `INSERT INTO puesto (codigo, denominacion, proposito, dotacion_prevista, id_unidad, id_nivel_jerarquico, activo)
        SELECT ${c.t(p.codigo)}, ${c.t(p.denominacion)}, ${c.t(p.proposito)}, ${c.n(p.dotacion)},
-              ${c.n(unidad(p.catedra))}, nj.id_nivel_jerarquico, true
+              ${c.n(unidad(p.unidad))}, nj.id_nivel_jerarquico, true
        FROM nivel_jerarquico nj WHERE nj.codigo = ${c.t(p.nivelJerarquico)}`,
+    );
+  }
+  // Los superiores van después: un puesto puede depender de otro definido más abajo.
+  for (const p of datos.puestos.filter((x) => x.superior !== null)) {
+    await insertar(
+      qr,
+      `el superior del puesto ${p.codigo}`,
+      (c) =>
+        `UPDATE puesto SET id_puesto_superior = sup.id_puesto
+       FROM puesto sup
+       WHERE puesto.codigo = ${c.t(p.codigo)} AND sup.codigo = ${c.t(p.superior)}`,
     );
   }
 

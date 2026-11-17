@@ -3,6 +3,7 @@ import type { DataSource } from 'typeorm';
 import type { SesionUsuario } from '../../common/sesion-usuario.js';
 import type { AlcanceService } from '../usuarios/alcance.service.js';
 import { AccesoPerfilService } from './acceso-perfil.service.js';
+import { SQL_ES_SUBORDINADO } from './perfil.sql.js';
 
 const sesion = (
   rol: SesionUsuario['rol'],
@@ -107,25 +108,58 @@ describe('AccesoPerfilService.exigirEvaluacion', () => {
     ).rejects.toThrow(/propios/);
   });
 
-  it('la persona debe tener una ocupación vigente en el alcance', async () => {
-    const { servicio } = crear([10], []);
+  it('rechaza si la persona no ocupa un puesto por debajo del evaluador', async () => {
+    const { servicio, dataSource } = crear([10], []);
     await expect(
       servicio.exigirEvaluacion(sesion('jefatura_departamento'), 99),
-    ).rejects.toThrow(/alcance/);
+    ).rejects.toThrow(/por debajo/);
+    expect(dataSource.query).toHaveBeenCalledWith(SQL_ES_SUBORDINADO, [7, 99]);
   });
 
-  it('con alcance vacío rechaza sin consultar la base', async () => {
-    const { servicio, dataSource } = crear([]);
-    await expect(
-      servicio.exigirEvaluacion(sesion('jefe_catedra'), 99),
-    ).rejects.toBeInstanceOf(ForbiddenException);
-    expect(dataSource.query).not.toHaveBeenCalled();
-  });
-
-  it('acepta a un jefe sobre alguien de su alcance', async () => {
-    const { servicio } = crear([10], [{}]);
+  it('las unidades asignadas al usuario no alcanzan ni hacen falta', async () => {
+    const { servicio, alcance } = crear([], [{ es_subordinado: 1 }]);
     await expect(
       servicio.exigirEvaluacion(sesion('jefe_catedra'), 99),
     ).resolves.toBeUndefined();
+    expect(alcance.unidadesVisibles).not.toHaveBeenCalled();
+  });
+
+  it('acepta a un jefe sobre un subordinado por puesto', async () => {
+    const { servicio } = crear([10], [{ es_subordinado: 1 }]);
+    await expect(
+      servicio.exigirEvaluacion(sesion('jefe_catedra'), 99),
+    ).resolves.toBeUndefined();
+  });
+});
+
+describe('AccesoPerfilService.permisoDeAcreditar', () => {
+  it('explica por qué no, con las mismas reglas que la evaluación', async () => {
+    const { servicio } = crear([10], []);
+    expect(await servicio.permisoDeAcreditar(sesion('docente'), 99)).toEqual({
+      puedeAcreditar: false,
+      motivo: expect.stringMatching(/jefatura/),
+    });
+    expect(
+      await servicio.permisoDeAcreditar(sesion('jefe_catedra', null), 99),
+    ).toMatchObject({ puedeAcreditar: false, motivo: expect.any(String) });
+    expect(
+      await servicio.permisoDeAcreditar(sesion('jefe_catedra', 7), 7),
+    ).toMatchObject({
+      puedeAcreditar: false,
+      motivo: expect.stringMatching(/propios/),
+    });
+    expect(
+      await servicio.permisoDeAcreditar(sesion('jefe_catedra'), 99),
+    ).toMatchObject({
+      puedeAcreditar: false,
+      motivo: expect.stringMatching(/por debajo/),
+    });
+  });
+
+  it('permite a un superior por puesto', async () => {
+    const { servicio } = crear([10], [{ es_subordinado: 1 }]);
+    expect(
+      await servicio.permisoDeAcreditar(sesion('jefe_catedra'), 99),
+    ).toEqual({ puedeAcreditar: true, motivo: null });
   });
 });

@@ -40,7 +40,7 @@ combinación). No cubre RF11 (activos de conocimiento).
 | 4 | Requisitos repetidos | Copia puntual de los requisitos de un puesto a otro. Sin plantilla por cargo tipo ni vínculo posterior |
 | 5 | Declarado y acreditado | Una fila por persona y conocimiento (`conocimiento_persona`) con nivel declarado y nivel acreditado vigente |
 | 6 | Historial | Tabla `acreditacion`, de solo inserción, con una fila por evaluación. Vigente: mayor `fecha_evaluacion` y, en empate, mayor `id_acreditacion`. El servicio refleja la vigente en `conocimiento_persona` en la misma transacción |
-| 7 | Evaluador | `jefe_catedra` y `jefatura_departamento`, sobre personas con una ocupación vigente en su alcance. Sin autoacreditación. `recursos_humanos` solo lee |
+| 7 | Evaluador | `jefe_catedra` y `jefatura_departamento`, sobre personas con una ocupación vigente en su alcance. Sin autoacreditación. `recursos_humanos` solo lee. **Reemplazada el 2026-11-17** por la jerarquía de puestos: ver `2026-11-17-acreditacion-por-jerarquia-design.md` |
 | 8 | Nivel para las detecciones | Solo cuenta el nivel acreditado vigente. Lo declarado sin acreditar no cuenta |
 | 9 | Evidencia | Tipo de evidencia como tabla de referencia `tipo_evidencia` más una observación de texto. **Sin archivo adjunto**: RNF08 queda limitado a los activos de conocimiento (RF11) |
 | 10 | Usabilidad | Pantalla "Mis conocimientos" precargada con los requisitos de los puestos que el docente ocupa hoy |

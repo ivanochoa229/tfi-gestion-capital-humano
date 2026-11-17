@@ -34,6 +34,7 @@ import {
   ConocimientoPersonaDto,
   DeclararDto,
   PerfilConocimientoDto,
+  PermisosPerfilDto,
 } from './dto/perfil.dto.js';
 import { PerfilConocimientoService } from './perfil-conocimiento.service.js';
 
@@ -58,6 +59,19 @@ export class PerfilConocimientoController {
     @UsuarioActual() sesion: SesionUsuario,
   ): Promise<PerfilConocimientoDto[]> {
     return this.perfil.perfilDe(idPersona, sesion);
+  }
+
+  @Get('permisos')
+  @Roles(...ROLES_LECTORES_DE_PERFIL)
+  @ApiOkResponse({ type: PermisosPerfilDto })
+  @ApiForbiddenResponse({
+    description: 'Sin acceso al conocimiento de esa persona',
+  })
+  permisos(
+    @Param('idPersona', ParseIntPipe) idPersona: number,
+    @UsuarioActual() sesion: SesionUsuario,
+  ): Promise<PermisosPerfilDto> {
+    return this.perfil.permisos(idPersona, sesion);
   }
 
   @Get(':idConocimiento/acreditaciones')
@@ -107,7 +121,10 @@ export class PerfilConocimientoController {
   @Post(':idConocimiento/acreditaciones')
   @Roles(...ROLES_EVALUADORES)
   @ApiCreatedResponse({ type: AcreditacionDto })
-  @ApiForbiddenResponse({ description: 'Fuera del alcance o autoacreditación' })
+  @ApiForbiddenResponse({
+    description:
+      'La persona no ocupa un puesto por debajo del evaluador, o es autoacreditación',
+  })
   @ApiBadRequestResponse({
     description: 'Sin persona vinculada, fecha futura o datos inactivos',
   })

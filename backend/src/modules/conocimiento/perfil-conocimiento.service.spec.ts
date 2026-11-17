@@ -1,7 +1,6 @@
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import type { DataSource, Repository } from 'typeorm';
 import type { SesionUsuario } from '../../common/sesion-usuario.js';
-import type { AlcanceService } from '../usuarios/alcance.service.js';
 import type { AccesoPerfilService } from './acceso-perfil.service.js';
 import type { Acreditacion } from './entities/acreditacion.entity.js';
 import { PerfilConocimientoService } from './perfil-conocimiento.service.js';
@@ -23,15 +22,11 @@ const sesion = (
   unidades: [],
 });
 
-function crear(
-  respuestas: Record<string, object[]> = {},
-  visibles: number[] | null = [10],
-) {
+function crear(respuestas: Record<string, object[]> = {}) {
   const dataSource = {
     query: vi.fn(async (sql: string) => respuestas[sql] ?? []),
   };
   const acceso = { exigirLectura: vi.fn(async () => undefined) };
-  const alcance = { unidadesVisibles: vi.fn(async () => visibles) };
   const acreditaciones = {
     find: vi.fn(async () => [
       {
@@ -51,7 +46,6 @@ function crear(
     dataSource as unknown as DataSource,
     acreditaciones as unknown as Repository<Acreditacion>,
     acceso as unknown as AccesoPerfilService,
-    alcance as unknown as AlcanceService,
   );
   return { servicio, dataSource, acceso, acreditaciones };
 }
@@ -204,18 +198,16 @@ describe('PerfilConocimientoService.mios', () => {
 });
 
 describe('PerfilConocimientoService.pendientes', () => {
-  it('consulta con las unidades del alcance y la persona del evaluador', async () => {
-    const { servicio, dataSource } = crear({ [SQL_PENDIENTES]: [] }, [10, 11]);
+  it('consulta con la persona del evaluador (la jerarquía la resuelve la base)', async () => {
+    const { servicio, dataSource } = crear({ [SQL_PENDIENTES]: [] });
     await servicio.pendientes(sesion('jefe_catedra', 7));
-    expect(dataSource.query).toHaveBeenCalledWith(SQL_PENDIENTES, [
-      [10, 11],
-      7,
-    ]);
+    expect(dataSource.query).toHaveBeenCalledWith(SQL_PENDIENTES, [7]);
   });
 
-  it('sin unidades en el alcance devuelve vacío sin consultar', async () => {
-    const { servicio, dataSource } = crear({}, []);
-    expect(await servicio.pendientes(sesion('jefe_catedra'))).toEqual([]);
+  it('sin persona vinculada o sin rol evaluador devuelve vacío sin consultar', async () => {
+    const { servicio, dataSource } = crear();
+    expect(await servicio.pendientes(sesion('jefe_catedra', null))).toEqual([]);
+    expect(await servicio.pendientes(sesion('recursos_humanos'))).toEqual([]);
     expect(dataSource.query).not.toHaveBeenCalled();
   });
 
@@ -246,5 +238,20 @@ describe('PerfilConocimientoService.pendientes', () => {
         fechaDeclaracion: '2026-06-01',
       },
     ]);
+  });
+});
+
+describe('PerfilConocimientoService.permisos', () => {
+  it('exige lectura y delega en el permiso de acreditar', async () => {
+    const { servicio, acceso } = crear();
+    const permiso = { puedeAcreditar: true, motivo: null };
+    (acceso as unknown as Record<string, unknown>).permisoDeAcreditar = vi.fn(
+      async () => permiso,
+    );
+    expect(await servicio.permisos(9, sesion('jefe_catedra', 7))).toBe(permiso);
+    expect(acceso.exigirLectura).toHaveBeenCalledWith(
+      sesion('jefe_catedra', 7),
+      9,
+    );
   });
 });

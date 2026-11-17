@@ -31,7 +31,7 @@ Spec: `docs/superpowers/specs/2026-11-16-demo-datos-y-guion-design.md`. Duració
    | --- | --- | --- | --- |
    | `demo.autoridad` | Autoridad | Toda la facultad | Tablero de riesgo, Estructura, Personas, Catálogo, Activos, Criticidad, Sucesión, Acciones, Detección |
    | `demo.rrhh` | Recursos Humanos | Toda la facultad; ve el documento de las personas | Igual que la autoridad |
-   | `demo.jefatura` | Jefatura de Departamento | Departamento de Sistemas | Estructura y puestos, Personas, Catálogo, Mis conocimientos, Por acreditar, Activos, Criticidad, Sucesión, Acciones, Detección, Mi brecha (sin Tablero ni Administración) |
+   | `demo.jefatura` | Jefatura de Departamento | Andrea Gómez, jefa del Departamento de Sistemas | Estructura y puestos, Personas, Catálogo, Mis conocimientos, Por acreditar, Activos, Criticidad, Sucesión, Acciones, Detección, Mi brecha (sin Tablero ni Administración) |
    | `demo.jefecatedra` | Jefe de cátedra | Laura Benítez; solo la cátedra de Bases de Datos | Igual que la jefatura, con los datos limitados a su cátedra |
    | `demo.analista` | Analista de puestos | Toda la facultad | Estructura y puestos, Personas, Catálogo, Activos |
    | `demo.docente` | Docente | Diego Paz (Algoritmos) | Estructura y puestos, Mi ficha, Mis conocimientos, Activos de conocimiento, Mi sucesión, Acciones, Mi brecha |
@@ -42,6 +42,8 @@ Spec: `docs/superpowers/specs/2026-11-16-demo-datos-y-guion-design.md`. Duració
 ## La historia, en una mirada
 
 Datos de partida (el tablero lo muestra en el caso 8):
+
+- **Jerarquía de puestos:** cada jefe de cátedra depende del puesto de jefatura del departamento (Andrea Gómez), y cada JTP o auxiliar, del jefe de su cátedra. Esa jerarquía decide quién acredita a quién (caso 4).
 
 - **Laura Benítez**, jefa de Bases de Datos, es la única que domina SQL avanzado y se retira en 10 meses.
 - **Ricardo Molina**, jefe de Ingeniería de Software, es el único con Arquitectura de software, pero se retira en 40 meses (fuera del horizonte de 24).
@@ -96,7 +98,7 @@ Con la API (opcional, Swagger): `demo.docente` pidiendo `/api/deteccion/tablero`
 | Paso | Dónde | Acción y datos | Resultado esperado |
 | --- | --- | --- | --- |
 | 2.1 | **Estructura y puestos** | En el árbol de la izquierda, elegir la cátedra **Redes de Datos** | La tabla muestra un único puesto: *Jefe de cátedra de Redes de Datos* |
-| 2.2 | Botón **Nuevo puesto** | Denominación `Auxiliar docente de Redes de Datos`; Nivel jerárquico `Operativo docente`; Dotación prevista `1`; Propósito `Dictar las prácticas del laboratorio de redes.` Guardar | El puesto aparece en la tabla con un código generado (`P-0001`) y estado **Activo** |
+| 2.2 | Botón **Nuevo puesto** | Denominación `Auxiliar docente de Redes de Datos`; Nivel jerárquico `Operativo docente`; Dotación prevista `1`; **Puesto superior** `Jefe de cátedra de Redes de Datos`; Propósito `Dictar las prácticas del laboratorio de redes.` Guardar | El puesto aparece en la tabla con un código generado (`P-0001`) y estado **Activo** |
 | 2.3 | En la fila del puesto nuevo, **Requisitos** | Se abre «Requisitos de…» | Todavía no tiene requisitos |
 | 2.4 | **Agregar un requisito** | Conocimiento `Redes TCP/IP`; Nivel `Intermedio`; marcar **Excluyente** | El requisito queda en la lista |
 | 2.5 | Repetir | Conocimiento `Administración de Linux`; Nivel `Básico`; sin marcar Excluyente | Queda como deseable |
@@ -125,19 +127,22 @@ Con la API (opcional, Swagger): `demo.docente` pidiendo `/api/deteccion/tablero`
 
 ---
 
-## Caso 4. Declaración y acreditación de conocimiento (RF10) · ~6 min
+## Caso 4. Declaración y acreditación de conocimiento (RF10, RF24) · ~8 min
 
-**Objetivo:** que el docente declare lo que sabe y su jefatura lo acredite con evidencia.
+**Objetivo:** que el docente declare lo que sabe y lo acredite, con evidencia, quien ocupa un puesto **por encima del suyo** en la jerarquía de puestos. Nadie acredita a un par, a su jefe ni a alguien de otra cátedra.
 
 | Paso | Usuario / dónde | Acción y datos | Resultado esperado |
 | --- | --- | --- | --- |
 | 4.1 | `demo.docente`, **Mis conocimientos** | Mirar la lista | *Java* (declarado y acreditado Avanzado), *Algoritmos y estructuras de datos* (declarado Intermedio, acreditado **Básico**) y dos **Pendiente de acreditar**: *Docker y contenedores* y *Testing automatizado*. Debajo de cada fila, «Se pide: …» si su puesto lo exige |
 | 4.2 | Misma pantalla | En *Algoritmos y estructuras de datos*, cambiar **Mi nivel** a `Avanzado` | Aparece «Cambiaste tu nivel, esperando nueva acreditación» (ya tenía una acreditación). En *Testing automatizado* la marca es «Declarado, esperando acreditación». No hace falta capacitación previa |
 | 4.3 | **Sumar otro conocimiento del catálogo** | Elegir `Redes TCP/IP` y nivel `Básico` | Se suma como declarado, pendiente de acreditar |
-| 4.4 | `demo.jefecatedra`, **Por acreditar** | Mirar la bandeja | Solo lo de su cátedra: *Acosta, Martín* en *SQL y modelado relacional* (declaró Avanzado; acreditado hasta ahora Intermedio) y en *Docker y contenedores* (declaró Básico). **No** aparece Diego (es de otra cátedra) |
+| 4.4 | `demo.jefecatedra`, **Por acreditar** | Mirar la bandeja | Solo quien ocupa un puesto por debajo del de Laura (jefa de Bases de Datos): *Acosta, Martín*, su JTP, en *SQL y modelado relacional* (declaró Avanzado; acreditado hasta ahora Intermedio) y en *Docker y contenedores* (declaró Básico). **No** aparece Diego: su puesto depende de la jefa de Algoritmos, no de Laura |
 | 4.5 | En la fila de Martín / SQL, **Acreditar** | Nivel acreditado `Avanzado`; Fecha de evaluación: hoy; Tipo de evidencia `Observación directa`; Observaciones `Resolvió el caso de optimización frente a la cátedra.` Guardar | La fila sale de la bandeja |
 | 4.6 | Como `demo.jefecatedra`, **Personas**, ficha de Martín, **Historial** del conocimiento SQL | Mirar | Dos acreditaciones: la anterior (Intermedio) y la nueva (Avanzado, vigente). El historial no se pisa |
 | 4.7 | Como `demo.jefecatedra`, **Personas**, ficha de Laura (su propia persona) | Buscar el botón **Acreditar** | No se ofrece: nadie acredita sus propios conocimientos |
+| 4.8 | Como `demo.jefecatedra`, en Swagger, `POST /api/personas/{id de Diego}/conocimientos/{id de Docker}/acreditaciones` | Intentar acreditar a Diego | 403 «Solo podés acreditar a quien ocupa hoy un puesto por debajo del tuyo». La autoridad sale de la jerarquía de puestos, no del rol ni de la cátedra asignada al usuario |
+| 4.9 | `demo.jefatura` (Andrea Gómez), **Por acreditar** | Mirar la bandeja | Lo pendiente de todas las cátedras, porque su puesto está arriba de los jefes de cátedra y, bajando, de todos los docentes: *Acosta* (Docker), *Paz* (Algoritmos, Docker, Redes TCP/IP y Testing) y *Ríos* (Java) |
+| 4.10 | Misma bandeja, fila de *Paz, Diego* / *Docker y contenedores*, **Acreditar** | Nivel `Intermedio`; Fecha: hoy; Tipo de evidencia `Entrevista`. Guardar | La fila sale de la bandeja. Andrea puede acreditar a Diego aunque no sea su jefa directa: la autoridad baja por toda la cadena |
 
 **Efecto en el riesgo:** *SQL y modelado relacional* ahora tiene **dos** poseedores (Laura y Martín): «Puntos únicos de falla» pasa de **3 a 2**.
 
@@ -232,11 +237,13 @@ Cierre sugerido: lo que queda (Arquitectura de software depende de Ricardo, Rede
 | 8-A. El tablero muestra el riesgo | 8 |
 | 2. Puestos y requisitos | 5 |
 | 3. Personas e importación CSV | 7 |
-| 4. Declaración y acreditación | 6 |
+| 4. Declaración y acreditación | 8 |
 | 5. Activos de conocimiento | 4 |
 | 6. Criticidad | 4 |
 | 7. Sucesión y acciones | 9 |
 | 8-B. Vuelta al tablero | 3 |
-| **Total** | **51** |
+| **Total** | **53** |
 
 Verificado el 16/11/2026 sobre la rama `feat/demo-datos-y-guion` (último commit de código: `1199a06`): se levantó el sistema con volúmenes vacíos y se ejecutaron todos los casos en este orden por la API, con **69 comprobaciones** de los resultados esperados (cantidades, estados, permisos y valores del tablero) sin ninguna falla. Lo que **no** se comprobó en el navegador son los textos exactos de pantallas y botones, que se tomaron del código del frontend.
+
+Actualizado el 17/11/2026 con la acreditación por jerarquía de puestos: el caso 4 (pasos 4.2 a 4.10) se ejecutó por la API sobre una base recién creada y el tablero quedó como indica el guion (puntos únicos de falla de 3 a 2; el resto sin cambios).
